@@ -60,6 +60,20 @@ Two graphical applications open during this activity:
 
 The two windows display the same simulated robot in different ways. Moving the robot in Gazebo changes the sensor and odometry data displayed in RViz2.
 
+In Gazebo, expect a 3D world containing the TurtleBot and cylindrical obstacles. In RViz2, expect a top-down occupancy map with toolbar buttons such as **2D Pose Estimate**, **Publish Point**, and **Nav2 Goal**. The colors and costmap overlays in RViz2 can change as localization and navigation start.
+
+**Gazebo example:**
+
+![Gazebo Sim showing the TurtleBot 3 obstacle world and the entity tree](images/gazebo-overview.png)
+
+*Figure 1. Gazebo is the 3D physics view. The obstacle world appears in the main view, and `turtlebot3_waffle` appears in the Entity Tree on the right.*
+
+**RViz2 example:**
+
+![RViz2 showing the occupancy map, navigation displays, costmaps, and pose tools](images/rviz-overview.png)
+
+*Figure 2. RViz2 is the ROS data view. The map is in the center; displays and Navigation 2 status are on the left; **2D Pose Estimate**, **Publish Point**, and **Nav2 Goal** are in the top toolbar. Costmap colors and status values vary during operation.*
+
 ### What the `/tf` bridge does
 
 Gazebo and ROS 2 use different communication systems. Gazebo calculates the robot's motion, while ROS tools such as RViz2, AMCL, and Nav2 need that motion expressed as coordinate transforms on the ROS `/tf` topic. The bridge translates Gazebo's pose messages into ROS TF messages.
@@ -255,20 +269,37 @@ A reasonable pose estimate should make the robot model and red laser-scan points
 
 ##### Finding map coordinates in RViz2
 
-RViz2 does not show the pointer coordinates prominently. To locate `x = -2.0 m, y = -0.5 m`, open another terminal and run:
+RViz2 does not display the mouse-pointer coordinates prominently. Use the **Publish Point** tool to ask RViz2 to publish the coordinates of each location you click.
+
+To locate `x = -2.0 m, y = -0.5 m`, open another **Ubuntu/WSL terminal** and run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ros2 topic echo /clicked_point
 ```
 
+Leave this command running. It waits silently until you click with the correct RViz2 tool.
+
 In RViz2:
 
-1. Click **Publish Point** in the top toolbar.
-2. Click a location on the map.
-3. Read the `x` and `y` values printed in the terminal.
-4. Click different map locations until the reported values are near `x = -2.0` and `y = -0.5`.
-5. Return to **2D Pose Estimate** and place the pose at that location.
+1. Click **Publish Point** in the top toolbar, as shown in Figure 2.
+2. Click an open location on the map. Do not click in Gazebo.
+3. Look at the terminal running `ros2 topic echo /clicked_point`. It should print output similar to:
+
+   ```yaml
+   header:
+     frame_id: map
+   point:
+     x: -2.04
+     y: -0.51
+     z: 0.0
+   ```
+
+4. If the values are not close to `x = -2.0` and `y = -0.5`, click another map location. Moving left generally decreases `x`; moving right increases `x`. Moving down generally decreases `y`; moving up increases `y`, although the view may be rotated.
+5. When the terminal reports a nearby point, remember that location on the map. Values within approximately `0.1 m` are sufficiently close for this initial estimate.
+6. Press `Ctrl+C` in the coordinate terminal after you have found the location.
+7. Return to RViz2 and click **2D Pose Estimate**. This tool is different from **Publish Point**.
+8. Press at the location you just found, drag the green arrow toward the robot's forward direction, and release. For a fresh default launch, drag approximately toward increasing `x`.
 
 The point does not need to be exact. AMCL uses the estimate as a starting guess and refines it using the laser scan. The position and heading are reasonable when the robot model and laser-scan points align with the map walls.
 
