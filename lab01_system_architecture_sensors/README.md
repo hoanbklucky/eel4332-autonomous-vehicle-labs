@@ -41,14 +41,78 @@ lab01_system_architecture_sensors/
 
 For Lab 1, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
-From a terminal with ROS 2 Jazzy sourced, run:
+### 1. Verify the required packages
+
+Run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 pkg prefix nav2_bringup
+ros2 pkg prefix nav2_minimal_tb3_sim
+```
+
+Both commands should print `/opt/ros/jazzy`. If either package is missing, install the simulation packages:
+
+```bash
+sudo apt update
+sudo apt install \
+  ros-jazzy-navigation2 \
+  ros-jazzy-nav2-bringup \
+  ros-jazzy-nav2-minimal-tb3-sim
+```
+
+### 2. Launch the simulation
+
+In **Terminal 1**, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ros2 launch nav2_bringup tb3_simulation_launch.py headless:=False
 ```
 
-The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack.
+Keep this terminal open. The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack. The robot starts stationary; launching the simulation does not automatically command it to move.
+
+Wait until the robot is visible in both Gazebo and RViz2 before continuing.
+
+### 3. Localize the robot and send a navigation goal
+
+In RViz2:
+
+1. Select **2D Pose Estimate** from the toolbar.
+2. Click near the robot's location on the map and drag in the direction the robot is facing.
+3. Wait a few seconds for the particle cloud around the robot to settle.
+4. Select **Nav2 Goal** or **2D Goal Pose** from the toolbar.
+5. Click an open location on the map and drag to specify the desired final heading.
+
+The global and local paths should appear in RViz2, and the robot should begin moving in both RViz2 and Gazebo.
+
+### 4. Verify the simulator can move the robot directly
+
+If the robot does not respond to an RViz2 goal, first test the Gazebo velocity interface without relying on localization or planning. Open **Terminal 2** and run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 topic type /cmd_vel
+ros2 topic info /cmd_vel --verbose
+```
+
+The topic type should be `geometry_msgs/msg/Twist`, and the topic should have a subscriber from the ROS–Gazebo bridge. Command a slow forward motion:
+
+```bash
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.1}, angular: {z: 0.0}}"
+```
+
+Let the robot move for only a few seconds, then press `Ctrl+C` and send an explicit stop command:
+
+```bash
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.0}}"
+```
+
+If this direct test moves the robot, the simulator and command bridge work; return to RViz2 and check the initial pose and navigation goal. If it does not move, check Terminal 1 for bridge or Gazebo errors and confirm that `/cmd_vel` has a subscriber.
+
+### 5. Inspect the ROS graph and sensor topics
 
 After the simulation starts, confirm that ROS topics and transforms are available:
 
@@ -63,6 +127,16 @@ ros2 topic echo /tf --once
 ```
 
 Topic names may differ slightly with the installed Jazzy package version. Use `ros2 topic list` to identify the exact names before continuing.
+
+To observe motion numerically while the robot moves, run:
+
+```bash
+ros2 topic echo /odom
+```
+
+Stop the command with `Ctrl+C` after confirming that position or orientation changes.
+
+### Fallback sensor demonstration
 
 If the primary simulation does not launch, use an official `ros_gz_sim_demos` sensor example as a fallback:
 

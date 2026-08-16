@@ -94,6 +94,7 @@ sudo apt update
 sudo apt install \
   ros-jazzy-navigation2 \
   ros-jazzy-nav2-bringup \
+  ros-jazzy-nav2-minimal-tb3-sim \
   ros-jazzy-slam-toolbox \
   ros-jazzy-robot-localization
 ```
