@@ -31,6 +31,7 @@ The purpose of this lab is **not** to master ROS 2. ROS 2 is the instrumentation
 ```text
 lab01_system_architecture_sensors/
 ├── README.md
+├── launch_simulation.sh
 ├── src/
 │   └── topic_inventory.py
 ├── results/
@@ -48,7 +49,79 @@ Two graphical applications open during this activity:
 
 The two windows display the same simulated robot in different ways. Moving the robot in Gazebo changes the sensor and odometry data displayed in RViz2.
 
-### 1. Verify the required packages
+### What the `/tf` bridge does
+
+Gazebo and ROS 2 use different communication systems. Gazebo calculates the robot's motion, while ROS tools such as RViz2, AMCL, and Nav2 need that motion expressed as coordinate transforms on the ROS `/tf` topic. The bridge translates Gazebo's pose messages into ROS TF messages.
+
+The transform chain used in this simulation is:
+
+```text
+map ──AMCL──> odom ──TF bridge──> base_footprint ──robot state publisher──> sensors
+```
+
+Without the bridge, the robot can move in Gazebo while appearing stationary or disconnected in RViz2. Localization and navigation also fail because they cannot determine the robot's pose.
+
+### Simplified workflow
+
+Use the provided helper so the simulation and TF bridge start together.
+
+In **Terminal 1**, from the repository root, run:
+
+```bash
+bash lab01_system_architecture_sensors/launch_simulation.sh
+```
+
+Keep Terminal 1 open. Wait for Gazebo and RViz2 to appear.
+
+In **Terminal 2**, run the following commands in order.
+
+1. Confirm the bridge is providing robot motion:
+
+   ```bash
+   source /opt/ros/jazzy/setup.bash
+   ros2 run tf2_ros tf2_echo odom base_footprint
+   ```
+
+   Wait for transform data, then press `Ctrl+C`.
+
+2. Start localization exactly once:
+
+   ```bash
+   ros2 service call /lifecycle_manager_localization/manage_nodes \
+     nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
+   ```
+
+   Continue only after it reports `success: true`.
+
+3. In RViz2, click **2D Pose Estimate**. Click near `x = -2.0 m, y = -0.5 m`, drag toward the positive x-direction, and release.
+
+4. Confirm localization created the complete transform chain:
+
+   ```bash
+   ros2 run tf2_ros tf2_echo map base_link
+   ```
+
+   Wait for transform data, then press `Ctrl+C`.
+
+5. Start navigation exactly once:
+
+   ```bash
+   ros2 service call /lifecycle_manager_navigation/manage_nodes \
+     nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
+   ```
+
+   Continue only after it reports `success: true`.
+
+6. In RViz2, click **Nav2 Goal**, then click-drag to a nearby open white area. The robot should move in both Gazebo and RViz2.
+
+If a lifecycle command reports `success: false` after an earlier `success: true`, do not run it again; the nodes are already active. Use the detailed procedure below only when a quick-start step fails.
+
+<details>
+<summary><strong>Detailed manual procedure and troubleshooting</strong></summary>
+
+Use this expanded procedure only if a simplified-workflow step fails.
+
+#### 1. Verify the required packages
 
 Run:
 
@@ -68,7 +141,7 @@ sudo apt install \
   ros-jazzy-nav2-minimal-tb3-sim
 ```
 
-### 2. Launch the simulation
+#### 2. Launch the simulation
 
 In **Terminal 1**, run:
 
@@ -88,9 +161,32 @@ Wait until both graphical windows open. At this stage:
 
 Make sure Gazebo is not paused. If its toolbar shows a **play** triangle, click it to start simulation time. Do not close Gazebo, RViz2, or Terminal 1 while completing the lab.
 
-### 3. Start localization
+#### 3. Start the Gazebo-to-ROS TF bridge
 
-In **Terminal 2**, start only the localization lifecycle nodes:
+The moving transform from `odom` to `base_footprint` is required before localization starts. Although the TurtleBot launch file starts a general ROS–Gazebo bridge, the tested Jazzy environment required a dedicated `/tf` bridge for this transform to appear reliably.
+
+In **Terminal 2**, run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 run ros_gz_bridge parameter_bridge \
+  '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
+```
+
+Keep Terminal 2 running for the rest of the activity. It should report that it created a Gazebo-to-ROS bridge from `/tf` to `/tf`.
+
+In **Terminal 3**, verify the moving transform:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 run tf2_ros tf2_echo odom base_footprint
+```
+
+Do not continue until the command prints translation and rotation data. Press `Ctrl+C` to stop `tf2_echo`; do not stop the bridge in Terminal 2. This transform allows RViz2 to display robot motion and allows AMCL to create the `map → odom` transform.
+
+#### 4. Start localization
+
+In **Terminal 3**, start only the localization lifecycle nodes:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -104,8 +200,10 @@ In RViz2, look for these signs that localization is ready for an initial pose:
 
 - the **Map** display is checked in the left **Displays** panel;
 - a black-and-white occupancy-grid map is visible in the center view;
-- the **Navigation 2** panel reports **Localization: active**;
-- **Navigation: inactive** is expected at this point.
+- the **Navigation 2** panel normally changes to **Localization: active**;
+- **Navigation: inactive** is expected at this point because navigation has not been started.
+
+The RViz2 panel can update slowly, and a map retained by RViz2 can remain visible even when the lifecycle nodes are inactive. Use the lifecycle commands below as the authoritative state check:
 
 Confirm the localization state:
 
@@ -116,7 +214,11 @@ ros2 lifecycle get /amcl
 
 Both nodes should report `active` before continuing.
 
-### 4. Set the initial pose and start navigation
+If either node reports `unconfigured` or `inactive`, make sure the localization startup command above has been run exactly once, then wait several seconds and check both states again. If the startup command already returned `success: true` and both lifecycle commands report `active`, continue even if the RViz2 panel has not refreshed yet. Do not click the combined RViz2 **Startup** button.
+
+The red **Global Status: Error** indicator can remain until an initial pose establishes the `map → odom → base_link` transform chain. Continue to the initial-pose step only after `/map_server` and `/amcl` both report `active`.
+
+#### 5. Set the initial pose and start navigation
 
 In RViz2:
 
@@ -130,7 +232,34 @@ In RViz2:
 
 A reasonable pose estimate should make the robot model and red laser-scan points line up with the walls on the map. If they are clearly misaligned, repeat the **2D Pose Estimate** action with a corrected position or direction.
 
-Return to Terminal 2 and start only the navigation lifecycle nodes:
+##### Finding map coordinates in RViz2
+
+RViz2 does not show the pointer coordinates prominently. To locate `x = -2.0 m, y = -0.5 m`, open another terminal and run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 topic echo /clicked_point
+```
+
+In RViz2:
+
+1. Click **Publish Point** in the top toolbar.
+2. Click a location on the map.
+3. Read the `x` and `y` values printed in the terminal.
+4. Click different map locations until the reported values are near `x = -2.0` and `y = -0.5`.
+5. Return to **2D Pose Estimate** and place the pose at that location.
+
+The point does not need to be exact. AMCL uses the estimate as a starting guess and refines it using the laser scan. The position and heading are reasonable when the robot model and laser-scan points align with the map walls.
+
+Return to Terminal 3 and verify that localization created the complete transform chain:
+
+```bash
+ros2 run tf2_ros tf2_echo map base_link
+```
+
+The command may initially print a waiting message. Do not continue until it prints translation and rotation data. Press `Ctrl+C` after confirming the transform. The translation should be close to the initial pose, approximately `x = -2.0 m, y = -0.5 m`, on a fresh launch.
+
+Now start only the navigation lifecycle nodes:
 
 ```bash
 ros2 service call /lifecycle_manager_navigation/manage_nodes \
@@ -155,6 +284,14 @@ Both nodes should report `active`. Then:
 
 Start with a short goal in clear space. A long or obstructed goal makes troubleshooting harder.
 
+A successful run prints messages similar to the following in Terminal 1:
+
+```text
+Passing new path to controller.
+Reached the goal!
+Goal succeeded
+```
+
 Do not use the RViz2 **Startup** button for this procedure because it attempts to start both lifecycle managers together. Do not send a goal while the Navigation panel reports **inactive**. When navigation is active, the global and local paths should appear in RViz2, and the robot should begin moving in both RViz2 and Gazebo.
 
 If Terminal 1 previously displayed an error similar to:
@@ -168,6 +305,14 @@ Nav2 attempted to activate before the initial pose created the complete `map →
 
 If an error says that no transition is registered for a node in the `active` state, a lifecycle manager was asked to start an already-active node. Stop the complete launch with `Ctrl+C`, close its Gazebo and RViz2 windows, launch again with `autostart:=False`, and use the two service commands above exactly once each.
 
+If the terminal reports that the `map` frame does not exist, the initial pose was not accepted after the moving TF bridge became available. Set **2D Pose Estimate** again, then verify the complete transform chain:
+
+```bash
+ros2 run tf2_ros tf2_echo map base_link
+```
+
+Do not start navigation until this command prints transform data. If the robot was driven far from its starting location during testing, restart the complete simulation before setting the initial pose; the default estimate `x = -2.0 m, y = -0.5 m` is valid only for a fresh launch.
+
 If RViz repeatedly reports that messages are older than the transform cache, stop the entire launch with `Ctrl+C`, close any remaining Gazebo and RViz2 windows, and start one fresh simulation. Do not leave an older simulation running when launching another one because resetting simulation time can invalidate cached transforms.
 
 If navigation is active but nothing changes after sending a goal, check whether simulation time is advancing:
@@ -178,9 +323,9 @@ ros2 topic hz /clock
 
 The command should continuously report a rate. If it prints nothing, return to Gazebo and click the **play** control.
 
-### 5. Verify the simulator can move the robot directly
+#### 6. Verify the simulator can move the robot directly
 
-If the robot does not respond to an RViz2 goal, first test the Gazebo velocity interface without relying on localization or planning. In Terminal 2, run:
+If the robot does not respond to an RViz2 goal, first test the Gazebo velocity interface without relying on localization or planning. In Terminal 3 or another terminal, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -204,7 +349,7 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
 
 If this direct test moves the robot, the simulator and command bridge work; return to RViz2 and check the initial pose and navigation goal. If it does not move, check Terminal 1 for bridge or Gazebo errors and confirm that `/cmd_vel` has a subscriber.
 
-### 6. Inspect the ROS graph and sensor topics
+#### 7. Inspect the ROS graph and sensor topics
 
 After the simulation starts, confirm that ROS topics and transforms are available:
 
@@ -228,7 +373,7 @@ ros2 topic echo /odom
 
 Stop the command with `Ctrl+C` after confirming that position or orientation changes.
 
-### Fallback sensor demonstration
+#### Fallback sensor demonstration
 
 If the primary simulation does not launch, use an official `ros_gz_sim_demos` sensor example as a fallback:
 
@@ -239,6 +384,8 @@ ros2 launch ros_gz_sim_demos imu.launch.py
 Other available fallback demonstrations include `camera.launch.py` and the Gazebo LiDAR examples.
 
 **INSTRUCTOR VALIDATION REQUIRED:** Test the primary launch command and record the final topic and frame names on the Fall 2026 course image before releasing the lab.
+
+</details>
 
 ## Part 2 — Inspect the ROS Graph
 
