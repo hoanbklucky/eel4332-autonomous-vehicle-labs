@@ -188,7 +188,7 @@ https://github.com/hoanbklucky/goose
 
 The instructor will provide the final ROS 2 branch/package names and network/hardware configuration before the physical-robot project.
 
-Goosebot is a four-wheel skid-steer robot. Its wheels do not steer; turns are produced by different left- and right-side wheel velocities. The TurtleBot simulation used in the course is not an exact Goosebot model, but it exercises the same high-level differential/skid-steer motion interface and the same ROS 2 autonomy layers.
+Goosebot is a four-wheel skid-steer robot. It has four conventional wheels, each powered by a DC motor, with fixed parallel wheel axes and no geometric steering linkage. Turning requires different left- and right-side wheel velocities and lateral tire slip. Before deployment, the instructor must document how motion commands are mapped to the four motors. The TurtleBot simulation is not an exact Goosebot model; it is used to exercise the ROS 2 autonomy layers before the physical interface is introduced.
 
 ---
 

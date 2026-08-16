@@ -10,7 +10,7 @@ The final project is an integration assessment. It should reuse concepts and cod
 
 A successful simulation demonstration is required. Physical Goosebot deployment is the intended final stage, but hardware availability or a documented hardware fault should not erase otherwise valid software/system work.
 
-The simulation uses TurtleBot in Gazebo; it is not a Goosebot digital twin. TurtleBot uses differential drive and Goosebot uses four-wheel skid steering, but both turn through relative left/right wheel motion. Students should transfer the ROS 2 architecture and validate the physical platform rather than assume that simulator parameters are interchangeable.
+The simulation uses TurtleBot in Gazebo; it is not a Goosebot digital twin. TurtleBot uses two-wheel differential drive. Goosebot uses four-wheel skid steering, with four conventional wheels powered by four DC motors on fixed parallel axes. Students should transfer the ROS 2 architecture while validating Goosebot's motor mapping, lateral slip, effective turning behavior, and safety limits rather than assuming that simulator parameters are interchangeable.
 
 ## Required Milestones
 
@@ -63,7 +63,7 @@ https://github.com/hoanbklucky/goose
 Expected workflow:
 
 1. verify hardware/network;
-2. verify the four-wheel skid-steer motor-command interface and safe stop;
+2. verify the four-motor skid-steer command mapping and safe stop;
 3. verify LiDAR/odometry/TF;
 4. confirm the physical footprint, speed limits, and controller parameters;
 5. build or load a map;

@@ -27,7 +27,7 @@ The intended course environment is:
 - **F1TENTH / RoboRacer Gym** only as an optional car-like path-tracking extension
 - **Goosebot** for final physical deployment
 
-ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer platform: its wheels do not steer, and it turns by commanding different left- and right-side wheel velocities. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion and ROS/Nav2 workflow provide a closer preparation path than an Ackermann-steered simulator.
+ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer robot: it has four conventional wheels powered by four DC motors, all four wheel axes are fixed and parallel, and there is no geometric steering linkage. It turns by producing different left- and right-side velocities, which requires lateral tire slip. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion is a useful approximation for learning the ROS/Nav2 workflow. The instructor must still validate Goosebot's motor-command mapping, slip, and exact kinematic parameters.
 
 The Python bicycle model remains a deliberate car-like modeling exercise. F1TENTH may be used to extend that exercise, but it is not required for Goosebot deployment.
 
@@ -36,7 +36,7 @@ The Python bicycle model remains a deliberate car-like modeling exercise. F1TENT
 | Lab | Mission | Main concepts |
 |---|---|---|
 | 01 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 02 | Predict car-like motion from steering and speed | bicycle model, kinematics, comparison with skid steering |
+| 02 | Predict car-like motion from steering and speed | bicycle model, kinematics, comparison with differential drive |
 | 03 | Characterize noisy sensors | bias, variance, sampling, measurement models |
 | 04 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
 | 05 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
@@ -57,7 +57,7 @@ The labs deliberately group related lecture topics into larger engineering tasks
 - **Lab 07** supports system integration, safety, and failure handling.
 - **Final Project** supports end-to-end autonomy and sim-to-real deployment.
 
-The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's exact hardware interfaces, dimensions, sensor frames, skid-steer behavior, and safety limits.
+The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's four-wheel skid-steer interface, dimensions, sensor frames, slip behavior, and safety limits.
 
 ## Start here
 

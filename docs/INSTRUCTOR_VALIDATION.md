@@ -22,7 +22,7 @@ Complete this checklist before publishing the repository to students.
 ## Lab 02
 
 - [ ] verify pure-Python bicycle starter flow
-- [ ] verify the bicycle-versus-skid-steer comparison prompt
+- [ ] verify the bicycle-versus-differential-drive comparison prompt
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 
@@ -61,7 +61,8 @@ Complete this checklist before publishing the repository to students.
 
 - [ ] verify the TurtleBot Gazebo/Nav2 final simulation
 - [ ] verify Goosebot ROS 2 branch/package
-- [ ] verify Goosebot LiDAR, odometry, TF, four-wheel skid-steer motor command interface, and safe stop
-- [ ] measure/freeze Goosebot footprint, speed limits, and skid-steer controller parameters
+- [ ] document Goosebot fixed-axis geometry and four-motor skid-steer command mapping
+- [ ] verify Goosebot LiDAR, odometry, TF, motor command interface, and safe stop
+- [ ] measure/freeze Goosebot footprint, speed limits, and motion-controller parameters
 - [ ] verify SLAM and Nav2 on Goosebot
 - [ ] publish hardware-failure fallback policy

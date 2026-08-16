@@ -16,7 +16,7 @@
 
 Run a known-good autonomous mission with TurtleBot in Gazebo.
 
-The final Goosebot deployment will reuse the system-level workflow but not every simulator parameter. In particular, verify the physical robot's command interface, braking behavior, wheel slip, sensor timing, footprint, and safe-stop mechanism before reusing simulation thresholds.
+The final Goosebot deployment will reuse the system-level workflow but not every simulator parameter. In particular, verify the four-motor command mapping, braking behavior, skid-steer slip, sensor timing, footprint, and safe-stop mechanism before reusing simulation thresholds.
 
 Record:
 

@@ -60,7 +60,7 @@ The function should compute a steering command from:
 - wheelbase;
 - look-ahead distance.
 
-This Pure Pursuit formulation produces an Ackermann/bicycle steering angle. It is a car-like control exercise and must not be sent directly to Goosebot, which has no steering joints. A Goosebot deployment requires a tested conversion or a controller designed for differential/skid-steer commands.
+This Pure Pursuit formulation produces an Ackermann/bicycle steering angle. It is a car-like control exercise and must not be sent directly to Goosebot, whose wheel axes are fixed and parallel. Goosebot deployment requires a tested controller or conversion that produces the appropriate left/right skid-steer motion commands and respects the four-motor interface.
 
 ## Part 4 — Lightweight Vehicle Experiment
 
@@ -87,7 +87,7 @@ Report:
 3. Why can a short Pure Pursuit look-ahead cause oscillation?
 4. Why can a long look-ahead cut corners?
 5. How did increasing speed change tracking performance?
-6. Why can an Ackermann steering command not be applied directly to a skid-steer robot?
+6. What parameters and interface information are needed to convert a path-tracking command into safe Goosebot left/right motor commands?
 
 ## Success Criteria
 

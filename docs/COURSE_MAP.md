@@ -5,7 +5,7 @@
 | Automation levels & architecture | Lab 01 |
 | Hardware/software architecture | Lab 01 |
 | Vehicle kinematics | Lab 02 |
-| Differential drive vs. skid steer vs. bicycle model | Labs 01–02 |
+| Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 01–02 |
 | Vehicle dynamics/modeling | Lab 02 experiments + lecture/homework |
 | AV sensors | Lab 01 + Lab 03 |
 | Sensor uncertainty | Lab 03 |

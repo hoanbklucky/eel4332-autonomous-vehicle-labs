@@ -41,7 +41,17 @@ lab01_system_architecture_sensors/
 
 For Lab 1, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
-TurtleBot is the course's simulation platform, not a geometric model of Goosebot. It uses differential drive, while the four-motor Goosebot uses skid steering with fixed wheel angles. Both turn by changing the relative left- and right-side wheel velocities, so the ROS 2, TF, localization, mapping, and Nav2 concepts in this lab transfer to the physical platform. Exact topics, frames, dimensions, slip, and safety limits must be revalidated on Goosebot.
+TurtleBot is the course's simulation platform, not a geometric model of Goosebot. TurtleBot uses two-wheel differential drive, while Goosebot uses four conventional, independently powered DC wheels on fixed parallel axes and is a four-wheel skid-steer platform. Both use relative left/right motion to turn, but Goosebot experiences additional tire scrub and slip. The ROS 2, TF, localization, mapping, and Nav2 concepts in this lab transfer to the physical platform; exact topics, frames, motor mapping, dimensions, motion limits, and safety behavior must be revalidated on Goosebot.
+
+### What skid steering means
+
+A skid-steer robot has no steering linkage that changes the wheel angles. All wheel axes remain fixed and parallel. The robot changes direction by commanding different velocities on its left and right sides:
+
+- equal left and right velocities produce approximately straight motion;
+- a faster right side produces a left turn, and a faster left side produces a right turn;
+- opposite left and right velocities can produce an approximately in-place turn.
+
+During a turn, four conventional wheels cannot all roll along their preferred directions without some sideways motion. The tires therefore scrub or **skid** across the surface. This slip makes the relationship between wheel rotation and vehicle motion less exact than an ideal differential-drive model, so physical Goosebot odometry and turning behavior must be measured and tuned rather than copied directly from TurtleBot.
 
 Two graphical applications open during this activity:
 

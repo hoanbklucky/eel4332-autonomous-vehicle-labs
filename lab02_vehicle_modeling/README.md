@@ -24,7 +24,7 @@ x = [X,\;Y,\;\psi]^T
 
 with inputs such as longitudinal speed \(v\) and steering angle \(\delta\).
 
-This is a car-like model, not a model of Goosebot. Goosebot has four fixed-angle, independently powered wheels and turns through left/right velocity differences. Comparing these motion models is part of understanding why a controller or model must match the physical platform.
+This is a car-like model, not a model of Goosebot. Goosebot has four conventional, independently powered DC wheels on fixed parallel axes and no geometric steering linkage. It uses four-wheel skid steering through left/right velocity differences and tire slip. Comparing bicycle, differential-drive, and four-wheel skid-steer motion is part of understanding why a controller or model must match the physical platform.
 
 ## Provided Files
 
@@ -77,7 +77,7 @@ Generate trajectory plots and save them in `results/`.
 
 ## Part 4 — Contrast with the Course Platforms
 
-Explain why the bicycle model cannot represent an in-place skid-steer turn. Identify which inputs would describe TurtleBot/Goosebot motion instead of the bicycle model's speed and steering angle.
+Explain why the bicycle model cannot represent an in-place differential/skid-steer turn. Identify the inputs that describe TurtleBot and Goosebot motion instead of the bicycle model's speed and steering angle. Explain why a two-wheel differential-drive model is useful but cannot capture all four-wheel tire scrub and slip.
 
 If the instructor assigns the optional F1TENTH extension, run the same or comparable steering/speed cases in F1TENTH and compare trajectories. Otherwise, complete the pure-Python comparison and use instructor-provided reference data.
 
@@ -105,7 +105,7 @@ Also conduct one parameter study:
 3. How does wheelbase affect turning radius?
 4. Why can two models agree at low speed but disagree at higher speed?
 5. Which parameter or assumption had the largest effect in your experiment?
-6. Why is this bicycle model unsuitable for an in-place turn by a skid-steer Goosebot?
+6. Why can TurtleBot's differential-drive model approximate Goosebot while still missing four-wheel skid-steer slip?
 
 ## Success Criteria
 
