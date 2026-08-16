@@ -60,14 +60,16 @@ The function should compute a steering command from:
 - wheelbase;
 - look-ahead distance.
 
-## Part 4 — F1TENTH / Lightweight Vehicle Experiment
+This Pure Pursuit formulation produces an Ackermann/bicycle steering angle. It is a car-like control exercise and must not be sent directly to Goosebot, which has no steering joints. A Goosebot deployment requires a tested conversion or a controller designed for differential/skid-steer commands.
+
+## Part 4 — Lightweight Vehicle Experiment
 
 Track the same path for at least:
 
 - two look-ahead distances;
 - two speeds.
 
-If the instructor-pinned F1TENTH environment is unavailable, use the Lab 02 bicycle simulator plus the tracking controller.
+Use the Lab 02 bicycle simulator plus the tracking controller. If the instructor provides a pinned F1TENTH environment, it may be used as an optional second experiment.
 
 ## Part 5 — Quantitative Evaluation
 
@@ -85,6 +87,7 @@ Report:
 3. Why can a short Pure Pursuit look-ahead cause oscillation?
 4. Why can a long look-ahead cut corners?
 5. How did increasing speed change tracking performance?
+6. Why can an Ackermann steering command not be applied directly to a skid-steer robot?
 
 ## Success Criteria
 

@@ -1,6 +1,6 @@
 # EEL 4332 — Introduction to Autonomous Vehicles
 
-## ROS 2 + Gazebo + F1TENTH + Goosebot Laboratory Repository
+## ROS 2 + Gazebo + Goosebot Laboratory Repository
 
 This repository contains the hands-on laboratory sequence for **EEL 4332 — Introduction to Autonomous Vehicles**.
 
@@ -23,21 +23,24 @@ The intended course environment is:
 - **SLAM Toolbox**
 - **robot_localization**
 - **Python 3 + NumPy + Matplotlib**
-- **F1TENTH / RoboRacer Gym** for lightweight vehicle-model and path-tracking experiments
+- **TurtleBot 3 in Gazebo** as the primary simulation platform
+- **F1TENTH / RoboRacer Gym** only as an optional car-like path-tracking extension
 - **Goosebot** for final physical deployment
 
-ROS 2 and Gazebo are used for autonomy-system integration. Python/F1TENTH is used where a lightweight car-like model is more appropriate than a differential-drive mobile robot.
+ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer platform: its wheels do not steer, and it turns by commanding different left- and right-side wheel velocities. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion and ROS/Nav2 workflow provide a closer preparation path than an Ackermann-steered simulator.
+
+The Python bicycle model remains a deliberate car-like modeling exercise. F1TENTH may be used to extend that exercise, but it is not required for Goosebot deployment.
 
 ## Required lab sequence
 
 | Lab | Mission | Main concepts |
 |---|---|---|
 | 01 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 02 | Predict vehicle motion from steering and speed | bicycle model, kinematics, simulation |
+| 02 | Predict car-like motion from steering and speed | bicycle model, kinematics, comparison with skid steering |
 | 03 | Characterize noisy sensors | bias, variance, sampling, measurement models |
 | 04 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
 | 05 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
-| 06 | Plan a path and track it | A*, path metrics, Pure Pursuit, tracking error |
+| 06 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
 | 07 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
 | Final | Complete an autonomous navigation mission | SLAM/localization/Nav2/Goosebot integration |
 
@@ -53,6 +56,8 @@ The labs deliberately group related lecture topics into larger engineering tasks
 - **Lab 06** supports path planning and path tracking/control.
 - **Lab 07** supports system integration, safety, and failure handling.
 - **Final Project** supports end-to-end autonomy and sim-to-real deployment.
+
+The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's exact hardware interfaces, dimensions, sensor frames, skid-steer behavior, and safety limits.
 
 ## Start here
 

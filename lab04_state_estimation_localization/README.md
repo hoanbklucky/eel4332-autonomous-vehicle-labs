@@ -51,6 +51,8 @@ Plot the resulting estimates.
 
 Apply the estimator or a comparable fusion workflow to instructor-provided odometry + global/localization measurements.
 
+The default live simulation source is TurtleBot/Gazebo. Treat its differential-drive odometry as preparation for Goosebot rather than ground-truth skid-steer behavior: physical Goosebot wheel slip may require different process noise and tuning.
+
 Compare at least:
 
 - raw/dead-reckoned trajectory;

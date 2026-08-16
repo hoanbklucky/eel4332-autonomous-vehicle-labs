@@ -14,6 +14,8 @@
 
 ## Procedure
 
+Use the same TurtleBot/Gazebo environment introduced in Lab 01 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
+
 ### Part 1 — Choose sensor signals
 
 Use at least two numeric sensor/state signals from the instructor simulation, such as:

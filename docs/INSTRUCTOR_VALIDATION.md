@@ -22,7 +22,8 @@ Complete this checklist before publishing the repository to students.
 ## Lab 02
 
 - [ ] verify pure-Python bicycle starter flow
-- [ ] pin F1TENTH/RoboRacer Gym commit or environment if required
+- [ ] verify the bicycle-versus-skid-steer comparison prompt
+- [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 
 ## Lab 03
@@ -46,7 +47,8 @@ Complete this checklist before publishing the repository to students.
 ## Lab 06
 
 - [ ] provide occupancy grid/map input for A*
-- [ ] verify F1TENTH or bicycle-model tracking environment
+- [ ] verify the required bicycle-model tracking environment
+- [ ] verify F1TENTH only if the optional extension is assigned
 - [ ] define track/path file format
 
 ## Lab 07
@@ -57,8 +59,9 @@ Complete this checklist before publishing the repository to students.
 
 ## Final Project
 
-- [ ] choose Gazebo/Nav2 final simulation
+- [ ] verify the TurtleBot Gazebo/Nav2 final simulation
 - [ ] verify Goosebot ROS 2 branch/package
-- [ ] verify Goosebot LiDAR, odometry, TF, motor command interface
+- [ ] verify Goosebot LiDAR, odometry, TF, four-wheel skid-steer motor command interface, and safe stop
+- [ ] measure/freeze Goosebot footprint, speed limits, and skid-steer controller parameters
 - [ ] verify SLAM and Nav2 on Goosebot
 - [ ] publish hardware-failure fallback policy

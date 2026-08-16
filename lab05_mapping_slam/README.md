@@ -38,7 +38,9 @@ Do not start debugging SLAM until `/scan`, `/odom`, and TF are valid.
 
 ## Part 2 — Build a Map
 
-Launch the instructor-provided simulation and SLAM workflow.
+Launch the instructor-provided TurtleBot/Gazebo simulation and SLAM workflow.
+
+This lab establishes the ROS 2 mapping procedure later used on Goosebot. On hardware, repeat all input checks because Goosebot's LiDAR mounting, odometry drift, skid-steer slip, and TF frames will differ from TurtleBot.
 
 **INSTRUCTOR VALIDATION REQUIRED:** insert the final launch commands for the Fall 2026 course simulation.
 

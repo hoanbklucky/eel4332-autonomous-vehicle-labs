@@ -41,6 +41,8 @@ lab01_system_architecture_sensors/
 
 For Lab 1, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
+TurtleBot is the course's simulation platform, not a geometric model of Goosebot. It uses differential drive, while the four-motor Goosebot uses skid steering with fixed wheel angles. Both turn by changing the relative left- and right-side wheel velocities, so the ROS 2, TF, localization, mapping, and Nav2 concepts in this lab transfer to the physical platform. Exact topics, frames, dimensions, slip, and safety limits must be revalidated on Goosebot.
+
 Two graphical applications open during this activity:
 
 - **Gazebo** is the physics simulator. It shows the robot and its environment as a 3D world. Use Gazebo to confirm that the simulated robot physically moves.

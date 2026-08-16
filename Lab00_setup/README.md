@@ -19,7 +19,7 @@ Windows 11
         └── Python tools
 ```
 
-F1TENTH / RoboRacer Gym is installed separately for the vehicle-model and path-tracking activities.
+F1TENTH / RoboRacer Gym is optional and is not required to begin the course. The required simulation environment uses TurtleBot 3 in Gazebo.
 
 ---
 
@@ -134,7 +134,7 @@ python -c "import numpy, matplotlib, yaml; print('Python dependencies OK')"
 
 ---
 
-## Part 6 — F1TENTH / RoboRacer Gym
+## Part 6 — Optional F1TENTH / RoboRacer Gym
 
 The official F1TENTH Gym repository is:
 
@@ -144,11 +144,11 @@ The official organization also maintains course lab repositories:
 
 https://github.com/f1tenth/f1tenth_labs_openrepo
 
-For Fall 2026, use the **course-pinned installation instructions supplied by the instructor** rather than blindly mixing old ROS/F1TENTH tutorials with Jazzy.
+Do not install this environment unless the instructor assigns the optional F1TENTH comparison. For Fall 2026, use the **course-pinned installation instructions supplied by the instructor** rather than mixing older ROS/F1TENTH tutorials with Jazzy.
 
 Why: some public F1TENTH ROS bridge documentation was originally written for older ROS 2 distributions.
 
-**INSTRUCTOR VALIDATION REQUIRED:** pin the exact Gym commit / Python environment after testing Lab 02 and Lab 06 on the instructor machine.
+**INSTRUCTOR VALIDATION REQUIRED:** if this extension is assigned, pin the exact Gym commit / Python environment after testing Lab 02 and Lab 06 on the instructor machine.
 
 Lab 02 can still be completed using the repository's pure-Python bicycle model if the F1TENTH environment is unavailable.
 
@@ -187,6 +187,8 @@ The final physical deployment will use:
 https://github.com/hoanbklucky/goose
 
 The instructor will provide the final ROS 2 branch/package names and network/hardware configuration before the physical-robot project.
+
+Goosebot is a four-wheel skid-steer robot. Its wheels do not steer; turns are produced by different left- and right-side wheel velocities. The TurtleBot simulation used in the course is not an exact Goosebot model, but it exercises the same high-level differential/skid-steer motion interface and the same ROS 2 autonomy layers.
 
 ---
 

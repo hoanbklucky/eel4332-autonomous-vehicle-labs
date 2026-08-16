@@ -24,6 +24,8 @@ x = [X,\;Y,\;\psi]^T
 
 with inputs such as longitudinal speed \(v\) and steering angle \(\delta\).
 
+This is a car-like model, not a model of Goosebot. Goosebot has four fixed-angle, independently powered wheels and turns through left/right velocity differences. Comparing these motion models is part of understanding why a controller or model must match the physical platform.
+
 ## Provided Files
 
 ```text
@@ -73,13 +75,13 @@ Modify the experiment definitions as required by the README/TODO comments.
 
 Generate trajectory plots and save them in `results/`.
 
-## Part 4 — F1TENTH / RoboRacer Comparison
+## Part 4 — Contrast with the Course Platforms
 
-If the instructor-pinned F1TENTH environment is available, run the same or comparable steering/speed cases in F1TENTH and compare trajectories.
+Explain why the bicycle model cannot represent an in-place skid-steer turn. Identify which inputs would describe TurtleBot/Goosebot motion instead of the bicycle model's speed and steering angle.
 
-If F1TENTH is unavailable, complete the pure-Python comparison and use instructor-provided reference data.
+If the instructor assigns the optional F1TENTH extension, run the same or comparable steering/speed cases in F1TENTH and compare trajectories. Otherwise, complete the pure-Python comparison and use instructor-provided reference data.
 
-**INSTRUCTOR VALIDATION REQUIRED:** pin the exact F1TENTH commit and example command before student release.
+**INSTRUCTOR VALIDATION REQUIRED:** if F1TENTH is assigned, pin the exact commit and example command before student release.
 
 ## Quantitative Analysis
 
@@ -103,6 +105,7 @@ Also conduct one parameter study:
 3. How does wheelbase affect turning radius?
 4. Why can two models agree at low speed but disagree at higher speed?
 5. Which parameter or assumption had the largest effect in your experiment?
+6. Why is this bicycle model unsuitable for an in-place turn by a skid-steer Goosebot?
 
 ## Success Criteria
 
@@ -119,4 +122,4 @@ Also conduct one parameter study:
 - trajectory plots;
 - parameter-study results;
 - completed `answers.md`;
-- F1TENTH comparison if assigned.
+- optional F1TENTH comparison if assigned.
