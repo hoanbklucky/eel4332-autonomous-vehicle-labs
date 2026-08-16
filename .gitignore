@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# ROS 2
+build/
+install/
+log/
+
+# Data / recordings
+*.db3
+*.mcap
+*.bag
+rosbag2_*/
+*.sqlite3
+
+# Results that can be regenerated
+**/results/*.tmp
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
