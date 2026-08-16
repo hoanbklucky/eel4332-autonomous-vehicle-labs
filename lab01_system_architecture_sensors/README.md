@@ -31,7 +31,6 @@ The purpose of this lab is **not** to master ROS 2. ROS 2 is the instrumentation
 ```text
 lab01_system_architecture_sensors/
 ├── README.md
-├── launch_simulation.sh
 ├── src/
 │   └── topic_inventory.py
 ├── results/
@@ -63,17 +62,27 @@ Without the bridge, the robot can move in Gazebo while appearing stationary or d
 
 ### Simplified workflow
 
-Use the provided helper so the simulation and TF bridge start together.
-
-In **Terminal 1**, from the repository root, run:
+In **Terminal 1**, launch the original Nav2 TurtleBot 3 simulation:
 
 ```bash
-bash lab01_system_architecture_sensors/launch_simulation.sh
+source /opt/ros/jazzy/setup.bash
+ros2 launch nav2_bringup tb3_simulation_launch.py \
+  headless:=False autostart:=False
 ```
 
-Keep Terminal 1 open. Wait for Gazebo and RViz2 to appear.
+Keep Terminal 1 open and wait for Gazebo and RViz2 to appear.
 
-In **Terminal 2**, run the following commands in order.
+In **Terminal 2**, start the dedicated TF bridge:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 run ros_gz_bridge parameter_bridge \
+  '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
+```
+
+Keep Terminal 2 open. The bridge must continue running while the simulation is in use.
+
+In **Terminal 3**, run the following commands in order.
 
 1. Confirm the bridge is providing robot motion:
 
