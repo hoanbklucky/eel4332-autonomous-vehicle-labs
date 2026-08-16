@@ -169,8 +169,8 @@ cd eel4332-autonomous-vehicle-labs
 ## Part 8 — Run the verification script
 
 ```bash
-chmod +x setup/verify_installation.sh
-./setup/verify_installation.sh
+chmod +x Lab00_setup/verify_installation.sh
+./Lab00_setup/verify_installation.sh
 ```
 
 Fix any required item marked `MISSING` before starting Lab 01.

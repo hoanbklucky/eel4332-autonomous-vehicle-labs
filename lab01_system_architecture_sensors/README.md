@@ -16,7 +16,7 @@ By the end of this lab, you should be able to:
 
 ## Prerequisites
 
-- Complete `setup/README.md`.
+- Complete `Lab00_setup/README.md`.
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -39,11 +39,40 @@ lab01_system_architecture_sensors/
 
 ## Part 1 — Launch a Known-Good Simulation
 
-Use the instructor-provided Gazebo/ROS launch command.
+For Lab 1, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
-**INSTRUCTOR VALIDATION REQUIRED:** insert the final Fall 2026 launch command here after the course simulation image is frozen.
+From a terminal with ROS 2 Jazzy sourced, run:
 
-If no course vehicle is yet available, the instructor may use an official `ros_gz_sim_demos` sensor demo for this lab.
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 launch nav2_bringup tb3_simulation_launch.py headless:=False
+```
+
+The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack.
+
+After the simulation starts, confirm that ROS topics and transforms are available:
+
+```bash
+ros2 topic list
+ros2 node list
+ros2 topic echo /scan --once
+ros2 topic echo /odom --once
+ros2 topic echo /imu --once
+ros2 topic echo /joint_states --once
+ros2 topic echo /tf --once
+```
+
+Topic names may differ slightly with the installed Jazzy package version. Use `ros2 topic list` to identify the exact names before continuing.
+
+If the primary simulation does not launch, use an official `ros_gz_sim_demos` sensor example as a fallback:
+
+```bash
+ros2 launch ros_gz_sim_demos imu.launch.py
+```
+
+Other available fallback demonstrations include `camera.launch.py` and the Gazebo LiDAR examples.
+
+**INSTRUCTOR VALIDATION REQUIRED:** Test the primary launch command and record the final topic and frame names on the Fall 2026 course image before releasing the lab.
 
 ## Part 2 — Inspect the ROS Graph
 

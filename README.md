@@ -56,8 +56,8 @@ The labs deliberately group related lecture topics into larger engineering tasks
 
 ## Start here
 
-1. Complete [`setup/README.md`](setup/README.md).
-2. Run [`setup/verify_installation.sh`](setup/verify_installation.sh).
+1. Complete [`Lab00_setup/README.md`](Lab00_setup/README.md).
+2. Run [`Lab00_setup/verify_installation.sh`](Lab00_setup/verify_installation.sh).
 3. Complete labs in numerical order unless your instructor says otherwise.
 4. Keep all experimental results in each lab's `results/` directory.
 5. Do not commit large ROS build artifacts or recorded bags unless instructed.
@@ -69,7 +69,7 @@ eel4332-autonomous-vehicle-labs/
 ├── README.md
 ├── AGENTS.md
 ├── requirements.txt
-├── setup/
+├── Lab00_setup/
 ├── docs/
 ├── common/
 ├── lab01_system_architecture_sensors/
