@@ -99,9 +99,6 @@ sudo apt install \
   ros-jazzy-robot-localization
 ```
 
-The exact demo-robot package used for Fall 2026 will be specified by the instructor.
-
-**INSTRUCTOR VALIDATION REQUIRED:** test the final Nav2 demo launch on the course image before publishing a fixed command to students.
 
 Official Nav2 setup guide:
 
@@ -144,11 +141,6 @@ The official organization also maintains course lab repositories:
 
 https://github.com/f1tenth/f1tenth_labs_openrepo
 
-Do not install this environment unless the instructor assigns the optional F1TENTH comparison. For Fall 2026, use the **course-pinned installation instructions supplied by the instructor** rather than mixing older ROS/F1TENTH tutorials with Jazzy.
-
-Why: some public F1TENTH ROS bridge documentation was originally written for older ROS 2 distributions.
-
-**INSTRUCTOR VALIDATION REQUIRED:** if this extension is assigned, pin the exact Gym commit / Python environment after testing Lab 02 and Lab 06 on the instructor machine.
 
 Lab 02 can still be completed using the repository's pure-Python bicycle model if the F1TENTH environment is unavailable.
 
