@@ -17,6 +17,8 @@ By the end of this lab, you should be able to:
 ## Prerequisites
 
 - Complete `lab00_setup/README.md`.
+- Complete the required `lab00_setup/ros2_fundamentals.md` practice.
+- Complete the required `lab00_setup/gazebo_fundamentals.md` practice.
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -24,7 +26,17 @@ By the end of this lab, you should be able to:
 
 A practical autonomous system is not one monolithic program. Sensor drivers, state estimation, mapping, planning, and control are commonly separated into components that exchange typed messages.
 
-The purpose of this lab is **not** to master ROS 2. ROS 2 is the instrumentation layer that lets you inspect the autonomy pipeline.
+Lab 00 introduced the core ROS 2 tools using small systems. This lab applies those same skills to a realistic autonomy graph. ROS 2 is the instrumentation and integration layer that lets you inspect how sensing, localization, planning, and control interact.
+
+### Why simulate this system?
+
+Gazebo supplies a repeatable world, robot motion, contacts, and sensor measurements. ROS 2 carries selected simulated data to autonomy nodes, while RViz2 displays ROS messages and transforms. Keeping these roles separate is essential when diagnosing a failure: a correct 3-D scene does not prove that ROS receives the data, and a visible RViz2 map does not prove that Gazebo physics is running.
+
+Simulation also provides controlled starting poses and repeatable obstacles, so observations can be compared across students and trials. It does not prove that the same rates, noise, traction, latency, or calibration will occur on Goosebot. Treat simulator outputs as measurements from a model and validate physical assumptions before deployment.
+
+### Data, time, and frames
+
+Every useful sensor message needs more than numeric values. Its message type defines the fields and units, its timestamp says when the measurement applies, and its frame ID says where the measurement is expressed. TF connects those frames over time. A topic can therefore be publishing at a healthy rate while still being unusable because its timestamps or frame chain are wrong.
 
 ## Provided Files
 
@@ -445,6 +457,21 @@ Other available fallback demonstrations include `camera.launch.py` and the Gazeb
 
 ## Part 2 — Inspect the ROS Graph
 
+### Expected interface contract
+
+The following names are expected in the course TurtleBot simulation. Treat the table as a checklist, not as a substitute for inspecting the live ROS graph.
+
+| Interface | Expected type | Information carried | Typical consumer |
+|---|---|---|---|
+| `/scan` | `sensor_msgs/msg/LaserScan` | planar LiDAR ranges and angles | AMCL, obstacle layers, safety logic |
+| `/odom` | `nav_msgs/msg/Odometry` | locally continuous pose and velocity | localization, control, evaluation |
+| `/imu` | `sensor_msgs/msg/Imu` | angular velocity and linear acceleration | state estimation |
+| `/joint_states` | `sensor_msgs/msg/JointState` | wheel/joint positions and velocities | robot-state publisher |
+| `/tf` and `/tf_static` | `tf2_msgs/msg/TFMessage` | time-varying and fixed frame relationships | RViz2, AMCL, Nav2 |
+| `/cmd_vel` | `geometry_msgs/msg/Twist` | requested linear and angular velocity | simulated mobile-base controller |
+
+Topic availability can vary with the installed Jazzy package version. If an expected name is absent, use `ros2 topic list -t` to find the live interface and document the difference. Do not silently invent or remap a topic.
+
 Run:
 
 ```bash
@@ -468,6 +495,8 @@ Record:
 - approximate rate;
 - physical quantity represented;
 - likely downstream consumer.
+
+For each selected topic, observe its rate for at least 10 seconds. Report the approximate mean rate and note any long pauses or missing messages. A topic that merely appears in `ros2 topic list` has not yet been shown to carry useful data.
 
 ## Part 3 — Inspect Coordinate Frames
 
@@ -519,9 +548,10 @@ Answer in `answers.md`.
 ## Success Criteria
 
 - [ ] simulation launches;
-- [ ] ROS nodes/topics can be inspected;
-- [ ] at least four sensor/state topics are characterized;
-- [ ] TF frames are identified;
+- [ ] ROS nodes/topics can be inspected and at least one publisher/subscriber relationship is identified;
+- [ ] at least four sensor/state topics have a recorded type, approximate 10-second rate, and downstream consumer;
+- [ ] the `map → odom → base_footprint` or instructor-validated equivalent TF chain is connected;
+- [ ] the base frame and at least two sensor frames are identified;
 - [ ] a sensor-to-function table is completed;
 - [ ] an autonomy architecture diagram is produced.
 

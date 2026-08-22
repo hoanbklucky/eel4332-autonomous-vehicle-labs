@@ -12,6 +12,39 @@
 - identify outliers/dropouts;
 - connect empirical data to a measurement model.
 
+## Prerequisites
+
+- Complete Labs 00 and 01, including the ROS 2 and Gazebo fundamentals practices.
+- Be able to identify a topic's type, rate, timestamp, and frame.
+- Review descriptive statistics and SI units.
+
+## Background
+
+### Why characterize simulated sensors?
+
+Gazebo sensors exercise the same message, timing, frame, recording, and analysis workflow used with hardware. The simulator also allows the robot state and experiment conditions to be repeated. However, simulated noise may be idealized, configured, or absent. Low variation in Gazebo is evidence about the simulation configuration, not proof that a physical sensor will be equally precise.
+
+### Measurement quality
+
+A measurement can differ from the quantity of interest through systematic bias, random noise, quantization, outliers, dropout, and delay. **Accuracy** describes closeness to a reference value, while **precision** describes repeatability. A sensor may be precise but biased, or unbiased on average but noisy in individual samples.
+
+Stationary trials reveal offsets and variation under nominally constant conditions. Controlled-motion trials reveal effects that appear only during dynamics, such as delay, vibration, changing scan geometry, or odometry error. Repeatable conditions and a documented ground-truth source are necessary for a defensible comparison.
+
+### Sampling and simulation time
+
+Message arrival time is not necessarily measurement time. Use message timestamps when available and report how sample intervals are computed. Keep Gazebo playing during collection and ensure the relevant ROS nodes use simulation time consistently. A topic rate alone cannot reveal stale timestamps, gaps, duplicated values, or an incorrect frame.
+
+## Provided Files
+
+```text
+lab03_sensor_characterization/
+├── README.md
+├── src/
+│   └── sensor_stats.py
+├── results/
+└── answers.md
+```
+
 ## Procedure
 
 Use the same TurtleBot/Gazebo environment introduced in Lab 01 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
@@ -102,3 +135,11 @@ and identify what each term represents in your experiment.
 - plots/tables in `results/`;
 - completed `answers.md`;
 - short description of data-collection procedure.
+
+## Troubleshooting
+
+- Confirm the exact topic name and type with `ros2 topic list` and `ros2 topic info`.
+- Inspect one message before recording a long experiment.
+- If timestamps stop, verify that Gazebo is playing and simulation time is configured consistently.
+- If a signal has zero variance, determine whether it is genuinely constant, rounded, or configured without noise.
+- Keep large bag files outside Git unless the instructor explicitly requests them.

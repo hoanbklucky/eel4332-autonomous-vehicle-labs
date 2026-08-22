@@ -2,6 +2,7 @@
 
 | Course module/topic | Repository activity |
 |---|---|
+| ROS 2 and Gazebo foundations | Lab 00 guided practices |
 | Automation levels & architecture | Lab 01 |
 | Hardware/software architecture | Lab 01 |
 | Vehicle kinematics | Lab 02 |

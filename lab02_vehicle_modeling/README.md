@@ -26,6 +26,22 @@ with inputs such as longitudinal speed \(v\) and steering angle \(\delta\).
 
 This is a car-like model, not a model of Goosebot. Goosebot has four conventional, independently powered DC wheels on fixed parallel axes and no geometric steering linkage. It uses four-wheel skid steering through left/right velocity differences and tire slip. Comparing bicycle, differential-drive, and four-wheel skid-steer motion is part of understanding why a controller or model must match the physical platform.
 
+## Background
+
+### Why use a lightweight simulation?
+
+A mathematical simulation makes model assumptions visible and allows one parameter to be changed at a time. Unlike Gazebo, the provided Python program does not simulate rigid-body contact, detailed tires, motors, or sensors. That simplicity is useful here because differences in a plotted trajectory can be attributed directly to the motion model, inputs, and numerical time step.
+
+### State, input, and numerical propagation
+
+The state describes the vehicle's planar position and heading at one instant. Speed and steering angle are inputs that determine how that state changes. Numerical integration approximates continuous motion by repeatedly advancing the state over a finite time step. A smaller step often reduces discretization error but requires more computation; it cannot repair an incorrect physical model.
+
+The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points and assumes rolling without important lateral slip. It is most informative at moderate steering and speed when tire-force dynamics are not dominant. The model cannot produce an in-place turn and should not be interpreted as a Goosebot motor model. The assigned propagation equations remain student implementation work.
+
+### Frames and units
+
+Use meters, seconds, meters per second, and radians consistently. State explicitly which direction is positive x, which direction is positive y, and whether positive yaw is counterclockwise. A trajectory may look plausible while being numerically wrong if degrees are supplied where radians are expected or if the plotting convention reverses an axis.
+
 ## Provided Files
 
 ```text
@@ -123,3 +139,10 @@ Also conduct one parameter study:
 - parameter-study results;
 - completed `answers.md`;
 - optional F1TENTH comparison if assigned.
+
+## Troubleshooting
+
+- Verify the straight-line case before debugging turns.
+- Print the state after one time step and compare it with a hand calculation.
+- Check radians versus degrees and confirm that the time step is positive.
+- If results change greatly when the time step is halved, investigate numerical integration error before interpreting vehicle behavior.

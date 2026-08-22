@@ -17,6 +17,7 @@ class HealthInputs:
     localization_ok: bool
     path_available: bool
     obstacle_distance_m: float
+    forward_speed_mps: float
 
 
 def evaluate_health(h: HealthInputs) -> SafetyState:
@@ -24,6 +25,8 @@ def evaluate_health(h: HealthInputs) -> SafetyState:
 
     TODO:
       Define a small, defensible rule set based on the lab requirements.
+      Use both obstacle distance and forward speed when evaluating
+      collision urgency. Handle stale or invalid inputs explicitly.
       Document thresholds in your report.
     """
     raise NotImplementedError("Implement safety-monitor logic")

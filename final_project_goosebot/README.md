@@ -12,6 +12,35 @@ A successful simulation demonstration is required. Physical Goosebot deployment 
 
 The simulation uses TurtleBot in Gazebo; it is not a Goosebot digital twin. TurtleBot uses two-wheel differential drive. Goosebot uses four-wheel skid steering, with four conventional wheels powered by four DC motors on fixed parallel axes. Students should transfer the ROS 2 architecture while validating Goosebot's motor mapping, lateral slip, effective turning behavior, and safety limits rather than assuming that simulator parameters are interchangeable.
 
+## Prerequisites
+
+- Complete Labs 00–07 and preserve evidence from their successful baseline tests.
+- Obtain the instructor-approved simulation image and Goosebot access procedure.
+- Review the team's command authority, stop, reset, and hardware-test boundaries.
+
+## Background
+
+### Why require simulation before hardware?
+
+The final project combines many individually reasonable components into one timed, stateful system. TurtleBot in Gazebo provides a repeatable integration environment for checking launch order, topics, TF, maps, localization, Nav2 behavior, metrics, logging, and controlled failures before hardware variability is introduced. A staged simulation result narrows later Goosebot problems to the platform interface or sim-to-real assumptions.
+
+Simulation completion is necessary but not sufficient. Goosebot differs in geometry, four-motor skid-steer motion, tire slip, sensor placement, latency, computational load, braking, and safe operating limits. Transfer the software architecture and validation method; do not transfer unverified topic names, controller gains, footprints, speeds, or thresholds.
+
+### Integration contracts and staged evidence
+
+Each connection between components is an interface contract: message type, units, frame, timing, update rate, range, and ownership must agree. Verify the system in layers—platform motion, sensors, TF, localization, map, planning, control, then safety—before attempting the complete mission. Save commands, configurations, logs, and quantitative baselines so a failure can be reproduced rather than diagnosed from memory.
+
+Ground truth available in Gazebo is useful for evaluation but should not silently become an autonomy input. On Goosebot, define an independent reference or acknowledge when a metric cannot be measured directly.
+
+## Provided Files
+
+```text
+final_project_goosebot/
+├── README.md
+├── src/
+└── results/
+```
+
 ## Required Milestones
 
 ### Milestone 1 — System Architecture
@@ -113,3 +142,11 @@ During the demonstration, each student should be able to answer questions about:
 - demonstration video;
 - concise report or project README;
 - individual contribution summary.
+
+## Troubleshooting
+
+- Return to the last independently verified layer instead of repeatedly launching the full mission.
+- Record exact package versions, launch arguments, topic types, frames, and parameter files.
+- Do not hide a simulation failure by switching to hardware or bypass a hardware safety check to meet a deadline.
+- When simulator and hardware behavior differ, identify the specific model, interface, timing, or calibration assumption being tested.
+- Follow the hardware-failure policy and preserve evidence of diagnosis when an external limitation prevents deployment.

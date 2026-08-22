@@ -22,7 +22,54 @@ Before starting, verify:
 - TF is connected;
 - SLAM Toolbox is installed.
 
+## Background
+
+### Why map in Gazebo?
+
+Gazebo provides a fixed world that can be explored repeatedly with controlled trajectories. SLAM does not receive the world file as a map: it must infer occupancy from bridged range measurements, odometry, and coordinate transforms. This separation lets you compare the map produced by the autonomy stack with the known simulated environment.
+
+A clean Gazebo world does not guarantee a clean map. Fast turns, sparse observations, odometry drift, timestamp mismatch, poor sensor frames, and missed loop closures can all distort the result. Simulation makes these causes easier to reproduce, but it usually underrepresents physical vibration, wheel slip, reflective surfaces, and calibration error.
+
+### Occupancy grids and SLAM
+
+An occupancy grid divides the planar environment into cells representing free, occupied, or unknown space. Resolution trades spatial detail against memory and computation. Mapping estimates the environment when pose is known; localization estimates pose in a known map; SLAM estimates pose and map together, coupling errors in the two results.
+
+LiDAR observations constrain nearby geometry while odometry connects observations over motion. Reobserving a distinctive area can create a loop-closure constraint that reduces accumulated drift. It can also produce a bad correction when data association or transforms are wrong, so inspect both the map and the robot trajectory.
+
+### Frame and time contract
+
+A typical mapping chain connects `map`, `odom`, the robot base, and the LiDAR frame. Each transform has a specific owner; publishing competing versions of the same transform can make the tree unstable. Sensor timestamps must be transformable at the time of each scan, and all simulation nodes must use a consistent clock.
+
+## Provided Files
+
+```text
+lab05_mapping_slam/
+├── README.md
+├── results/
+└── answers.md
+```
+
 ## Part 1 — Verify Inputs
+
+### Mapping interface contract
+
+Verify these interfaces before launching SLAM. Names shown are the expected TurtleBot defaults; record any instructor-validated replacement used by the course image.
+
+| Interface | Expected type/frame | Role | Required evidence |
+|---|---|---|---|
+| `/scan` | `sensor_msgs/msg/LaserScan`, sensor frame such as `base_scan` | range observations | nonzero rate and one valid message |
+| `/odom` | `nav_msgs/msg/Odometry`, `odom` to base frame | local motion estimate | changing pose while teleoperating |
+| `/tf` and `/tf_static` | ROS TF tree | connects map, odometry, base, and LiDAR | connected tree in RViz2 or `tf2_echo` |
+| `/map` | `nav_msgs/msg/OccupancyGrid`, `map` frame | map produced by SLAM | grid grows or updates during mapping |
+| `/cmd_vel` | `geometry_msgs/msg/Twist` | teleoperation command | subscriber present before driving |
+
+SLAM and the simulator must use simulation time consistently. Check a SLAM node after it starts:
+
+```bash
+ros2 param get /slam_toolbox use_sim_time
+```
+
+**INSTRUCTOR VALIDATION REQUIRED:** confirm the final SLAM Toolbox node name, topic names, and frames on the Fall 2026 course image.
 
 Record:
 
@@ -76,6 +123,8 @@ Create two maps using different driving strategies, for example:
 - fast/aggressive;
 - with/without revisiting a loop.
 
+Keep the simulator world, initial pose, approximate driving duration, and map-saving procedure the same between runs. Change only the driving strategy being studied. Record the duration and approximate distance traveled so that the comparison is reproducible.
+
 Compare:
 
 - completeness;
@@ -93,6 +142,8 @@ Use one simple quantitative measure in addition to visual assessment. Examples:
 - alignment error for a known wall;
 - repeatability across two runs.
 
+Define the chosen measure before comparing the runs. Report its units, calculation method, and value for both maps. Include one RViz2 screenshot from each run using comparable zoom and display settings; if a loop closure is visible, include before-and-after images.
+
 ## Engineering Questions
 
 1. Why are odometry and range sensing both important for SLAM?
@@ -103,11 +154,12 @@ Use one simple quantitative measure in addition to visual assessment. Examples:
 
 ## Success Criteria
 
-- [ ] valid sensor/odometry/TF inputs verified;
-- [ ] occupancy map generated;
-- [ ] map saved;
-- [ ] two mapping strategies compared;
-- [ ] one quantitative quality measure reported.
+- [ ] `/scan` and `/odom` have measured nonzero update rates;
+- [ ] the sensor-to-base-to-odometry TF chain is connected before SLAM starts;
+- [ ] an occupancy map is generated and changes as new space is observed;
+- [ ] each saved map includes the course-required image and metadata files;
+- [ ] two mapping strategies are compared under documented, approximately matched conditions;
+- [ ] one quantitative quality measure with units and method is reported for both maps.
 
 ## What to Submit
 
@@ -115,3 +167,10 @@ Use one simple quantitative measure in addition to visual assessment. Examples:
 - one short mapping video/screenshot sequence;
 - quality comparison;
 - completed `answers.md`.
+
+## Troubleshooting
+
+- Validate `/scan`, `/odom`, TF, and simulation time in that order before launching SLAM.
+- If scans appear detached from the robot, inspect frame IDs and the LiDAR-to-base transform.
+- If the map doubles or smears during turns, reduce speed and check odometry and timestamps.
+- If a saved map is empty, verify that `/map` is updating and use the instructor-approved map-saving command.

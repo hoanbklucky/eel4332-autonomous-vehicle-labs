@@ -24,6 +24,8 @@ check_cmd git "Git"
 check_cmd ros2 "ROS 2 CLI"
 check_cmd gz "Gazebo CLI"
 check_cmd rviz2 "RViz2"
+check_cmd colcon "colcon build tool"
+check_cmd rqt_graph "rqt_graph"
 
 if command -v python3 >/dev/null 2>&1; then
   if python3 - <<'PY' >/dev/null 2>&1
@@ -52,6 +54,24 @@ fi
 if command -v ros2 >/dev/null 2>&1; then
   distro="${ROS_DISTRO:-not-sourced}"
   echo "[INFO]    ROS_DISTRO=$distro"
+
+  for pkg in demo_nodes_py turtlesim ros_gz_bridge ros_gz_sim eel4332_ros_practice; do
+    if ros2 pkg prefix "$pkg" >/dev/null 2>&1; then
+      echo "[OK]      ROS package: $pkg"
+      ok=$((ok+1))
+    else
+      echo "[MISSING] ROS package: $pkg"
+      missing=$((missing+1))
+    fi
+  done
+fi
+
+if [ -f "lab00_setup/worlds/gazebo_practice.sdf" ]; then
+  echo "[OK]      Gazebo practice world"
+  ok=$((ok+1))
+else
+  echo "[MISSING] Run this script from the repository root"
+  missing=$((missing+1))
 fi
 
 echo "---------------------------"

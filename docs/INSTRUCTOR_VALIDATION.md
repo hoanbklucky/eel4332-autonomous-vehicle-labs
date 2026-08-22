@@ -13,6 +13,17 @@ Complete this checklist before publishing the repository to students.
 - [ ] SLAM Toolbox tested
 - [ ] robot_localization tested
 
+## Lab 00
+
+- [ ] `demo_nodes_py`, turtlesim, `rqt_graph`, colcon, and rosdep tested
+- [ ] `eel4332_ros_practice` builds from a clean `~/eel4332_ws`
+- [ ] replace the practice package's placeholder maintainer email and confirm its license metadata
+- [ ] practice launch argument changes the measured `/practice/count` rate
+- [ ] publisher/topic/subscriber relationship appears correctly in `rqt_graph`
+- [ ] `gazebo_practice.sdf` validates and runs with physics, reset, and entity inspection
+- [ ] `/clock` appears in Gazebo Transport and the documented one-way bridge produces a ROS `/clock` message
+- [ ] complete both fundamentals practices once as a new student and confirm the expected duration
+
 ## Lab 01
 
 - [ ] choose the exact simulation launch command
@@ -50,12 +61,15 @@ Complete this checklist before publishing the repository to students.
 - [ ] verify the required bicycle-model tracking environment
 - [ ] verify F1TENTH only if the optional extension is assigned
 - [ ] define track/path file format
+- [ ] validate the ROS/RViz2 planning-visualization wrapper if that extension is required
 
 ## Lab 07
 
 - [ ] define supported fault-injection methods
 - [ ] decide which safety state/command students can actually publish
 - [ ] verify baseline mission
+- [ ] validate Nav2 cancellation and command arbitration for simulated safe stop
+- [ ] verify the two-speed collision-approach experiment remains simulation-only
 
 ## Final Project
 
