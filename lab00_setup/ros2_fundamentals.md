@@ -52,6 +52,31 @@ The expected distribution is `jazzy`, and `which ros2` should resolve to `/opt/r
 
 ## Practice 2 — Run and Inspect Publisher/Subscriber Nodes
 
+The system in this practice has the following intended ROS graph:
+
+```mermaid
+flowchart LR
+    talker["Node: /talker"]
+    chatter(["Topic: /chatter<br/>Type: std_msgs/msg/String"])
+    listener["Node: /listener"]
+    cli["Temporary CLI publisher<br/>ros2 topic pub"]
+
+    talker -->|publishes message instances| chatter
+    chatter -->|delivers message instances| listener
+    cli -.->|publishes one message| chatter
+```
+
+Read the graph from left to right:
+
+- `/talker` and `/listener` are running nodes;
+- `/chatter` is the named communication channel connecting them;
+- `std_msgs/msg/String` is the message **type** allowed on that topic;
+- each numbered `Hello World` value is one message **instance** moving through the topic;
+- `ros2 topic pub` creates a temporary command-line publisher, shown with a dashed connection;
+- the listener and its connection do not exist until you start the listener node.
+
+The graph shows communication relationships, not the order in which terminal windows were opened. A topic is not a program, and a message is not a permanent graph component. Use `rqt_graph` to visualize live connections, and use the ROS CLI to inspect message types, fields, rates, and Quality of Service details that the graph does not show.
+
 Open three WSL/Ubuntu Terminals.
 
 In **WSL/Ubuntu Terminal 1**, start a publisher:
@@ -171,6 +196,20 @@ ros2 topic info /chatter --verbose
 *After the listener starts, the topic has one publisher and one subscriber.*
 
 Confirm that the graph now contains a publisher and a subscriber. Notice that a topic is not a process: nodes publish or subscribe to a named, typed topic.
+
+Visualize the live graph from WSL/Ubuntu Terminal 2:
+
+```bash
+rqt_graph
+```
+
+Select **Nodes/Topics (all)** if necessary and use the refresh button. Confirm that the live graph contains:
+
+```text
+/talker → /chatter → /listener
+```
+
+Compare it with the conceptual graph above. The temporary CLI tools used by `ros2 topic echo` or `ros2 topic hz` may appear only while those commands are running. Close `rqt_graph` before continuing.
 
 Stop the talker with `Ctrl+C`, but keep the listener running. Publish one message manually from WSL/Ubuntu Terminal 2:
 
@@ -484,9 +523,9 @@ The official [developing a ROS 2 package guide](https://docs.ros.org/en/jazzy/Ho
 Before returning to the main Lab 00 README, confirm that you can:
 
 - [ ] describe nodes, topics, messages, services, actions, parameters, packages, and workspaces;
+- [ ] explain the `/talker → /chatter → /listener` graph and distinguish a topic, message type, and message instance;
 - [ ] inspect a running graph with ROS CLI tools;
 - [ ] publish a correctly typed message from the command line;
 - [ ] call a service and send an action goal;
 - [ ] build and source a colcon workspace;
-- [ ] launch two nodes together with a launch argument;
-- [ ] explain the practice graph shown by `rqt_graph`.
+- [ ] launch two nodes together with a launch argument.
