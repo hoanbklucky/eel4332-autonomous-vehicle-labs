@@ -36,6 +36,17 @@ PY
     echo "[MISSING] NumPy / Matplotlib / PyYAML"
     missing=$((missing+1))
   fi
+
+  if python3 - <<'PY' >/dev/null 2>&1
+import setuptools, jinja2, typeguard
+PY
+  then
+    echo "[OK]      ROS Python helpers"
+    ok=$((ok+1))
+  else
+    echo "[MISSING] setuptools / Jinja2 / typeguard"
+    missing=$((missing+1))
+  fi
 fi
 
 if command -v ros2 >/dev/null 2>&1; then

@@ -40,6 +40,15 @@ Do not start debugging SLAM until `/scan`, `/odom`, and TF are valid.
 
 Launch the instructor-provided TurtleBot/Gazebo simulation and SLAM workflow.
 
+The official [ROBOTIS TurtleBot 3 SLAM simulation guide for ROS 2 Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy) is a helpful visual reference for the overall workflow:
+
+1. launch the simulated world;
+2. launch the SLAM system with simulation time enabled;
+3. teleoperate the robot through the environment;
+4. save the completed occupancy map.
+
+The ROBOTIS example uses Cartographer and the `turtlebot3_gazebo` packages. This course uses SLAM Toolbox and the course simulation workflow. Use the link to understand the process, but use the instructor-validated commands below for the lab rather than substituting the website's commands.
+
 This lab establishes the ROS 2 mapping procedure later used on Goosebot. On hardware, repeat all input checks because Goosebot's LiDAR mounting, odometry drift, wheel slip, motion model, and TF frames will differ from TurtleBot.
 
 **INSTRUCTOR VALIDATION REQUIRED:** insert the final launch commands for the Fall 2026 course simulation.

@@ -51,7 +51,7 @@ If this fails, fix Gazebo before running a course lab.
 ros2 pkg list | grep ros_gz
 ```
 
-If the required bridge or simulation package is missing, return to `Lab00_setup/README.md`.
+If the required bridge or simulation package is missing, return to `lab00_setup/README.md`.
 
 ## 5. TF checks
 

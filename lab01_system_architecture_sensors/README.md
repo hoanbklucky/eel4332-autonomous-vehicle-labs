@@ -16,7 +16,7 @@ By the end of this lab, you should be able to:
 
 ## Prerequisites
 
-- Complete `Lab00_setup/README.md`.
+- Complete `lab00_setup/README.md`.
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -40,6 +40,10 @@ lab01_system_architecture_sensors/
 ## Part 1 — Launch a Known-Good Simulation
 
 For Lab 1, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
+
+For additional background, see the official [ROBOTIS TurtleBot 3 Gazebo simulation guide for ROS 2 Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy). It explains the Gazebo worlds, keyboard teleoperation, and RViz2 visualization used in a typical TurtleBot workflow.
+
+The ROBOTIS guide uses launch files from `turtlebot3_gazebo`. This lab instead uses Nav2's `tb3_simulation_launch.py` and the dedicated `/tf` bridge documented below because that combination was tested for the course environment. Follow this README for the required activity. Do not launch both versions at the same time, and do not mix commands from the two workflows in one simulation session.
 
 TurtleBot is the course's simulation platform, not a geometric model of Goosebot. TurtleBot uses two-wheel differential drive, while Goosebot uses four conventional, independently powered DC wheels on fixed parallel axes and is a four-wheel skid-steer platform. Both use relative left/right motion to turn, but Goosebot experiences additional tire scrub and slip. The ROS 2, TF, localization, mapping, and Nav2 concepts in this lab transfer to the physical platform; exact topics, frames, motor mapping, dimensions, motion limits, and safety behavior must be revalidated on Goosebot.
 

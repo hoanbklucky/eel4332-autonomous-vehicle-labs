@@ -61,8 +61,8 @@ The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, ma
 
 ## Start here
 
-1. Complete [`Lab00_setup/README.md`](Lab00_setup/README.md).
-2. Run [`Lab00_setup/verify_installation.sh`](Lab00_setup/verify_installation.sh).
+1. Complete [`lab00_setup/README.md`](lab00_setup/README.md).
+2. Run [`lab00_setup/verify_installation.sh`](lab00_setup/verify_installation.sh).
 3. Complete labs in numerical order unless your instructor says otherwise.
 4. Keep all experimental results in each lab's `results/` directory.
 5. Do not commit large ROS build artifacts or recorded bags unless instructed.
@@ -74,7 +74,7 @@ eel4332-autonomous-vehicle-labs/
 ├── README.md
 ├── AGENTS.md
 ├── requirements.txt
-├── Lab00_setup/
+├── lab00_setup/
 ├── docs/
 ├── common/
 ├── lab01_system_architecture_sensors/
@@ -134,6 +134,8 @@ Useful official references:
 - Gazebo: https://gazebosim.org/
 - Nav2: https://docs.nav2.org/
 - Nav2 Gazebo setup guide: https://docs.nav2.org/setup_guides/gazebo.html
+- ROBOTIS TurtleBot 3 Gazebo simulation (select **Jazzy**): https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy
+- ROBOTIS TurtleBot 3 SLAM simulation (select **Jazzy**): https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy
 - RoboRacer / F1TENTH: https://github.com/f1tenth
 - F1TENTH Gym: https://github.com/f1tenth/f1tenth_gym
 - F1TENTH open course labs: https://github.com/f1tenth/f1tenth_labs_openrepo
