@@ -203,7 +203,17 @@ Visualize the live graph from WSL/Ubuntu Terminal 2:
 rqt_graph
 ```
 
-Select **Nodes/Topics (all)** if necessary and use the refresh button. Confirm that the live graph contains:
+When the `rqt_graph` window opens:
+
+1. Make sure both the `/talker` and `/listener` nodes are still running.
+2. Open the drop-down menu near the upper-left corner and select **Nodes/Topics (all)**.
+3. Click the **Refresh** button (the circular-arrow icon at the far left of the toolbar).
+
+The graph area may initially be empty. Selecting **Nodes/Topics (all)** and clicking **Refresh** forces `rqt_graph` to rediscover and display the current ROS graph. Confirm that it contains:
+
+![rqt_graph showing the talker publishing to chatter and the listener subscribing to chatter](images/practice2-rqt-graph.png)
+
+*The live graph after selecting **Nodes/Topics (all)** and clicking **Refresh**.*
 
 ```text
 /talker → /chatter → /listener
