@@ -63,6 +63,8 @@ wsl -l -v
 
 Confirm that Ubuntu is using WSL version 2.
 
+**Terminal terminology used throughout this repository:** a **WSL/Ubuntu Terminal** means a shell whose prompt is running inside Ubuntu. It may be an Ubuntu tab in the Windows Terminal application, the Ubuntu application, or VS Code's integrated terminal after VS Code connects to WSL. It does **not** mean a PowerShell or Command Prompt tab.
+
 ---
 
 ## Part 2 — Install Git and Visual Studio Code
@@ -99,9 +101,9 @@ VS Code is the course-supported editor. Install the graphical application on **W
 2. During installation, enable **Add to PATH** when offered.
 3. Open VS Code and install the **WSL** extension published by Microsoft.
 4. Install the **Python** extension published by Microsoft. When a course folder is open through WSL, make sure the extension is also installed in that WSL environment if VS Code offers **Install in WSL**.
-5. Close and reopen the Ubuntu terminal so it receives the updated Windows PATH.
+5. Close and reopen the WSL/Ubuntu Terminal so it receives the updated Windows PATH.
 
-Test the connection from Ubuntu/WSL:
+Test the connection from a WSL/Ubuntu Terminal:
 
 ```bash
 code --version
@@ -110,14 +112,14 @@ cd ~/courses
 code .
 ```
 
-VS Code should open with an indicator such as **WSL: Ubuntu-24.04** in the lower-left corner. Open **Terminal → New Terminal** inside VS Code and run:
+VS Code should open with an indicator such as **WSL: Ubuntu-24.04** in the lower-left corner. Open **Terminal → New Terminal** inside VS Code to create an integrated WSL/Ubuntu Terminal, then run:
 
 ```bash
 pwd
 uname -a
 ```
 
-The terminal should show a Linux path and identify Linux/WSL. If VS Code opens the folder locally on Windows instead, use the lower-left remote indicator and select **Connect to WSL**, then reopen the folder.
+The integrated WSL/Ubuntu Terminal should show a Linux path and identify Linux/WSL. If VS Code opens the folder locally on Windows instead, use the lower-left remote indicator and select **Connect to WSL**, then reopen the folder.
 
 Keep course repositories in the Linux filesystem, such as `~/courses`, rather than under `/mnt/c`, unless the instructor directs otherwise. After creating the Python environment later in this lab, select `~/venvs/eel4332/bin/python` when VS Code asks for the course Python interpreter.
 
@@ -237,7 +239,7 @@ When a later lab directs you to one of these pages, confirm that its **Jazzy** t
 
 ## Part 6 — Clone this repository and enter its root
 
-Run these commands in Ubuntu/WSL:
+Run these commands in a WSL/Ubuntu Terminal:
 
 ```bash
 mkdir -p ~/courses
@@ -270,7 +272,7 @@ git branch --show-current
 code .
 ```
 
-The VS Code Explorer should show `lab00_setup`, `lab01_system_architecture_sensors`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands and VS Code terminals in this WSL workspace, not from a separate Windows copy of the folder.
+The VS Code Explorer should show `lab00_setup`, `lab01_system_architecture_sensors`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands in integrated WSL/Ubuntu Terminals in this workspace, not from a separate Windows copy of the folder.
 
 ---
 
@@ -287,7 +289,7 @@ A Python virtual environment gives this course its own location for packages ins
 
 The environment isolates packages installed by `pip`; it does not contain a second installation of ROS 2. ROS packages from `/opt/ros/jazzy` remain available when the ROS setup file is sourced. This is why the course environment also installs a few Python helpers required by ROS-visible packages.
 
-After activation, the terminal prompt normally begins with `(eel4332)`, and `python` and `pip` refer to the course environment. Run `deactivate` to return to the normal system environment. If you open a new terminal, activate the environment again before running the pure-Python lab programs:
+After activation, the WSL/Ubuntu Terminal prompt normally begins with `(eel4332)`, and `python` and `pip` refer to the course environment. Run `deactivate` to return to the normal system environment. If you open a new WSL/Ubuntu Terminal, activate the environment again before running the pure-Python lab programs:
 
 ```bash
 source ~/venvs/eel4332/bin/activate
@@ -299,7 +301,7 @@ When the repository is open in VS Code, use **Python: Select Interpreter** from 
 ~/venvs/eel4332/bin/python
 ```
 
-The selected interpreter controls Python editing, running, and debugging in VS Code. It does not replace the need to source `/opt/ros/jazzy/setup.bash` in terminals that run ROS commands.
+The selected interpreter controls Python editing, running, and debugging in VS Code. It does not replace the need to source `/opt/ros/jazzy/setup.bash` in WSL/Ubuntu Terminals that run ROS commands.
 
 In Ubuntu:
 

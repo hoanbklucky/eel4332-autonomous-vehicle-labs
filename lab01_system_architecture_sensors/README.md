@@ -104,7 +104,7 @@ Without the bridge, the robot can move in Gazebo while appearing stationary or d
 
 ### Simplified workflow
 
-In **Terminal 1**, launch the original Nav2 TurtleBot 3 simulation:
+In **WSL/Ubuntu Terminal 1**, launch the original Nav2 TurtleBot 3 simulation:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -112,9 +112,9 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False autostart:=False
 ```
 
-Keep Terminal 1 open and wait for Gazebo and RViz2 to appear.
+Keep WSL/Ubuntu Terminal 1 open and wait for Gazebo and RViz2 to appear.
 
-In **Terminal 2**, start the dedicated TF bridge:
+In **WSL/Ubuntu Terminal 2**, start the dedicated TF bridge:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -122,9 +122,9 @@ ros2 run ros_gz_bridge parameter_bridge \
   '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
 ```
 
-Keep Terminal 2 open. The bridge must continue running while the simulation is in use.
+Keep WSL/Ubuntu Terminal 2 open. The bridge must continue running while the simulation is in use.
 
-In **Terminal 3**, run the following commands in order.
+In **WSL/Ubuntu Terminal 3**, run the following commands in order.
 
 1. Confirm the bridge is providing robot motion:
 
@@ -194,7 +194,7 @@ sudo apt install \
 
 #### 2. Launch the simulation
 
-In **Terminal 1**, run:
+In **WSL/Ubuntu Terminal 1**, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -202,21 +202,21 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False autostart:=False
 ```
 
-Keep this terminal open. The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack. The `autostart:=False` argument prevents navigation from starting before localization has created the complete transform tree. The robot starts stationary; launching the simulation does not automatically command it to move.
+Keep this WSL/Ubuntu Terminal open. The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack. The `autostart:=False` argument prevents navigation from starting before localization has created the complete transform tree. The robot starts stationary; launching the simulation does not automatically command it to move.
 
 Wait until both graphical windows open. At this stage:
 
 - Gazebo should show a TurtleBot inside a small indoor world.
 - RViz2 should open, but some displays may be blank or show warnings until localization starts and an initial pose is provided.
-- Terminal 1 should remain running and continue printing status messages.
+- WSL/Ubuntu Terminal 1 should remain running and continue printing status messages.
 
-Make sure Gazebo is not paused. If its toolbar shows a **play** triangle, click it to start simulation time. Do not close Gazebo, RViz2, or Terminal 1 while completing the lab.
+Make sure Gazebo is not paused. If its toolbar shows a **play** triangle, click it to start simulation time. Do not close Gazebo, RViz2, or WSL/Ubuntu Terminal 1 while completing the lab.
 
 #### 3. Start the Gazebo-to-ROS TF bridge
 
 The moving transform from `odom` to `base_footprint` is required before localization starts. Although the TurtleBot launch file starts a general ROS–Gazebo bridge, the tested Jazzy environment required a dedicated `/tf` bridge for this transform to appear reliably.
 
-In **Terminal 2**, run:
+In **WSL/Ubuntu Terminal 2**, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -224,20 +224,20 @@ ros2 run ros_gz_bridge parameter_bridge \
   '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
 ```
 
-Keep Terminal 2 running for the rest of the activity. It should report that it created a Gazebo-to-ROS bridge from `/tf` to `/tf`.
+Keep WSL/Ubuntu Terminal 2 running for the rest of the activity. It should report that it created a Gazebo-to-ROS bridge from `/tf` to `/tf`.
 
-In **Terminal 3**, verify the moving transform:
+In **WSL/Ubuntu Terminal 3**, verify the moving transform:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ros2 run tf2_ros tf2_echo odom base_footprint
 ```
 
-Do not continue until the command prints translation and rotation data. Press `Ctrl+C` to stop `tf2_echo`; do not stop the bridge in Terminal 2. This transform allows RViz2 to display robot motion and allows AMCL to create the `map → odom` transform.
+Do not continue until the command prints translation and rotation data. Press `Ctrl+C` to stop `tf2_echo`; do not stop the bridge in WSL/Ubuntu Terminal 2. This transform allows RViz2 to display robot motion and allows AMCL to create the `map → odom` transform.
 
 #### 4. Start localization
 
-In **Terminal 3**, start only the localization lifecycle nodes:
+In **WSL/Ubuntu Terminal 3**, start only the localization lifecycle nodes:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -287,7 +287,7 @@ A reasonable pose estimate should make the robot model and red laser-scan points
 
 RViz2 does not display the mouse-pointer coordinates prominently. Use the **Publish Point** tool to ask RViz2 to publish the coordinates of each location you click.
 
-To locate `x = -2.0 m, y = -0.5 m`, open another **Ubuntu/WSL terminal** and run:
+To locate `x = -2.0 m, y = -0.5 m`, open another **WSL/Ubuntu Terminal** and run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -300,7 +300,7 @@ In RViz2:
 
 1. Click **Publish Point** in the top toolbar, as shown in Figure 2.
 2. Click an open location on the map. Do not click in Gazebo.
-3. Look at the terminal running `ros2 topic echo /clicked_point`. It should print output similar to:
+3. Look at the WSL/Ubuntu Terminal running `ros2 topic echo /clicked_point`. It should print output similar to:
 
    ```yaml
    header:
@@ -312,14 +312,14 @@ In RViz2:
    ```
 
 4. If the values are not close to `x = -2.0` and `y = -0.5`, click another map location. Moving left generally decreases `x`; moving right increases `x`. Moving down generally decreases `y`; moving up increases `y`, although the view may be rotated.
-5. When the terminal reports a nearby point, remember that location on the map. Values within approximately `0.1 m` are sufficiently close for this initial estimate.
-6. Press `Ctrl+C` in the coordinate terminal after you have found the location.
+5. When the WSL/Ubuntu Terminal reports a nearby point, remember that location on the map. Values within approximately `0.1 m` are sufficiently close for this initial estimate.
+6. Press `Ctrl+C` in the coordinate WSL/Ubuntu Terminal after you have found the location.
 7. Return to RViz2 and click **2D Pose Estimate**. This tool is different from **Publish Point**.
 8. Press at the location you just found, drag the green arrow toward the robot's forward direction, and release. For a fresh default launch, drag approximately toward increasing `x`.
 
 The point does not need to be exact. AMCL uses the estimate as a starting guess and refines it using the laser scan. The position and heading are reasonable when the robot model and laser-scan points align with the map walls.
 
-Return to Terminal 3 and verify that localization created the complete transform chain:
+Return to WSL/Ubuntu Terminal 3 and verify that localization created the complete transform chain:
 
 ```bash
 ros2 run tf2_ros tf2_echo map base_link
@@ -352,7 +352,7 @@ Both nodes should report `active`. Then:
 
 Start with a short goal in clear space. A long or obstructed goal makes troubleshooting harder.
 
-A successful run prints messages similar to the following in Terminal 1:
+A successful run prints messages similar to the following in WSL/Ubuntu Terminal 1:
 
 ```text
 Passing new path to controller.
@@ -362,7 +362,7 @@ Goal succeeded
 
 Do not use the RViz2 **Startup** button for this procedure because it attempts to start both lifecycle managers together. Do not send a goal while the Navigation panel reports **inactive**. When navigation is active, the global and local paths should appear in RViz2, and the robot should begin moving in both RViz2 and Gazebo.
 
-If Terminal 1 previously displayed an error similar to:
+If WSL/Ubuntu Terminal 1 previously displayed an error similar to:
 
 ```text
 Failed to activate global_costmap because transform from base_link to map
@@ -373,7 +373,7 @@ Nav2 attempted to activate before the initial pose created the complete `map →
 
 If an error says that no transition is registered for a node in the `active` state, a lifecycle manager was asked to start an already-active node. Stop the complete launch with `Ctrl+C`, close its Gazebo and RViz2 windows, launch again with `autostart:=False`, and use the two service commands above exactly once each.
 
-If the terminal reports that the `map` frame does not exist, the initial pose was not accepted after the moving TF bridge became available. Set **2D Pose Estimate** again, then verify the complete transform chain:
+If the WSL/Ubuntu Terminal reports that the `map` frame does not exist, the initial pose was not accepted after the moving TF bridge became available. Set **2D Pose Estimate** again, then verify the complete transform chain:
 
 ```bash
 ros2 run tf2_ros tf2_echo map base_link
@@ -393,7 +393,7 @@ The command should continuously report a rate. If it prints nothing, return to G
 
 #### 6. Verify the simulator can move the robot directly
 
-If the robot does not respond to an RViz2 goal, first test the Gazebo velocity interface without relying on localization or planning. In Terminal 3 or another terminal, run:
+If the robot does not respond to an RViz2 goal, first test the Gazebo velocity interface without relying on localization or planning. In WSL/Ubuntu Terminal 3 or another WSL/Ubuntu Terminal, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -415,7 +415,7 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
 ```
 
-If this direct test moves the robot, the simulator and command bridge work; return to RViz2 and check the initial pose and navigation goal. If it does not move, check Terminal 1 for bridge or Gazebo errors and confirm that `/cmd_vel` has a subscriber.
+If this direct test moves the robot, the simulator and command bridge work; return to RViz2 and check the initial pose and navigation goal. If it does not move, check WSL/Ubuntu Terminal 1 for bridge or Gazebo errors and confirm that `/cmd_vel` has a subscriber.
 
 #### 7. Inspect the ROS graph and sensor topics
 

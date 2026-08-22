@@ -100,7 +100,7 @@ Record the original pose, modified pose, and what changed visually. This is a co
 
 ## Practice 3 — Inspect Gazebo Transport
 
-Launch the original practice world again and keep it open. In a second Ubuntu terminal, run:
+Launch the original practice world again and keep it open. In a second WSL/Ubuntu Terminal, run:
 
 ```bash
 gz topic -l
@@ -133,7 +133,7 @@ ros2 topic list
 gz topic -l
 ```
 
-Seeing `/clock` in Gazebo does not guarantee that it is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third terminal:
+Seeing `/clock` in Gazebo does not guarantee that it is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third WSL/Ubuntu Terminal:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -141,7 +141,7 @@ ros2 run ros_gz_bridge parameter_bridge \
   '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
 ```
 
-Keep the bridge running. In another terminal, verify the ROS topic:
+Keep the bridge running. In another WSL/Ubuntu Terminal, verify the ROS topic:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -196,7 +196,7 @@ Submit or show the instructor:
 
 ## Troubleshooting
 
-- Run all Linux, ROS, and Gazebo commands in Ubuntu/WSL, not PowerShell.
+- Run all Linux, ROS, and Gazebo commands in a WSL/Ubuntu Terminal, not PowerShell.
 - Close extra Gazebo instances before retrying a world.
 - If `gz` is not found, return to Part 4 of [Lab 00](README.md).
 - If `ros2` is not found, source `/opt/ros/jazzy/setup.bash`.

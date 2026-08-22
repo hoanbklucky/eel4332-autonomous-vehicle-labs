@@ -24,7 +24,7 @@ Do not debug all layers at once.
 
 ## Git and VS Code checks
 
-Run Git from Ubuntu/WSL for this course:
+Run Git from a WSL/Ubuntu Terminal for this course:
 
 ```bash
 git --version
@@ -35,14 +35,14 @@ git config --global --get user.email
 
 If `git` is missing, install it with `sudo apt install git`. If the identity commands print nothing, return to Part 2 of [`../lab00_setup/README.md`](../lab00_setup/README.md).
 
-VS Code should be installed on Windows and connected using Microsoft's WSL extension. From Ubuntu/WSL, run:
+VS Code should be installed on Windows and connected using Microsoft's WSL extension. From a WSL/Ubuntu Terminal, run:
 
 ```bash
 code --version
 code .
 ```
 
-Confirm the lower-left VS Code indicator names WSL and that the integrated terminal's `pwd` is a Linux path. Do not install a separate Linux copy of VS Code inside WSL. If `code` is not found, confirm the Windows installation added VS Code to PATH, install the WSL extension, and reopen the Ubuntu terminal.
+Confirm the lower-left VS Code indicator names WSL and that the integrated WSL/Ubuntu Terminal's `pwd` is a Linux path. Do not install a separate Linux copy of VS Code inside WSL. If `code` is not found, confirm the Windows installation added VS Code to PATH, install the WSL extension, and reopen the WSL/Ubuntu Terminal.
 
 ## ROS 2 checks
 
@@ -59,7 +59,7 @@ Expected ROS distribution:
 jazzy
 ```
 
-If `ros2` is not found in an Ubuntu terminal:
+If `ros2` is not found in a WSL/Ubuntu Terminal:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
