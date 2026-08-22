@@ -205,16 +205,13 @@ All three verification commands should complete without dependency-conflict mess
 
 ## Part 7 — Optional F1TENTH / RoboRacer Gym
 
-The official F1TENTH Gym repository is:
+F1TENTH, now also known as RoboRacer, is an autonomous-driving education and racing platform built around a small car-like vehicle. Unlike the differential-drive TurtleBot used in this course's primary Gazebo simulation, an F1TENTH vehicle uses car-like steering. Its simulator can therefore be useful when studying vehicle kinematics, planning, and control.
 
-https://github.com/f1tenth/f1tenth_gym
+The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an optional simulation environment for experimenting with this type of vehicle. It is not required for Lab 00 or Lab 01, and students should not delay the required TurtleBot/Gazebo setup to install it.
 
-The official organization also maintains course lab repositories:
+The F1TENTH organization also publishes an [open collection of teaching labs](https://github.com/f1tenth/f1tenth_labs_openrepo). These are examples and exercises developed for F1TENTH courses at other institutions. They may be useful as supplemental reading, but they are not EEL 4332 assignments and their installation instructions, software versions, and deliverables may differ from this repository.
 
-https://github.com/f1tenth/f1tenth_labs_openrepo
-
-
-Lab 02 can still be completed using the repository's pure-Python bicycle model if the F1TENTH environment is unavailable.
+Lab 02 uses the pure-Python bicycle model included in this repository, so F1TENTH Gym is optional. Install or explore it only if the instructor specifically assigns an extension that uses it.
 
 ---
 
