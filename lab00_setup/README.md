@@ -124,17 +124,22 @@ sudo apt install \
   ros-jazzy-robot-localization
 ```
 
+For Lab 00, installing these packages is the only required action in this part. You do **not** need to complete a TurtleBot, Nav2, or SLAM tutorial yet. The course introduces those workflows gradually in later labs using course-tested commands.
 
-Official Nav2 setup guide:
+<details>
+<summary><strong>Optional references for later labs — not required in Lab 00</strong></summary>
 
-https://docs.nav2.org/setup_guides/gazebo.html
+The following official pages are useful when you reach navigation and mapping later in the course:
 
-Official TurtleBot 3 learning references:
-
+- [Nav2 Gazebo setup guide](https://docs.nav2.org/setup_guides/gazebo.html)
 - [TurtleBot 3 Gazebo simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy)
 - [TurtleBot 3 SLAM simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy)
 
-These ROBOTIS pages are useful for learning the usual simulation sequence: launch a world, move the robot, visualize its data, run SLAM, and save a map. They use the ROBOTIS `turtlebot3_gazebo` package workflow, while the first course labs use the installed `nav2_bringup` and `nav2_minimal_tb3_sim` packages. Do not clone another TurtleBot workspace or substitute ROBOTIS launch commands for course commands unless the instructor asks you to do so. Also confirm that the **Jazzy** tab is selected before using a command from the website.
+The ROBOTIS pages use the `turtlebot3_gazebo` package workflow, while the first course labs use the installed `nav2_bringup` and `nav2_minimal_tb3_sim` packages. Do not clone another TurtleBot workspace, install additional packages, or substitute website launch commands for course commands unless the instructor asks you to do so.
+
+When a later lab directs you to one of these pages, confirm that its **Jazzy** tab is selected and return to the course README for the required command and deliverables.
+
+</details>
 
 ---
 
