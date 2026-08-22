@@ -15,7 +15,11 @@ Complete this checklist before publishing the repository to students.
 
 ## Lab 00
 
+- [ ] Git installs inside Ubuntu/WSL and the documented identity checks work
+- [ ] Windows VS Code, Microsoft WSL extension, and `code .` open the Linux repository as a WSL workspace
+- [ ] Microsoft Python extension can select `~/venvs/eel4332/bin/python` inside WSL
 - [ ] `demo_nodes_py`, turtlesim, `rqt_graph`, colcon, and rosdep tested
+- [ ] `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` tested
 - [ ] `eel4332_ros_practice` builds from a clean `~/eel4332_ws`
 - [ ] replace the practice package's placeholder maintainer email and confirm its license metadata
 - [ ] practice launch argument changes the measured `/practice/count` rate

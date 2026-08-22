@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-## 1. Identify the failing layer
+## Identify the failing layer
 
 Troubleshoot from the bottom up:
 
@@ -22,7 +22,29 @@ algorithm
 
 Do not debug all layers at once.
 
-## 2. ROS 2 checks
+## Git and VS Code checks
+
+Run Git from Ubuntu/WSL for this course:
+
+```bash
+git --version
+which git
+git config --global --get user.name
+git config --global --get user.email
+```
+
+If `git` is missing, install it with `sudo apt install git`. If the identity commands print nothing, return to Part 2 of [`../lab00_setup/README.md`](../lab00_setup/README.md).
+
+VS Code should be installed on Windows and connected using Microsoft's WSL extension. From Ubuntu/WSL, run:
+
+```bash
+code --version
+code .
+```
+
+Confirm the lower-left VS Code indicator names WSL and that the integrated terminal's `pwd` is a Linux path. Do not install a separate Linux copy of VS Code inside WSL. If `code` is not found, confirm the Windows installation added VS Code to PATH, install the WSL extension, and reopen the Ubuntu terminal.
+
+## ROS 2 checks
 
 ```bash
 echo $ROS_DISTRO
@@ -53,7 +75,7 @@ ros2 pkg prefix eel4332_ros_practice
 
 If the package is still missing, return to the workspace build steps in [`../lab00_setup/ros2_fundamentals.md`](../lab00_setup/ros2_fundamentals.md). Do not source another workspace merely to hide a failed build.
 
-## 3. Gazebo check
+## Gazebo check
 
 ```bash
 gz sim shapes.sdf
@@ -69,7 +91,7 @@ gz sim -v 4 lab00_setup/worlds/gazebo_practice.sdf
 
 Use `gz topic -l` and `gz service -l` to inspect the Gazebo Transport graph. Confirm that the world is playing and that `/clock` advances. Gazebo's GUI, simulation server, and Transport graph are related but distinct; a visible window alone does not prove that physics or topics are updating.
 
-## 4. ROS–Gazebo check
+## ROS–Gazebo check
 
 ```bash
 ros2 pkg list | grep ros_gz
@@ -86,7 +108,7 @@ ros2 topic list
 
 If a value exists only in Gazebo, verify that the launch file or an explicit `ros_gz_bridge` process bridges its topic and supported message type. Use the [Lab 00 Gazebo practice](../lab00_setup/gazebo_fundamentals.md) to test a simple `/clock` bridge before debugging a robot-specific bridge.
 
-## 5. TF checks
+## TF checks
 
 ```bash
 ros2 topic echo /tf --once
@@ -95,7 +117,7 @@ ros2 topic echo /tf_static --once
 
 Use RViz2 to confirm that frames form a connected tree.
 
-## 6. Sensor checks
+## Sensor checks
 
 For a numeric topic:
 
@@ -105,9 +127,13 @@ ros2 topic echo /TOPIC_NAME --once
 ros2 topic info /TOPIC_NAME
 ```
 
-For image topics, use RViz2 or `rqt_image_view` when available.
+For image topics, use RViz2 or launch the installed image viewer:
 
-## 7. Nav2 checks
+```bash
+ros2 run rqt_image_view rqt_image_view
+```
+
+## Nav2 checks
 
 Before debugging a planner/controller:
 
@@ -120,7 +146,7 @@ Before debugging a planner/controller:
 
 The Nav2 setup guide follows the same dependency order.
 
-## 8. Student-code checks
+## Student-code checks
 
 Run:
 
@@ -130,7 +156,7 @@ python3 -m py_compile path/to/script.py
 
 For pure Python labs, run unit tests before connecting the code to a simulator.
 
-## 9. What to include when asking for help
+## What to include when asking for help
 
 Provide:
 

@@ -29,6 +29,22 @@ For that reason, Lab 00 includes two required practices after installation. The 
 
 The setup and practice steps are part of the laboratory work. Save the requested evidence and resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation, clock, frame, or bridge problem.
 
+## Required Software
+
+| Component | Where it is installed | Course use |
+|---|---|---|
+| WSL2 + Ubuntu 24.04 | Windows / WSL | Linux environment for all course commands |
+| Git | inside Ubuntu/WSL | clone, update, and track lab work |
+| VS Code | Windows | course-supported editor |
+| Microsoft WSL extension | VS Code on Windows | opens and runs tools inside Ubuntu/WSL |
+| Microsoft Python extension | VS Code WSL environment | Python editing, interpreter selection, and debugging |
+| ROS 2 Jazzy Desktop | inside Ubuntu/WSL | robot middleware and visualization |
+| Gazebo Harmonic through `ros_gz` | inside Ubuntu/WSL | physics and sensor simulation |
+| Nav2, SLAM Toolbox, and localization packages | inside Ubuntu/WSL | later navigation labs |
+| Python virtual environment and requirements | inside Ubuntu/WSL | numerical lab dependencies |
+
+F1TENTH/RoboRacer and Goosebot software are not required for the initial setup.
+
 ---
 
 ## Part 1 — Install WSL2 and Ubuntu 24.04
@@ -49,7 +65,71 @@ Confirm that Ubuntu is using WSL version 2.
 
 ---
 
-## Part 2 — Install ROS 2 Jazzy
+## Part 2 — Install Git and Visual Studio Code
+
+### Install and configure Git inside Ubuntu/WSL
+
+Git downloads the course repository, records changes to your work, and obtains instructor updates. Install Git inside Ubuntu because the course commands and repository live in the WSL environment:
+
+```bash
+sudo apt update
+sudo apt install git
+git --version
+which git
+```
+
+`which git` should normally print `/usr/bin/git`. Configure the identity attached to your commits, replacing the examples with your real information:
+
+```bash
+git config --global user.name "Your Full Name"
+git config --global user.email "your.email@example.com"
+git config --global --get user.name
+git config --global --get user.email
+```
+
+Use an email associated with GitHub or your GitHub-provided private `noreply` address. The name and email identify commits; they are not your GitHub password and do not authenticate `git push`.
+
+If Git is also installed on Windows, it has a separate configuration. For this course, run Git commands from Ubuntu/WSL so paths, permissions, and line endings stay consistent with ROS 2.
+
+### Install VS Code on Windows and connect it to WSL
+
+VS Code is the course-supported editor. Install the graphical application on **Windows**, not inside Ubuntu/WSL:
+
+1. Download and install [Visual Studio Code for Windows](https://code.visualstudio.com/download).
+2. During installation, enable **Add to PATH** when offered.
+3. Open VS Code and install the **WSL** extension published by Microsoft.
+4. Install the **Python** extension published by Microsoft. When a course folder is open through WSL, make sure the extension is also installed in that WSL environment if VS Code offers **Install in WSL**.
+5. Close and reopen the Ubuntu terminal so it receives the updated Windows PATH.
+
+Test the connection from Ubuntu/WSL:
+
+```bash
+code --version
+mkdir -p ~/courses
+cd ~/courses
+code .
+```
+
+VS Code should open with an indicator such as **WSL: Ubuntu-24.04** in the lower-left corner. Open **Terminal → New Terminal** inside VS Code and run:
+
+```bash
+pwd
+uname -a
+```
+
+The terminal should show a Linux path and identify Linux/WSL. If VS Code opens the folder locally on Windows instead, use the lower-left remote indicator and select **Connect to WSL**, then reopen the folder.
+
+Keep course repositories in the Linux filesystem, such as `~/courses`, rather than under `/mnt/c`, unless the instructor directs otherwise. After creating the Python environment later in this lab, select `~/venvs/eel4332/bin/python` when VS Code asks for the course Python interpreter.
+
+Official references:
+
+- [Developing in WSL with VS Code](https://code.visualstudio.com/docs/remote/wsl)
+- [Git installation for Linux](https://git-scm.com/install/linux)
+- [First-time Git configuration](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
+
+---
+
+## Part 3 — Install ROS 2 Jazzy
 
 Follow the official ROS 2 Jazzy Ubuntu Debian-package instructions:
 
@@ -65,6 +145,9 @@ sudo apt install \
   ros-jazzy-demo-nodes-py \
   ros-jazzy-turtlesim \
   ros-jazzy-rqt-graph \
+  ros-jazzy-rqt-image-view \
+  ros-jazzy-teleop-twist-keyboard \
+  ros-jazzy-rosbag2 \
   python3-colcon-common-extensions \
   python3-rosdep
 ```
@@ -76,7 +159,16 @@ source /opt/ros/jazzy/setup.bash
 ros2 --help
 ```
 
-Part 7 provides guided ROS 2 and Gazebo exercises before students use the larger TurtleBot/Nav2 system.
+Initialize `rosdep`, which later resolves ROS package dependencies:
+
+```bash
+sudo rosdep init
+rosdep update
+```
+
+Run `sudo rosdep init` only once. If it reports that the default sources list already exists, leave that file in place and continue with `rosdep update`.
+
+Part 8 provides guided ROS 2 and Gazebo exercises before students use the larger TurtleBot/Nav2 system.
 
 To source ROS automatically:
 
@@ -86,7 +178,7 @@ echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 
 ---
 
-## Part 3 — Install ROS–Gazebo integration
+## Part 4 — Install ROS–Gazebo integration
 
 ```bash
 sudo apt update
@@ -112,7 +204,7 @@ The same window opens.
 
 ---
 
-## Part 4 — Install navigation / localization packages
+## Part 5 — Install navigation / localization packages
 
 ```bash
 sudo apt update
@@ -143,7 +235,7 @@ When a later lab directs you to one of these pages, confirm that its **Jazzy** t
 
 ---
 
-## Part 5 — Clone this repository and enter its root
+## Part 6 — Clone this repository and enter its root
 
 Run these commands in Ubuntu/WSL:
 
@@ -169,9 +261,20 @@ ls
 
 `pwd` should end with `/eel4332-autonomous-vehicle-labs`, and the `ls` output should include `requirements.txt`. If you cloned the repository somewhere other than `~/courses`, use that location in the `cd` command.
 
+Inspect the repository and open it through the WSL connection:
+
+```bash
+git status
+git remote -v
+git branch --show-current
+code .
+```
+
+The VS Code Explorer should show `lab00_setup`, `lab01_system_architecture_sensors`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands and VS Code terminals in this WSL workspace, not from a separate Windows copy of the folder.
+
 ---
 
-## Part 6 — Create the course Python environment
+## Part 7 — Create the course Python environment
 
 ### Why use a virtual environment?
 
@@ -190,6 +293,14 @@ After activation, the terminal prompt normally begins with `(eel4332)`, and `pyt
 source ~/venvs/eel4332/bin/activate
 ```
 
+When the repository is open in VS Code, use **Python: Select Interpreter** from the Command Palette and choose:
+
+```text
+~/venvs/eel4332/bin/python
+```
+
+The selected interpreter controls Python editing, running, and debugging in VS Code. It does not replace the need to source `/opt/ros/jazzy/setup.bash` in terminals that run ROS commands.
+
 In Ubuntu:
 
 ```bash
@@ -199,7 +310,7 @@ source ~/venvs/eel4332/bin/activate
 python -m pip install --upgrade pip setuptools
 ```
 
-Make sure you are still at the repository root established in Part 5, then run:
+Make sure you are still at the repository root established in Part 6, then run:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -228,7 +339,7 @@ All three verification commands should complete without dependency-conflict mess
 
 ---
 
-## Part 7 — Complete the ROS 2 and Gazebo fundamentals practices
+## Part 8 — Complete the ROS 2 and Gazebo fundamentals practices
 
 Most students are not expected to have previous ROS 2 or Gazebo experience. Before working with the much larger TurtleBot/Nav2 system, complete both required guided practices in this order:
 
@@ -258,7 +369,7 @@ Do not skip directly to TurtleBot merely because Gazebo opens successfully. Bein
 
 ---
 
-## Part 8 — Optional F1TENTH / RoboRacer Gym
+## Part 9 — Optional F1TENTH / RoboRacer Gym
 
 F1TENTH, now also known as RoboRacer, is an autonomous-driving education and racing platform built around a small car-like vehicle. Unlike the differential-drive TurtleBot used in this course's primary Gazebo simulation, an F1TENTH vehicle uses car-like steering. Its simulator can therefore be useful when studying vehicle kinematics, planning, and control.
 
@@ -270,7 +381,7 @@ Lab 02 uses the pure-Python bicycle model included in this repository, so F1TENT
 
 ---
 
-## Part 9 — Run the verification script
+## Part 10 — Run the verification script
 
 Source both ROS 2 and the practice workspace before running the verification:
 
@@ -286,7 +397,7 @@ Fix any required item marked `MISSING` before starting Lab 01.
 
 ---
 
-## Part 10 — Goosebot
+## Part 11 — Goosebot
 
 Do **not** install Goosebot-specific dependencies during the first week unless instructed.
 
@@ -305,6 +416,10 @@ Goosebot is a four-wheel skid-steer robot. It has four conventional wheels, each
 Before Lab 01, you should be able to:
 
 - [ ] run `ros2 --help`
+- [ ] run `git --version` and confirm Git name/email configuration
+- [ ] run `code .` from WSL and confirm VS Code reports a WSL connection
+- [ ] confirm VS Code recognizes the repository and selects `~/venvs/eel4332/bin/python`
+- [ ] run `rosdep update` successfully
 - [ ] run `gz sim shapes.sdf`
 - [ ] launch Gazebo through `ros_gz_sim`
 - [ ] open RViz2
@@ -312,6 +427,7 @@ Before Lab 01, you should be able to:
 - [ ] clone and edit this repository
 - [ ] explain the difference between a topic, service, and action
 - [ ] inspect a node, topic, message type, service, action, and parameter from the command line
+- [ ] verify `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` are available
 - [ ] build and source a colcon workspace
 - [ ] launch the `eel4332_ros_practice` publisher and subscriber together
 - [ ] produce an `rqt_graph` screenshot of the practice nodes

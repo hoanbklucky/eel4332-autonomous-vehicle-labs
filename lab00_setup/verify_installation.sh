@@ -21,11 +21,25 @@ echo "---------------------------"
 
 check_cmd python3 "Python 3"
 check_cmd git "Git"
+check_cmd code "VS Code WSL command"
 check_cmd ros2 "ROS 2 CLI"
 check_cmd gz "Gazebo CLI"
 check_cmd rviz2 "RViz2"
 check_cmd colcon "colcon build tool"
+check_cmd rosdep "rosdep"
 check_cmd rqt_graph "rqt_graph"
+
+if command -v git >/dev/null 2>&1; then
+  git_name="$(git config --global --get user.name 2>/dev/null || true)"
+  git_email="$(git config --global --get user.email 2>/dev/null || true)"
+  if [ -n "$git_name" ] && [ -n "$git_email" ]; then
+    echo "[OK]      Git user.name / user.email"
+    ok=$((ok+1))
+  else
+    echo "[MISSING] Git user.name / user.email"
+    missing=$((missing+1))
+  fi
+fi
 
 if command -v python3 >/dev/null 2>&1; then
   if python3 - <<'PY' >/dev/null 2>&1
@@ -55,7 +69,7 @@ if command -v ros2 >/dev/null 2>&1; then
   distro="${ROS_DISTRO:-not-sourced}"
   echo "[INFO]    ROS_DISTRO=$distro"
 
-  for pkg in demo_nodes_py turtlesim ros_gz_bridge ros_gz_sim eel4332_ros_practice; do
+  for pkg in demo_nodes_py turtlesim rqt_image_view teleop_twist_keyboard rosbag2_transport ros_gz_bridge ros_gz_sim eel4332_ros_practice; do
     if ros2 pkg prefix "$pkg" >/dev/null 2>&1; then
       echo "[OK]      ROS package: $pkg"
       ok=$((ok+1))
@@ -64,6 +78,16 @@ if command -v ros2 >/dev/null 2>&1; then
       missing=$((missing+1))
     fi
   done
+fi
+
+if command -v rosdep >/dev/null 2>&1; then
+  if rosdep resolve rclpy >/dev/null 2>&1; then
+    echo "[OK]      rosdep initialized"
+    ok=$((ok+1))
+  else
+    echo "[MISSING] rosdep initialization/update"
+    missing=$((missing+1))
+  fi
 fi
 
 if [ -f "lab00_setup/worlds/gazebo_practice.sdf" ]; then

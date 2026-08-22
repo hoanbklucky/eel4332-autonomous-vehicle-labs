@@ -198,7 +198,7 @@ Submit or show the instructor:
 
 - Run all Linux, ROS, and Gazebo commands in Ubuntu/WSL, not PowerShell.
 - Close extra Gazebo instances before retrying a world.
-- If `gz` is not found, return to Part 3 of [Lab 00](README.md).
+- If `gz` is not found, return to Part 4 of [Lab 00](README.md).
 - If `ros2` is not found, source `/opt/ros/jazzy/setup.bash`.
 - If the bridge package is missing, install `ros-jazzy-ros-gz`.
 - If `/clock` does not advance, confirm Gazebo is playing.

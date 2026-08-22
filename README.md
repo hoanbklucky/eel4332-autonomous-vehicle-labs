@@ -23,6 +23,8 @@ The intended course environment is:
 - **SLAM Toolbox**
 - **robot_localization**
 - **Python 3 + NumPy + Matplotlib**
+- **Git** for version control and course updates
+- **Visual Studio Code + WSL extension** as the supported editor workflow
 - **TurtleBot 3 in Gazebo** as the primary simulation platform
 - **F1TENTH / RoboRacer Gym** only as an optional car-like path-tracking extension
 - **Goosebot** for final physical deployment
@@ -131,6 +133,8 @@ Do not submit:
 
 Useful official references:
 
+- Git for Linux: https://git-scm.com/install/linux
+- Visual Studio Code with WSL: https://code.visualstudio.com/docs/remote/wsl
 - ROS 2 Jazzy: https://docs.ros.org/en/jazzy/
 - ROS 2 Jazzy beginner CLI tutorials: https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html
 - ROS–Gazebo integration (`ros_gz`): https://docs.ros.org/en/jazzy/p/ros_gz/
