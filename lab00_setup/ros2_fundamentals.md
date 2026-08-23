@@ -8,6 +8,14 @@ Run **one command block at a time** and examine its output before continuing. Do
 
 The official [ROS 2 Jazzy beginner CLI tutorials](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html) provide additional explanations and examples.
 
+Most ROS 2 commands follow this pattern:
+
+```text
+ros2 <command group> <operation> [name] [options]
+```
+
+For example, in `ros2 topic list -t`, `topic` selects the topic command group, `list` selects the operation, and `-t` requests type information. Names beginning with `/`, such as `/chatter`, identify resources in the live ROS graph. Press the `Tab` key while typing to explore available commands and names.
+
 ## Mental Model
 
 ROS 2 is middleware and a collection of development tools, not a simulator or a robot model.
@@ -89,6 +97,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run demo_nodes_py talker
 ```
 
+**Command breakdown:** `run` starts one executable from an installed package. Here, `demo_nodes_py` is the package and `talker` is the executable. The executable creates a node named `/talker` and keeps running until you press `Ctrl+C`.
+
 ![The demo talker publishing numbered Hello World messages](images/practice2-01-talker-publishing.png)
 
 *Expected talker output. The node publishes a new numbered string approximately once per second.*
@@ -105,6 +115,8 @@ List the running nodes:
 ros2 node list
 ```
 
+**Command breakdown:** `node list` asks the ROS graph for the names of all currently discoverable nodes. It does not start or stop anything.
+
 ![The ROS node list containing the talker node](images/practice2-02-node-list.png)
 
 *The running publisher appears as the `/talker` node.*
@@ -114,6 +126,8 @@ Inspect the talker node:
 ```bash
 ros2 node info /talker
 ```
+
+**Command breakdown:** `node info` inspects one named node. `/talker` is the node name; the output shows its publishers, subscribers, services, and actions.
 
 ![Detailed ROS information for the talker node](images/practice2-03-node-info-talker.png)
 
@@ -125,6 +139,8 @@ List topics together with their message types:
 ros2 topic list -t
 ```
 
+**Command breakdown:** `topic list` prints the currently discoverable topic names. The `-t` option adds the message type associated with each topic.
+
 ![ROS topic list showing chatter and its String message type](images/practice2-04-topic-list-types.png)
 
 *The `/chatter` topic carries `std_msgs/msg/String` messages.*
@@ -134,6 +150,8 @@ Inspect the publishers, subscribers, type, and Quality of Service settings for `
 ```bash
 ros2 topic info /chatter --verbose
 ```
+
+**Command breakdown:** `topic info` examines one topic. `/chatter` is the topic name, and `--verbose` adds endpoint details such as node names, publisher and subscriber counts, and Quality of Service settings.
 
 ![Verbose chatter topic information with one publisher and no subscribers](images/practice2-05-topic-info-publisher.png)
 
@@ -145,6 +163,8 @@ Inspect the fields in the message type:
 ros2 interface show std_msgs/msg/String
 ```
 
+**Command breakdown:** `interface show` prints the definition of a ROS interface type. `std_msgs/msg/String` means the `String` message in the `msg` directory of the `std_msgs` package.
+
 ![The std_msgs String interface containing its data field](images/practice2-06-string-interface.png)
 
 *The message definition contains one string field named `data`.*
@@ -155,6 +175,8 @@ Display one message and return to the prompt:
 ros2 topic echo /chatter --once
 ```
 
+**Command breakdown:** `topic echo` temporarily subscribes to `/chatter` and prints received messages. The `--once` option exits after the first message instead of continuing indefinitely.
+
 ![One numbered Hello World message echoed from chatter](images/practice2-07-topic-echo-once.png)
 
 *The `--once` option prints one message and then returns to the shell prompt.*
@@ -164,6 +186,8 @@ Measure the publication rate:
 ```bash
 ros2 topic hz /chatter
 ```
+
+**Command breakdown:** `topic hz` temporarily subscribes to `/chatter`, measures message arrival times, and reports the estimated frequency in hertz. It continues until you press `Ctrl+C`.
 
 ![Measured chatter topic rate of approximately one hertz](images/practice2-08-topic-rate.png)
 
@@ -181,6 +205,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run demo_nodes_py listener
 ```
 
+**Command breakdown:** this uses `run` again, now starting the `listener` executable from `demo_nodes_py`. It creates the `/listener` node, which subscribes to `/chatter`.
+
 ![The demo listener receiving numbered Hello World messages](images/practice2-09-listener-running.png)
 
 *The listener subscribes to `/chatter` and prints each received message.*
@@ -190,6 +216,8 @@ Return to WSL/Ubuntu Terminal 2 and inspect the topic again:
 ```bash
 ros2 topic info /chatter --verbose
 ```
+
+**Command breakdown:** repeat the verbose inspection after starting `/listener`. Comparing the two outputs reveals that the subscriber count changed from zero to one.
 
 ![Verbose chatter information with one publisher and one subscriber](images/practice2-10-topic-info-publisher-subscriber.png)
 
@@ -228,6 +256,8 @@ ros2 topic pub --once /chatter std_msgs/msg/String \
   "{data: 'hello from the EEL 4332 command line'}"
 ```
 
+**Command breakdown:** `topic pub` creates a temporary publisher. `--once` sends one message, `/chatter` is the destination topic, `std_msgs/msg/String` is its required type, and the YAML expression supplies the `data` field. The trailing `\` only continues the same shell command on the next displayed line.
+
 ![A manually published String message sent to chatter](images/practice2-11-manual-publish.png)
 
 *The command-line publisher sends one correctly typed message.*
@@ -252,6 +282,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run turtlesim turtlesim_node
 ```
 
+**Command breakdown:** `run` starts the `turtlesim_node` executable from the installed `turtlesim` package. The process creates a node named `/turtlesim` and opens the graphical simulator window.
+
 ![The turtlesim window with the original turtle near the center](images/practice3-01-turtlesim-start.png)
 
 *The turtlesim node opens a graphical window containing the original turtle.*
@@ -270,6 +302,8 @@ List available services and their types:
 ros2 service list -t
 ```
 
+**Command breakdown:** `service list` prints the names of currently available services. The `-t` option also shows the service type required by each service.
+
 ![List of available ROS services and their service types](images/practice3-02-service-list.png)
 
 *The list includes `/spawn` with the service type `turtlesim/srv/Spawn`.*
@@ -279,6 +313,8 @@ Show the type of the `/spawn` service:
 ```bash
 ros2 service type /spawn
 ```
+
+**Command breakdown:** `service type` looks up the interface type used by one service. `/spawn` is the service name; its returned type is needed to inspect or call it.
 
 ![The service type returned for the spawn service](images/practice3-03-spawn-service-type.png)
 
@@ -290,6 +326,8 @@ Inspect the request and response fields:
 ros2 interface show turtlesim/srv/Spawn
 ```
 
+**Command breakdown:** `interface show` prints the `Spawn` service definition from the `turtlesim` package. The `srv` portion identifies it as a service interface. The `---` line separates request fields from response fields.
+
 ![Request and response fields of the turtlesim Spawn service](images/practice3-04-spawn-interface.png)
 
 *Fields above `---` belong to the request; fields below it belong to the response.*
@@ -300,6 +338,8 @@ Call the service:
 ros2 service call /spawn turtlesim/srv/Spawn \
   "{x: 2.0, y: 2.0, theta: 0.0, name: 'practice_turtle'}"
 ```
+
+**Command breakdown:** `service call` sends one request to `/spawn`. The next argument declares the expected service type, and the YAML expression supplies values for its request fields. The command waits for and then prints the response.
 
 ![Successful call to the turtlesim spawn service](images/practice3-05-spawn-service-call.png)
 
@@ -317,13 +357,19 @@ A second turtle should appear. The request contains input fields; the service re
 ros2 param list /turtlesim
 ```
 
+**Command breakdown:** `param list` prints the parameter names owned by the `/turtlesim` node. Parameters are node-specific configuration values.
+
 ```bash
 ros2 param get /turtlesim background_r
 ```
 
+**Command breakdown:** `param get` reads one parameter. `/turtlesim` identifies the node and `background_r` identifies its red-background component.
+
 ```bash
 ros2 param set /turtlesim background_r 100
 ```
+
+**Command breakdown:** `param set` requests a new value for a node parameter. It asks `/turtlesim` to change `background_r` to `100` and reports whether the update succeeded.
 
 Parameters configure a node. They are not intended to replace a high-rate sensor or command topic.
 
@@ -333,14 +379,20 @@ Parameters configure a node. They are not intended to replace a high-rate sensor
 ros2 action list -t
 ```
 
+**Command breakdown:** `action list` prints available action names. The `-t` option adds each action's interface type.
+
 ```bash
 ros2 action info /turtle1/rotate_absolute
 ```
+
+**Command breakdown:** `action info` inspects an action endpoint. It reports the action type and the nodes acting as action clients or servers for `/turtle1/rotate_absolute`.
 
 ```bash
 ros2 action send_goal /turtle1/rotate_absolute \
   turtlesim/action/RotateAbsolute "{theta: 1.57}" --feedback
 ```
+
+**Command breakdown:** `action send_goal` sends a goal to the named action using the stated action type. The YAML expression requests an absolute heading of `1.57` radians, approximately 90 degrees. `--feedback` prints progress messages while the goal is executing, followed by the final result.
 
 Observe the feedback while the turtle rotates. An action is appropriate because the operation takes time and has a goal, feedback, and final result.
 
@@ -421,6 +473,8 @@ source ~/eel4332_ws/install/setup.bash
 ros2 pkg prefix eel4332_ros_practice
 ```
 
+**Command breakdown:** `pkg prefix` prints the installation prefix of an available package. A path under `~/eel4332_ws/install` confirms that ROS 2 found the package in the course workspace overlay rather than only in the base Jazzy installation.
+
 The final command should print a path under `~/eel4332_ws/install`. The sourcing order matters: source the base Jazzy installation first and the course workspace second.
 
 Do not commit the workspace `build/`, `install/`, or `log/` directories to the course repository.
@@ -441,6 +495,8 @@ source ~/eel4332_ws/install/setup.bash
 ros2 launch eel4332_ros_practice practice.launch.py rate_hz:=5.0
 ```
 
+**Command breakdown:** `launch` starts the system described by `practice.launch.py` from the `eel4332_ros_practice` package. `rate_hz:=5.0` overrides the launch argument named `rate_hz`; the launch file passes that value to the publisher node.
+
 In WSL/Ubuntu Terminal 2:
 
 ```bash
@@ -457,11 +513,15 @@ List the practice nodes:
 ros2 node list
 ```
 
+**Command breakdown:** list the live nodes and confirm that both `/counter_publisher` and `/counter_subscriber` were created by the launch file.
+
 List topics and their types:
 
 ```bash
 ros2 topic list -t
 ```
+
+**Command breakdown:** list the live topics with their message types and locate the `/practice/count` topic used by the two practice nodes.
 
 Inspect the practice topic:
 
@@ -469,11 +529,15 @@ Inspect the practice topic:
 ros2 topic info /practice/count --verbose
 ```
 
+**Command breakdown:** inspect `/practice/count` and verify its message type, publisher, subscriber, and Quality of Service information.
+
 Display one counter message:
 
 ```bash
 ros2 topic echo /practice/count --once
 ```
+
+**Command breakdown:** subscribe temporarily, print one counter message from `/practice/count`, and then return to the prompt.
 
 Measure its update rate:
 
@@ -481,11 +545,15 @@ Measure its update rate:
 ros2 topic hz /practice/count
 ```
 
+**Command breakdown:** measure the arrival frequency of counter messages. With this launch command, the result should settle near `5 Hz` after several samples.
+
 After stopping the rate measurement with `Ctrl+C`, inspect the launch parameter:
 
 ```bash
 ros2 param get /counter_publisher rate_hz
 ```
+
+**Command breakdown:** read the `rate_hz` parameter owned by `/counter_publisher` and confirm that the launch argument configured it to `5.0`.
 
 The measured topic rate should be close to the configured value, allowing for scheduling and measurement variation. Stop `ros2 topic hz` after approximately 10 seconds.
 
@@ -507,11 +575,15 @@ Save a screenshot for your setup record. Close `rqt_graph` and stop the launch w
 ros2 launch eel4332_ros_practice practice.launch.py rate_hz:=2.0
 ```
 
+**Command breakdown:** launch the same nodes and code again while changing only the `rate_hz` launch argument from `5.0` to `2.0`.
+
 In WSL/Ubuntu Terminal 2, measure the topic again:
 
 ```bash
 ros2 topic hz /practice/count
 ```
+
+**Command breakdown:** repeat the same measurement; the reported frequency should now settle near `2 Hz`, demonstrating that launch-time configuration changed the behavior.
 
 Let it collect data for approximately 10 seconds and press `Ctrl+C`. Verify that the observed rate changed. This demonstrates the difference between reusable node code and launch-time configuration.
 
