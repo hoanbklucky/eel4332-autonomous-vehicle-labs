@@ -343,12 +343,13 @@ All three verification commands should complete without dependency-conflict mess
 
 ## Part 8 — Complete the ROS 2 and Gazebo fundamentals practices
 
-Most students are not expected to have previous ROS 2 or Gazebo experience. Before working with the much larger TurtleBot/Nav2 system, complete both required guided practices in this order:
+Most students are not expected to have previous ROS 2 or Gazebo experience. Before working with the much larger TurtleBot/Nav2 system, complete the required guided practices in this order:
 
-1. [ROS 2 Fundamentals Practice](ros2_fundamentals.md)
-2. [Gazebo Fundamentals Practice](gazebo_fundamentals.md)
+1. [ROS 2 Fundamentals — Part 1: Graph and Communication](ros2_fundamentals_part1.md)
+2. [ROS 2 Fundamentals — Part 2: Packages, Workspaces, and Launch](ros2_fundamentals_part2.md)
+3. [Gazebo Fundamentals Practice](gazebo_fundamentals.md)
 
-The ROS 2 practice covers:
+The two ROS 2 practices cover:
 
 - the ROS graph and the roles of nodes;
 - topics and typed messages;

@@ -64,12 +64,13 @@ The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, ma
 ## Start here
 
 1. Complete [`lab00_setup/README.md`](lab00_setup/README.md).
-2. Complete the required [`ROS 2 fundamentals practice`](lab00_setup/ros2_fundamentals.md).
-3. Complete the required [`Gazebo fundamentals practice`](lab00_setup/gazebo_fundamentals.md).
-4. Run [`lab00_setup/verify_installation.sh`](lab00_setup/verify_installation.sh).
-5. Complete labs in numerical order unless your instructor says otherwise.
-6. Keep all experimental results in each lab's `results/` directory.
-7. Do not commit large ROS build artifacts or recorded bags unless instructed.
+2. Complete [`ROS 2 Fundamentals — Part 1`](lab00_setup/ros2_fundamentals_part1.md).
+3. Complete [`ROS 2 Fundamentals — Part 2`](lab00_setup/ros2_fundamentals_part2.md).
+4. Complete the required [`Gazebo fundamentals practice`](lab00_setup/gazebo_fundamentals.md).
+5. Run [`lab00_setup/verify_installation.sh`](lab00_setup/verify_installation.sh).
+6. Complete labs in numerical order unless your instructor says otherwise.
+7. Keep all experimental results in each lab's `results/` directory.
+8. Do not commit large ROS build artifacts or recorded bags unless instructed.
 
 ## Repository structure
 

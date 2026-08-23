@@ -73,7 +73,7 @@ source ~/eel4332_ws/install/setup.bash
 ros2 pkg prefix eel4332_ros_practice
 ```
 
-If the package is still missing, return to the workspace build steps in [`../lab00_setup/ros2_fundamentals.md`](../lab00_setup/ros2_fundamentals.md). Do not source another workspace merely to hide a failed build.
+If the package is still missing, return to the workspace build steps in [ROS 2 Fundamentals — Part 2](../lab00_setup/ros2_fundamentals_part2.md). Do not source another workspace merely to hide a failed build.
 
 ## Gazebo check
 

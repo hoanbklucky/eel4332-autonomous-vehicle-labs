@@ -17,7 +17,7 @@ By the end of this lab, you should be able to:
 ## Prerequisites
 
 - Complete `lab00_setup/README.md`.
-- Complete the required `lab00_setup/ros2_fundamentals.md` practice.
+- Complete both required ROS 2 practices: `lab00_setup/ros2_fundamentals_part1.md` and `lab00_setup/ros2_fundamentals_part2.md`.
 - Complete the required `lab00_setup/gazebo_fundamentals.md` practice.
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
