@@ -252,6 +252,10 @@ source /opt/ros/jazzy/setup.bash
 ros2 run turtlesim turtlesim_node
 ```
 
+![The turtlesim window with the original turtle near the center](images/practice3-01-turtlesim-start.png)
+
+*The turtlesim node opens a graphical window containing the original turtle.*
+
 ### Inspect and call a service
 
 In WSL/Ubuntu Terminal 2:
@@ -266,17 +270,29 @@ List available services and their types:
 ros2 service list -t
 ```
 
+![List of available ROS services and their service types](images/practice3-02-service-list.png)
+
+*The list includes `/spawn` with the service type `turtlesim/srv/Spawn`.*
+
 Show the type of the `/spawn` service:
 
 ```bash
 ros2 service type /spawn
 ```
 
+![The service type returned for the spawn service](images/practice3-03-spawn-service-type.png)
+
+*The command confirms the type required when calling `/spawn`.*
+
 Inspect the request and response fields:
 
 ```bash
 ros2 interface show turtlesim/srv/Spawn
 ```
+
+![Request and response fields of the turtlesim Spawn service](images/practice3-04-spawn-interface.png)
+
+*Fields above `---` belong to the request; fields below it belong to the response.*
 
 Call the service:
 
@@ -285,7 +301,15 @@ ros2 service call /spawn turtlesim/srv/Spawn \
   "{x: 2.0, y: 2.0, theta: 0.0, name: 'practice_turtle'}"
 ```
 
+![Successful call to the turtlesim spawn service](images/practice3-05-spawn-service-call.png)
+
+*A successful response returns the name assigned to the new turtle.*
+
 A second turtle should appear. The request contains input fields; the service returns one response.
+
+![The turtlesim window after spawning practice turtle](images/practice3-06-turtlesim-after-spawn.png)
+
+*The new turtle appears at the requested position while the original turtle remains in the simulation.*
 
 ### Inspect and change a parameter
 
