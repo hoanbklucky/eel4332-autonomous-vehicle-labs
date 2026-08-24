@@ -28,12 +28,12 @@ ROS 2 and Gazebo solve different parts of the robotics problem:
 
 ```mermaid
 flowchart LR
-    world["SDF world and models"] --> gazebo["Gazebo physics and sensors"]
-    gazebo --> transport["Gazebo Transport topics"]
-    transport --> bridge["ros_gz bridge"]
-    bridge --> graph["ROS 2 nodes and typed interfaces"]
-    graph --> tools["ROS CLI and rqt_graph"]
-    graph --> rviz["RViz2 visualization"]
+    sdf_world["SDF world and models"] --> gz_sim["Gazebo physics and sensors"]
+    gz_sim --> gz_transport["Gazebo Transport topics"]
+    gz_transport --> gz_bridge["ros_gz bridge"]
+    gz_bridge --> ros_graph["ROS 2 nodes and typed interfaces"]
+    ros_graph --> ros_tools["ROS CLI and rqt_graph"]
+    ros_graph --> rviz_view["RViz2 visualization"]
 ```
 
 Gazebo simulates the world. ROS 2 connects autonomy software. A bridge translates only the selected data that must cross between their communication systems. This lab begins with small examples so each layer can be understood before they are combined in a full robot simulation.

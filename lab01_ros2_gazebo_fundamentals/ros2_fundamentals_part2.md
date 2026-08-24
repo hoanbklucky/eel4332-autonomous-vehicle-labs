@@ -24,13 +24,13 @@ Complete [Part 1](ros2_fundamentals_part1.md) before beginning this guide. Part 
 
 ```mermaid
 flowchart LR
-    package["Course package source"] --> workspace["Workspace src/"]
-    workspace --> rosdep["rosdep install dependencies"]
-    rosdep --> colcon["colcon build"]
-    colcon --> install["Workspace install/"]
-    base["Source ROS 2 Jazzy underlay"] --> overlay["Source workspace overlay"]
-    install --> overlay
-    overlay --> run["ros2 run or ros2 launch"]
+    package_source["Course package source"] --> workspace_src["Workspace src/"]
+    workspace_src --> rosdep_step["rosdep install dependencies"]
+    rosdep_step --> colcon_step["colcon build"]
+    colcon_step --> install_tree["Workspace install/"]
+    base_underlay["Source ROS 2 Jazzy underlay"] --> workspace_overlay["Source workspace overlay"]
+    install_tree --> workspace_overlay
+    workspace_overlay --> ros_command["ros2 run or ros2 launch"]
 ```
 
 Building creates the workspace's `install/` tree, but it does not modify every open terminal automatically. Sourcing `install/setup.bash` updates the current shell so ROS 2 can discover the newly built package. That is why **build** and **source** are separate steps.
