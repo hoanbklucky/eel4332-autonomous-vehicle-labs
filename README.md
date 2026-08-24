@@ -37,26 +37,28 @@ The Python bicycle model remains a deliberate car-like modeling exercise. F1TENT
 
 | Lab | Mission | Main concepts |
 |---|---|---|
-| 01 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 02 | Predict car-like motion from steering and speed | bicycle model, kinematics, comparison with differential drive |
-| 03 | Characterize noisy sensors | bias, variance, sampling, measurement models |
-| 04 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
-| 05 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
-| 06 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
-| 07 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
+| 01 | Learn the ROS 2 and Gazebo workflow | nodes, interfaces, workspaces, launch files, simulation, bridges |
+| 02 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
+| 03 | Predict car-like motion from steering and speed | bicycle model, kinematics, comparison with differential drive |
+| 04 | Characterize noisy sensors | bias, variance, sampling, measurement models |
+| 05 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
+| 06 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
+| 07 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
+| 08 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
 | Final | Complete an autonomous navigation mission | SLAM/localization/Nav2/Goosebot integration |
 
 ## How these labs map to the course
 
 The labs deliberately group related lecture topics into larger engineering tasks.
 
-- **Lab 01** supports system architecture and autonomous-vehicle sensors.
-- **Lab 02** supports vehicle kinematics and modeling.
-- **Lab 03** supports sensor uncertainty and measurement models.
-- **Lab 04** supports state estimation and localization.
-- **Lab 05** supports mapping and SLAM.
-- **Lab 06** supports path planning and path tracking/control.
-- **Lab 07** supports system integration, safety, and failure handling.
+- **Lab 01** establishes the ROS 2 and Gazebo foundation used by later labs.
+- **Lab 02** supports system architecture and autonomous-vehicle sensors.
+- **Lab 03** supports vehicle kinematics and modeling.
+- **Lab 04** supports sensor uncertainty and measurement models.
+- **Lab 05** supports state estimation and localization.
+- **Lab 06** supports mapping and SLAM.
+- **Lab 07** supports path planning and path tracking/control.
+- **Lab 08** supports system integration, safety, and failure handling.
 - **Final Project** supports end-to-end autonomy and sim-to-real deployment.
 
 The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's four-wheel skid-steer interface, dimensions, sensor frames, slip behavior, and safety limits.
@@ -64,13 +66,11 @@ The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, ma
 ## Start here
 
 1. Complete [`lab00_setup/README.md`](lab00_setup/README.md).
-2. Complete [`ROS 2 Fundamentals — Part 1`](lab00_setup/ros2_fundamentals_part1.md).
-3. Complete [`ROS 2 Fundamentals — Part 2`](lab00_setup/ros2_fundamentals_part2.md).
-4. Complete the required [`Gazebo fundamentals practice`](lab00_setup/gazebo_fundamentals.md).
-5. Run [`lab00_setup/verify_installation.sh`](lab00_setup/verify_installation.sh).
-6. Complete labs in numerical order unless your instructor says otherwise.
-7. Keep all experimental results in each lab's `results/` directory.
-8. Do not commit large ROS build artifacts or recorded bags unless instructed.
+2. Run [`lab00_setup/verify_installation.sh`](lab00_setup/verify_installation.sh).
+3. Complete [Lab 01 — ROS 2 and Gazebo Fundamentals](lab01_ros2_gazebo_fundamentals/README.md).
+4. Complete the remaining labs in numerical order unless your instructor says otherwise.
+5. Keep all experimental results in each lab's `results/` directory.
+6. Do not commit large ROS build artifacts or recorded bags unless instructed.
 
 ## Repository structure
 
@@ -82,13 +82,14 @@ eel4332-autonomous-vehicle-labs/
 ├── lab00_setup/
 ├── docs/
 ├── common/
-├── lab01_system_architecture_sensors/
-├── lab02_vehicle_modeling/
-├── lab03_sensor_characterization/
-├── lab04_state_estimation_localization/
-├── lab05_mapping_slam/
-├── lab06_planning_tracking/
-├── lab07_integration_safety/
+├── lab01_ros2_gazebo_fundamentals/
+├── lab02_system_architecture_sensors/
+├── lab03_vehicle_modeling/
+├── lab04_sensor_characterization/
+├── lab05_state_estimation_localization/
+├── lab06_mapping_slam/
+├── lab07_planning_tracking/
+├── lab08_integration_safety/
 └── final_project_goosebot/
 ```
 

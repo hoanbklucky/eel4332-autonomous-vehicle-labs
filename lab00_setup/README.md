@@ -25,9 +25,9 @@ F1TENTH / RoboRacer Gym is optional and is not required to begin the course. The
 
 Autonomous-vehicle software spans several layers. Ubuntu provides the operating environment; ROS 2 connects software components; Gazebo simulates a physical world and sensors; RViz2 visualizes ROS data; and Nav2 supplies localization, planning, and navigation components. Installing the programs is only the first step—students must also learn how to inspect each layer and the interfaces between them.
 
-For that reason, Lab 00 includes two required practices after installation. The ROS 2 practice starts with small publisher/subscriber systems so the communication graph is understandable. The Gazebo practice starts with a small SDF world so physics, entities, simulation time, and bridging can be observed without the complexity of TurtleBot and Nav2. Lab 01 then combines the same ideas in a complete robot simulation.
+Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundamentals/README.md) then teaches ROS 2 and Gazebo through small systems before Lab 2 combines the same ideas in a complete TurtleBot/Nav2 simulation.
 
-The setup and practice steps are part of the laboratory work. Save the requested evidence and resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation, clock, frame, or bridge problem.
+Resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation or environment problem.
 
 ## Required Software
 
@@ -139,7 +139,7 @@ https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 
 For this course, install the Desktop variant.
 
-Install the beginner examples and ROS development tools used later in this setup lab:
+Install the beginner examples and ROS development tools used in Lab 1 and later labs:
 
 ```bash
 sudo apt update
@@ -170,7 +170,7 @@ rosdep update
 
 Run `sudo rosdep init` only once. If it reports that the default sources list already exists, leave that file in place and continue with `rosdep update`.
 
-Part 8 provides guided ROS 2 and Gazebo exercises before students use the larger TurtleBot/Nav2 system.
+Lab 1 provides guided ROS 2 and Gazebo exercises before students use the larger TurtleBot/Nav2 system.
 
 To source ROS automatically:
 
@@ -272,7 +272,7 @@ git branch --show-current
 code .
 ```
 
-The VS Code Explorer should show `lab00_setup`, `lab01_system_architecture_sensors`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands in integrated WSL/Ubuntu Terminals in this workspace, not from a separate Windows copy of the folder.
+The VS Code Explorer should show `lab00_setup`, `lab01_ros2_gazebo_fundamentals`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands in integrated WSL/Ubuntu Terminals in this workspace, not from a separate Windows copy of the folder.
 
 ---
 
@@ -341,38 +341,7 @@ All three verification commands should complete without dependency-conflict mess
 
 ---
 
-## Part 8 — Complete the ROS 2 and Gazebo fundamentals practices
-
-Most students are not expected to have previous ROS 2 or Gazebo experience. Before working with the much larger TurtleBot/Nav2 system, complete the required guided practices in this order:
-
-1. [ROS 2 Fundamentals — Part 1: Graph and Communication](ros2_fundamentals_part1.md)
-2. [ROS 2 Fundamentals — Part 2: Packages, Workspaces, and Launch](ros2_fundamentals_part2.md)
-3. [Gazebo Fundamentals Practice](gazebo_fundamentals.md)
-
-The two ROS 2 practices cover:
-
-- the ROS graph and the roles of nodes;
-- topics and typed messages;
-- services, actions, and parameters;
-- command-line introspection and `rqt_graph`;
-- ROS packages and colcon workspaces;
-- sourcing order;
-- running multiple nodes with a launch file.
-
-The Gazebo practice covers:
-
-- the different jobs of Gazebo, ROS 2, and RViz2;
-- worlds, models, links, visuals, collisions, inertial properties, sensors, and plugins;
-- play, pause, reset, camera, and entity-inspection controls;
-- SDF world files, poses, simulation time, and real-time factor;
-- Gazebo Transport topics and services;
-- an explicit Gazebo-to-ROS clock bridge.
-
-Do not skip directly to TurtleBot merely because Gazebo opens successfully. Being able to launch a window is different from being able to inspect, modify, and debug a simulated robotic system.
-
----
-
-## Part 9 — Optional F1TENTH / RoboRacer Gym
+## Part 8 — Optional F1TENTH / RoboRacer Gym
 
 F1TENTH, now also known as RoboRacer, is an autonomous-driving education and racing platform built around a small car-like vehicle. Unlike the differential-drive TurtleBot used in this course's primary Gazebo simulation, an F1TENTH vehicle uses car-like steering. Its simulator can therefore be useful when studying vehicle kinematics, planning, and control.
 
@@ -380,18 +349,17 @@ The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an
 
 The F1TENTH organization also publishes an [open collection of teaching labs](https://github.com/f1tenth/f1tenth_labs_openrepo). These are examples and exercises developed for F1TENTH courses at other institutions. They may be useful as supplemental reading, but they are not EEL 4332 assignments and their installation instructions, software versions, and deliverables may differ from this repository.
 
-Lab 02 uses the pure-Python bicycle model included in this repository, so F1TENTH Gym is optional. Install or explore it only if the instructor specifically assigns an extension that uses it.
+Lab 3 uses the pure-Python bicycle model included in this repository, so F1TENTH Gym is optional. Install or explore it only if the instructor specifically assigns an extension that uses it.
 
 ---
 
-## Part 10 — Run the verification script
+## Part 9 — Run the verification script
 
-Source both ROS 2 and the practice workspace before running the verification:
+Source ROS 2 and activate the Python environment before running the verification:
 
 ```bash
 source ~/venvs/eel4332/bin/activate
 source /opt/ros/jazzy/setup.bash
-source ~/eel4332_ws/install/setup.bash
 chmod +x lab00_setup/verify_installation.sh
 ./lab00_setup/verify_installation.sh
 ```
@@ -400,7 +368,7 @@ Fix any required item marked `MISSING` before starting Lab 01.
 
 ---
 
-## Part 11 — Goosebot
+## Part 10 — Goosebot
 
 Do **not** install Goosebot-specific dependencies during the first week unless instructed.
 
@@ -428,13 +396,6 @@ Before Lab 01, you should be able to:
 - [ ] open RViz2
 - [ ] import NumPy and Matplotlib
 - [ ] clone and edit this repository
-- [ ] explain the difference between a topic, service, and action
-- [ ] inspect a node, topic, message type, service, action, and parameter from the command line
 - [ ] verify `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` are available
-- [ ] build and source a colcon workspace
-- [ ] launch the `eel4332_ros_practice` publisher and subscriber together
-- [ ] produce an `rqt_graph` screenshot of the practice nodes
-- [ ] inspect and modify the provided Gazebo practice world
-- [ ] explain the difference between Gazebo, ROS 2, and RViz2
-- [ ] inspect Gazebo topics and services
-- [ ] bridge `/clock` from Gazebo to ROS 2 and verify it
+
+After every item passes, continue to [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).

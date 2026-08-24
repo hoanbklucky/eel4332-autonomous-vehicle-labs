@@ -69,7 +69,7 @@ if command -v ros2 >/dev/null 2>&1; then
   distro="${ROS_DISTRO:-not-sourced}"
   echo "[INFO]    ROS_DISTRO=$distro"
 
-  for pkg in demo_nodes_py turtlesim rqt_image_view teleop_twist_keyboard rosbag2_transport ros_gz_bridge ros_gz_sim eel4332_ros_practice; do
+  for pkg in demo_nodes_py turtlesim rqt_image_view teleop_twist_keyboard rosbag2_transport ros_gz_bridge ros_gz_sim; do
     if ros2 pkg prefix "$pkg" >/dev/null 2>&1; then
       echo "[OK]      ROS package: $pkg"
       ok=$((ok+1))
@@ -90,8 +90,8 @@ if command -v rosdep >/dev/null 2>&1; then
   fi
 fi
 
-if [ -f "lab00_setup/worlds/gazebo_practice.sdf" ]; then
-  echo "[OK]      Gazebo practice world"
+if [ -f "requirements.txt" ] && [ -f "lab00_setup/README.md" ]; then
+  echo "[OK]      Repository root"
   ok=$((ok+1))
 else
   echo "[MISSING] Run this script from the repository root"

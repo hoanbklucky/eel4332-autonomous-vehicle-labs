@@ -18,8 +18,12 @@ Complete this checklist before publishing the repository to students.
 - [ ] Git installs inside Ubuntu/WSL and the documented identity checks work
 - [ ] Windows VS Code, Microsoft WSL extension, and `code .` open the Linux repository as a WSL workspace
 - [ ] Microsoft Python extension can select `~/venvs/eel4332/bin/python` inside WSL
+- [ ] `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` are installed and discoverable
+- [ ] Lab 00 verification script passes before the Lab 1 practice workspace is built
+
+## Lab 01
+
 - [ ] `demo_nodes_py`, turtlesim, `rqt_graph`, colcon, and rosdep tested
-- [ ] `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` tested
 - [ ] `eel4332_ros_practice` builds from a clean `~/eel4332_ws`
 - [ ] replace the practice package's placeholder maintainer email and confirm its license metadata
 - [ ] practice launch argument changes the measured `/practice/count` rate
@@ -28,38 +32,38 @@ Complete this checklist before publishing the repository to students.
 - [ ] `/clock` appears in Gazebo Transport and the documented one-way bridge produces a ROS `/clock` message
 - [ ] complete both fundamentals practices once as a new student and confirm the expected duration
 
-## Lab 01
+## Lab 02
 
 - [ ] choose the exact simulation launch command
 - [ ] confirm camera/LiDAR/IMU/odometry topic names
 - [ ] confirm TF frame names
 
-## Lab 02
+## Lab 03
 
 - [ ] verify pure-Python bicycle starter flow
 - [ ] verify the bicycle-versus-differential-drive comparison prompt
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 
-## Lab 03
+## Lab 04
 
 - [ ] define the exact sensor-recording/export workflow
 - [ ] provide a reference dataset in case ROS bag collection fails
 
-## Lab 04
+## Lab 05
 
 - [ ] choose the warm-up KF dataset
 - [ ] choose localization/fusion dataset or simulation topics
 - [ ] confirm ground-truth source
 
-## Lab 05
+## Lab 06
 
 - [ ] pin simulation robot/world
 - [ ] verify `/scan`, `/odom`, TF
 - [ ] verify SLAM launch
 - [ ] verify map-save command
 
-## Lab 06
+## Lab 07
 
 - [ ] provide occupancy grid/map input for A*
 - [ ] verify the required bicycle-model tracking environment
@@ -67,7 +71,7 @@ Complete this checklist before publishing the repository to students.
 - [ ] define track/path file format
 - [ ] validate the ROS/RViz2 planning-visualization wrapper if that extension is required
 
-## Lab 07
+## Lab 08
 
 - [ ] define supported fault-injection methods
 - [ ] decide which safety state/command students can actually publish
