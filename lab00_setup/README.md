@@ -365,6 +365,9 @@ chmod +x lab00_setup/verify_installation.sh
 ```
 
 Fix any required item marked `MISSING` before starting Lab 01.
+If there is no missing, the output should look like below
+
+![alt text](verification.png)
 
 ---
 
