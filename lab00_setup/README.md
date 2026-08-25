@@ -385,6 +385,17 @@ Goosebot is a four-wheel skid-steer robot. It has four conventional wheels, each
 
 ---
 
+## What to Submit
+
+Submit the following two screenshots:
+
+1. **Gazebo shapes:** the Gazebo window from Part 4 showing the world with several different shapes.
+2. **Installation verification:** the complete Terminal output from Part 9 showing that the installation verification script ran successfully and that no required item is marked `MISSING`.
+
+Make sure both screenshots are readable and show enough of the application window to identify Gazebo or the WSL/Ubuntu Terminal.
+
+---
+
 # Setup Success Criteria
 
 Before Lab 01, you should be able to:
