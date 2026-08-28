@@ -349,7 +349,7 @@ The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an
 
 The F1TENTH organization also publishes an [open collection of teaching labs](https://github.com/f1tenth/f1tenth_labs_openrepo). These are examples and exercises developed for F1TENTH courses at other institutions. They may be useful as supplemental reading, but they are not EEL 4332 assignments and their installation instructions, software versions, and deliverables may differ from this repository.
 
-Lab 3 uses the pure-Python bicycle model included in this repository, so F1TENTH Gym is optional. Install or explore it only if the instructor specifically assigns an extension that uses it.
+Lab 3 first implements differential-drive odometry and then uses the repository's pure-Python bicycle model for comparison. F1TENTH Gym is optional; install or explore it only if the instructor specifically assigns an extension that uses it.
 
 ---
 

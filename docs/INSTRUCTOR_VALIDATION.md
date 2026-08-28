@@ -40,8 +40,11 @@ Complete this checklist before publishing the repository to students.
 
 ## Lab 03
 
+- [ ] verify differential-drive forward-kinematics and odometry starter flow
+- [ ] verify straight, pivot, curved, and in-place wheel-speed cases
+- [ ] verify the odometry-sensitivity experiment and expected metrics
 - [ ] verify pure-Python bicycle starter flow
-- [ ] verify the bicycle-versus-differential-drive comparison prompt
+- [ ] verify the differential-drive-versus-bicycle-versus-skid-steer comparison prompt
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 

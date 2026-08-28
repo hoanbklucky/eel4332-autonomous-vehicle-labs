@@ -5,7 +5,7 @@
 | ROS 2 and Gazebo foundations | Lab 01 |
 | Automation levels & architecture | Lab 02 |
 | Hardware/software architecture | Lab 02 |
-| Vehicle kinematics | Lab 03 |
+| Differential-drive kinematics and wheel odometry | Lab 03 |
 | Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 02–03 |
 | Vehicle dynamics/modeling | Lab 03 experiments + lecture/homework |
 | AV sensors | Lab 02 + Lab 04 |
