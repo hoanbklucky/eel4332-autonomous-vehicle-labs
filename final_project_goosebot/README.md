@@ -14,7 +14,7 @@ The simulation uses TurtleBot in Gazebo; it is not a Goosebot digital twin. Turt
 
 ## Prerequisites
 
-- Complete Labs 00–07 and preserve evidence from their successful baseline tests.
+- Complete Labs 00–08 and preserve evidence from their successful baseline tests.
 - Obtain the instructor-approved simulation image and Goosebot access procedure.
 - Review the team's command authority, stop, reset, and hardware-test boundaries.
 

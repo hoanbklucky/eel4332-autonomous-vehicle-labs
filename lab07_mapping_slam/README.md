@@ -1,4 +1,4 @@
-# Lab 6 — Mapping and SLAM
+# Lab 7 — Mapping and SLAM
 
 ## Mission
 
@@ -43,7 +43,7 @@ A typical mapping chain connects `map`, `odom`, the robot base, and the LiDAR fr
 ## Provided Files
 
 ```text
-lab06_mapping_slam/
+lab07_mapping_slam/
 ├── README.md
 ├── results/
 └── answers.md

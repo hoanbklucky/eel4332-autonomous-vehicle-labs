@@ -31,20 +31,21 @@ The intended course environment is:
 
 ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer robot: it has four conventional wheels powered by four DC motors, all four wheel axes are fixed and parallel, and there is no geometric steering linkage. It turns by producing different left- and right-side velocities, which requires lateral tire slip. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion is a useful approximation for learning the ROS/Nav2 workflow. The instructor must still validate Goosebot's motor-command mapping, slip, and exact kinematic parameters.
 
-Lab 3 first develops differential-drive kinematics and wheel odometry as preparation for TurtleBot and Goosebot, then introduces the Python bicycle model as a deliberate car-like modeling comparison. F1TENTH may be used to extend the bicycle exercise, but it is not required for Goosebot deployment.
+Lab 4 first develops differential-drive kinematics and wheel odometry as preparation for TurtleBot and Goosebot, then introduces the Python bicycle model as a deliberate car-like modeling comparison. F1TENTH may be used to extend the bicycle exercise, but it is not required for Goosebot deployment.
 
 ## Required lab sequence
 
 | Lab | Mission | Main concepts |
 |---|---|---|
 | 01 | Learn the ROS 2 and Gazebo workflow | nodes, interfaces, workspaces, launch files, simulation, bridges |
-| 02 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 03 | Predict motion from wheel speeds and steering | differential-drive kinematics, wheel odometry, bicycle model |
-| 04 | Characterize noisy sensors | bias, variance, sampling, measurement models |
-| 05 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
-| 06 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
-| 07 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
-| 08 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
+| 02 | Explore TurtleBot through manual driving | Gazebo operation, teleoperation, `/cmd_vel`, `/odom` preview |
+| 03 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
+| 04 | Predict motion from wheel speeds and steering | differential-drive kinematics, wheel odometry, bicycle model |
+| 05 | Characterize noisy sensors | bias, variance, sampling, measurement models |
+| 06 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
+| 07 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
+| 08 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
+| 09 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
 | Final | Complete an autonomous navigation mission | SLAM/localization/Nav2/Goosebot integration |
 
 ## How these labs map to the course
@@ -52,13 +53,14 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 The labs deliberately group related lecture topics into larger engineering tasks.
 
 - **Lab 01** establishes the ROS 2 and Gazebo foundation used by later labs.
-- **Lab 02** supports system architecture and autonomous-vehicle sensors.
-- **Lab 03** supports differential-drive kinematics, wheel odometry, and car-like vehicle modeling.
-- **Lab 04** supports sensor uncertainty and measurement models.
-- **Lab 05** supports state estimation and localization.
-- **Lab 06** supports mapping and SLAM.
-- **Lab 07** supports path planning and path tracking/control.
-- **Lab 08** supports system integration, safety, and failure handling.
+- **Lab 02** builds confidence and motivation through manual TurtleBot driving.
+- **Lab 03** supports system architecture and autonomous-vehicle sensors.
+- **Lab 04** supports differential-drive kinematics, wheel odometry, and car-like vehicle modeling.
+- **Lab 05** supports sensor uncertainty and measurement models.
+- **Lab 06** supports state estimation and localization.
+- **Lab 07** supports mapping and SLAM.
+- **Lab 08** supports path planning and path tracking/control.
+- **Lab 09** supports system integration, safety, and failure handling.
 - **Final Project** supports end-to-end autonomy and sim-to-real deployment.
 
 The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's four-wheel skid-steer interface, dimensions, sensor frames, slip behavior, and safety limits.
@@ -83,17 +85,18 @@ eel4332-autonomous-vehicle-labs/
 ├── docs/
 ├── common/
 ├── lab01_ros2_gazebo_fundamentals/
-├── lab02_system_architecture_sensors/
-├── lab03_vehicle_modeling/
-├── lab04_sensor_characterization/
-├── lab05_state_estimation_localization/
-├── lab06_mapping_slam/
-├── lab07_planning_tracking/
-├── lab08_integration_safety/
+├── lab02_turtlebot_playground/
+├── lab03_system_architecture_sensors/
+├── lab04_vehicle_modeling/
+├── lab05_sensor_characterization/
+├── lab06_state_estimation_localization/
+├── lab07_mapping_slam/
+├── lab08_planning_tracking/
+├── lab09_integration_safety/
 └── final_project_goosebot/
 ```
 
-Each required lab follows the same structure:
+Each required technical lab generally follows this structure:
 
 ```text
 labXX_.../

@@ -1,4 +1,4 @@
-# Lab 3 — Differential-Drive Odometry and Vehicle Modeling
+# Lab 4 — Differential-Drive Odometry and Vehicle Modeling
 
 ## Mission
 
@@ -15,7 +15,7 @@
 
 ## Prerequisites
 
-- Complete Lab 2 and identify the TurtleBot `/odom` topic and `odom → base_footprint` transform.
+- Complete Lab 3 and identify the TurtleBot `/odom` topic and `odom → base_footprint` transform.
 - Review planar position, heading, angular velocity, and fixed-step numerical integration.
 - Use the course Python virtual environment from Lab 00.
 
@@ -85,7 +85,7 @@ The kinematic bicycle model replaces a four-wheel car with equivalent front and 
 \dot{\theta}=\frac{v}{L}\tan\delta.
 \]
 
-Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 7. It is not a model of Goosebot.
+Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 8. It is not a model of Goosebot.
 
 ### Frames, signs, and units
 
@@ -94,7 +94,7 @@ Use meters, seconds, meters per second, radians, and radians per second. This la
 ## Provided Files
 
 ```text
-lab03_vehicle_modeling/
+lab04_vehicle_modeling/
 ├── README.md
 ├── src/
 │   ├── differential_drive.py
@@ -176,7 +176,7 @@ Confirm that zero steering produces a straight line and that increasing steering
 
 ### Part 6 — Run and compare the models
 
-From the Lab 3 directory, run:
+From the Lab 4 directory, run:
 
 ```bash
 source ~/venvs/eel4332/bin/activate
@@ -218,7 +218,7 @@ Do not compare trajectories point by point unless they use the same time samples
 5. Why can the bicycle model not represent an in-place turn?
 6. How do wheelbase and steering angle affect bicycle-model turning radius?
 7. Why can TurtleBot’s differential-drive model approximate Goosebot while missing four-wheel tire scrub and slip?
-8. Which model should be used for the Pure Pursuit steering-angle exercise in Lab 7, and which model better prepares you to interpret TurtleBot odometry?
+8. Which model should be used for the Pure Pursuit steering-angle exercise in Lab 8, and which model better prepares you to interpret TurtleBot odometry?
 
 ## Success Criteria
 

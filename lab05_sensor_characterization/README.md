@@ -1,4 +1,4 @@
-# Lab 4 — Sensor Characterization and Measurement Uncertainty
+# Lab 5 — Sensor Characterization and Measurement Uncertainty
 
 ## Mission
 
@@ -37,7 +37,7 @@ Message arrival time is not necessarily measurement time. Use message timestamps
 ## Provided Files
 
 ```text
-lab04_sensor_characterization/
+lab05_sensor_characterization/
 ├── README.md
 ├── src/
 │   └── sensor_stats.py
@@ -47,7 +47,7 @@ lab04_sensor_characterization/
 
 ## Procedure
 
-Use the same TurtleBot/Gazebo environment introduced in Lab 2 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
+Use the same TurtleBot/Gazebo environment introduced in Lab 3 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
 
 ### Part 1 — Choose sensor signals
 

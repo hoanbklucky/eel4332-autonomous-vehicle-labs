@@ -25,7 +25,7 @@ F1TENTH / RoboRacer Gym is optional and is not required to begin the course. The
 
 Autonomous-vehicle software spans several layers. Ubuntu provides the operating environment; ROS 2 connects software components; Gazebo simulates a physical world and sensors; RViz2 visualizes ROS data; and Nav2 supplies localization, planning, and navigation components. Installing the programs is only the first step—students must also learn how to inspect each layer and the interfaces between them.
 
-Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundamentals/README.md) then teaches ROS 2 and Gazebo through small systems before Lab 2 combines the same ideas in a complete TurtleBot/Nav2 simulation.
+Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundamentals/README.md) teaches ROS 2 and Gazebo through small systems, [Lab 2](../lab02_turtlebot_playground/README.md) provides a low-pressure TurtleBot driving playground, and Lab 3 combines the same ideas in a complete TurtleBot/Nav2 simulation.
 
 Resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation or environment problem.
 
@@ -170,7 +170,7 @@ rosdep update
 
 Run `sudo rosdep init` only once. If it reports that the default sources list already exists, leave that file in place and continue with `rosdep update`.
 
-Lab 1 provides guided ROS 2 and Gazebo exercises before students use the larger TurtleBot/Nav2 system.
+Lab 1 provides guided ROS 2 and Gazebo exercises, and Lab 2 provides manual TurtleBot practice before students use the larger TurtleBot/Nav2 system in Lab 3.
 
 To source ROS automatically:
 
@@ -345,11 +345,11 @@ All three verification commands should complete without dependency-conflict mess
 
 F1TENTH, now also known as RoboRacer, is an autonomous-driving education and racing platform built around a small car-like vehicle. Unlike the differential-drive TurtleBot used in this course's primary Gazebo simulation, an F1TENTH vehicle uses car-like steering. Its simulator can therefore be useful when studying vehicle kinematics, planning, and control.
 
-The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an optional simulation environment for experimenting with this type of vehicle. It is not required for Lab 00 or Lab 01, and students should not delay the required TurtleBot/Gazebo setup to install it.
+The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an optional simulation environment for experimenting with this type of vehicle. It is not required for Labs 00–02, and students should not delay the required TurtleBot/Gazebo setup or playground to install it.
 
 The F1TENTH organization also publishes an [open collection of teaching labs](https://github.com/f1tenth/f1tenth_labs_openrepo). These are examples and exercises developed for F1TENTH courses at other institutions. They may be useful as supplemental reading, but they are not EEL 4332 assignments and their installation instructions, software versions, and deliverables may differ from this repository.
 
-Lab 3 first implements differential-drive odometry and then uses the repository's pure-Python bicycle model for comparison. F1TENTH Gym is optional; install or explore it only if the instructor specifically assigns an extension that uses it.
+Lab 4 first implements differential-drive odometry and then uses the repository's pure-Python bicycle model for comparison. F1TENTH Gym is optional; install or explore it only if the instructor specifically assigns an extension that uses it.
 
 ---
 

@@ -34,11 +34,20 @@ Complete this checklist before publishing the repository to students.
 
 ## Lab 02
 
+- [ ] verify `tb3_simulation_launch.py` accepts `headless:=False use_rviz:=False autostart:=False` on the course image
+- [ ] confirm Gazebo opens without RViz2 and the robot begins in a usable obstacle-course location
+- [ ] confirm `teleop_twist_keyboard` publishes the expected `/cmd_vel` type and moves the simulated robot
+- [ ] confirm the documented stop and speed-reduction keys match the installed teleoperation package
+- [ ] confirm `/odom` remains available without starting localization or navigation
+- [ ] complete every required challenge as a new student and confirm a 45–60 minute duration
+
+## Lab 03
+
 - [ ] choose the exact simulation launch command
 - [ ] confirm camera/LiDAR/IMU/odometry topic names
 - [ ] confirm TF frame names
 
-## Lab 03
+## Lab 04
 
 - [ ] verify differential-drive forward-kinematics and odometry starter flow
 - [ ] verify straight, pivot, curved, and in-place wheel-speed cases
@@ -48,25 +57,25 @@ Complete this checklist before publishing the repository to students.
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 
-## Lab 04
+## Lab 05
 
 - [ ] define the exact sensor-recording/export workflow
 - [ ] provide a reference dataset in case ROS bag collection fails
 
-## Lab 05
+## Lab 06
 
 - [ ] choose the warm-up KF dataset
 - [ ] choose localization/fusion dataset or simulation topics
 - [ ] confirm ground-truth source
 
-## Lab 06
+## Lab 07
 
 - [ ] pin simulation robot/world
 - [ ] verify `/scan`, `/odom`, TF
 - [ ] verify SLAM launch
 - [ ] verify map-save command
 
-## Lab 07
+## Lab 08
 
 - [ ] provide occupancy grid/map input for A*
 - [ ] verify the required bicycle-model tracking environment
@@ -74,7 +83,7 @@ Complete this checklist before publishing the repository to students.
 - [ ] define track/path file format
 - [ ] validate the ROS/RViz2 planning-visualization wrapper if that extension is required
 
-## Lab 08
+## Lab 09
 
 - [ ] define supported fault-injection methods
 - [ ] decide which safety state/command students can actually publish

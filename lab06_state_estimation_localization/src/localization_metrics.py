@@ -1,4 +1,4 @@
-"""Localization metrics that students may use for Lab 5."""
+"""Localization metrics that students may use for Lab 6."""
 
 from __future__ import annotations
 import numpy as np

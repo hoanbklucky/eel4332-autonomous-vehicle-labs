@@ -2,7 +2,7 @@
 
 ## Mission
 
-Build a working mental model of ROS 2 and Gazebo before using the complete TurtleBot/Nav2 simulation in Lab 2. You will inspect small ROS systems, compare communication patterns, build and launch a ROS package, inspect a Gazebo world, and create one explicit Gazebo-to-ROS bridge.
+Build a working mental model of ROS 2 and Gazebo before manually driving TurtleBot in Lab 2 and using the complete TurtleBot/Nav2 system in Lab 3. You will inspect small ROS systems, compare communication patterns, build and launch a ROS package, inspect a Gazebo world, and create one explicit Gazebo-to-ROS bridge.
 
 ## Learning Objectives
 
@@ -109,4 +109,4 @@ Store locally generated evidence in `lab01_ros2_gazebo_fundamentals/results/` un
 - Close older Gazebo instances before relaunching the practice world.
 - Use the repository [troubleshooting guide](../docs/TROUBLESHOOTING.md) for installation, workspace, bridge, and graphics problems.
 
-After completing this lab, continue to [Lab 2 — Autonomous-System Architecture and Sensors](../lab02_system_architecture_sensors/README.md).
+After completing this lab, continue to [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).

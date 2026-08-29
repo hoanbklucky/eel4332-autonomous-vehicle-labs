@@ -1,4 +1,4 @@
-# Lab 5 — State Estimation and Localization
+# Lab 6 — State Estimation and Localization
 
 ## Mission
 
@@ -14,8 +14,8 @@
 
 ## Prerequisites
 
-- Complete Labs 02 and 03.
-- Be able to explain how Lab 3 integrates wheel-derived velocity into a dead-reckoned pose.
+- Complete Labs 03 and 04.
+- Be able to explain how Lab 4 integrates wheel-derived velocity into a dead-reckoned pose.
 - Review the assigned Kalman-filter equations, covariance, and matrix dimensions.
 - Be able to identify timestamps, frames, and ground-truth versus estimated data.
 
@@ -38,7 +38,7 @@ Dead reckoning is locally continuous but accumulates drift. A global or map-rela
 ## Provided Files
 
 ```text
-lab05_state_estimation_localization/
+lab06_state_estimation_localization/
 ├── README.md
 ├── src/
 │   ├── kalman_filter.py

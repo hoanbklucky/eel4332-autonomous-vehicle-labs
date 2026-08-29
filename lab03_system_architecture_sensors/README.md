@@ -1,4 +1,4 @@
-# Lab 2 — Autonomous-System Architecture and Sensors
+# Lab 3 — Autonomous-System Architecture and Sensors
 
 ## Mission
 
@@ -18,6 +18,7 @@ By the end of this lab, you should be able to:
 
 - Complete [Lab 00 — Software Setup](../lab00_setup/README.md).
 - Complete [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).
+- Complete [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -40,7 +41,7 @@ Every useful sensor message needs more than numeric values. Its message type def
 ## Provided Files
 
 ```text
-lab02_system_architecture_sensors/
+lab03_system_architecture_sensors/
 ├── README.md
 ├── src/
 │   └── topic_inventory.py
@@ -50,7 +51,7 @@ lab02_system_architecture_sensors/
 
 ## Part 1 — Launch a Known-Good Simulation
 
-For Lab 2, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
+For Lab 3, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
 For additional background, see the official [ROBOTIS TurtleBot 3 Gazebo simulation guide for ROS 2 Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy). It explains the Gazebo worlds, keyboard teleoperation, and RViz2 visualization used in a typical TurtleBot workflow.
 

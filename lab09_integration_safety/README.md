@@ -1,4 +1,4 @@
-# Lab 8 — System Integration, Safety, and Failure Handling
+# Lab 9 — System Integration, Safety, and Failure Handling
 
 ## Mission
 
@@ -35,7 +35,7 @@ Safety monitoring depends on data validity, freshness, coordinate-frame connecti
 ## Provided Files
 
 ```text
-lab08_integration_safety/
+lab09_integration_safety/
 ├── README.md
 ├── src/
 │   └── safety_monitor.py

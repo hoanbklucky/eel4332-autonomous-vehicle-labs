@@ -156,7 +156,7 @@ The bridge syntax used here means:
 - `gz.msgs.Clock` is the Gazebo message type;
 - `[` requests Gazebo-to-ROS communication.
 
-Stop the bridge with `Ctrl+C`. Gazebo can continue simulating, but ROS 2 no longer receives new clock messages through that bridge. Later course launch files create several bridges automatically. Lab 2 also makes one TF bridge explicit so you can see exactly how Gazebo motion reaches ROS localization and visualization.
+Stop the bridge with `Ctrl+C`. Gazebo can continue simulating, but ROS 2 no longer receives new clock messages through that bridge. Later course launch files create several bridges automatically. Lab 3 also makes one TF bridge explicit so you can see exactly how Gazebo motion reaches ROS localization and visualization.
 
 ## Practice 5 — Connect the Concepts to a Robot
 

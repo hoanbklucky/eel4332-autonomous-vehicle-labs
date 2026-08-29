@@ -3,20 +3,21 @@
 | Course module/topic | Repository activity |
 |---|---|
 | ROS 2 and Gazebo foundations | Lab 01 |
-| Automation levels & architecture | Lab 02 |
-| Hardware/software architecture | Lab 02 |
-| Differential-drive kinematics and wheel odometry | Lab 03 |
-| Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 02–03 |
-| Vehicle dynamics/modeling | Lab 03 experiments + lecture/homework |
-| AV sensors | Lab 02 + Lab 04 |
-| Sensor uncertainty | Lab 04 |
-| State estimation / Kalman filter | Lab 05 |
-| Localization | Lab 05 |
-| Mapping / SLAM | Lab 06 |
-| Path planning | Lab 07 |
-| Path tracking / basic control | Lab 07 |
-| Integration / safety / failures | Lab 08 |
-| TurtleBot simulation to Goosebot skid-steer transfer | Lab 08 + Final project |
+| TurtleBot operation and manual control | Lab 02 |
+| Automation levels & architecture | Lab 03 |
+| Hardware/software architecture | Lab 03 |
+| Differential-drive kinematics and wheel odometry | Lab 04 |
+| Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 03–04 |
+| Vehicle dynamics/modeling | Lab 04 experiments + lecture/homework |
+| AV sensors | Lab 03 + Lab 05 |
+| Sensor uncertainty | Lab 05 |
+| State estimation / Kalman filter | Lab 06 |
+| Localization | Lab 06 |
+| Mapping / SLAM | Lab 07 |
+| Path planning | Lab 08 |
+| Path tracking / basic control | Lab 08 |
+| Integration / safety / failures | Lab 09 |
+| TurtleBot simulation to Goosebot skid-steer transfer | Lab 09 + Final project |
 | Goosebot SLAM | Final project milestone |
 | Goosebot localization / Nav2 | Final project milestone |
 
