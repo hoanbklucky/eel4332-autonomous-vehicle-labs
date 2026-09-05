@@ -4,9 +4,9 @@
 
 ## Purpose
 
-Complete Part 1 before Part 2. It introduces the ROS graph and the four interaction patterns students will use throughout the course: topics, services, actions, and parameters. Allow approximately 45–60 minutes.
+Complete Part 1 before Part 2. It introduces the ROS graph and the four interaction patterns students will use throughout the course: topics, services, actions, and parameters. Allow approximately 60–75 minutes.
 
-Run **one command block at a time** and examine its output before continuing. After running a command, expand **Expected output** to compare your result with the example screenshot. Do not copy an entire practice section into the WSL/Ubuntu Terminal at once. Commands split across two displayed lines with a trailing `\` are one command, not two commands.
+Run **one command block at a time** and examine its output before continuing. After running a command, expand **Expected output** to compare your result with the example output or screenshot. Do not copy an entire practice section into the WSL/Ubuntu Terminal at once. Commands split across two displayed lines with a trailing `\` are one command, not two commands.
 
 The official [ROS 2 Jazzy beginner CLI tutorials](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html) provide additional explanations and examples.
 
@@ -548,14 +548,31 @@ ros2 service call /turtle1/teleport_absolute \
   turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 2.0, theta: 1.57}"
 ```
 
-This request uses the same service and interface but supplies a different pose. The heading `1.57` radians is approximately 90 degrees, so the turtle points upward.
-It should produce the same empty response form as the first call.
+This request uses the same service and interface but supplies a different pose. The heading `1.57` radians is approximately 90 degrees, so the turtle points upward. It should produce the same empty response form as the first call.
 
 Confirm the turtle's current pose:
 
 ```bash
 ros2 topic echo /turtle1/pose --once
 ```
+
+**Command breakdown:** `topic echo` temporarily subscribes to `/turtle1/pose` and prints a pose message. The `--once` option exits after receiving one message. In addition to position and heading, the message reports the turtle's current linear and angular velocities.
+
+<details>
+<summary>Expected output</summary>
+
+```text
+x: 8.0
+y: 2.0
+theta: 1.57
+linear_velocity: 0.0
+angular_velocity: 0.0
+---
+```
+
+*Values may differ slightly because of floating-point representation. The position and heading should be close to the most recent teleport request, and the velocities should be zero while the turtle is stationary.*
+
+</details>
 
 The reported `x`, `y`, and `theta` values should be close to those in the most recent request. The teleport service changes the pose immediately; it does not simulate the turtle driving between the two positions.
 
@@ -701,6 +718,8 @@ In WSL/Ubuntu Terminal 2, run:
 ros2 run turtlesim turtle_teleop_key
 ```
 
+**Command breakdown:** `run` starts the `turtle_teleop_key` executable from the `turtlesim` package. This executable creates a teleoperation node that reads arrow-key input and publishes `geometry_msgs/msg/Twist` velocity commands to `/turtle1/cmd_vel`.
+
 Keep the keyboard focus in that terminal and use the arrow keys:
 
 - **Up arrow:** move forward.
@@ -708,9 +727,100 @@ Keep the keyboard focus in that terminal and use the arrow keys:
 - **Left arrow:** turn counterclockwise.
 - **Right arrow:** turn clockwise.
 
-Try drawing a simple square or your initials in the turtlesim window. The teleoperation node converts each key press into a `geometry_msgs/msg/Twist` velocity command and publishes it on `/turtle1/cmd_vel`.
+Before drawing, observe those commands directly. In **WSL/Ubuntu Terminal 3**, run:
 
-When finished driving, press `Ctrl+C` in Terminal 2 to stop the teleoperation node. Then press `Ctrl+C` in Terminal 1 to stop turtlesim.
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+```bash
+ros2 topic echo /turtle1/cmd_vel
+```
+
+**Command breakdown:** `topic echo` subscribes to the velocity-command topic and prints every message it receives. This command waits silently until the teleoperation node publishes a command.
+
+Return the keyboard focus to WSL/Ubuntu Terminal 2 and press an arrow key. WSL/Ubuntu Terminal 3 should display a message similar to:
+
+<details>
+<summary>Expected output</summary>
+
+```text
+linear:
+  x: 2.0
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.0
+---
+```
+
+*The exact values depend on which arrow key was pressed. Forward or backward commands change `linear.x`; turning commands change `angular.z`.*
+
+</details>
+
+This demonstrates the complete command path:
+
+```text
+arrow key → teleoperation node → /turtle1/cmd_vel → turtlesim node → turtle motion
+```
+
+Press `Ctrl+C` in WSL/Ubuntu Terminal 3 to stop `topic echo`. Then return to WSL/Ubuntu Terminal 2 and try drawing a simple square or your initials in the turtlesim window.
+
+When finished driving, press `Ctrl+C` in WSL/Ubuntu Terminal 2 to stop the teleoperation node. Then press `Ctrl+C` in WSL/Ubuntu Terminal 1 to stop turtlesim.
+
+## ROS 2 CLI Cheat Sheet
+
+Use this table to review the commands from Part 1. Text inside angle brackets, such as `<topic>`, is a placeholder that you replace; do not type the angle brackets.
+
+| Purpose | General command | Example from this lab |
+|---|---|---|
+| Prepare a new terminal | `source /opt/ros/<distro>/setup.bash` | `source /opt/ros/jazzy/setup.bash` |
+| Run an installed executable | `ros2 run <package> <executable>` | `ros2 run turtlesim turtlesim_node` |
+| List nodes | `ros2 node list` | `ros2 node list` |
+| Inspect a node | `ros2 node info <node>` | `ros2 node info /talker` |
+| List topics with types | `ros2 topic list -t` | `ros2 topic list -t` |
+| Inspect topic endpoints and QoS | `ros2 topic info <topic> --verbose` | `ros2 topic info /chatter --verbose` |
+| Display topic messages | `ros2 topic echo <topic>` | `ros2 topic echo /turtle1/pose --once` |
+| Measure a topic's rate | `ros2 topic hz <topic>` | `ros2 topic hz /chatter` |
+| Publish a message | `ros2 topic pub --once <topic> <type> "<YAML>"` | `ros2 topic pub --once /chatter std_msgs/msg/String "{data: 'hello'}"` |
+| Inspect message, service, or action fields | `ros2 interface show <interface-type>` | `ros2 interface show std_msgs/msg/String` |
+| List services with types | `ros2 service list -t` | `ros2 service list -t` |
+| Find a service's type | `ros2 service type <service>` | `ros2 service type /spawn` |
+| Call a service | `ros2 service call <service> <type> "<YAML>"` | `ros2 service call /spawn turtlesim/srv/Spawn "{x: 2.0, y: 2.0, theta: 0.0, name: 'practice_turtle'}"` |
+| List a node's parameters | `ros2 param list <node>` | `ros2 param list /turtlesim` |
+| Read a parameter | `ros2 param get <node> <parameter>` | `ros2 param get /turtlesim background_r` |
+| Change a parameter | `ros2 param set <node> <parameter> <value>` | `ros2 param set /turtlesim background_r 100` |
+| List actions with types | `ros2 action list -t` | `ros2 action list -t` |
+| Inspect action endpoints | `ros2 action info <action>` | `ros2 action info /turtle1/rotate_absolute` |
+| Find an action's type | `ros2 action type <action>` | `ros2 action type /turtle1/rotate_absolute` |
+| Send an action goal | `ros2 action send_goal <action> <type> "<YAML>" --feedback` | `ros2 action send_goal /turtle1/rotate_absolute turtlesim/action/RotateAbsolute "{theta: 1.57}" --feedback` |
+| Visualize the live ROS graph | `rqt_graph` | Select **Nodes/Topics (all)** and click **Refresh** |
+| Drive turtlesim with the keyboard | `ros2 run turtlesim turtle_teleop_key` | Use the arrow keys while its terminal has focus |
+| Stop a foreground command | `Ctrl+C` | Stop `topic hz`, `topic echo`, or a running node |
+
+### How to investigate an unfamiliar interface
+
+Do not try to memorize every topic, service, or action type. Use the ROS graph to discover what a running system provides:
+
+```text
+List available names
+        ↓
+Choose a name and find its type
+        ↓
+Inspect the type with ros2 interface show
+        ↓
+Compose YAML using the displayed field names
+        ↓
+Publish a message, call the service, or send the action goal
+```
+
+The command family depends on the communication pattern:
+
+- **Topic:** `topic list -t` → `topic info` → `interface show` → `topic echo` or `topic pub`
+- **Service:** `service list -t` → `service type` → `interface show` → `service call`
+- **Action:** `action list -t` → `action type` and `action info` → `interface show` → `action send_goal`
 
 ## Part 1 Completion Check
 
