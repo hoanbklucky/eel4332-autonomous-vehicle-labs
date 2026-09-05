@@ -485,11 +485,36 @@ First inspect the service type and its request fields:
 ros2 service type /turtle1/teleport_absolute
 ```
 
+<details>
+<summary>Expected output</summary>
+
+```text
+turtlesim/srv/TeleportAbsolute
+```
+
+*This is the interface type required to inspect or call the service.*
+
+</details>
+
 ```bash
 ros2 interface show turtlesim/srv/TeleportAbsolute
 ```
 
 **Command breakdown:** `service type` identifies the interface as `turtlesim/srv/TeleportAbsolute`. `interface show` reveals that its request requires `x`, `y`, and `theta` values. This service has no response fields.
+
+<details>
+<summary>Expected output</summary>
+
+```text
+float32 x
+float32 y
+float32 theta
+---
+```
+
+*The fields above `---` form the request. Nothing appears below it because this service returns no data fields.*
+
+</details>
 
 Move `/turtle1` near the upper-right area of the window, facing right:
 
@@ -498,12 +523,33 @@ ros2 service call /turtle1/teleport_absolute \
   turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 8.0, theta: 0.0}"
 ```
 
+**Command breakdown:** `service call` sends one request to the `/turtle1/teleport_absolute` service. `turtlesim/srv/TeleportAbsolute` specifies the required service interface. The YAML request supplies its three input fields: `x: 8.0` and `y: 8.0` set the position, while `theta: 0.0` sets the heading in radians. A heading of `0.0` points right.
+
+<details>
+<summary>Expected output</summary>
+
+```text
+waiting for service to become available...
+requester: making request: turtlesim.srv.TeleportAbsolute_Request(
+  x=8.0, y=8.0, theta=0.0)
+
+response:
+turtlesim.srv.TeleportAbsolute_Response()
+```
+
+*The exact formatting may vary. An empty `TeleportAbsolute_Response()` is successful: it is empty because the service definition has no response fields. The turtle's new position in the simulator is the visible result.*
+
+</details>
+
 Move it to another position, this time facing upward:
 
 ```bash
 ros2 service call /turtle1/teleport_absolute \
   turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 2.0, theta: 1.57}"
 ```
+
+This request uses the same service and interface but supplies a different pose. The heading `1.57` radians is approximately 90 degrees, so the turtle points upward.
+It should produce the same empty response form as the first call.
 
 Confirm the turtle's current pose:
 
