@@ -475,6 +475,44 @@ A second turtle should appear. The request contains input fields; the service re
 
 </details>
 
+### Move the turtle to exact positions
+
+The `/turtle1/teleport_absolute` service places the original turtle at an exact pose. In turtlesim, `x` increases toward the right, `y` increases toward the top, and `theta` is the heading in radians.
+
+First inspect the service type and its request fields:
+
+```bash
+ros2 service type /turtle1/teleport_absolute
+```
+
+```bash
+ros2 interface show turtlesim/srv/TeleportAbsolute
+```
+
+**Command breakdown:** `service type` identifies the interface as `turtlesim/srv/TeleportAbsolute`. `interface show` reveals that its request requires `x`, `y`, and `theta` values. This service has no response fields.
+
+Move `/turtle1` near the upper-right area of the window, facing right:
+
+```bash
+ros2 service call /turtle1/teleport_absolute \
+  turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 8.0, theta: 0.0}"
+```
+
+Move it to another position, this time facing upward:
+
+```bash
+ros2 service call /turtle1/teleport_absolute \
+  turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 2.0, theta: 1.57}"
+```
+
+Confirm the turtle's current pose:
+
+```bash
+ros2 topic echo /turtle1/pose --once
+```
+
+The reported `x`, `y`, and `theta` values should be close to those in the most recent request. The teleport service changes the pose immediately; it does not simulate the turtle driving between the two positions.
+
 ### Inspect and change a parameter
 
 ```bash
@@ -557,6 +595,39 @@ ros2 action info /turtle1/rotate_absolute
 </details>
 
 ```bash
+ros2 action type /turtle1/rotate_absolute
+```
+
+**Command breakdown:** `action type` asks ROS 2 which interface type the named action uses. It should print:
+
+```text
+turtlesim/action/RotateAbsolute
+```
+
+Use that type name to inspect the action's data fields:
+
+```bash
+ros2 interface show turtlesim/action/RotateAbsolute
+```
+
+**Command breakdown:** `interface show` displays the action definition. An action interface has three sections separated by `---`:
+
+```text
+# The desired heading in radians
+float32 theta
+---
+# The angular displacement in radians to the starting position
+float32 delta
+---
+# The remaining rotation in radians
+float32 remaining
+```
+
+The first section defines the **goal request**. Because its field is named `theta`, the goal message must provide a value using the form `{theta: value}`. The second section defines the final **result**, and the third defines the **feedback** reported while the action runs. You provide only the goal field when using `action send_goal`.
+
+Now compose and send a goal that requests an absolute heading of `1.57` radians:
+
+```bash
 ros2 action send_goal /turtle1/rotate_absolute \
   turtlesim/action/RotateAbsolute "{theta: 1.57}" --feedback
 ```
@@ -574,7 +645,26 @@ ros2 action send_goal /turtle1/rotate_absolute \
 
 Observe the feedback while the turtle rotates. An action is appropriate because the operation takes time and has a goal, feedback, and final result.
 
-Stop turtlesim with `Ctrl+C`.
+### Drive the turtle with the keyboard
+
+Keyboard teleoperation is a more interactive way to move the turtle. Unlike teleportation, it publishes velocity commands that make the turtle travel and turn over time.
+
+In WSL/Ubuntu Terminal 2, run:
+
+```bash
+ros2 run turtlesim turtle_teleop_key
+```
+
+Keep the keyboard focus in that terminal and use the arrow keys:
+
+- **Up arrow:** move forward.
+- **Down arrow:** move backward.
+- **Left arrow:** turn counterclockwise.
+- **Right arrow:** turn clockwise.
+
+Try drawing a simple square or your initials in the turtlesim window. The teleoperation node converts each key press into a `geometry_msgs/msg/Twist` velocity command and publishes it on `/turtle1/cmd_vel`.
+
+When finished driving, press `Ctrl+C` in Terminal 2 to stop the teleoperation node. Then press `Ctrl+C` in Terminal 1 to stop turtlesim.
 
 ## Part 1 Completion Check
 
@@ -585,6 +675,7 @@ Before continuing to Part 2, confirm that you can:
 - [ ] distinguish a message type from one message instance;
 - [ ] inspect a running graph with ROS CLI tools and `rqt_graph`;
 - [ ] publish a correctly typed message from the command line;
-- [ ] call a service, change a parameter, and send an action goal.
+- [ ] call a service, change a parameter, and send an action goal;
+- [ ] move a turtle to an exact pose and drive it with keyboard teleoperation.
 
 Continue to [Part 2 — Packages, Workspaces, and Launch](ros2_fundamentals_part2.md).
