@@ -13,6 +13,8 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 
 Complete this guided practice after both ROS 2 fundamentals parts. It assumes ROS 2 Jazzy, Gazebo Harmonic, and `ros_gz` were installed in [Lab 00](../lab00_setup/README.md).
 
+Use the [WSL/Ubuntu Terminal shortcuts from Lab 00](../lab00_setup/README.md#wslubuntu-terminal-shortcuts) to complete long paths with `Tab`, recall commands with the arrow keys or `Ctrl+R`, and edit a recalled command before running it again.
+
 ## Learning Objectives
 
 By the end of this practice, you should be able to:
@@ -61,12 +63,30 @@ ROS nodes that process simulated sensors should normally use the Gazebo clock co
 
 **Why this practice matters:** Learning the simulation controls and entity tree first gives you a known visual baseline before robots and ROS connections add complexity.
 
-From the repository root, run:
+First, use `cd` to move to the course repository root. If you used the recommended location from Lab 00, run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+pwd
+```
+
+`cd` changes the current directory, and `pwd` prints it so you can confirm that the final directory name is `eel4332-autonomous-vehicle-labs`. If you cloned the repository somewhere else, replace the path above with its actual location.
+
+Then source ROS 2 and open the provided world:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 gz sim -v 4 lab01_ros2_gazebo_fundamentals/worlds/gazebo_practice.sdf
 ```
+
+<details>
+<summary>Expected Gazebo window</summary>
+
+![Gazebo practice world with the ground plane, blue wall, red box, and green reference marker](images/gazebo-practice1-01-course-world.png)
+
+*The Entity Tree on the right lists the same models that appear in the simulated world.*
+
+</details>
 
 The world contains:
 
@@ -90,26 +110,73 @@ Do not continue until you can reliably play, pause, reset, select an entity, and
 
 **Why this practice matters:** SDF is the source description for simulated worlds and models, so small edits connect file contents to what Gazebo displays.
 
-Do not edit the course copy. Make a working copy:
+Return to the WSL/Ubuntu Terminal running Gazebo and press `Ctrl+C` to close the first simulation. The terminal should return to the repository root.
+
+Do not edit the course copy. Make a working copy in your Ubuntu home directory:
 
 ```bash
 cp lab01_ros2_gazebo_fundamentals/worlds/gazebo_practice.sdf ~/eel4332_gazebo_practice.sdf
 ```
 
-Open the copied file in a text editor. Find:
+Change to the directory containing the copied file and confirm your location:
+
+```bash
+cd ~
+pwd
+```
+
+`pwd` should print your Ubuntu home directory, such as `/home/your_username`. Open the copied file with the `nano` terminal editor:
+
+```bash
+nano eel4332_gazebo_practice.sdf
+```
+
+Use the arrow keys to navigate. Find:
 
 ```xml
 <model name="red_dynamic_box">
   <pose>0 0 1.5 0 0 0</pose>
 ```
 
-The six pose numbers are `x y z roll pitch yaw`, using meters and radians. Change only the box's `x` value from `0` to `-1`, save, and launch the copy:
+The six pose numbers are `x y z roll pitch yaw`, using meters and radians. To make the change easy to see, move the box below the ground by changing only the third number, which is `z`, from `1.5` to `-1`. The edited line must be:
 
-```bash
-gz sim -v 4 ~/eel4332_gazebo_practice.sdf
+```xml
+  <pose>0 0 -1 0 0 0</pose>
 ```
 
-Verify that the red box begins one meter farther in the negative x-direction. Close this second simulation before continuing; running multiple worlds with overlapping names makes troubleshooting harder.
+<details>
+<summary>Expected edit in nano</summary>
+
+![Nano showing the red dynamic box pose changed to zero zero negative one zero zero zero](images/gazebo-practice2-01-nano-z-minus-one.png)
+
+*The asterisk beside the filename at the top means the file has unsaved changes. Save it before exiting.*
+
+</details>
+
+Save and close `nano`:
+
+1. Press `Ctrl+O` (**Write Out**).
+2. Press `Enter` to confirm the displayed filename.
+3. Press `Ctrl+X` to exit.
+
+Launch the copied world from your home directory:
+
+```bash
+gz sim -v 4 eel4332_gazebo_practice.sdf
+```
+
+Select `red_dynamic_box` in the Entity Tree and verify that its `Z` position is `-1.00`. The box should appear below the ground plane; you may need to move the camera lower or tilt the view to see it clearly. This deliberately unrealistic position makes the effect of the SDF pose change obvious.
+
+<details>
+<summary>Example: red box below the ground</summary>
+
+![Gazebo red box positioned below the ground after changing its z coordinate](images/gazebo-practice2-02-red-box-below-ground.png)
+
+*The Model inspector confirms that the red box is at `Z = -1.00`.*
+
+</details>
+
+Close this second simulation before continuing; running multiple worlds with overlapping names makes troubleshooting harder.
 
 Record the original pose, modified pose, and what changed visually. This is a controlled experiment: one input changed while the rest of the world remained constant.
 

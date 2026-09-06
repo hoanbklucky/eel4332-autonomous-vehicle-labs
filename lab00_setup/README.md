@@ -40,6 +40,50 @@ Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundament
 
 Resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation or environment problem.
 
+## WSL/Ubuntu Terminal Shortcuts
+
+You do not need to retype every long path or command. Bash, the shell used by the WSL/Ubuntu Terminal, provides shortcuts that reduce typing and mistakes.
+
+### Complete names with Tab
+
+Type the beginning of a command, folder, or filename and press `Tab`. Bash completes the name when there is one match. If several names match, type another character or press `Tab` twice to list the choices.
+
+For example, the following keystrokes can complete the course repository path. Do not type the text `<Tab>`; press the `Tab` key at those positions.
+
+```text
+cd ~/cou<Tab>/eel4332<Tab>
+```
+
+Tab completion works only for names that already exist, which also makes it a useful check for misspelled paths.
+
+### Reuse and edit previous commands
+
+| Key or command | What it does |
+|---|---|
+| `Up Arrow` / `Down Arrow` | move backward or forward through commands already entered |
+| `Ctrl+R` | search backward through command history; type part of a command and press `Ctrl+R` again for an older match |
+| `Ctrl+A` / `Ctrl+E` | move the cursor to the beginning or end of the current command |
+| `Alt+B` / `Alt+F` | move backward or forward by one word |
+| `Ctrl+W` | delete the word immediately before the cursor |
+| `Ctrl+U` / `Ctrl+K` | delete from the cursor to the beginning or end of the line |
+| `Ctrl+L` | clear the visible terminal while keeping command history |
+| `Ctrl+C` | cancel the current command or stop a running ROS/Gazebo process |
+| `history` | display numbered commands from the current shell's history |
+
+When using `Ctrl+R`, inspect the matched command before running it. Press `Enter` to execute it, use an arrow key to leave the search and edit it, or press `Ctrl+C` to cancel the search.
+
+### Move among common directories
+
+| Command | Destination |
+|---|---|
+| `cd ~` | your Ubuntu home directory |
+| `cd ..` | the parent of the current directory |
+| `cd -` | the previous directory |
+| `pwd` | prints the current directory instead of changing it |
+| `ls` | lists files and folders in the current directory |
+
+Use `pwd` and `ls` whenever you are unsure where you are, and use Tab completion before pressing `Enter` on a long path.
+
 ## Required Software
 
 | Component | Where it is installed | Course use |

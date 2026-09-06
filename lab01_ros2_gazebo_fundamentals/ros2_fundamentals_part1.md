@@ -19,6 +19,8 @@ Complete Part 1 before Part 2. It introduces the ROS graph and the four interact
 
 Run **one command block at a time** and examine its output before continuing. After running a command, expand **Expected output** to compare your result with the example output or screenshot. Do not copy an entire practice section into the WSL/Ubuntu Terminal at once. Commands split across two displayed lines with a trailing `\` are one command, not two commands.
 
+Use the [WSL/Ubuntu Terminal shortcuts from Lab 00](../lab00_setup/README.md#wslubuntu-terminal-shortcuts) to complete long names with `Tab`, recall commands with the arrow keys or `Ctrl+R`, and edit commands instead of retyping them.
+
 The official [ROS 2 Jazzy beginner CLI tutorials](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html) provide additional explanations and examples.
 
 Most ROS 2 commands follow this pattern:
