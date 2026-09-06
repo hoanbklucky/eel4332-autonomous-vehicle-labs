@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Complete [Part 1](ros2_fundamentals_part1.md) before beginning this guide. Part 2 explains how ROS code is organized into packages, built in a colcon workspace, made discoverable through an overlay, and started reproducibly with a launch file. Allow approximately 30–45 minutes.
+Complete [Part 1](ros2_fundamentals_part1.md) before beginning this guide. Part 2 explains how ROS code is organized into packages, built in a workspace, made visible to the current terminal, and started reproducibly with a launch file. Allow approximately 30–45 minutes.
 
 ## Key Terms
 
@@ -14,23 +14,55 @@ Complete [Part 1](ros2_fundamentals_part1.md) before beginning this guide. Part 
 | workspace | a directory containing a `src/` folder and generated build products |
 | dependency | another system or ROS package required by the package |
 | `rosdep` | a tool that reads package declarations and installs system dependencies |
-| `colcon` | the build tool used for a ROS 2 workspace |
-| underlay | an environment sourced first, such as the base Jazzy installation |
-| overlay | a workspace sourced afterward so its packages take precedence |
+| `colcon` | the command that builds the ROS packages in a workspace and puts the usable results under `install/` |
+| underlay | ROS software that is already installed and available before building your workspace; in this lab it is ROS 2 Jazzy under `/opt/ros/jazzy` |
+| overlay | packages built in your own workspace and added on top of the underlay; in this lab they are made available by sourcing `~/eel4332_ws/install/setup.bash` |
 | launch file | a reproducible description that starts and configures multiple nodes |
 | launch argument | a value supplied when launching to change configured behavior |
+
+### Underlay and overlay in plain language
+
+Think of the base ROS 2 installation as the **foundation** and your course workspace as an **additional layer placed on top**:
+
+```text
+Your course package                   ← overlay: code you build
+─────────────────────────────────
+ROS 2 Jazzy and installed packages    ← underlay: software already provided
+─────────────────────────────────
+Ubuntu
+```
+
+The words *underlay* and *overlay* describe the order in which ROS environments are added to a terminal; they are not special kinds of source code.
+
+The following is a preview of the sequence. Do not run it yet; Practice 4 provides the exact commands after the workspace has been created.
+
+```bash
+# 1. Make the installed ROS 2 tools and libraries available.
+source /opt/ros/jazzy/setup.bash
+
+# 2. Build the packages found in the workspace.
+cd ~/eel4332_ws
+colcon build
+
+# 3. Make the newly built course packages available in this terminal.
+source ~/eel4332_ws/install/setup.bash
+```
+
+`colcon` coordinates the build. It finds ROS packages in the workspace, runs the appropriate build process for each package, and creates `build/`, `install/`, and `log/` directories. The important student-facing result is `install/`, which contains the files ROS 2 needs in order to run the built packages.
+
+Sourcing the Jazzy setup file first makes the base installation the **underlay**. Sourcing the workspace setup file afterward adds the **overlay**. ROS 2 can then find both the installed Jazzy packages and your course package. If both layers contain a package with the same name, the overlay version is normally found first.
+
+These `source` commands affect only the current WSL/Ubuntu Terminal. Opening another terminal creates a new shell, so that terminal must source the environments again.
 
 ## From Source Code to a Running ROS System
 
 ```mermaid
 flowchart LR
-    package_source["Course package source"] --> workspace_src["Workspace src/"]
-    workspace_src --> rosdep_step["rosdep install dependencies"]
-    rosdep_step --> colcon_step["colcon build"]
-    colcon_step --> install_tree["Workspace install/"]
-    base_underlay["Source ROS 2 Jazzy underlay"] --> workspace_overlay["Source workspace overlay"]
-    install_tree --> workspace_overlay
-    workspace_overlay --> ros_command["ros2 run or ros2 launch"]
+    base_underlay["1. Source ROS 2 Jazzy<br/>underlay is available"] --> colcon_step
+    package_source["2. Package source<br/>in workspace src/"] --> colcon_step["3. Build with colcon"]
+    colcon_step --> install_tree["Built files<br/>in workspace install/"]
+    install_tree --> workspace_overlay["4. Source workspace<br/>overlay is available"]
+    workspace_overlay --> ros_command["5. Use ros2 run<br/>or ros2 launch"]
 ```
 
 Building creates the workspace's `install/` tree, but it does not modify every open terminal automatically. Sourcing `install/setup.bash` updates the current shell so ROS 2 can discover the newly built package. That is why **build** and **source** are separate steps.
@@ -47,7 +79,25 @@ deactivate
 
 If the command reports that `deactivate` is not found, no virtual environment is active and you may continue.
 
-From the course repository root, create a workspace and link the practice package into its `src` directory:
+Next, enter the course repository root. If you used the recommended location from Lab 00, run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+```
+
+If you cloned the repository somewhere else, replace that path with its actual location. Confirm that you are in the correct directory:
+
+```bash
+pwd
+```
+
+```bash
+ls lab01_ros2_gazebo_fundamentals/eel4332_ros_practice
+```
+
+**Command breakdown:** `cd` changes the current directory. `pwd` prints its full path, which should end with `/eel4332-autonomous-vehicle-labs`. `ls` confirms that the practice package exists below the current directory. This location matters because the later `$PWD` expression expands to the directory printed by `pwd`.
+
+Now source ROS 2 and create the workspace:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -57,14 +107,41 @@ source /opt/ros/jazzy/setup.bash
 mkdir -p ~/eel4332_ws/src
 ```
 
-**Command breakdown:** `mkdir -p` creates the workspace directory and its `src/` subdirectory. The `-p` option also creates missing parent directories and does not fail if they already exist.
+In a Linux path, `~` is a shortcut for the current user's home directory. For example, if the username is `student`, `~/eel4332_ws` means `/home/student/eel4332_ws`. It does not mean the course repository.
+
+**Command breakdown:** `mkdir -p` creates the workspace directory and its `src/` subdirectory under your Ubuntu home directory. The `-p` option also creates missing parent directories and does not fail if they already exist.
+
+### Why link the package into the workspace?
+
+By convention, `colcon` looks for source packages beneath a workspace's `src/` directory. The practice package is stored beside this lab manual so that it remains part of the course Git repository. A symbolic link lets the same package appear inside the workspace without making a second copy:
+
+```text
+Course Git repository
+└── lab01_ros2_gazebo_fundamentals/
+    └── eel4332_ros_practice/             ← actual package files
+
+ROS 2 workspace
+└── ~/eel4332_ws/
+    └── src/
+        └── eel4332_ros_practice          ← link to the actual package
+```
+
+This arrangement has three benefits:
+
+- edits made to the package in VS Code are the same files that `colcon` builds;
+- there is no duplicate package that could become out of date;
+- generated `build/`, `install/`, and `log/` directories stay outside the course Git repository.
+
+It is also possible to place a ROS workspace inside a Git repository. ROS 2 does not require the workspace to be outside. This course uses a separate workspace to keep instructional files and generated build products clearly separated.
+
+Create the symbolic link:
 
 ```bash
 ln -sfn "$PWD/lab01_ros2_gazebo_fundamentals/eel4332_ros_practice" \
   ~/eel4332_ws/src/eel4332_ros_practice
 ```
 
-**Command breakdown:** `ln -sfn` creates or updates a symbolic link inside the workspace. The package remains in the course repository, while colcon sees it under the workspace's required `src/` directory. The `-f` and `-n` options safely replace an older symbolic link, including one created before the lab directories were renumbered; they do not remove a real directory.
+**Command breakdown:** `ln -sfn` creates or updates a symbolic link inside the workspace. `$PWD` expands to the course repository root verified above. The first path is the actual package, and the second path is where its link appears in the workspace. The `-f` and `-n` options safely replace an older symbolic link, including one created before the lab directories were renumbered; they do not remove a real directory.
 
 ```bash
 cd ~/eel4332_ws
