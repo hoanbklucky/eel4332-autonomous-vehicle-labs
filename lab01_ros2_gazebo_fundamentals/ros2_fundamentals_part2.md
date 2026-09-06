@@ -457,6 +457,19 @@ Be able to explain:
 - why rebuilding and sourcing are separate steps;
 - why another WSL/Ubuntu Terminal cannot see a newly built package until its overlay is sourced.
 
+Try to answer each question before opening the self-check below.
+
+<details>
+<summary>Check your understanding</summary>
+
+- **Where are dependencies declared?** ROS package dependencies are declared in `package.xml`. This lets ROS tooling such as `rosdep` determine which packages must be installed.
+- **How do `console_scripts` make Python nodes available to `ros2 run`?** Each entry in the `setup.py` `console_scripts` list maps an executable name to a Python function. When `colcon` builds the package, that entry point is installed where `ros2 run` can find it.
+- **Why must launch files be installed by `setup.py`?** ROS 2 searches the package's installed share directory for launch files. The `data_files` rules in `setup.py` copy them there during the build.
+- **Why are rebuilding and sourcing separate steps?** Building creates or updates files under `build/` and `install/`. Sourcing `install/setup.bash` then updates the current terminal environment so ROS 2 can find the installed packages and executables.
+- **Why can another WSL/Ubuntu Terminal not see the package automatically?** Each terminal has its own environment. Source `~/eel4332_ws/install/setup.bash` in every new WSL/Ubuntu Terminal that needs to use the workspace overlay.
+
+</details>
+
 The official [developing a ROS 2 package guide](https://docs.ros.org/en/jazzy/How-To-Guides/Developing-a-ROS-2-Package.html) and [launch-file integration tutorial](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-system.html) provide further details.
 
 ## ROS 2 Working Practices
