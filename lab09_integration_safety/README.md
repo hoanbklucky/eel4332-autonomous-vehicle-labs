@@ -1,5 +1,16 @@
 # Lab 9 — System Integration, Safety, and Failure Handling
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Make the autonomy stack fail in controlled ways, detect the failures, and transition the vehicle to a safer behavior.**
@@ -61,6 +72,8 @@ A production robot needs an explicit command-arbitration design so that autonomo
 
 ## Part 1 — Establish a Baseline
 
+**Why this part matters:** A healthy baseline provides the reference needed to distinguish injected failures from normal system variation.
+
 Run a known-good autonomous mission with TurtleBot in Gazebo.
 
 The final Goosebot deployment will reuse the system-level workflow but not every simulator parameter. In particular, verify the four-motor command mapping, braking behavior, skid-steer slip, sensor timing, footprint, and safe-stop mechanism before reusing simulation thresholds.
@@ -76,6 +89,8 @@ Also record the normal ranges of `/scan` age and update rate, forward speed, and
 
 ## Part 2 — Inject Faults
 
+**Why this part matters:** Controlled faults reveal causal links among sensing, estimation, planning, and control without waiting for unpredictable failures.
+
 Test at least three fault types from different categories:
 
 - sensor dropout;
@@ -88,6 +103,8 @@ Test at least three fault types from different categories:
 The instructor may provide fault-injection nodes or configuration switches.
 
 ## Part 3 — Controlled Collision-Approach Experiment
+
+**Why this part matters:** Measuring the approach and stop response turns an abstract safety concern into a timing and distance requirement.
 
 Perform this experiment in Gazebo only. Do not reproduce it on Goosebot.
 
@@ -115,6 +132,8 @@ For every approach, record:
 
 ## Part 4 — Implement a Safety Monitor
 
+**Why this part matters:** A separate monitor can detect unsafe conditions and request a safer state even when another component behaves incorrectly.
+
 Complete:
 
 ```text
@@ -134,6 +153,8 @@ Do not create an excessively complicated fault-management system.
 The monitor must consider freshness, localization/path health, obstacle distance, and forward speed. Explain which conditions produce `NORMAL`, `DEGRADED`, and `STOP`. A transition to `STOP` must use the instructor-validated command-arbitration or Nav2 cancellation path; printing `STOP` without inhibiting simulated motion is not a successful safe response.
 
 ## Part 5 — Evaluate Response
+
+**Why this part matters:** Response metrics verify whether the safety mechanism reduces risk and reveal the performance cost of its thresholds.
 
 For each fault, report:
 

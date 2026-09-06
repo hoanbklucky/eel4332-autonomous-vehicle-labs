@@ -2,6 +2,17 @@
 
 [Part 1: Graph and Communication](ros2_fundamentals_part1.md) | [Lab 1 overview](README.md)
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Purpose
 
 Complete [Part 1](ros2_fundamentals_part1.md) before beginning this guide. Part 2 explains how ROS code is organized into packages, built in a workspace, made visible to the current terminal, and started reproducibly with a launch file. Allow approximately 30–45 minutes.
@@ -82,6 +93,8 @@ flowchart LR
 `rosdep` and `colcon` have different jobs: `rosdep` installs dependencies declared by the source packages, while `colcon` builds the packages themselves. Building creates the workspace's generated directories, but it does not modify every open terminal automatically. Sourcing `install/setup.bash` updates the current shell so ROS 2 can discover the newly built package. That is why **install dependencies**, **build**, and **source** are separate steps.
 
 ## Practice 4 — Build a Course ROS Package
+
+**Why this practice matters:** ROS 2 cannot run source code as an installed package until a workspace builds it and the current terminal sources the resulting overlay.
 
 ROS packages are normally built inside a colcon workspace. The provided `eel4332_ros_practice` package contains a small counter publisher, counter subscriber, and launch file. The code is intentionally simple so you can concentrate on package structure and tools.
 
@@ -187,6 +200,15 @@ colcon build --symlink-install --packages-select eel4332_ros_practice
 
 **Command breakdown:** `colcon build` builds the workspace. `--symlink-install` links Python and resource files into the install tree so many source edits do not require copying files again. `--packages-select` limits this build to the named course package.
 
+<details>
+<summary>Expected output</summary>
+
+![Successful colcon build of the ROS practice package](images/practice4-01-colcon-build.png)
+
+*A successful build finishes `eel4332_ros_practice` and reports one package finished. Build times will vary.*
+
+</details>
+
 If `rosdep update` says that rosdep has not been initialized, initialize it once and then retry:
 
 ```bash
@@ -215,11 +237,22 @@ ros2 pkg prefix eel4332_ros_practice
 
 **Command breakdown:** `pkg prefix` prints the installation prefix of an available package. A path under `~/eel4332_ws/install` confirms that ROS 2 found the package in the course workspace overlay rather than only in the base Jazzy installation.
 
+<details>
+<summary>Expected output</summary>
+
+![Installation prefix of the ROS practice package](images/practice4-02-package-prefix.png)
+
+*The path under `~/eel4332_ws/install` confirms that the current terminal can discover the workspace package.*
+
+</details>
+
 The final command should print a path under `~/eel4332_ws/install`. The sourcing order matters: source the base Jazzy installation first and the course workspace second.
 
 Do not commit the workspace `build/`, `install/`, or `log/` directories to the course repository.
 
 ## Practice 5 — Use a Launch File and Parameters
+
+**Why this practice matters:** Launch files start a repeatable multi-node system, while parameters let you change its behavior without editing the node source code.
 
 In WSL/Ubuntu Terminal 1, source both environments and launch the provided publisher and subscriber:
 
@@ -255,6 +288,15 @@ ros2 node list
 
 **Command breakdown:** list the live nodes and confirm that both `/counter_publisher` and `/counter_subscriber` were created by the launch file.
 
+<details>
+<summary>Expected output</summary>
+
+![Counter publisher and subscriber in the ROS node list](images/practice5-01-node-list.png)
+
+*Both nodes started by the launch file should appear. Other running ROS nodes may also be listed.*
+
+</details>
+
 List topics and their types:
 
 ```bash
@@ -262,6 +304,15 @@ ros2 topic list -t
 ```
 
 **Command breakdown:** list the live topics with their message types and locate the `/practice/count` topic used by the two practice nodes.
+
+<details>
+<summary>Expected output</summary>
+
+![Practice count topic and its Int32 message type](images/practice5-02-topic-list-types.png)
+
+*The launched system provides `/practice/count` with the type `std_msgs/msg/Int32`. Additional ROS topics may also appear.*
+
+</details>
 
 Inspect the practice topic:
 
@@ -271,6 +322,15 @@ ros2 topic info /practice/count --verbose
 
 **Command breakdown:** inspect `/practice/count` and verify its message type, publisher, subscriber, and Quality of Service information.
 
+<details>
+<summary>Expected output</summary>
+
+![Verbose endpoint and QoS information for the practice count topic](images/practice5-03-topic-info-count.png)
+
+*The topic has one publisher and one subscriber. Endpoint identifiers and some QoS details may vary between runs.*
+
+</details>
+
 Display one counter message:
 
 ```bash
@@ -278,6 +338,15 @@ ros2 topic echo /practice/count --once
 ```
 
 **Command breakdown:** subscribe temporarily, print one counter message from `/practice/count`, and then return to the prompt.
+
+<details>
+<summary>Expected output</summary>
+
+![One integer message received from the practice count topic](images/practice5-04-topic-echo-count.png)
+
+*The exact counter value will differ because the publisher continues counting while it runs.*
+
+</details>
 
 Measure its update rate:
 
@@ -287,6 +356,15 @@ ros2 topic hz /practice/count
 
 **Command breakdown:** measure the arrival frequency of counter messages. With this launch command, the result should settle near `5 Hz` after several samples.
 
+<details>
+<summary>Expected output</summary>
+
+![Practice count topic measured at approximately five hertz](images/practice5-05-topic-rate-5hz.png)
+
+*Small timing variations are normal; the average rate should settle close to the configured `5 Hz`.*
+
+</details>
+
 After stopping the rate measurement with `Ctrl+C`, inspect the launch parameter:
 
 ```bash
@@ -294,6 +372,15 @@ ros2 param get /counter_publisher rate_hz
 ```
 
 **Command breakdown:** read the `rate_hz` parameter owned by `/counter_publisher` and confirm that the launch argument configured it to `5.0`.
+
+<details>
+<summary>Expected output</summary>
+
+![Counter publisher rate parameter set to five hertz](images/practice5-06-publisher-rate-parameter.png)
+
+*The node reports a double value of `5.0`, confirming that the launch argument reached the publisher parameter.*
+
+</details>
 
 The measured topic rate should be close to the configured value, allowing for scheduling and measurement variation. Stop `ros2 topic hz` after approximately 10 seconds.
 
@@ -308,6 +395,15 @@ Select **Nodes/Topics (all)** if necessary. Confirm that the graph shows:
 ```text
 /counter_publisher → /practice/count → /counter_subscriber
 ```
+
+<details>
+<summary>Expected output</summary>
+
+![rqt_graph showing the counter publisher, practice count topic, and counter subscriber](images/practice5-07-rqt-graph.png)
+
+*If the graph is empty, select **Nodes/Topics (all)** and click the **Refresh** button.*
+
+</details>
 
 Save a screenshot for your setup record. Close `rqt_graph` and stop the launch with `Ctrl+C`. In WSL/Ubuntu Terminal 1, relaunch at a different configured rate:
 
@@ -325,9 +421,20 @@ ros2 topic hz /practice/count
 
 **Command breakdown:** repeat the same measurement; the reported frequency should now settle near `2 Hz`, demonstrating that launch-time configuration changed the behavior.
 
+<details>
+<summary>Expected output</summary>
+
+![Practice count topic measured at approximately two hertz](images/practice5-08-topic-rate-2hz.png)
+
+*The approximately `0.5 s` interval between messages corresponds to a publication rate near `2 Hz`.*
+
+</details>
+
 Let it collect data for approximately 10 seconds and press `Ctrl+C`. Verify that the observed rate changed. This demonstrates the difference between reusable node code and launch-time configuration.
 
 ## Practice 6 — Read the Package Structure
+
+**Why this practice matters:** Understanding the package files shows how source code, dependencies, executable entry points, and launch files work together.
 
 Inspect these provided files:
 

@@ -1,5 +1,16 @@
 # Lab 7 — Mapping and SLAM
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Build a usable occupancy-grid map of an unknown environment and explain why some mapping trajectories produce better maps than others.**
@@ -51,6 +62,8 @@ lab07_mapping_slam/
 
 ## Part 1 — Verify Inputs
 
+**Why this part matters:** SLAM depends on valid sensor, odometry, and transform data, so checking inputs first avoids blaming the mapper for upstream problems.
+
 ### Mapping interface contract
 
 Verify these interfaces before launching SLAM. Names shown are the expected TurtleBot defaults; record any instructor-validated replacement used by the course image.
@@ -85,6 +98,8 @@ Do not start debugging SLAM until `/scan`, `/odom`, and TF are valid.
 
 ## Part 2 — Build a Map
 
+**Why this part matters:** Controlled exploration gives the mapper useful coverage while letting you observe how motion and revisiting areas affect the result.
+
 Launch the instructor-provided TurtleBot/Gazebo simulation and SLAM workflow.
 
 The official [ROBOTIS TurtleBot 3 SLAM simulation guide for ROS 2 Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy) is a helpful visual reference for the overall workflow:
@@ -111,11 +126,15 @@ Use a deliberate trajectory:
 
 ## Part 3 — Save the Map
 
+**Why this part matters:** Saving converts the live SLAM result into a reusable artifact for later localization and navigation.
+
 Save the occupancy map using the course-approved workflow.
 
 Keep generated map files in `results/`.
 
 ## Part 4 — Compare Mapping Strategies
+
+**Why this part matters:** Repeating the experiment with different trajectories reveals how coverage, speed, and loop closure influence drift and consistency.
 
 Create two maps using different driving strategies, for example:
 
@@ -134,6 +153,8 @@ Compare:
 - loop-closure behavior.
 
 ## Part 5 — Map Quality
+
+**Why this part matters:** Quantitative and task-based checks determine whether a map is usable, not merely visually appealing.
 
 Use one simple quantitative measure in addition to visual assessment. Examples:
 

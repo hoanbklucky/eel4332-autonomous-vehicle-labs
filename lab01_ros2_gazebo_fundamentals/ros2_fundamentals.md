@@ -1,5 +1,16 @@
 # ROS 2 Fundamentals Practice
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 Most students are not expected to have previous ROS 2 experience. Complete these two required parts in order:
 
 1. [Part 1 — Graph and Communication](ros2_fundamentals_part1.md)

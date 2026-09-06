@@ -1,5 +1,16 @@
 # Lab 3 — Differential-Drive Odometry and Vehicle Modeling
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Predict planar robot motion from wheel rotation, construct a differential-drive odometry estimate, and compare that model with car-like bicycle motion.**
@@ -109,7 +120,11 @@ The propagation functions contain required `TODO` sections. Do not replace them 
 
 ## Step-by-Step Procedure
 
+The work progresses from hand predictions to code, validation, sensitivity analysis, and model comparison so that each implementation result has a physical and mathematical reference.
+
 ### Part 1 — Predict differential-drive motion by hand
+
+**Why this part matters:** Hand predictions provide a simple reference for catching sign, unit, and interpretation errors in the code that follows.
 
 Before writing code, use the equations above to predict the sign of $v$ and $\dot{\theta}$ for:
 
@@ -121,6 +136,8 @@ Before writing code, use the equations above to predict the sign of $v$ and $\do
 Record whether each case should move straight, curve left, curve right, or rotate in place. These predictions are your first debugging test.
 
 ### Part 2 — Implement differential-drive kinematics and odometry
+
+**Why this part matters:** This step translates the wheel-motion equations from lecture into an executable estimate of robot pose.
 
 Open:
 
@@ -138,6 +155,8 @@ Use fixed-step Euler integration and include the initial pose as the first traje
 
 ### Part 3 — Validate differential-drive special cases
 
+**Why this part matters:** Straight, rotating, and curved cases isolate different behaviors and make implementation errors easier to diagnose.
+
 For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simulate at least:
 
 1. equal positive wheel speeds;
@@ -148,6 +167,8 @@ For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simu
 For every case, compare the simulated result with your Part 1 prediction. An in-place rotation changes yaw while $x$ and $y$ remain approximately constant; it may appear as a single point on an $x$–$y$ plot, so also inspect the final yaw.
 
 ### Part 4 — Conduct an odometry-sensitivity experiment
+
+**Why this part matters:** Changing model assumptions shows why small wheel or geometry errors accumulate into odometry drift.
 
 Choose **one** experiment:
 
@@ -160,6 +181,8 @@ Treat one trajectory as the reference. Report final position error and final hea
 If the instructor assigns a live comparison, record the TurtleBot `/odom` topic during a short straight or turning command and compare its qualitative behavior with your ideal model. Do not treat `/odom` as Gazebo ground truth.
 
 ### Part 5 — Implement and test the bicycle model
+
+**Why this part matters:** Comparing a car-like steering model with differential drive clarifies why vehicle geometry determines the appropriate kinematics.
 
 Open:
 
@@ -176,6 +199,8 @@ Complete its existing `TODO` sections. Test these compact cases:
 Confirm that zero steering produces a straight line and that increasing steering magnitude reduces turning radius. The bicycle portion is intentionally smaller than the differential-drive portion.
 
 ### Part 6 — Run and compare the models
+
+**Why this part matters:** Common plots and metrics make similarities, limitations, and modeling errors easier to evaluate objectively.
 
 From the Lab 3 directory, run:
 

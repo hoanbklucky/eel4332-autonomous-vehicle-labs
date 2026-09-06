@@ -1,5 +1,16 @@
 # Lab 4 — Autonomous-System Architecture and Sensors
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Inspect a running autonomous-robot simulation and trace how sensor data flows through the ROS 2 system.**
@@ -51,6 +62,8 @@ lab04_system_architecture_sensors/
 ```
 
 ## Part 1 — Launch a Known-Good Simulation
+
+**Why this part matters:** A complete working system provides a baseline before you inspect individual nodes, frames, and sensor connections.
 
 For Lab 4, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
@@ -458,6 +471,8 @@ Other available fallback demonstrations include `camera.launch.py` and the Gazeb
 
 ## Part 2 — Inspect the ROS Graph
 
+**Why this part matters:** The ROS graph reveals which software components exist and which topic interfaces connect them.
+
 ### Expected interface contract
 
 The following names are expected in the course TurtleBot simulation. Treat the table as a checklist, not as a substitute for inspecting the live ROS graph.
@@ -501,6 +516,8 @@ For each selected topic, observe its rate for at least 10 seconds. Report the ap
 
 ## Part 3 — Inspect Coordinate Frames
 
+**Why this part matters:** Sensor values are only meaningful when you know the coordinate frame in which their positions and directions are expressed.
+
 Examine TF:
 
 ```bash
@@ -514,6 +531,8 @@ Explain why the pose of a sensor relative to the vehicle matters.
 
 ## Part 4 — Run the Topic Inventory Helper
 
+**Why this part matters:** A repeatable inventory turns a large, changing topic list into organized evidence you can compare and debug.
+
 ```bash
 python3 src/topic_inventory.py
 ```
@@ -521,6 +540,8 @@ python3 src/topic_inventory.py
 The helper prints available topics and their message types. It is intentionally a utility; you are still responsible for interpreting the topics.
 
 ## Part 5 — Sensor-to-Function Mapping
+
+**Why this part matters:** Mapping each signal to an autonomy function connects low-level data streams to the purpose they serve in the full system.
 
 Create a table containing at least:
 

@@ -1,5 +1,16 @@
 # Lab 1 — ROS 2 and Gazebo Fundamentals
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 Build a working mental model of ROS 2 and Gazebo before manually driving TurtleBot in Lab 2, modeling its motion in Lab 3, and using the complete TurtleBot/Nav2 system in Lab 4. You will inspect small ROS systems, compare communication patterns, build and launch a ROS package, inspect a Gazebo world, and create one explicit Gazebo-to-ROS bridge.
@@ -55,6 +66,8 @@ lab01_ros2_gazebo_fundamentals/
 ```
 
 ## Step-by-Step Procedure
+
+The sequence below moves from ROS 2 communication, to building your own package, and finally to Gazebo. Each stage makes the next one easier to interpret instead of treating the tools as unrelated commands.
 
 Complete the following guides in order. Do not skip directly to the larger Gazebo exercise.
 

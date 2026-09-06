@@ -2,6 +2,17 @@
 
 [Lab 1 overview](README.md) | [Part 2: Packages, Workspaces, and Launch](ros2_fundamentals_part2.md)
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Purpose
 
 Complete Part 1 before Part 2. It introduces the ROS graph and the four interaction patterns students will use throughout the course: topics, services, actions, and parameters. Allow approximately 60–75 minutes.
@@ -65,6 +76,8 @@ Use the diagram as a map while completing the practices. The command output and 
 
 ## Practice 1 — Source ROS in Every WSL/Ubuntu Terminal
 
+**Why this practice matters:** Sourcing tells the current terminal where ROS 2 commands and packages are located; without it, otherwise correct commands may appear to be missing.
+
 Open a WSL/Ubuntu Terminal and run:
 
 ```bash
@@ -88,6 +101,8 @@ The expected distribution is `jazzy`, and `which ros2` should resolve to `/opt/r
 `source` changes the environment of the current shell only. Every newly opened WSL/Ubuntu Terminal must source ROS, either manually or through `~/.bashrc`. Commands entered at a PowerShell prompt are not Ubuntu commands; enter `wsl` first.
 
 ## Practice 2 — Run and Inspect Publisher/Subscriber Nodes
+
+**Why this practice matters:** A small talker/listener system makes continuous, typed topic communication visible before you encounter a larger robot graph.
 
 The system in this practice has the following intended ROS graph:
 
@@ -365,6 +380,8 @@ Confirm that the listener receives it:
 Then stop the listener.
 
 ## Practice 3 — Services, Parameters, and Actions
+
+**Why this practice matters:** Using each interaction pattern helps you recognize when a robot needs a one-time request, a configurable setting, or a longer task with feedback instead of a continuous topic stream.
 
 In WSL/Ubuntu Terminal 1, start turtlesim:
 

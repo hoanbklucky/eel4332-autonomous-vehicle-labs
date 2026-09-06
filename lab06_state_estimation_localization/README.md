@@ -1,5 +1,16 @@
 # Lab 6 — State Estimation and Localization
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Fuse imperfect measurements into a better estimate of vehicle motion, then quantify whether the estimator actually improves localization.**
@@ -49,6 +60,8 @@ lab06_state_estimation_localization/
 
 ## Part 1 — Warm-Up Dataset
 
+**Why this part matters:** A small, known dataset lets you verify the estimator mathematics before adding implementation and simulation complexity.
+
 Use the instructor-provided 1-D or 2-D dataset first.
 
 Complete:
@@ -60,6 +73,8 @@ src/kalman_filter.py
 The assigned filter implementation must be your own.
 
 ## Part 2 — Prediction and Correction
+
+**Why this part matters:** Implementing the two Kalman-filter phases separately makes their roles—and mistakes in either phase—easier to understand.
 
 For each time step:
 
@@ -74,6 +89,8 @@ Log the estimate and uncertainty.
 
 ## Part 3 — Tune Q and R
 
+**Why this part matters:** Varying process and measurement uncertainty shows how the filter decides whether to trust its model or its sensors.
+
 Run at least three configurations:
 
 - trust the model more;
@@ -83,6 +100,8 @@ Run at least three configurations:
 Plot the resulting estimates.
 
 ## Part 4 — Localization Dataset / Simulation
+
+**Why this part matters:** Applying the estimator to realistic data tests whether its improvement survives noise and motion beyond the warm-up example.
 
 Apply the estimator or a comparable fusion workflow to instructor-provided odometry + global/localization measurements.
 
@@ -95,6 +114,8 @@ Compare at least:
 - ground truth when available.
 
 ## Part 5 — Failure Experiment
+
+**Why this part matters:** Dropouts and bias expose estimator limitations that may remain hidden during normal operation.
 
 Repeat with one degradation:
 

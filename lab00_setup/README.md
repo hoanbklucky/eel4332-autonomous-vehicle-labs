@@ -1,5 +1,16 @@
 # EEL 4332 Software Setup
 
+## Before You Begin — Update Course Files
+
+If this is your first setup, skip this update check; Part 6 installs Git and clones the repository. If you already have a local copy, open a **WSL/Ubuntu Terminal** and run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Goal
 
 Prepare one consistent environment for the EEL 4332 simulation labs.
@@ -49,6 +60,8 @@ F1TENTH/RoboRacer and Goosebot software are not required for the initial setup.
 
 ## Part 1 — Install WSL2 and Ubuntu 24.04
 
+**Why this part matters:** ROS 2 and Gazebo are Linux tools; WSL2 gives Windows users the consistent Ubuntu environment used throughout the course.
+
 From Windows PowerShell:
 
 ```powershell
@@ -68,6 +81,8 @@ Confirm that Ubuntu is using WSL version 2.
 ---
 
 ## Part 2 — Install Git and Visual Studio Code
+
+**Why this part matters:** Git delivers course files and updates, while VS Code with WSL lets you edit and run those Linux files from one workspace.
 
 ### Install and configure Git inside Ubuntu/WSL
 
@@ -133,6 +148,8 @@ Official references:
 
 ## Part 3 — Install ROS 2 Jazzy
 
+**Why this part matters:** ROS 2 provides the command-line tools, communication middleware, and software packages used by every later robotics lab.
+
 Follow the official ROS 2 Jazzy Ubuntu Debian-package instructions:
 
 https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
@@ -182,6 +199,8 @@ echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 
 ## Part 4 — Install ROS–Gazebo integration
 
+**Why this part matters:** Gazebo simulates the physical world, while the integration packages let ROS 2 programs exchange data with that simulation.
+
 ```bash
 sudo apt update
 sudo apt install ros-jazzy-ros-gz
@@ -207,6 +226,8 @@ The same window opens.
 ---
 
 ## Part 5 — Install navigation / localization packages
+
+**Why this part matters:** Later labs use these packages for mapping, localization, planning, and navigation, so installing them now prevents interruptions later.
 
 ```bash
 sudo apt update
@@ -238,6 +259,8 @@ When a later lab directs you to one of these pages, confirm that its **Jazzy** t
 ---
 
 ## Part 6 — Clone this repository and enter its root
+
+**Why this part matters:** Your local clone contains the instructions and starter files, and its Git history lets you receive future course updates.
 
 Run these commands in a WSL/Ubuntu Terminal:
 
@@ -277,6 +300,8 @@ The VS Code Explorer should show `lab00_setup`, `lab01_ros2_gazebo_fundamentals`
 ---
 
 ## Part 7 — Create the course Python environment
+
+**Why this part matters:** A dedicated virtual environment keeps course Python dependencies consistent without changing ROS 2 or system Python packages.
 
 ### Why use a virtual environment?
 
@@ -343,6 +368,8 @@ All three verification commands should complete without dependency-conflict mess
 
 ## Part 8 — Optional F1TENTH / RoboRacer Gym
 
+**Why this part matters:** This optional simulator offers another vehicle-control environment without making it a dependency for the required labs.
+
 F1TENTH, now also known as RoboRacer, is an autonomous-driving education and racing platform built around a small car-like vehicle. Unlike the differential-drive TurtleBot used in this course's primary Gazebo simulation, an F1TENTH vehicle uses car-like steering. Its simulator can therefore be useful when studying vehicle kinematics, planning, and control.
 
 The [F1TENTH Gym repository](https://github.com/f1tenth/f1tenth_gym) provides an optional simulation environment for experimenting with this type of vehicle. It is not required for Labs 00–02, and students should not delay the required TurtleBot/Gazebo setup or playground to install it.
@@ -354,6 +381,8 @@ Lab 3 first implements differential-drive odometry and then uses the repository'
 ---
 
 ## Part 9 — Run the verification script
+
+**Why this part matters:** Verification catches missing tools and packages now, before they appear as harder-to-diagnose failures during a lab.
 
 Source ROS 2 and activate the Python environment before running the verification:
 
@@ -372,6 +401,8 @@ If there is no missing, the output should look like below
 ---
 
 ## Part 10 — Goosebot
+
+**Why this part matters:** Identifying the simulation-to-hardware boundary prepares you for later Goosebot work without assuming an unverified hardware interface.
 
 Do **not** install Goosebot-specific dependencies during the first week unless instructed.
 

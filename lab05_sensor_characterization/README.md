@@ -1,5 +1,16 @@
 # Lab 5 — Sensor Characterization and Measurement Uncertainty
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Measure how noisy simulated sensor data really is and build a measurement model from experimental evidence.**
@@ -51,6 +62,8 @@ Use the same TurtleBot/Gazebo environment introduced in Lab 4 unless the instruc
 
 ### Part 1 — Choose sensor signals
 
+**Why this part matters:** Choosing the correct signal, field, frame, and unit is necessary before any statistical result can be interpreted correctly.
+
 Use at least two numeric sensor/state signals from the instructor simulation, such as:
 
 - IMU angular velocity;
@@ -60,6 +73,8 @@ Use at least two numeric sensor/state signals from the instructor simulation, su
 - GNSS-like position if available.
 
 ### Part 2 — Record a stationary experiment
+
+**Why this part matters:** Holding the robot still isolates measurement bias and random noise from changes caused by motion.
 
 Keep the robot stationary and record at least 20–30 seconds.
 
@@ -73,9 +88,13 @@ ros2 topic hz /TOPIC
 
 ### Part 3 — Record a controlled-motion experiment
 
+**Why this part matters:** A repeatable motion test shows how the sensor behaves under the dynamic conditions an autonomous system actually encounters.
+
 Use a simple repeatable motion, such as constant forward speed or a constant turn.
 
 ### Part 4 — Analyze statistics
+
+**Why this part matters:** Statistics turn qualitative impressions of “noisy data” into measurable bias, spread, and outlier behavior.
 
 Complete:
 
@@ -94,6 +113,8 @@ For at least two signals report:
 
 ### Part 5 — Timing
 
+**Why this part matters:** Update rate and timing jitter affect how reliably controllers and estimators can use a sensor stream.
+
 Examine timestamps or sample intervals.
 
 Report:
@@ -103,6 +124,8 @@ Report:
 - any obvious gaps.
 
 ### Part 6 — Measurement model
+
+**Why this part matters:** Converting observations into a measurement model provides evidence-based uncertainty values for the estimator in the next lab.
 
 For one signal, write a model such as:
 

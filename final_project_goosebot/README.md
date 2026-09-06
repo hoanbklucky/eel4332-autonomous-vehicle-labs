@@ -1,5 +1,16 @@
 # Final Project — Integrated Autonomous Navigation with Goosebot
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Integrate localization, mapping/navigation, planning, and control to complete a multi-waypoint autonomous mission, then validate as much of the stack as possible on Goosebot.**
@@ -43,7 +54,11 @@ final_project_goosebot/
 
 ## Required Milestones
 
+The milestones deliberately move from interface planning to simulation evidence, quantitative evaluation, failure handling, and finally hardware so integration problems are found in progressively riskier environments.
+
 ### Milestone 1 — System Architecture
+
+**Why this milestone matters:** Defining components and interface contracts before integration prevents incompatible assumptions from surfacing late in the project.
 
 Create a diagram showing:
 
@@ -59,6 +74,8 @@ Identify important ROS topics/services/actions.
 
 ### Milestone 2 — Simulation Mission
 
+**Why this milestone matters:** Simulation provides a safe, repeatable environment for validating the complete mission before physical deployment.
+
 In the instructor-approved Gazebo/Nav2 environment:
 
 1. start from a known pose;
@@ -68,6 +85,8 @@ In the instructor-approved Gazebo/Nav2 environment:
 5. complete the mission or document the failure.
 
 ### Milestone 3 — Quantitative Evaluation
+
+**Why this milestone matters:** Objective metrics show whether the integrated system meets its requirements rather than merely completing one demonstration.
 
 Report at least three metrics such as:
 
@@ -81,9 +100,13 @@ Report at least three metrics such as:
 
 ### Milestone 4 — Safety / Failure Case
 
+**Why this milestone matters:** Demonstrating a controlled failure verifies that the system can recognize a problem and respond safely.
+
 Demonstrate at least one controlled failure or degraded condition and explain the system response.
 
 ### Milestone 5 — Goosebot Deployment
+
+**Why this milestone matters:** Staged hardware deployment tests which simulation assumptions remain valid while limiting risk to the robot and its surroundings.
 
 Use the instructor Goosebot repository:
 

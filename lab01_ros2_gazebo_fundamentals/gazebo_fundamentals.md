@@ -1,5 +1,16 @@
 # Gazebo Fundamentals Practice
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 Complete this guided practice after both ROS 2 fundamentals parts. It assumes ROS 2 Jazzy, Gazebo Harmonic, and `ros_gz` were installed in [Lab 00](../lab00_setup/README.md).
 
 ## Learning Objectives
@@ -48,6 +59,8 @@ ROS nodes that process simulated sensors should normally use the Gazebo clock co
 
 ## Practice 1 — Open and Inspect the Course World
 
+**Why this practice matters:** Learning the simulation controls and entity tree first gives you a known visual baseline before robots and ROS connections add complexity.
+
 From the repository root, run:
 
 ```bash
@@ -75,6 +88,8 @@ Do not continue until you can reliably play, pause, reset, select an entity, and
 
 ## Practice 2 — Read and Modify SDF
 
+**Why this practice matters:** SDF is the source description for simulated worlds and models, so small edits connect file contents to what Gazebo displays.
+
 Do not edit the course copy. Make a working copy:
 
 ```bash
@@ -99,6 +114,8 @@ Verify that the red box begins one meter farther in the negative x-direction. Cl
 Record the original pose, modified pose, and what changed visually. This is a controlled experiment: one input changed while the rest of the world remained constant.
 
 ## Practice 3 — Inspect Gazebo Transport
+
+**Why this practice matters:** Gazebo has its own native transport system; inspecting it prevents you from assuming every simulated signal is automatically a ROS 2 topic.
 
 Launch the original practice world again and keep it open. In a second WSL/Ubuntu Terminal, run:
 
@@ -125,6 +142,8 @@ Repeat while Gazebo is playing and paused. The simulation-time values should adv
 World-specific topics and services include the world name `eel4332_gazebo_practice`. Names can differ in other worlds, so discover them with `gz topic -l` and `gz service -l` instead of guessing.
 
 ## Practice 4 — Bridge the Gazebo Clock to ROS 2
+
+**Why this practice matters:** Creating one explicit bridge demonstrates how selected data crosses between Gazebo and ROS 2.
 
 First compare the two communication graphs:
 
@@ -159,6 +178,8 @@ The bridge syntax used here means:
 Stop the bridge with `Ctrl+C`. Gazebo can continue simulating, but ROS 2 no longer receives new clock messages through that bridge. Later course launch files create several bridges automatically. Lab 4 also makes one TF bridge explicit so you can see exactly how Gazebo motion reaches ROS localization and visualization.
 
 ## Practice 5 — Connect the Concepts to a Robot
+
+**Why this practice matters:** Relating world files, simulated components, transport topics, bridges, and ROS tools gives you a reusable debugging model for later robot labs.
 
 Before launching TurtleBot, be able to explain this chain in your own words:
 

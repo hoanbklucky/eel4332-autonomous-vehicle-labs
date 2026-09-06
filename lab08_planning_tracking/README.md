@@ -1,5 +1,16 @@
 # Lab 8 — Path Planning and Path Tracking
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Compute a collision-free path and make a vehicle follow it accurately enough to reach the goal.**
@@ -48,6 +59,8 @@ lab08_planning_tracking/
 
 ## Part 1 — A* Planning
 
+**Why this part matters:** Implementing A* connects the search concepts from class to the practical task of finding a collision-free route on a grid.
+
 Complete:
 
 ```text
@@ -80,6 +93,8 @@ Before reporting a path as successful, verify programmatically that every path c
 
 ## Part 2 — Planner Experiments
 
+**Why this part matters:** Changing maps and planner settings exposes tradeoffs among path length, safety clearance, and computational effort.
+
 Compare at least:
 
 - A* with an admissible heuristic;
@@ -94,6 +109,8 @@ Report:
 Use the same grid, start, goal, connectivity, and timing method for A* and Dijkstra. State the heuristic and whether diagonal moves are allowed.
 
 ## Part 3 — Path Tracking
+
+**Why this part matters:** A geometric path alone does not move a vehicle; tracking converts that path into steering commands while correcting error.
 
 Complete:
 
@@ -122,6 +139,8 @@ This Pure Pursuit formulation produces an Ackermann/bicycle steering angle. It i
 
 ## Part 4 — Visualize Planning and Tracking
 
+**Why this part matters:** Visualization makes coordinate, waypoint, collision, and tracking errors much easier to diagnose than numerical output alone.
+
 Create a figure that overlays:
 
 - the occupancy grid;
@@ -148,6 +167,8 @@ All messages displayed together must use consistent frame IDs and timestamps. Ca
 
 ## Part 5 — Lightweight Vehicle Experiment
 
+**Why this part matters:** Testing vehicle-model assumptions shows when a controller that works for one platform may not transfer directly to another.
+
 Track the same path for at least:
 
 - two look-ahead distances;
@@ -156,6 +177,8 @@ Track the same path for at least:
 Use the bicycle-model portion of the Lab 3 simulator plus the tracking controller. The differential-drive odometry portion of Lab 3 uses different physical inputs and is not a direct Pure Pursuit steering-angle model. If the instructor provides a pinned F1TENTH environment, it may be used as an optional second experiment.
 
 ## Part 6 — Quantitative Evaluation
+
+**Why this part matters:** Common metrics let you compare planning and tracking performance objectively instead of judging only by appearance.
 
 Report:
 

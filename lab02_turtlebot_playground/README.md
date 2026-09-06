@@ -1,5 +1,16 @@
 # Lab 2 — TurtleBot Playground
 
+## Before You Begin — Update Course Files
+
+In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
+
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+
 ## Mission
 
 **Take manual control of TurtleBot in Gazebo, explore how it moves, and complete a short obstacle-course challenge.**
@@ -64,7 +75,11 @@ The activity uses the installed Nav2 TurtleBot simulation and the installed `tel
 
 ## Step-by-Step Procedure
 
+This sequence lets you first confirm a known-good simulation, then drive, experiment, and finally connect what you observed to the ROS 2 signals underneath it.
+
 ### Part 1 — Launch the Gazebo-only playground
+
+**Why this part matters:** A controlled, known-good starting point separates launch or simulation problems from mistakes made later while driving.
 
 In **WSL/Ubuntu Terminal 1**, verify the required packages:
 
@@ -96,6 +111,8 @@ Before driving:
 Do not continue until you can see the robot clearly and the simulation is playing.
 
 ### Part 2 — Take keyboard control
+
+**Why this part matters:** Manual control lets you feel how velocity commands translate into differential-drive motion before you model or automate it.
 
 Open **WSL/Ubuntu Terminal 2** and run:
 
@@ -132,6 +149,8 @@ If the initial response feels too fast, press `x` and `c` several times to reduc
 
 ### Part 3 — Complete the driving challenges
 
+**Why this part matters:** The challenges reveal turning limits and the difficulty of human closed-loop control, motivating the models and controllers in later labs.
+
 Complete the following in order. Accuracy matters less than careful observation.
 
 1. **Approach and stop:** drive toward a cylinder and stop before touching it.
@@ -150,6 +169,8 @@ Optional challenges:
 This is not a racing competition. A failed attempt that reveals delayed stopping, poor camera placement, or an awkward turning approach is useful evidence.
 
 ### Part 4 — Peek at the ROS signals
+
+**Why this part matters:** Observing command and odometry topics connects visible robot motion to the messages exchanged by the software system.
 
 This section is only a preview. Lab 3 uses these motion observations when developing differential-drive odometry, and Lab 4 examines the complete ROS system in detail.
 
@@ -173,6 +194,8 @@ Drive to a different location and run the same command again. Find the changed p
 Record one forward `/cmd_vel` message, one turning `/cmd_vel` message, and one qualitative change observed in `/odom`.
 
 ### Part 5 — Stop and recover safely
+
+**Why this part matters:** A clean shutdown prevents stale processes from interfering with the next launch and gives you a reliable recovery routine.
 
 At the end of the activity:
 
