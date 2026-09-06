@@ -10,6 +10,8 @@ If you cloned the repository in the recommended location, run:
 cd ~/courses/eel4332-autonomous-vehicle-labs
 ```
 
+**Command breakdown:** `cd` changes the current directory, and `~` represents your Ubuntu home directory.
+
 Here, `~` means your Ubuntu home directory, such as `/home/your_username`. If you cloned the repository somewhere else, change the command to that location.
 
 ## 2. Check for Local Changes
@@ -17,6 +19,8 @@ Here, `~` means your Ubuntu home directory, such as `/home/your_username`. If yo
 ```bash
 git status --short
 ```
+
+**Command breakdown:** `git status` compares your working files with the current commit; `--short` uses a compact one-line format for each changed file.
 
 This command compares your working files with your most recent local commit:
 
@@ -31,6 +35,8 @@ When `git status --short` prints nothing, run:
 git pull --rebase
 ```
 
+**Command breakdown:** `git pull` downloads and integrates changes from the configured remote branch. `--rebase` reapplies your local commits after the downloaded commits, avoiding an unnecessary merge commit.
+
 Git will either report `Already up to date.` or download and apply newer course files. Pulling updates does **not** submit your lab work.
 
 ## 4. Protect Local Work Before Updating
@@ -42,6 +48,8 @@ git stash push --include-untracked -m "My work before course update"
 git pull --rebase
 git stash pop
 ```
+
+**Command breakdown:** `git stash push` temporarily stores tracked and untracked changes; `-m` labels that saved state. After `git pull --rebase` updates the repository, `git stash pop` reapplies the stored work.
 
 `git stash` sets your unfinished changes aside, `git pull --rebase` updates the course files, and `git stash pop` reapplies your changes.
 
@@ -59,3 +67,5 @@ If you are unsure how to resolve a conflict, stop and ask the instructor or teac
 ```bash
 git rebase --abort
 ```
+
+**Command breakdown:** `git rebase --abort` cancels an in-progress rebase and restores the repository to its state before that rebase began. It does not resolve a conflict caused only by `git stash pop`.

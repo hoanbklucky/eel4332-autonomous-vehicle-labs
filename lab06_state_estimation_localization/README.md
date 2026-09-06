@@ -9,6 +9,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Mission

@@ -11,6 +11,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Purpose
@@ -86,17 +88,23 @@ Open a WSL/Ubuntu Terminal and run:
 source /opt/ros/jazzy/setup.bash
 ```
 
+**Command breakdown:** `source` executes the Jazzy setup script in the current shell, adding ROS 2 commands, packages, and environment variables to this terminal.
+
 Confirm the selected ROS distribution:
 
 ```bash
 echo "$ROS_DISTRO"
 ```
 
+**Command breakdown:** `echo` prints a value, and `$ROS_DISTRO` expands to the selected ROS distribution stored in that environment variable.
+
 Locate the ROS 2 command:
 
 ```bash
 which ros2
 ```
+
+**Command breakdown:** `which` prints the executable that the shell will run for `ros2`, confirming that it comes from the Jazzy installation.
 
 The expected distribution is `jazzy`, and `which ros2` should resolve to `/opt/ros/jazzy/bin/ros2`.
 
@@ -139,6 +147,8 @@ In **WSL/Ubuntu Terminal 1**, start a publisher:
 source /opt/ros/jazzy/setup.bash
 ```
 
+**Command breakdown:** Source ROS 2 separately in Terminal 1 because each terminal has its own environment.
+
 ```bash
 ros2 run demo_nodes_py talker
 ```
@@ -159,6 +169,8 @@ Keep it running. In **WSL/Ubuntu Terminal 2**, inspect the graph:
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
+
+**Command breakdown:** Source ROS 2 in Terminal 2 before using its graph-inspection commands.
 
 List the running nodes:
 
@@ -287,6 +299,8 @@ In **WSL/Ubuntu Terminal 3**, start a subscriber:
 source /opt/ros/jazzy/setup.bash
 ```
 
+**Command breakdown:** Source ROS 2 in Terminal 3 before starting the listener node.
+
 ```bash
 ros2 run demo_nodes_py listener
 ```
@@ -326,6 +340,8 @@ Visualize the live graph from WSL/Ubuntu Terminal 2:
 ```bash
 rqt_graph
 ```
+
+**Command breakdown:** `rqt_graph` starts the graphical ROS graph viewer. It discovers running nodes and the topic connections between them.
 
 When the `rqt_graph` window opens:
 
@@ -391,6 +407,8 @@ In WSL/Ubuntu Terminal 1, start turtlesim:
 source /opt/ros/jazzy/setup.bash
 ```
 
+**Command breakdown:** Source ROS 2 in Terminal 1 before starting turtlesim.
+
 ```bash
 ros2 run turtlesim turtlesim_node
 ```
@@ -413,6 +431,8 @@ In WSL/Ubuntu Terminal 2:
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
+
+**Command breakdown:** Source ROS 2 in Terminal 2 before inspecting or calling turtlesim services.
 
 List available services and their types:
 
@@ -504,6 +524,8 @@ First inspect the service type and its request fields:
 ros2 service type /turtle1/teleport_absolute
 ```
 
+**Command breakdown:** `ros2 service type SERVICE_NAME` prints the interface type required to call that service. Here it identifies the request format for `/turtle1/teleport_absolute`.
+
 <details>
 <summary>Expected output</summary>
 
@@ -566,6 +588,8 @@ Move it to another position, this time facing upward:
 ros2 service call /turtle1/teleport_absolute \
   turtlesim/srv/TeleportAbsolute "{x: 8.0, y: 2.0, theta: 1.57}"
 ```
+
+**Command breakdown:** This repeats `service call` with a new YAML request. The position becomes `(8.0, 2.0)`, and `theta: 1.57` turns the turtle to approximately 90 degrees, pointing upward.
 
 This request uses the same service and interface but supplies a different pose. The heading `1.57` radians is approximately 90 degrees, so the turtle points upward. It should produce the same empty response form as the first call.
 
@@ -751,6 +775,8 @@ Before drawing, observe those commands directly. In **WSL/Ubuntu Terminal 3**, r
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
+
+**Command breakdown:** Source ROS 2 in Terminal 3 before subscribing to the teleoperation command topic.
 
 ```bash
 ros2 topic echo /turtle1/cmd_vel

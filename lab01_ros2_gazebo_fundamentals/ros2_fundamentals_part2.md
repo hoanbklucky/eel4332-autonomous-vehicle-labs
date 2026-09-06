@@ -11,6 +11,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Purpose
@@ -92,6 +94,8 @@ colcon build
 source ~/eel4332_ws/install/setup.bash
 ```
 
+**Command breakdown:** This preview sources the ROS underlay, enters the workspace, installs declared dependencies with `rosdep`, builds packages with `colcon`, and sources the resulting overlay. Practice 4 explains each step and option before you run it.
+
 `colcon` coordinates the build. It finds ROS packages in the workspace, runs the appropriate build process for each package, and creates three directories:
 
 | Directory | What it contains | How students use it |
@@ -134,6 +138,8 @@ First leave the course Python virtual environment if it is active:
 deactivate
 ```
 
+**Command breakdown:** `deactivate` leaves an active Python virtual environment so its packages do not interfere with the ROS workspace build.
+
 If the command reports that `deactivate` is not found, no virtual environment is active and you may continue.
 
 Next, enter the course repository root. If you used the recommended location from Lab 00, run:
@@ -141,6 +147,8 @@ Next, enter the course repository root. If you used the recommended location fro
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
 ```
+
+**Command breakdown:** `cd` changes the current directory to the recommended course repository root; `~` means your Ubuntu home directory.
 
 If you cloned the repository somewhere else, replace that path with its actual location. Confirm that you are in the correct directory:
 
@@ -159,6 +167,8 @@ Now source ROS 2 and create the workspace:
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
+
+**Command breakdown:** `source` loads the installed ROS 2 Jazzy environment as the workspace underlay in this terminal.
 
 ```bash
 mkdir -p ~/eel4332_ws/src
@@ -204,11 +214,15 @@ ln -sfn "$PWD/lab01_ros2_gazebo_fundamentals/eel4332_ros_practice" \
 cd ~/eel4332_ws
 ```
 
+**Command breakdown:** `cd` changes from the repository to the ROS workspace root, where `colcon build` must be run.
+
 Confirm the workspace layout:
 
 ```bash
 find src/eel4332_ros_practice -maxdepth 2 -type f | sort
 ```
+
+**Command breakdown:** The preceding `cd` enters the workspace. `find` lists regular files up to two levels below the linked package path, and the pipe sends those paths to `sort` for predictable ordering.
 
 Install declared dependencies and build only the practice package:
 
@@ -249,6 +263,8 @@ sudo rosdep init
 rosdep update
 ```
 
+**Command breakdown:** In this recovery path, `sudo rosdep init` creates the system-wide configuration once, and `rosdep update` downloads the dependency-rule index for the current user.
+
 After a successful build, source the workspace overlay:
 
 ```bash
@@ -259,7 +275,7 @@ source /opt/ros/jazzy/setup.bash
 source ~/eel4332_ws/install/setup.bash
 ```
 
-**Command breakdown:** sourcing the generated setup file adds this workspace as an overlay in the current terminal. New WSL/Ubuntu Terminals must source it again before they can find the package.
+**Command breakdown:** The preceding Jazzy setup command loads the underlay. Sourcing the generated workspace setup file then adds this workspace as an overlay in the current terminal. New WSL/Ubuntu Terminals must repeat both commands.
 
 ```bash
 ros2 pkg prefix eel4332_ros_practice
@@ -294,6 +310,8 @@ source /opt/ros/jazzy/setup.bash
 source ~/eel4332_ws/install/setup.bash
 ```
 
+**Command breakdown:** Source the Jazzy underlay first and the course workspace overlay second so Terminal 1 can find both installed ROS packages and the package you built.
+
 ```bash
 ros2 launch eel4332_ros_practice practice.launch.py rate_hz:=5.0
 ```
@@ -309,6 +327,8 @@ source /opt/ros/jazzy/setup.bash
 ```bash
 source ~/eel4332_ws/install/setup.bash
 ```
+
+**Command breakdown:** Terminal 2 has a separate environment, so source the Jazzy underlay and workspace overlay here as well.
 
 List the practice nodes:
 
@@ -419,6 +439,8 @@ Launch `rqt_graph` from WSL/Ubuntu Terminal 2:
 ```bash
 rqt_graph
 ```
+
+**Command breakdown:** `rqt_graph` opens a graphical view of running ROS nodes and their topic connections.
 
 Select **Nodes/Topics (all)** if necessary. Confirm that the graph shows:
 

@@ -9,6 +9,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 Complete this guided practice after both ROS 2 fundamentals parts. It assumes ROS 2 Jazzy, Gazebo Harmonic, and `ros_gz` were installed in [Lab 00](../lab00_setup/README.md).
@@ -70,6 +72,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 pwd
 ```
 
+**Command breakdown:** `cd` changes the current directory to the repository root. `pwd` means **print working directory** and displays the full path of your current location.
+
 `cd` changes the current directory, and `pwd` prints it so you can confirm that the final directory name is `eel4332-autonomous-vehicle-labs`. If you cloned the repository somewhere else, replace the path above with its actual location.
 
 Then source ROS 2 and open the provided world:
@@ -78,6 +82,8 @@ Then source ROS 2 and open the provided world:
 source /opt/ros/jazzy/setup.bash
 gz sim -v 4 lab01_ros2_gazebo_fundamentals/worlds/gazebo_practice.sdf
 ```
+
+**Command breakdown:** `source` loads the ROS 2 Jazzy environment into this terminal. `gz sim` starts Gazebo Sim, `-v 4` requests detailed console messages, and the final argument is the SDF world file to open.
 
 <details>
 <summary>Expected Gazebo window</summary>
@@ -118,6 +124,8 @@ Do not edit the course copy. Make a working copy in your Ubuntu home directory:
 cp lab01_ros2_gazebo_fundamentals/worlds/gazebo_practice.sdf ~/eel4332_gazebo_practice.sdf
 ```
 
+**Command breakdown:** `cp SOURCE DESTINATION` copies a file. The first path is the protected course file, while the second creates `eel4332_gazebo_practice.sdf` under `~`, your Ubuntu home directory.
+
 Change to the directory containing the copied file and confirm your location:
 
 ```bash
@@ -125,11 +133,15 @@ cd ~
 pwd
 ```
 
+**Command breakdown:** `cd ~` returns to your Ubuntu home directory. `pwd` displays that directory so you can verify where the copied file is located.
+
 `pwd` should print your Ubuntu home directory, such as `/home/your_username`. Open the copied file with the `nano` terminal editor:
 
 ```bash
 nano eel4332_gazebo_practice.sdf
 ```
+
+**Command breakdown:** `nano` opens the named text file in a terminal editor. Because the command uses only a filename, `nano` looks for it in the current directory.
 
 Use the arrow keys to navigate. Find:
 
@@ -165,6 +177,8 @@ Launch the copied world from your home directory:
 gz sim -v 4 eel4332_gazebo_practice.sdf
 ```
 
+**Command breakdown:** `gz sim` launches Gazebo, `-v 4` enables detailed messages, and the filename selects your modified copy rather than the original course world.
+
 Select `red_dynamic_box` in the Entity Tree and verify that its `Z` position is `-1.00`. The box should appear below the ground plane; you may need to move the camera lower or tilt the view to see it clearly. This deliberately unrealistic position makes the effect of the SDF pose change obvious.
 
 <details>
@@ -184,12 +198,29 @@ Record the original pose, modified pose, and what changed visually. This is a co
 
 **Why this practice matters:** Gazebo has its own native transport system; inspecting it prevents you from assuming every simulated signal is automatically a ROS 2 topic.
 
-Launch the original practice world again and keep it open. In a second WSL/Ubuntu Terminal, run:
+In your current WSL/Ubuntu Terminal (**Terminal 1**), return to the course repository root and launch the original, unmodified world:
 
 ```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+source /opt/ros/jazzy/setup.bash
+gz sim -v 4 lab01_ros2_gazebo_fundamentals/worlds/gazebo_practice.sdf
+```
+
+**Command breakdown:** `cd` returns to the repository root, `source` prepares this terminal for ROS 2 Jazzy, and `gz sim -v 4` launches the original course SDF with detailed logging.
+
+If you cloned the repository somewhere else, replace the `cd` path with its actual location. Keep Gazebo and Terminal 1 running; the `gz sim` command occupies that terminal until you stop the simulation.
+
+Open a second WSL/Ubuntu Terminal (**Terminal 2**) from Windows Terminal or VS Code. Source ROS 2 in the new terminal, then list the Gazebo Transport topics and services:
+
+```bash
+source /opt/ros/jazzy/setup.bash
 gz topic -l
 gz service -l
 ```
+
+**Command breakdown:** `source` prepares the newly opened terminal. In the Gazebo CLI, `topic -l` lists Transport topics and `service -l` lists Transport services; `-l` means **list**.
+
+Terminal 1 runs the simulated world. Terminal 2 lets you inspect that running simulation without stopping it.
 
 These lists belong to Gazebo Transport, not ROS 2. Find the clock topic:
 
@@ -198,11 +229,15 @@ gz topic -l | grep clock
 gz topic -i -t /clock
 ```
 
+**Command breakdown:** The pipe (`|`) sends the topic list to `grep clock`, which keeps only lines containing `clock`. `gz topic -i` requests information and `-t /clock` selects the `/clock` topic.
+
 Echo a few clock messages, then stop with `Ctrl+C`:
 
 ```bash
 gz topic -e -t /clock
 ```
+
+**Command breakdown:** `gz topic -e` echoes incoming messages and `-t /clock` chooses the topic. The command continues until you press `Ctrl+C`.
 
 Repeat while Gazebo is playing and paused. The simulation-time values should advance only while the world is playing.
 
@@ -219,6 +254,8 @@ ros2 topic list
 gz topic -l
 ```
 
+**Command breakdown:** `ros2 topic list` displays the ROS 2 topic graph, while `gz topic -l` displays the separate Gazebo Transport topic graph. Comparing them reveals which data has not yet been bridged.
+
 Seeing `/clock` in Gazebo does not guarantee that it is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third WSL/Ubuntu Terminal:
 
 ```bash
@@ -227,6 +264,8 @@ ros2 run ros_gz_bridge parameter_bridge \
   '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
 ```
 
+**Command breakdown:** `ros2 run PACKAGE EXECUTABLE` starts `parameter_bridge` from the `ros_gz_bridge` package. The bridge specification names the topic, ROS message type, and Gazebo message type. The `[` requests the Gazebo-to-ROS direction, and `\` continues one command on the next displayed line.
+
 Keep the bridge running. In another WSL/Ubuntu Terminal, verify the ROS topic:
 
 ```bash
@@ -234,6 +273,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 topic info /clock --verbose
 ros2 topic echo /clock --once
 ```
+
+**Command breakdown:** `source` prepares Terminal 3. `ros2 topic info /clock --verbose` shows the topic type and endpoint details. `ros2 topic echo /clock --once` prints one bridged clock message and exits.
 
 The bridge syntax used here means:
 

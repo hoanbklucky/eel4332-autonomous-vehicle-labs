@@ -9,6 +9,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Mission
@@ -82,6 +84,8 @@ SLAM and the simulator must use simulation time consistently. Check a SLAM node 
 ros2 param get /slam_toolbox use_sim_time
 ```
 
+**Command breakdown:** `ros2 param get NODE PARAMETER` reads one parameter from a running node. Here it checks whether `/slam_toolbox` uses the simulation clock.
+
 **INSTRUCTOR VALIDATION REQUIRED:** confirm the final SLAM Toolbox node name, topic names, and frames on the Fall 2026 course image.
 
 Record:
@@ -91,6 +95,8 @@ ros2 topic list
 ros2 topic hz /scan
 ros2 topic hz /odom
 ```
+
+**Command breakdown:** `ros2 topic list` checks that expected topics exist. Each `ros2 topic hz` command measures a topic's message rate; run the rate checks one at a time and stop each with `Ctrl+C`.
 
 Inspect TF in RViz2.
 

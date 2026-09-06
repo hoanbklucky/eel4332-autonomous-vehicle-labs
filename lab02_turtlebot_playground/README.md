@@ -9,6 +9,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Mission
@@ -89,12 +91,16 @@ ros2 pkg prefix nav2_bringup
 ros2 pkg prefix teleop_twist_keyboard
 ```
 
+**Command breakdown:** `source` loads ROS 2 Jazzy. Each `ros2 pkg prefix PACKAGE` command prints where that installed package is located, confirming that the simulator and keyboard teleoperation packages are available.
+
 Both commands should print an installation path. Then launch TurtleBot with RViz2 and automatic Nav2 startup disabled:
 
 ```bash
 ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False use_rviz:=False autostart:=False
 ```
+
+**Command breakdown:** `ros2 launch` starts the TurtleBot simulation launch file from `nav2_bringup`. `headless:=False` shows Gazebo, `use_rviz:=False` omits RViz for this playground, and `autostart:=False` keeps the Nav2 lifecycle nodes inactive.
 
 Keep WSL/Ubuntu Terminal 1 open. Wait for Gazebo to show TurtleBot in the obstacle world.
 
@@ -121,6 +127,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args \
   -p speed:=0.15 -p turn:=0.8
 ```
+
+**Command breakdown:** `ros2 run` starts the keyboard teleop executable from its package. `--ros-args` begins ROS-specific options; each `-p NAME:=VALUE` sets a node parameter, limiting forward speed and turn rate for safer practice.
 
 The parameters set a beginner-friendly initial forward speed of `0.15 m/s` and turning rate of `0.8 rad/s`. Keep this terminal focused while driving. The program prints its complete key map. The most important keys are:
 
@@ -181,6 +189,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 topic echo /cmd_vel
 ```
 
+**Command breakdown:** `source` prepares the new terminal, and `ros2 topic echo /cmd_vel` continuously prints the velocity commands sent by the keyboard node. Press `Ctrl+C` to stop echoing.
+
 Press movement and stop keys in WSL/Ubuntu Terminal 2. Observe which `linear` and `angular` values change, then stop the echo with `Ctrl+C`.
 
 Now inspect the odometry estimate:
@@ -188,6 +198,8 @@ Now inspect the odometry estimate:
 ```bash
 ros2 topic echo /odom --once
 ```
+
+**Command breakdown:** `ros2 topic echo` displays messages from `/odom`; `--once` prints one message and exits instead of streaming continuously.
 
 Drive to a different location and run the same command again. Find the changed position or orientation fields. You do not need to interpret the quaternion yet.
 

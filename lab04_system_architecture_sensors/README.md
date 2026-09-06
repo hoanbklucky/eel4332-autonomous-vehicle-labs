@@ -9,6 +9,8 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 git status --short
 ```
 
+**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
+
 If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Mission
@@ -126,6 +128,8 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False autostart:=False
 ```
 
+**Command breakdown:** `source` loads ROS 2 Jazzy. `ros2 launch` starts the TurtleBot simulation from `nav2_bringup`; `headless:=False` displays Gazebo and `autostart:=False` leaves Nav2 lifecycle nodes inactive initially.
+
 Keep WSL/Ubuntu Terminal 1 open and wait for Gazebo and RViz2 to appear.
 
 In **WSL/Ubuntu Terminal 2**, start the dedicated TF bridge:
@@ -135,6 +139,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 run ros_gz_bridge parameter_bridge \
   '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
 ```
+
+**Command breakdown:** `ros2 run` starts `parameter_bridge` from `ros_gz_bridge`. The bridge specification maps Gazebo pose messages to ROS `TFMessage` data on `/tf`; `[` selects the Gazebo-to-ROS direction.
 
 Keep WSL/Ubuntu Terminal 2 open. The bridge must continue running while the simulation is in use.
 
@@ -196,6 +202,8 @@ ros2 pkg prefix nav2_bringup
 ros2 pkg prefix nav2_minimal_tb3_sim
 ```
 
+**Command breakdown:** `source` prepares the terminal, and each `ros2 pkg prefix` command prints an installed package location. A missing package produces an error instead of a path.
+
 Both commands should print `/opt/ros/jazzy`. If either package is missing, install the simulation packages:
 
 ```bash
@@ -206,6 +214,8 @@ sudo apt install \
   ros-jazzy-nav2-minimal-tb3-sim
 ```
 
+**Command breakdown:** `apt update` refreshes Ubuntu package information, while `apt install` installs the three named ROS 2 Jazzy navigation and TurtleBot simulation packages.
+
 #### 2. Launch the simulation
 
 In **WSL/Ubuntu Terminal 1**, run:
@@ -215,6 +225,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False autostart:=False
 ```
+
+**Command breakdown:** `source` loads ROS 2, and `ros2 launch PACKAGE FILE` starts the supplied simulation launch file. The two `name:=value` arguments request a visible simulator without automatically activating Nav2.
 
 Keep this WSL/Ubuntu Terminal open. The launch file starts modern Gazebo, RViz2, the robot-state publisher, the simulated TurtleBot 3, and the Nav2 stack. The `autostart:=False` argument prevents navigation from starting before localization has created the complete transform tree. The robot starts stationary; launching the simulation does not automatically command it to move.
 
@@ -238,6 +250,8 @@ ros2 run ros_gz_bridge parameter_bridge \
   '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
 ```
 
+**Command breakdown:** This starts a one-way `/tf` bridge from Gazebo pose messages to ROS 2 transform messages. Keep the command running because stopping it removes that transform data from the ROS graph.
+
 Keep WSL/Ubuntu Terminal 2 running for the rest of the activity. It should report that it created a Gazebo-to-ROS bridge from `/tf` to `/tf`.
 
 In **WSL/Ubuntu Terminal 3**, verify the moving transform:
@@ -246,6 +260,8 @@ In **WSL/Ubuntu Terminal 3**, verify the moving transform:
 source /opt/ros/jazzy/setup.bash
 ros2 run tf2_ros tf2_echo odom base_footprint
 ```
+
+**Command breakdown:** `tf2_echo SOURCE TARGET` repeatedly prints the transform from `odom` to `base_footprint`. It verifies that the robot's odometry transform is available.
 
 Do not continue until the command prints translation and rotation data. Press `Ctrl+C` to stop `tf2_echo`; do not stop the bridge in WSL/Ubuntu Terminal 2. This transform allows RViz2 to display robot motion and allows AMCL to create the `map → odom` transform.
 
@@ -258,6 +274,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 service call /lifecycle_manager_localization/manage_nodes \
   nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
 ```
+
+**Command breakdown:** `ros2 service call` sends one request to the localization lifecycle manager. The next argument is the service type, and `{command: 0}` requests startup of its managed nodes.
 
 Run this command **once**. Wait for it to report `success: true` and for the map to appear in RViz2. Do not run it again: a second startup request reports `success: false` because the localization nodes are already active. That second response does not mean the first startup failed.
 
@@ -276,6 +294,8 @@ Confirm the localization state:
 ros2 lifecycle get /map_server
 ros2 lifecycle get /amcl
 ```
+
+**Command breakdown:** `ros2 lifecycle get NODE` reports the current lifecycle state of each named node. Both should become active after the startup request.
 
 Both nodes should report `active` before continuing.
 
@@ -308,6 +328,8 @@ source /opt/ros/jazzy/setup.bash
 ros2 topic echo /clicked_point
 ```
 
+**Command breakdown:** `source` prepares the terminal and `ros2 topic echo /clicked_point` displays points selected with RViz's Publish Point tool. The command runs until `Ctrl+C`.
+
 Leave this command running. It waits silently until you click with the correct RViz2 tool.
 
 In RViz2:
@@ -339,6 +361,8 @@ Return to WSL/Ubuntu Terminal 3 and verify that localization created the complet
 ros2 run tf2_ros tf2_echo map base_link
 ```
 
+**Command breakdown:** `ros2 run` starts the `tf2_echo` utility from `tf2_ros`. The final two arguments request the transform from the `map` frame to the robot's `base_link` frame.
+
 The command may initially print a waiting message. Do not continue until it prints translation and rotation data. Press `Ctrl+C` after confirming the transform. The translation should be close to the initial pose, approximately `x = -2.0 m, y = -0.5 m`, on a fresh launch.
 
 Now start only the navigation lifecycle nodes:
@@ -348,12 +372,16 @@ ros2 service call /lifecycle_manager_navigation/manage_nodes \
   nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
 ```
 
+**Command breakdown:** This service request sends startup command `0` to the navigation lifecycle manager, which activates the Nav2 nodes it manages.
+
 Run this command **once**. Wait for `success: true`. The RViz2 panel should now report **Localization: active** and **Navigation: active**. Confirm the navigation state if needed:
 
 ```bash
 ros2 lifecycle get /planner_server
 ros2 lifecycle get /controller_server
 ```
+
+**Command breakdown:** These commands query the planner and controller lifecycle states. An `active` response confirms that the navigation manager started them successfully.
 
 Both nodes should report `active`. Then:
 
@@ -393,6 +421,8 @@ If the WSL/Ubuntu Terminal reports that the `map` frame does not exist, the init
 ros2 run tf2_ros tf2_echo map base_link
 ```
 
+**Command breakdown:** `tf2_echo map base_link` prints the robot base pose expressed in the map frame. It succeeds only when the required transform chain is available.
+
 Do not start navigation until this command prints transform data. If the robot was driven far from its starting location during testing, restart the complete simulation before setting the initial pose; the default estimate `x = -2.0 m, y = -0.5 m` is valid only for a fresh launch.
 
 If RViz repeatedly reports that messages are older than the transform cache, stop the entire launch with `Ctrl+C`, close any remaining Gazebo and RViz2 windows, and start one fresh simulation. Do not leave an older simulation running when launching another one because resetting simulation time can invalidate cached transforms.
@@ -402,6 +432,8 @@ If navigation is active but nothing changes after sending a goal, check whether 
 ```bash
 ros2 topic hz /clock
 ```
+
+**Command breakdown:** `ros2 topic hz /clock` measures the simulation-clock publication rate. Press `Ctrl+C` after the reported average stabilizes.
 
 The command should continuously report a rate. If it prints nothing, return to Gazebo and click the **play** control.
 
@@ -415,6 +447,8 @@ ros2 topic type /cmd_vel
 ros2 topic info /cmd_vel --verbose
 ```
 
+**Command breakdown:** `source` prepares the terminal, `ros2 topic type` prints the message type on `/cmd_vel`, and `ros2 topic info --verbose` shows its publishers, subscribers, and QoS details.
+
 The topic type should be `geometry_msgs/msg/Twist`, and the topic should have a subscriber from the ROS–Gazebo bridge. Command a slow forward motion:
 
 ```bash
@@ -422,12 +456,16 @@ ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.1}, angular: {z: 0.0}}"
 ```
 
+**Command breakdown:** `ros2 topic pub` publishes `Twist` messages to `/cmd_vel`. `--rate 10` sends ten messages per second; the YAML data requests forward linear velocity with zero angular velocity. Stop it with `Ctrl+C`.
+
 Let the robot move for only a few seconds, then press `Ctrl+C` and send an explicit stop command:
 
 ```bash
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
 ```
+
+**Command breakdown:** This publishes one (`--once`) zero-valued `Twist` message to request a stop. The topic and message type must match those inspected above.
 
 If this direct test moves the robot, the simulator and command bridge work; return to RViz2 and check the initial pose and navigation goal. If it does not move, check WSL/Ubuntu Terminal 1 for bridge or Gazebo errors and confirm that `/cmd_vel` has a subscriber.
 
@@ -445,6 +483,8 @@ ros2 topic echo /joint_states --once
 ros2 topic echo /tf --once
 ```
 
+**Command breakdown:** `ros2 topic list` and `ros2 node list` inventory the live graph. Each `ros2 topic echo TOPIC --once` prints one message from a sensor, state, or transform topic and exits; unavailable optional topics may report no data.
+
 Topic names may differ slightly with the installed Jazzy package version. Use `ros2 topic list` to identify the exact names before continuing.
 
 To observe motion numerically while the robot moves, run:
@@ -452,6 +492,8 @@ To observe motion numerically while the robot moves, run:
 ```bash
 ros2 topic echo /odom
 ```
+
+**Command breakdown:** `ros2 topic echo /odom` continuously displays odometry messages so you can observe pose and velocity changes. Press `Ctrl+C` to stop.
 
 Stop the command with `Ctrl+C` after confirming that position or orientation changes.
 
@@ -462,6 +504,8 @@ If the primary simulation does not launch, use an official `ros_gz_sim_demos` se
 ```bash
 ros2 launch ros_gz_sim_demos imu.launch.py
 ```
+
+**Command breakdown:** `ros2 launch` starts `imu.launch.py` from the `ros_gz_sim_demos` package. This optional demonstration is separate from the primary TurtleBot simulation.
 
 Other available fallback demonstrations include `camera.launch.py` and the Gazebo LiDAR examples.
 
@@ -495,6 +539,8 @@ ros2 node list
 ros2 topic list
 ```
 
+**Command breakdown:** `ros2 node list` inventories running components, while `ros2 topic list` inventories their named communication streams.
+
 Choose at least four relevant topics and inspect them:
 
 ```bash
@@ -503,6 +549,8 @@ ros2 interface show MESSAGE_TYPE
 ros2 topic echo /TOPIC --once
 ros2 topic hz /TOPIC
 ```
+
+**Command breakdown:** Replace the placeholders with an observed topic and its type. `topic info` reports endpoints, `interface show` displays message fields, `topic echo --once` captures one sample, and `topic hz` measures update rate.
 
 Record:
 
@@ -525,6 +573,8 @@ ros2 topic echo /tf --once
 ros2 topic echo /tf_static --once
 ```
 
+**Command breakdown:** These commands capture one dynamic-transform and one static-transform message. `--once` prevents either command from streaming indefinitely.
+
 Use RViz2 to identify the base frame and at least two sensor frames.
 
 Explain why the pose of a sensor relative to the vehicle matters.
@@ -536,6 +586,8 @@ Explain why the pose of a sensor relative to the vehicle matters.
 ```bash
 python3 src/topic_inventory.py
 ```
+
+**Command breakdown:** `python3` runs the provided helper script from the lab directory. The relative path `src/topic_inventory.py` assumes your current directory is this lab's root.
 
 The helper prints available topics and their message types. It is intentionally a utility; you are still responsible for interpreting the topics.
 
