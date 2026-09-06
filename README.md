@@ -31,7 +31,7 @@ The intended course environment is:
 
 ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer robot: it has four conventional wheels powered by four DC motors, all four wheel axes are fixed and parallel, and there is no geometric steering linkage. It turns by producing different left- and right-side velocities, which requires lateral tire slip. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion is a useful approximation for learning the ROS/Nav2 workflow. The instructor must still validate Goosebot's motor-command mapping, slip, and exact kinematic parameters.
 
-Lab 4 first develops differential-drive kinematics and wheel odometry as preparation for TurtleBot and Goosebot, then introduces the Python bicycle model as a deliberate car-like modeling comparison. F1TENTH may be used to extend the bicycle exercise, but it is not required for Goosebot deployment.
+Lab 3 first develops differential-drive kinematics and wheel odometry as preparation for TurtleBot and Goosebot, then introduces the Python bicycle model as a deliberate car-like modeling comparison. F1TENTH may be used to extend the bicycle exercise, but it is not required for Goosebot deployment.
 
 ## Required lab sequence
 
@@ -39,8 +39,8 @@ Lab 4 first develops differential-drive kinematics and wheel odometry as prepara
 |---|---|---|
 | 01 | Learn the ROS 2 and Gazebo workflow | nodes, interfaces, workspaces, launch files, simulation, bridges |
 | 02 | Explore TurtleBot through manual driving | Gazebo operation, teleoperation, `/cmd_vel`, `/odom` preview |
-| 03 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 04 | Predict motion from wheel speeds and steering | differential-drive kinematics, wheel odometry, bicycle model |
+| 03 | Predict motion from wheel speeds and steering | differential-drive kinematics, wheel odometry, bicycle model |
+| 04 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
 | 05 | Characterize noisy sensors | bias, variance, sampling, measurement models |
 | 06 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
 | 07 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
@@ -54,8 +54,8 @@ The labs deliberately group related lecture topics into larger engineering tasks
 
 - **Lab 01** establishes the ROS 2 and Gazebo foundation used by later labs.
 - **Lab 02** builds confidence and motivation through manual TurtleBot driving.
-- **Lab 03** supports system architecture and autonomous-vehicle sensors.
-- **Lab 04** supports differential-drive kinematics, wheel odometry, and car-like vehicle modeling.
+- **Lab 03** supports differential-drive kinematics, wheel odometry, and car-like vehicle modeling.
+- **Lab 04** supports system architecture and autonomous-vehicle sensors.
 - **Lab 05** supports sensor uncertainty and measurement models.
 - **Lab 06** supports state estimation and localization.
 - **Lab 07** supports mapping and SLAM.
@@ -86,8 +86,8 @@ eel4332-autonomous-vehicle-labs/
 ├── common/
 ├── lab01_ros2_gazebo_fundamentals/
 ├── lab02_turtlebot_playground/
-├── lab03_system_architecture_sensors/
-├── lab04_vehicle_modeling/
+├── lab03_vehicle_modeling/
+├── lab04_system_architecture_sensors/
 ├── lab05_sensor_characterization/
 ├── lab06_state_estimation_localization/
 ├── lab07_mapping_slam/

@@ -1,4 +1,4 @@
-"""List ROS 2 topics and message types for Lab 3.
+"""List ROS 2 topics and message types for Lab 4.
 
 Run after sourcing ROS 2 and starting the simulation.
 """

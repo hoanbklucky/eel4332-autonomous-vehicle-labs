@@ -4,12 +4,12 @@
 |---|---|
 | ROS 2 and Gazebo foundations | Lab 01 |
 | TurtleBot operation and manual control | Lab 02 |
-| Automation levels & architecture | Lab 03 |
-| Hardware/software architecture | Lab 03 |
-| Differential-drive kinematics and wheel odometry | Lab 04 |
+| Automation levels & architecture | Lab 04 |
+| Hardware/software architecture | Lab 04 |
+| Differential-drive kinematics and wheel odometry | Lab 03 |
 | Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 03–04 |
-| Vehicle dynamics/modeling | Lab 04 experiments + lecture/homework |
-| AV sensors | Lab 03 + Lab 05 |
+| Vehicle dynamics/modeling | Lab 03 experiments + lecture/homework |
+| AV sensors | Lab 04 + Lab 05 |
 | Sensor uncertainty | Lab 05 |
 | State estimation / Kalman filter | Lab 06 |
 | Localization | Lab 06 |

@@ -4,7 +4,7 @@
 
 **Take manual control of TurtleBot in Gazebo, explore how it moves, and complete a short obstacle-course challenge.**
 
-This is an exploration lab. You are not expected to understand localization, Nav2, costmaps, or autonomous planning yet. Use observation and trial and error. The limitations of manual driving will motivate the technical system investigation in Lab 3.
+This is an exploration lab. You are not expected to understand localization, Nav2, costmaps, or autonomous planning yet. Use observation and trial and error. The motion you observe will motivate the differential-drive model in Lab 3 and the larger autonomous-system investigation in Lab 4.
 
 Plan for approximately 45–60 minutes.
 
@@ -47,9 +47,9 @@ The command topic does not say where the robot should ultimately go. It requests
 
 ### Why this lab uses only Gazebo
 
-Gazebo is the 3-D physics view and is sufficient for this driving exercise. RViz2, localization, Nav2 lifecycle services, map initialization, and the dedicated TF bridge are intentionally excluded. Lab 3 introduces those layers after you are comfortable launching and moving the simulated platform.
+Gazebo is the 3-D physics view and is sufficient for this driving exercise. RViz2, localization, Nav2 lifecycle services, map initialization, and the dedicated TF bridge are intentionally excluded. Lab 4 introduces those layers after you have modeled the platform's motion in Lab 3.
 
-TurtleBot uses idealized differential-drive motion in this simulation. It can turn by moving its left and right wheels at different speeds and can approximately rotate in place. Lab 4 develops the mathematical model behind that behavior and compares it with Goosebot's four-wheel skid steering.
+TurtleBot uses idealized differential-drive motion in this simulation. It can turn by moving its left and right wheels at different speeds and can approximately rotate in place. Lab 3 develops the mathematical model behind that behavior and compares it with Goosebot's four-wheel skid steering.
 
 ## Provided Files
 
@@ -151,7 +151,7 @@ This is not a racing competition. A failed attempt that reveals delayed stopping
 
 ### Part 4 — Peek at the ROS signals
 
-This section is only a preview. Lab 3 examines the complete ROS system in detail.
+This section is only a preview. Lab 3 uses these motion observations when developing differential-drive odometry, and Lab 4 examines the complete ROS system in detail.
 
 While teleoperation remains active in WSL/Ubuntu Terminal 2, open **WSL/Ubuntu Terminal 3**:
 
@@ -238,4 +238,4 @@ Store screenshots or other local evidence in `lab02_turtlebot_playground/results
 | RViz2 opens unexpectedly | confirm the launch command includes `use_rviz:=False` |
 | old warnings or stale state appear | stop every simulation window and launch one fresh instance |
 
-After completing this lab, continue to [Lab 3 — Autonomous-System Architecture and Sensors](../lab03_system_architecture_sensors/README.md).
+After completing this lab, continue to [Lab 3 — Differential-Drive Odometry and Vehicle Modeling](../lab03_vehicle_modeling/README.md).

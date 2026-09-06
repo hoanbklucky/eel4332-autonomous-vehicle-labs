@@ -1,4 +1,4 @@
-# Lab 3 — Autonomous-System Architecture and Sensors
+# Lab 4 — Autonomous-System Architecture and Sensors
 
 ## Mission
 
@@ -19,6 +19,7 @@ By the end of this lab, you should be able to:
 - Complete [Lab 00 — Software Setup](../lab00_setup/README.md).
 - Complete [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).
 - Complete [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).
+- Complete [Lab 3 — Differential-Drive Odometry and Vehicle Modeling](../lab03_vehicle_modeling/README.md).
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -26,7 +27,7 @@ By the end of this lab, you should be able to:
 
 A practical autonomous system is not one monolithic program. Sensor drivers, state estimation, mapping, planning, and control are commonly separated into components that exchange typed messages.
 
-Lab 1 introduced the core ROS 2 and Gazebo tools using small systems. This lab applies those same skills to a realistic autonomy graph. ROS 2 is the instrumentation and integration layer that lets you inspect how sensing, localization, planning, and control interact.
+Lab 1 introduced the core ROS 2 and Gazebo tools using small systems, Lab 2 provided direct experience with TurtleBot motion, and Lab 3 explained that motion mathematically. This lab now applies those foundations to a realistic autonomy graph. ROS 2 is the instrumentation and integration layer that lets you inspect how sensing, localization, planning, and control interact.
 
 ### Why simulate this system?
 
@@ -41,7 +42,7 @@ Every useful sensor message needs more than numeric values. Its message type def
 ## Provided Files
 
 ```text
-lab03_system_architecture_sensors/
+lab04_system_architecture_sensors/
 ├── README.md
 ├── src/
 │   └── topic_inventory.py
@@ -51,7 +52,7 @@ lab03_system_architecture_sensors/
 
 ## Part 1 — Launch a Known-Good Simulation
 
-For Lab 3, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
+For Lab 4, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
 For additional background, see the official [ROBOTIS TurtleBot 3 Gazebo simulation guide for ROS 2 Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy). It explains the Gazebo worlds, keyboard teleoperation, and RViz2 visualization used in a typical TurtleBot workflow.
 
@@ -568,3 +569,5 @@ Answer in `answers.md`.
 If no topics appear, confirm that the simulation is running and that your ROS environment is sourced.
 
 See [`../docs/TROUBLESHOOTING.md`](../docs/TROUBLESHOOTING.md).
+
+After completing this lab, continue to [Lab 5 — Sensor Characterization and Measurement Uncertainty](../lab05_sensor_characterization/README.md).

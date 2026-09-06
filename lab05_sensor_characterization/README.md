@@ -47,7 +47,7 @@ lab05_sensor_characterization/
 
 ## Procedure
 
-Use the same TurtleBot/Gazebo environment introduced in Lab 3 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
+Use the same TurtleBot/Gazebo environment introduced in Lab 4 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.
 
 ### Part 1 — Choose sensor signals
 

@@ -153,7 +153,7 @@ Track the same path for at least:
 - two look-ahead distances;
 - two speeds.
 
-Use the bicycle-model portion of the Lab 4 simulator plus the tracking controller. The differential-drive odometry portion of Lab 4 uses different physical inputs and is not a direct Pure Pursuit steering-angle model. If the instructor provides a pinned F1TENTH environment, it may be used as an optional second experiment.
+Use the bicycle-model portion of the Lab 3 simulator plus the tracking controller. The differential-drive odometry portion of Lab 3 uses different physical inputs and is not a direct Pure Pursuit steering-angle model. If the instructor provides a pinned F1TENTH environment, it may be used as an optional second experiment.
 
 ## Part 6 — Quantitative Evaluation
 

@@ -1,4 +1,4 @@
-"""Starter code for Lab 4 differential-drive kinematics and odometry."""
+"""Starter code for Lab 3 differential-drive kinematics and odometry."""
 
 from __future__ import annotations
 

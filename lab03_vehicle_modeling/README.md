@@ -1,4 +1,4 @@
-# Lab 4 — Differential-Drive Odometry and Vehicle Modeling
+# Lab 3 — Differential-Drive Odometry and Vehicle Modeling
 
 ## Mission
 
@@ -15,7 +15,8 @@
 
 ## Prerequisites
 
-- Complete Lab 3 and identify the TurtleBot `/odom` topic and `odom → base_footprint` transform.
+- Complete [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).
+- Recall how straight, curved, and in-place TurtleBot motion appeared in Gazebo, and how `/cmd_vel` and `/odom` changed while the robot moved.
 - Review planar position, heading, angular velocity, and fixed-step numerical integration.
 - Use the course Python virtual environment from Lab 00.
 
@@ -94,7 +95,7 @@ Use meters, seconds, meters per second, radians, and radians per second. This la
 ## Provided Files
 
 ```text
-lab04_vehicle_modeling/
+lab03_vehicle_modeling/
 ├── README.md
 ├── src/
 │   ├── differential_drive.py
@@ -176,7 +177,7 @@ Confirm that zero steering produces a straight line and that increasing steering
 
 ### Part 6 — Run and compare the models
 
-From the Lab 4 directory, run:
+From the Lab 3 directory, run:
 
 ```bash
 source ~/venvs/eel4332/bin/activate
@@ -248,3 +249,5 @@ Do not compare trajectories point by point unless they use the same time samples
 - If in-place rotation seems motionless on the $x$–$y$ plot, inspect yaw versus time.
 - Check radians versus degrees and angular wheel speed versus linear wheel-edge speed.
 - If results change greatly when the time step is halved, investigate integration error before interpreting vehicle behavior.
+
+After completing this lab, continue to [Lab 4 — Autonomous-System Architecture and Sensors](../lab04_system_architecture_sensors/README.md).

@@ -15,7 +15,7 @@
 ## Prerequisites
 
 - Complete Labs 03 and 04.
-- Be able to explain how Lab 4 integrates wheel-derived velocity into a dead-reckoned pose.
+- Be able to explain how Lab 3 integrates wheel-derived velocity into a dead-reckoned pose.
 - Review the assigned Kalman-filter equations, covariance, and matrix dimensions.
 - Be able to identify timestamps, frames, and ground-truth versus estimated data.
 

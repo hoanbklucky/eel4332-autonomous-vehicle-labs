@@ -43,12 +43,6 @@ Complete this checklist before publishing the repository to students.
 
 ## Lab 03
 
-- [ ] choose the exact simulation launch command
-- [ ] confirm camera/LiDAR/IMU/odometry topic names
-- [ ] confirm TF frame names
-
-## Lab 04
-
 - [ ] verify differential-drive forward-kinematics and odometry starter flow
 - [ ] verify straight, pivot, curved, and in-place wheel-speed cases
 - [ ] verify the odometry-sensitivity experiment and expected metrics
@@ -56,6 +50,12 @@ Complete this checklist before publishing the repository to students.
 - [ ] verify the differential-drive-versus-bicycle-versus-skid-steer comparison prompt
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
+
+## Lab 04
+
+- [ ] choose the exact simulation launch command
+- [ ] confirm camera/LiDAR/IMU/odometry topic names
+- [ ] confirm TF frame names
 
 ## Lab 05
 

@@ -1,4 +1,4 @@
-"""Experiment driver for Lab 4.
+"""Experiment driver for Lab 3.
 
 Complete differential_drive.py and bicycle_model.py before running this file.
 """
