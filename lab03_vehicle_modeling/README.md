@@ -321,26 +321,35 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
 
 **Command breakdown:** `source` loads ROS 2 Jazzy. `ros2 launch` starts the TurtleBot simulation and its ROS–Gazebo bridges. `headless:=False` opens Gazebo, `use_rviz:=False` omits RViz, and `autostart:=False` keeps autonomous Nav2 behavior inactive.
 
-Make sure Gazebo is playing, select `turtlebot3_waffle`, and use an overhead view. The [Lab 2 split-screen layout](../lab02_turtlebot_playground/README.md#recommended-driving-layout) is recommended. Do **not** run `teleop_twist_keyboard` during these tests because the commands below should be the only `/cmd_vel` publisher.
+Make sure Gazebo is playing, then prepare an overhead view:
 
-In **WSL/Ubuntu Terminal 2**, run each test separately. The first command in each block publishes for approximately two seconds; the second sends an explicit stop.
+1. Keep the arrow-shaped **Select** tool active and select `turtlebot3_waffle` in the Entity Tree so you can locate the robot.
+2. Move the pointer over an empty part of the 3-D scene. Press and drag the mouse wheel to orbit the camera until you are looking nearly straight down at the ground. If middle-button dragging is unavailable, try **Shift + left-click and drag**.
+3. Roll the mouse wheel to zoom until the robot and enough open driving space are visible.
+4. Left-click and drag over empty space to pan and center the robot without changing the viewing direction.
+
+Camera movement changes only the viewpoint; it does not move the robot. Avoid beginning a drag on the robot or another model. The complete [Lab 2 camera-control table](../lab02_turtlebot_playground/README.md#observe-the-world-and-choose-a-camera-view) and [split-screen layout](../lab02_turtlebot_playground/README.md#recommended-driving-layout) are useful references. Do **not** run `teleop_twist_keyboard` during these tests because the commands below should be the only `/cmd_vel` publisher.
+
+> **Do not click Gazebo's circular Reset button in this simulation.** The launch process loads the playground world and then dynamically spawns `turtlebot3_waffle`. A full Gazebo reset can reload the base world without rerunning the ROS spawning action, causing the robot to disappear. The Entity Tree should contain both `turtlebot3_world` and `turtlebot3_waffle`. If `turtlebot3_waffle` is missing, stop the launch with `Ctrl+C` in Terminal 1 and run the launch command again.
+
+In **WSL/Ubuntu Terminal 2**, run each test separately. The first command in each block publishes 10 messages at 10 Hz, so the command lasts approximately one second. Here, `-t 10` means **10 messages**, not 10 seconds. The second command sends an explicit stop.
 
 **Straight motion:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+ros2 topic pub -r 10 -t 10 /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.15}, angular: {z: 0.0}}"
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
 ```
 
-**Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 20` stops after 20 messages. Positive `linear.x` requests body-forward speed and zero `angular.z` requests zero vehicle yaw rate. The second command uses `--once` to replace the motion request with zero forward speed and yaw rate.
+**Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 10` stops after 10 messages, giving an approximate duration of 10 messages ÷ 10 messages/s = 1 second. Positive `linear.x` requests body-forward speed and zero `angular.z` requests zero vehicle yaw rate. The second command uses `--once` to replace the motion request with zero forward speed and yaw rate.
 
 **Curved motion:**
 
 ```bash
-ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+ros2 topic pub -r 10 -t 10 /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.15}, angular: {z: 0.5}}"
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
@@ -351,7 +360,7 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
 **In-place rotation:**
 
 ```bash
-ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+ros2 topic pub -r 10 -t 10 /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.8}}"
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
@@ -359,7 +368,14 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
 
 **Command breakdown:** Zero `linear.x` requests no forward translation, while positive `angular.z` requests counterclockwise rotation. Publishing the zero message afterward stops the turn.
 
-Press `Ctrl+C` and immediately send the one-time zero command if a repeated publisher does not finish normally. After each test, use Gazebo's reset control before starting the next case so all three motions begin from a comparable pose.
+Press `Ctrl+C` and immediately send the one-time zero command if a repeated publisher does not finish normally.
+
+Because these are qualitative path-shape tests, you may perform the next test from the robot's current stopped pose if it has enough open space. If you need the original pose for a fair comparison, use this restart procedure instead of Gazebo Reset:
+
+1. Stop the simulation launch with `Ctrl+C` in Terminal 1.
+2. Press the Up Arrow key in the same terminal to recall the launch command, verify that it matches the command shown at the beginning of Part 4, and press Enter to run it again.
+3. Wait until `turtlebot3_waffle` appears in the Entity Tree and Gazebo is playing.
+4. Reestablish the overhead view, then run the next motion command from Terminal 2.
 
 For each case, compare the visible motion with the corresponding Part 3 trajectory and record:
 
@@ -503,7 +519,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - If TurtleBot does not respond, confirm that Gazebo is playing and that `ros2 topic info /cmd_vel` reports the bridge as a subscriber.
 - If TurtleBot continues moving after a test, publish the one-time zero `Twist` command again before doing anything else.
 - If motion is inconsistent, stop any `teleop_twist_keyboard` process so only the test publisher writes to `/cmd_vel`.
-- If TurtleBot becomes trapped or leaves the useful area, send the zero command and reset or relaunch the simulation.
+- If TurtleBot becomes trapped, leaves the useful area, or disappears after Gazebo Reset, send the zero command if the robot still exists, stop the launch, and relaunch the simulation. Do not use the Gazebo Reset button with this dynamically spawned robot.
 - Verify the wheel-angular-velocity-to-twist calculation before debugging pose integration.
 - Print one update and compare it with a hand calculation.
 - If equal positive wheel angular velocities do not produce zero yaw rate, check the subtraction order.
