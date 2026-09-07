@@ -56,7 +56,20 @@ flowchart LR
     robot --> odometry["ROS /odom estimate"]
 ```
 
-The command topic does not say where the robot should ultimately go. It requests forward and angular velocity at the current instant. You must repeatedly observe, decide, command, and correct—the same broad loop that later autonomy software performs automatically.
+Each block has a different job:
+
+| Block | What it does |
+|---|---|
+| Student keyboard input | You press a key to request forward, backward, or turning motion. In this lab, you perform the decision-making role that autonomy software will perform later. |
+| `teleop_twist_keyboard` | This ROS 2 node converts each supported key press into numerical linear- and angular-velocity values. |
+| ROS `/cmd_vel` | This topic carries the requested velocity command, normally as a `geometry_msgs/msg/Twist` message. It is a communication channel, not a controller or a destination. |
+| ROS–Gazebo command bridge | The bridge translates the ROS velocity message into the corresponding Gazebo message and relays it into Gazebo's separate communication system. |
+| TurtleBot motion in Gazebo | The simulated drive system applies the command to the wheels, while Gazebo computes the resulting motion, contacts, and collisions. The actual motion can differ from the request if the robot is blocked or its wheels slip. |
+| ROS `/odom` estimate | This topic reports the robot's estimated change in pose and velocity, normally as a `nav_msgs/msg/Odometry` message. It describes what the robot is estimated to have done; it does not command motion. |
+
+The arrows show the direction in which commands and motion information travel. The chain is not automatic feedback control yet: **you close the loop** by observing the robot in Gazebo (and later `/odom`), deciding what to do next, and pressing another key.
+
+The `/cmd_vel` topic does not say where the robot should ultimately go. It requests forward and angular velocity at the current instant. For example, a forward command means “move forward at this speed now,” not “drive to a particular coordinate.” You must repeatedly observe, decide, command, and correct—the same broad loop that later autonomy software performs automatically.
 
 ### Why this lab uses only Gazebo
 
@@ -70,6 +83,7 @@ TurtleBot uses idealized differential-drive motion in this simulation. It can tu
 lab02_turtlebot_playground/
 ├── README.md
 ├── answers.md
+├── images/                 # Reference screenshots used in this guide
 └── results/
 ```
 
@@ -95,6 +109,15 @@ ros2 pkg prefix teleop_twist_keyboard
 
 Both commands should print an installation path. Then launch TurtleBot with RViz2 and automatic Nav2 startup disabled:
 
+<details>
+<summary>Expected package-verification output</summary>
+
+![Both required ROS packages found under the Jazzy installation](images/playground-part1-01-package-verification.png)
+
+*Both commands return `/opt/ros/jazzy`, confirming that the required packages are installed.*
+
+</details>
+
 ```bash
 ros2 launch nav2_bringup tb3_simulation_launch.py \
   headless:=False use_rviz:=False autostart:=False
@@ -102,9 +125,50 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
 
 **Command breakdown:** `ros2 launch` starts the TurtleBot simulation launch file from `nav2_bringup`. `headless:=False` shows Gazebo, `use_rviz:=False` omits RViz for this playground, and `autostart:=False` keeps the Nav2 lifecycle nodes inactive.
 
+<details>
+<summary>Expected launch output</summary>
+
+![ROS launch output while starting the TurtleBot simulation](images/playground-part1-04-launch-output.png)
+
+*Several processes start because the launch file assembles the simulator, robot model, state publisher, and ROS–Gazebo bridge. `Entity creation successful` confirms that TurtleBot was inserted into the world. Gazebo may continue printing status and warning messages while it runs.*
+
+</details>
+
 Keep WSL/Ubuntu Terminal 1 open. Wait for Gazebo to show TurtleBot in the obstacle world.
 
+<details>
+<summary>Expected Gazebo obstacle world</summary>
+
+![TurtleBot in the Gazebo obstacle playground](images/playground-part1-02-obstacle-world.png)
+
+*The exact initial camera angle may differ. Look for the walls, cylinders, and `turtlebot3_waffle` in the Entity Tree.*
+
+</details>
+
 **INSTRUCTOR VALIDATION REQUIRED:** verify this simplified launch and the exact teleoperation topic on the final course image before releasing the lab.
+
+#### Observe the world and choose a camera view
+
+Camera movement changes only your viewpoint; it does not drive the robot. Keep the arrow-shaped **Select** tool active and start camera drags over an empty part of the 3-D scene so that you do not accidentally use a model-transform tool.
+
+| Mouse action | Camera result |
+|---|---|
+| Left-click | Select an object. You can also select a named object in the Entity Tree. |
+| Left-click and drag | Pan sideways or vertically without changing the viewing direction. |
+| Roll the mouse wheel | Zoom in or out. |
+| Press the mouse wheel and drag | Orbit, or rotate the view around the scene. If middle-button dragging is unavailable, try `Shift` + left-click and drag. |
+| Right-click and drag | Another way to zoom in or out. |
+
+To find the robot, select `turtlebot3_waffle` in the Entity Tree. This highlights it and opens its properties without moving it. Use pan, orbit, and zoom to create an elevated diagonal or overhead view that shows both the robot and its intended route. An overhead view makes route planning easier, while a lower diagonal view makes distances to nearby obstacles easier to judge.
+
+<details>
+<summary>Example overhead view with TurtleBot selected</summary>
+
+![Overhead view of the obstacle world with turtlebot3_waffle selected](images/playground-part1-03-turtlebot-selected.png)
+
+*The highlighted Entity Tree entry identifies the robot. Your camera view does not need to match this example exactly.*
+
+</details>
 
 Before driving:
 
@@ -132,6 +196,15 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args \
 
 The parameters set a beginner-friendly initial forward speed of `0.15 m/s` and turning rate of `0.8 rad/s`. Keep this terminal focused while driving. The program prints its complete key map. The most important keys are:
 
+<details>
+<summary>Expected keyboard-teleoperation display</summary>
+
+![Keyboard teleoperation node running with its movement key map](images/playground-part2-01-keyboard-teleop.png)
+
+*When the key map and current speed values appear, the node is ready. The terminal must have keyboard focus when you press a driving key.*
+
+</details>
+
 | Key | Motion |
 |---|---|
 | `i` | forward |
@@ -145,15 +218,36 @@ The parameters set a beginner-friendly initial forward speed of `0.15 m/s` and t
 
 Use the key map printed by your installed package if it differs from this summary.
 
+Each motion key sets the current velocity; it does not move the robot by a fixed distance. The robot continues using that command until another key changes it, so use `k` deliberately and keep the robot in view.
+
+#### Recommended driving layout
+
+Place the keyboard-teleoperation terminal on one side of the screen and Gazebo on the other. In Gazebo, use an overhead view that includes the robot, nearby cylinders, and the route ahead. Then click the teleop terminal once before driving so that it keeps keyboard focus. This arrangement lets you send commands and watch their effect at the same time; it is especially helpful during the slalom challenge.
+
+On Windows, you can drag each window to an opposite edge of the desktop or use `Windows` + left/right arrow to snap the windows side by side. If you click Gazebo to adjust the camera, click the teleop terminal again before pressing a motion key.
+
+![Recommended split-screen layout with the teleop terminal and an overhead Gazebo view](images/playground-part2-03-split-screen-driving.png)
+
+*The teleop terminal remains ready for keystrokes while the overhead view makes the robot's position and available paths easy to observe.*
+
 Start slowly:
 
-1. Tap `i` briefly, then press `k`.
-2. Tap `,` briefly, then press `k`.
-3. Tap `j` and `l` to observe in-place rotation.
+1. Press `i`, observe forward motion for about one second, then press `k`.
+2. Press `,`, observe reverse motion briefly, then press `k`.
+3. Press `j` or `l`, observe in-place rotation briefly, then press `k`.
 4. Try one forward curve with `u` or `o`.
 5. Watch the robot in Gazebo after every command.
 
 If the initial response feels too fast, press `x` and `c` several times to reduce speed. Press `k` whenever you are uncertain.
+
+<details>
+<summary>Example TurtleBot position after keyboard motion</summary>
+
+![TurtleBot at a new position among the playground obstacles](images/playground-part2-02-turtlebot-after-motion.png)
+
+*The robot has moved from its starting position. Your final position and camera angle will differ because they depend on the keys and durations you use.*
+
+</details>
 
 ### Part 3 — Complete the driving challenges
 

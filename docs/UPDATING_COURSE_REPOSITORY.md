@@ -41,6 +41,8 @@ Git will either report `Already up to date.` or download and apply newer course 
 
 ## 4. Protect Local Work Before Updating
 
+Complete this step **only when `git status --short` lists one or more files**. If the command printed nothing and you already completed Step 3, skip Step 4; there is no local work to stash.
+
 First, make a backup copy of any important work outside the repository. Then temporarily store both tracked and untracked changes:
 
 ```bash
