@@ -67,6 +67,22 @@ lab01_ros2_gazebo_fundamentals/
 └── results/
 ```
 
+## Learning Path and Visible Checkpoints
+
+This lab follows the same engineering pattern used later in the course: establish a baseline, observe messages and behavior, make one controlled change, and test its effect.
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Baseline ROS graph | How publishers, topics, and subscribers connect | `rqt_graph` shows the expected node–topic–node chain. |
+| Measure communication | How rates, types, and parameters describe live behavior | The measured topic rate is close to the configured rate. |
+| Build and launch | How a package becomes a runnable ROS installation | `ros2 run` and the launch file discover the package after its overlay is sourced. |
+| Change and retest | How a parameter changes behavior without changing code | `/practice/count` changes from approximately 5 Hz to approximately 2 Hz. |
+| Compare communication systems | Why Gazebo data is not automatically ROS data | Gazebo `/clock` appears in ROS only while the bridge is running. |
+
+The screenshots and expected-output blocks in the three guides are reference checkpoints. Your values and window layout may differ, but the stated relationship or behavior must be visible before you continue.
+
+**Optional challenge after the required work:** Close the bridge, predict what ROS will report for `/clock`, test your prediction, and then restore the working bridge. This is not an additional submission unless the instructor assigns it.
+
 ## Step-by-Step Procedure
 
 The sequence below moves from ROS 2 communication, to building your own package, and finally to Gazebo. Each stage makes the next one easier to interpret instead of treating the tools as unrelated commands.

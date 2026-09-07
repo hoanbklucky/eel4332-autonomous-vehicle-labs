@@ -60,6 +60,20 @@ lab06_state_estimation_localization/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Warm-up baseline | Whether the estimator equations work on a small known case | Prediction and correction values agree with a hand-checkable first step. |
+| Implement the estimator | How state and uncertainty change together | The log shows a predicted state, innovation, corrected state, and covariance. |
+| Tune assumptions | How `Q` and `R` change trust in model and measurement | Three overlaid estimates respond differently in the predicted directions. |
+| Test realistic data | Whether the method improves a motion dataset | Raw, fused, and reference trajectories share compatible frames and timestamps. |
+| Expose a failure | When a smooth estimate can still be wrong | A controlled dropout, bias, noise, or rate change causes a measurable degradation. |
+
+Plots are debugging evidence as well as deliverables. Before interpreting a metric, confirm that the trajectory, measurements, and uncertainty behave sensibly during both normal data and the chosen failure.
+
+**Optional challenge after the required failure test:** Predict which tuning configuration will recover most slowly after the degradation ends, then use the plot to test the prediction. This is not an additional submission unless assigned.
+
 ## Part 1 — Warm-Up Dataset
 
 **Why this part matters:** A small, known dataset lets you verify the estimator mathematics before adding implementation and simulation complexity.

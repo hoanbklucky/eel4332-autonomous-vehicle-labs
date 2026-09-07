@@ -54,6 +54,23 @@ final_project_goosebot/
 └── results/
 ```
 
+## Team Integration Path and Demonstration Gates
+
+Later-course integration should combine verified components, not hide their individual failures inside one launch command. Assign an owner and a reviewer for each gate; both students should be able to explain the evidence before the team continues.
+
+| Gate | Team responsibility | Demonstration required before continuing |
+|---|---|---|
+| Interface baseline | Agree on types, units, frames, rates, ownership, and stop authority | A live interface inventory matches the architecture diagram. |
+| Component behavior | Verify sensing, localization, planning, control, and safety separately | Each component produces its expected observable output with known inputs. |
+| Simulation mission | Connect the verified components in the safest environment | The robot completes the waypoint behavior in Gazebo while required data are logged. |
+| Quantitative test | Evaluate repeatability and performance rather than one lucky run | Common metrics and success criteria are applied across documented trials. |
+| Failure case | Demonstrate detection, safe response, and recovery | A controlled fault produces the intended state transition and motion outcome. |
+| Hardware transfer | Revalidate every platform-specific assumption | Goosebot passes staged motion, sensing, TF, stop, and speed-limit checks before autonomy. |
+
+Use screenshots, short videos, plots, and logs as evidence appropriate to each gate. A team should be able to return to the last passing gate when integration fails instead of restarting the complete stack blindly.
+
+**Optional performance challenge after the required mission:** Improve one agreed metric while keeping every safety constraint and success criterion unchanged. Optimize only after the baseline mission is repeatable; the challenge never replaces a required safety or failure demonstration.
+
 ## Required Milestones
 
 The milestones deliberately move from interface planning to simulation evidence, quantitative evaluation, failure handling, and finally hardware so integration problems are found in progressively riskier environments.

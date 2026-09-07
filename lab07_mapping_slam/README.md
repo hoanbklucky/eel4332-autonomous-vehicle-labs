@@ -62,6 +62,20 @@ lab07_mapping_slam/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Verify the baseline | Whether SLAM has valid sensor, odometry, time, and TF inputs | `/scan` and `/odom` update and the sensor-to-odometry frame chain is connected. |
+| Observe map growth | How motion and LiDAR observations create an occupancy grid | Previously unknown space becomes free or occupied as TurtleBot explores. |
+| Save the result | How a live map becomes a reusable navigation artifact | The saved image and metadata describe the same map seen in RViz2. |
+| Compare strategies | How driving behavior changes SLAM quality | Comparable screenshots reveal differences in coverage, blur, duplication, or drift. |
+| Test map usefulness | Why appearance alone is insufficient | One defined quality measure supports the visual comparison. |
+
+Pause at each checkpoint and capture evidence before changing the driving strategy. A visually attractive map is not a passing result if its inputs were invalid or its saved files cannot be reused.
+
+**Optional challenge after the two required maps:** Revisit one distinctive area slowly and watch for a loop-closure correction. Save before-and-after screenshots if the correction is visible; this is not an additional submission unless assigned.
+
 ## Part 1 — Verify Inputs
 
 **Why this part matters:** SLAM depends on valid sensor, odometry, and transform data, so checking inputs first avoids blaming the mapper for upstream problems.

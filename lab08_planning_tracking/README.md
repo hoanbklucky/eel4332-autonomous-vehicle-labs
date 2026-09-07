@@ -59,6 +59,20 @@ lab08_planning_tracking/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Establish planning cases | What success, failure, and invalid input mean | Reachable, unreachable, and invalid cases return distinct, verified outcomes. |
+| Implement and measure search | How heuristic guidance changes search effort | A* and Dijkstra use the same problem while reporting path validity and expanded nodes. |
+| Add vehicle behavior | How a path becomes steering rather than instant motion | The simulated vehicle advances toward successive look-ahead targets. |
+| Visualize the chain | How map, path, target, and motion relate | One labeled view shows obstacles, expansions, path, target, and tracked trajectory. |
+| Test limits | How speed and look-ahead create success or failure | Four matched configurations expose corner cutting, oscillation, or tracking error. |
+
+Do not count a nonempty path or a final “success” message as sufficient evidence. Verify collision-free adjacency for planning and show the vehicle behavior and failure criteria for tracking.
+
+**Optional challenge after the required configurations:** Find one safe parameter change that improves a chosen tracking metric without violating the fixed collision or off-track criterion. Report the tradeoff only if the instructor assigns the extension.
+
 ## Part 1 — A* Planning
 
 **Why this part matters:** Implementing A* connects the search concepts from class to the practical task of finding a collision-free route on a grid.

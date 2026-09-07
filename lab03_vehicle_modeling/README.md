@@ -121,6 +121,21 @@ lab03_vehicle_modeling/
 
 The propagation functions contain required `TODO` sections. Do not replace them with an external kinematics or vehicle-dynamics library.
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Predict | What each wheel-speed combination should do | A hand table identifies straight, curved, and in-place motion before coding. |
+| Implement | How kinematic equations become pose updates | The required functions produce a trajectory containing the initial pose. |
+| Test special cases | How simple cases isolate sign and unit errors | Straight motion has negligible yaw; in-place rotation has negligible translation. |
+| Observe the robot | How mathematical motion categories appear physically | TurtleBot visibly performs the same straight, curved, and rotating cases. |
+| Expose a limitation | Why odometry and numerical models drift | One controlled parameter or integration change produces a measured final error. |
+| Compare platforms | Why robot geometry selects the model | Plots distinguish differential-drive motion from car-like bicycle motion. |
+
+Do not accept a plausible-looking plot by itself. A result passes a checkpoint only when its direction, final pose, and limiting cases agree with your prediction.
+
+**Optional challenge after the required work:** Choose wheel speeds that produce a visibly gentle curve, predict its direction and approximate radius, and test it with the completed simulator. State your assumptions; no additional submission is required unless assigned.
+
 ## Step-by-Step Procedure
 
 The work progresses from hand predictions to code, visual simulation, sensitivity analysis, and model comparison so that each implementation result has both a physical and mathematical reference.

@@ -56,6 +56,20 @@ lab09_integration_safety/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Establish healthy behavior | What normal timing, sensing, localization, and motion look like | A mission succeeds and its normal input ranges are recorded. |
+| Inject one fault at a time | How an underlying fault produces observable symptoms | Each injected condition changes the intended signal or system state. |
+| Measure collision urgency | Why distance must be interpreted together with motion | Two low-speed approaches show different urgency as speed changes. |
+| Implement a safety response | How detection gains command authority | The monitor transitions among documented states and inhibits unsafe simulated motion. |
+| Test failure and recovery | Whether the design is effective without excessive false stops | Results include delay, clearance, outcome, limitations, and an explicit reset. |
+
+The required demonstration is behavioral: printing `STOP` is not enough. The simulated robot must stop through the approved command path, and the recorded evidence must connect the triggering condition to that physical outcome.
+
+**Optional challenge after the required tests:** Find a safe, repeatable case near your decision boundary and explain whether changing the threshold would reduce a false positive or increase stopping risk. Do not increase the approved speed or reproduce collision approaches on hardware.
+
 ## Safety Interface Contract
 
 The expected TurtleBot interfaces are listed below. Verify them on the live graph and record any instructor-approved replacement.

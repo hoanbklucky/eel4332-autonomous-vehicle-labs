@@ -42,6 +42,18 @@ Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundament
 
 Resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation or environment problem.
 
+### Setup progression and visible checkpoints
+
+| Stage | Why you do it | Visible checkpoint before continuing |
+|---|---|---|
+| Establish the Linux environment | ROS 2 and the course tools run inside Ubuntu/WSL | An Ubuntu prompt opens and reports the expected distribution version. |
+| Install development tools | Git and VS Code provide the course editing workflow | Git reports a version and VS Code opens the repository through WSL. |
+| Install ROS 2 and Gazebo | These provide robot communication and simulation | ROS commands are discovered and a Gazebo window opens. |
+| Clone and prepare the course repository | Students need a known location and Python environment | The repository root is visible and the course environment activates. |
+| Run the verification script | One repeatable test checks the complete setup | Every required check reports success, or a specific failed layer is identified. |
+
+Treat each checkpoint as evidence, not just a command to type. If a checkpoint fails, stop there and fix that layer before installing or testing the next one.
+
 ## WSL/Ubuntu Terminal Shortcuts
 
 You do not need to retype every long path or command. Bash, the shell used by the WSL/Ubuntu Terminal, provides shortcuts that reduce typing and mistakes.

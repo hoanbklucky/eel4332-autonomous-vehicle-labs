@@ -58,6 +58,20 @@ lab05_sensor_characterization/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Inspect a baseline signal | Which field, frame, unit, and timestamp you are measuring | One live message is decoded and its chosen numeric field is identified. |
+| Record controlled data | How stationary and moving conditions isolate different effects | Both datasets cover the stated duration and contain changing timestamps. |
+| Measure quality | How statistics describe bias, spread, and outliers | A labeled table and plot summarize at least two signals. |
+| Measure timing | Why nominal topic rate does not describe every timing problem | Sample-period results show the mean, variation, and any gaps. |
+| Build a measurement model | How evidence becomes an uncertainty assumption | Every term in the model is tied to a measured signal or documented limitation. |
+
+The expected result is not necessarily a visibly noisy trace. A nearly constant simulated signal is valid evidence when you verify that timestamps advance and explain what the simulator configuration can—and cannot—establish.
+
+**Optional challenge after the required analysis:** Without changing the required datasets, identify the single most suspicious sample in one signal and explain whether it is likely an outlier, a real motion effect, or a processing mistake. This is not an additional submission unless assigned.
+
 ## Procedure
 
 Use the same TurtleBot/Gazebo environment introduced in Lab 4 unless the instructor supplies a recorded dataset. The resulting measurement workflow transfers to Goosebot, although its physical sensors, mounting locations, noise, timing, and calibration will differ.

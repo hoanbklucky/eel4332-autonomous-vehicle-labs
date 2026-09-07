@@ -89,6 +89,20 @@ lab02_turtlebot_playground/
 
 The activity uses the installed Nav2 TurtleBot simulation and the installed `teleop_twist_keyboard` package. There is no controller code to modify.
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Known-good baseline | Whether the simulator and bridges started correctly | Gazebo shows TurtleBot and the obstacle playground while simulation time runs. |
+| Observe before acting | How camera position affects situational awareness | You can identify the robot, obstacles, and an open route from a useful view. |
+| Manual control | How key presses become velocity commands and motion | TurtleBot performs forward, turning, reverse, and stopping motions. |
+| Inspect measurements | How commanded and estimated motion appear in ROS | `/cmd_vel` changes with the keyboard and `/odom` changes as the robot moves. |
+| Recovery test | How to return safely from a bad command or pose | You can stop the robot and reset or relaunch the simulation deliberately. |
+
+Each checkpoint should show behavior, not merely a command that ran without an error. Use the reference screenshots below to recognize the expected world and terminal displays.
+
+**Optional driving challenge after the required route:** Complete one slow, contact-free circuit around the central obstacles. Smooth control and a safe stop matter more than speed; this is not an additional submission unless assigned.
+
 ## Step-by-Step Procedure
 
 This sequence lets you first confirm a known-good simulation, then drive, experiment, and finally connect what you observed to the ROS 2 signals underneath it.

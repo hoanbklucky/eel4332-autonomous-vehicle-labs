@@ -63,6 +63,20 @@ lab04_system_architecture_sensors/
 └── answers.md
 ```
 
+## Learning Path and Visible Checkpoints
+
+| Stage | What you are learning | Visible checkpoint |
+|---|---|---|
+| Launch a baseline | What a healthy integrated simulation looks like | TurtleBot appears in Gazebo and the corresponding ROS data appears in RViz2. |
+| Verify the bridge and TF | How simulated motion becomes usable ROS frame data | `tf2_echo` reports a changing transform through the expected frame chain. |
+| Observe a mission | How sensing, localization, planning, and control cooperate | A Nav2 goal produces a path and robot motion in both graphical views. |
+| Measure interfaces | How to distinguish presence from usable data | Required topics have the expected types, frames, and nonzero rates. |
+| Explain the architecture | How individual components contribute to autonomy | Your diagram traces one sensor measurement through a decision to robot motion. |
+
+Use the supplied Gazebo and RViz2 figures as baseline references. Exact colors or camera angles can differ; the robot, map, sensor data, transforms, path, and resulting motion must have the roles described in this lab.
+
+**Optional challenge after the required inspection:** Pick one displayed ROS layer, temporarily hide only its RViz2 display, and explain why the underlying simulation continues running. Restore the display afterward. This is not an additional submission unless assigned.
+
 ## Part 1 — Launch a Known-Good Simulation
 
 **Why this part matters:** A complete working system provides a baseline before you inspect individual nodes, frames, and sensor connections.
