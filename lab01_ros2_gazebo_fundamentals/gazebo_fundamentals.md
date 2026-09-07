@@ -269,9 +269,9 @@ Therefore, your observation is correct: while the world is playing, both `real` 
 
 `real` and `sim` answer different questions. If Gazebo runs near real time, they increase by similar amounts. If the computer needs two real seconds to calculate one simulated second, `real` increases faster than `sim` and the real-time factor is approximately `0.5`. In general:
 
-\[
+$$
 \text{real-time factor} = \frac{\Delta \text{sim time}}{\Delta \text{real time}}
-\]
+$$
 
 A factor near `1.0` means simulation time and active real time advance at nearly the same rate. A factor below `1.0` means the simulation is running slower than real time; a factor above `1.0` means it is running faster.
 

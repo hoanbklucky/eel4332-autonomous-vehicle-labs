@@ -133,9 +133,9 @@ Report:
 
 For one signal, write a model such as:
 
-\[
+$$
 z = h(x) + b + v
-\]
+$$
 
 and identify what each term represents in your experiment.
 

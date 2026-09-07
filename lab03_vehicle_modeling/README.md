@@ -35,9 +35,9 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 
 Both models use the planar pose
 
-\[
+$$
 \mathbf{x}=[x,\;y,\;\theta]^T,
-\]
+$$
 
 where $x$ and $y$ are expressed in a fixed world or odometry frame and $\theta$ is the robot heading.
 
@@ -47,19 +47,19 @@ where $x$ and $y$ are expressed in a fixed world or odometry frame and $\theta$ 
 
 The ideal differential-drive model has two independently driven wheels with radius $r$, separated by track width $b$. Let $\omega_L$ and $\omega_R$ be the left and right wheel angular speeds in radians per second. The forward speed $v$ and yaw rate $\dot{\theta}$ of the robot are
 
-\[
+$$
 v=\frac{r}{2}(\omega_R+\omega_L),
 \qquad
 \dot{\theta}=\frac{r}{b}(\omega_R-\omega_L).
-\]
+$$
 
 The body-forward speed must then be expressed in the fixed frame:
 
-\[
+$$
 \dot{x}=v\cos\theta,
 \qquad
 \dot{y}=v\sin\theta.
-\]
+$$
 
 These equations predict important special cases:
 
@@ -72,14 +72,14 @@ These equations predict important special cases:
 
 **Forward kinematics** converts wheel speeds into instantaneous robot velocity. **Wheel odometry** repeatedly integrates that velocity to estimate pose:
 
-\[
+$$
 \mathbf{x}_{k+1}\approx \mathbf{x}_k+
 \begin{bmatrix}
 v_k\cos\theta_k\\
 v_k\sin\theta_k\\
 \dot{\theta}_k
 \end{bmatrix}\Delta t.
-\]
+$$
 
 This is a dead-reckoning estimate, not a direct measurement of world position. Wheel-radius error, unequal wheels, slip, encoder quantization, timestamp error, and finite integration steps accumulate over time. A smooth odometry trajectory can therefore be precise but wrong.
 
@@ -91,13 +91,13 @@ TurtleBot is well approximated by a two-wheel differential-drive model. Goosebot
 
 The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points. Its inputs are longitudinal speed $v$ and steering angle $\delta$, and its wheelbase is $L$:
 
-\[
+$$
 \dot{x}=v\cos\theta,
 \qquad
 \dot{y}=v\sin\theta,
 \qquad
 \dot{\theta}=\frac{v}{L}\tan\delta.
-\]
+$$
 
 Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 8. It is not a model of Goosebot.
 
