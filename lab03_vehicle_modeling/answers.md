@@ -8,6 +8,16 @@ Record the predicted motion and signs of linear speed and yaw rate for each whee
 
 Summarize the final pose of each special case and explain any disagreement with your hand prediction.
 
+## TurtleBot visual comparison
+
+Insert one screenshot showing TurtleBot during a commanded motion case, then complete the qualitative comparison.
+
+| Command case | Predicted path shape | Observed Gazebo motion | Did they agree qualitatively? |
+|---|---|---|---|
+| straight | | | |
+| curved | | | |
+| in-place rotation | | | |
+
 ## Odometry-sensitivity experiment
 
 Identify the reference trajectory, changed variable, final position error, and final heading error. Explain the accumulation mechanism.

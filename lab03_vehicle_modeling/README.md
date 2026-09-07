@@ -22,6 +22,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 - convert left and right wheel speeds into robot linear and angular velocity;
 - numerically integrate differential-drive wheel odometry;
 - recognize why odometry is an estimate rather than ground truth;
+- compare differential-drive model predictions with visible TurtleBot motion in Gazebo;
 - implement the planar kinematic bicycle model;
 - compare differential-drive, bicycle, and four-wheel skid-steer motion;
 - quantify the effect of one model parameter or numerical setting.
@@ -122,7 +123,7 @@ The propagation functions contain required `TODO` sections. Do not replace them 
 
 ## Step-by-Step Procedure
 
-The work progresses from hand predictions to code, validation, sensitivity analysis, and model comparison so that each implementation result has a physical and mathematical reference.
+The work progresses from hand predictions to code, visual simulation, sensitivity analysis, and model comparison so that each implementation result has both a physical and mathematical reference.
 
 ### Part 1 — Predict differential-drive motion by hand
 
@@ -168,7 +169,75 @@ For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simu
 
 For every case, compare the simulated result with your Part 1 prediction. An in-place rotation changes yaw while $x$ and $y$ remain approximately constant; it may appear as a single point on an $x$–$y$ plot, so also inspect the final yaw.
 
-### Part 4 — Conduct an odometry-sensitivity experiment
+### Part 4 — Compare the model with TurtleBot motion in Gazebo
+
+**Why this part matters:** The plots in Part 3 are mathematical predictions. Watching TurtleBot perform the same motion categories connects those curves to a physical robot and checks whether you are interpreting $v$ and $\dot{\theta}$ correctly.
+
+The TurtleBot simulator accepts body velocity on `/cmd_vel`, where `linear.x` corresponds to model output $v$ and `angular.z` corresponds to $\dot{\theta}$. It does not accept the model's left and right wheel speeds directly. Therefore, this is a qualitative comparison of motion type—not an independent numerical validation of your wheel equations.
+
+Close any older TurtleBot, Gazebo, or keyboard-teleoperation processes. In **WSL/Ubuntu Terminal 1**, launch the same known-good simulator used in Lab 2:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 launch nav2_bringup tb3_simulation_launch.py \
+  headless:=False use_rviz:=False autostart:=False
+```
+
+**Command breakdown:** `source` loads ROS 2 Jazzy. `ros2 launch` starts the TurtleBot simulation and its ROS–Gazebo bridges. `headless:=False` opens Gazebo, `use_rviz:=False` omits RViz, and `autostart:=False` keeps autonomous Nav2 behavior inactive.
+
+Make sure Gazebo is playing, select `turtlebot3_waffle`, and use an overhead view. The [Lab 2 split-screen layout](../lab02_turtlebot_playground/README.md#recommended-driving-layout) is recommended. Do **not** run `teleop_twist_keyboard` during these tests because the commands below should be the only `/cmd_vel` publisher.
+
+In **WSL/Ubuntu Terminal 2**, run each test separately. The first command in each block publishes for approximately two seconds; the second sends an explicit stop.
+
+**Straight motion:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.15}, angular: {z: 0.0}}"
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.0}}"
+```
+
+**Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 20` stops after 20 messages. Positive `linear.x` requests forward motion and zero `angular.z` requests no turn. The second command uses `--once` to replace the motion request with zero linear and angular velocity.
+
+**Curved motion:**
+
+```bash
+ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.15}, angular: {z: 0.5}}"
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.0}}"
+```
+
+**Command breakdown:** This uses the same forward speed while adding a positive yaw rate. TurtleBot should trace a counterclockwise arc. The final one-time zero message stops the robot.
+
+**In-place rotation:**
+
+```bash
+ros2 topic pub -r 10 -t 20 /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.8}}"
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.0}}"
+```
+
+**Command breakdown:** Zero `linear.x` requests no forward translation, while positive `angular.z` requests counterclockwise rotation. Publishing the zero message afterward stops the turn.
+
+Press `Ctrl+C` and immediately send the one-time zero command if a repeated publisher does not finish normally. After each test, use Gazebo's reset control before starting the next case so all three motions begin from a comparable pose.
+
+For each case, compare the visible motion with the corresponding Part 3 trajectory and record:
+
+| Command case | Predicted path shape | Observed Gazebo motion | Did they agree qualitatively? |
+|---|---|---|---|
+| straight | | | |
+| curved | | | |
+| in-place rotation | | | |
+
+You may inspect `/odom` as in Lab 2, but do not treat it as Gazebo ground truth. TurtleBot's odometry is generated from the simulated drive system and can continue accumulating wheel motion when the body is blocked by an obstacle.
+
+When finished, send the zero command once more and stop the launch with `Ctrl+C` in Terminal 1.
+
+### Part 5 — Conduct an odometry-sensitivity experiment
 
 **Why this part matters:** Changing model assumptions shows why small wheel or geometry errors accumulate into odometry drift.
 
@@ -180,9 +249,7 @@ Choose **one** experiment:
 
 Treat one trajectory as the reference. Report final position error and final heading error for the other cases. Explain why the error accumulates even when the wheel-speed input is constant.
 
-If the instructor assigns a live comparison, record the TurtleBot `/odom` topic during a short straight or turning command and compare its qualitative behavior with your ideal model. Do not treat `/odom` as Gazebo ground truth.
-
-### Part 5 — Implement and test the bicycle model
+### Part 6 — Implement and test the bicycle model
 
 **Why this part matters:** Comparing a car-like steering model with differential drive clarifies why vehicle geometry determines the appropriate kinematics.
 
@@ -200,7 +267,7 @@ Complete its existing `TODO` sections. Test these compact cases:
 
 Confirm that zero steering produces a straight line and that increasing steering magnitude reduces turning radius. The bicycle portion is intentionally smaller than the differential-drive portion.
 
-### Part 6 — Run and compare the models
+### Part 7 — Run and compare the models
 
 **Why this part matters:** Common plots and metrics make similarities, limitations, and modeling errors easier to evaluate objectively.
 
@@ -223,9 +290,22 @@ Use your results to compare:
 | kinematic bicycle | speed and steering angle | no | omits tire-force dynamics and lateral slip |
 | Goosebot four-wheel skid steer | four motor commands reduced to left/right motion | physically possible | turning depends strongly on tire scrub and slip |
 
-If the instructor assigns the optional F1TENTH extension, run comparable bicycle-model cases in the pinned environment. Otherwise, no F1TENTH installation is required.
+### Part 8 — Optional F1TENTH visual checkpoint
 
-**INSTRUCTOR VALIDATION REQUIRED:** pin the exact F1TENTH commit and command before assigning that extension, and provide the exact TurtleBot ground-truth topic if a quantitative live-simulation comparison is required.
+**Why this part matters:** TurtleBot makes differential-drive motion visible; F1TENTH makes the bicycle model's car-like steering constraints visible. Seeing both platforms emphasizes that the correct kinematic model depends on how the vehicle is built.
+
+Complete this part only as an instructor demonstration or when the instructor provides a pinned, course-tested F1TENTH Jazzy environment. Do not install an arbitrary upstream version during the graded lab. The Python bicycle-model work remains required even when this visual checkpoint is unavailable.
+
+Using the instructor-provided launch and drive commands, observe these low-speed cases:
+
+1. positive speed with zero steering angle;
+2. the same speed with a small positive steering angle;
+3. the same speed with a larger positive steering angle;
+4. zero speed with a nonzero steering angle.
+
+Compare the motion with your Part 6 plots. The first case should be straight, the next two should form increasingly tight arcs, and the stationary car may turn its front wheels but should not change its vehicle heading. This last observation is the visible contrast with TurtleBot's in-place rotation.
+
+**INSTRUCTOR VALIDATION REQUIRED:** before assigning this checkpoint, pin a ROS 2 Jazzy-compatible F1TENTH commit or container and provide the exact launch command, command topic and message type, safe speed and steering values, and shutdown procedure.
 
 ## Experiment / Quantitative Analysis
 
@@ -233,8 +313,9 @@ Your results must include:
 
 - differential-drive plots for the four special cases;
 - a table of final $x$, $y$, and $\theta$ for those cases;
-- the Part 4 odometry-sensitivity plot and its final position and heading errors;
-- one bicycle-model plot containing the three Part 5 cases;
+- the Part 4 TurtleBot qualitative-comparison table;
+- the Part 5 odometry-sensitivity plot and its final position and heading errors;
+- one bicycle-model plot containing the three Part 6 cases;
 - a concise comparison of the assumptions behind all three platform models.
 
 Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A steering angle and a left/right wheel-speed pair are different physical inputs.
@@ -255,6 +336,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] differential-drive forward kinematics implemented and unit-checked;
 - [ ] wheel odometry integrated from an initial pose;
 - [ ] straight, curved, pivot, and in-place cases verified;
+- [ ] straight, curved, and in-place model predictions compared with TurtleBot motion;
 - [ ] one odometry-sensitivity experiment completed quantitatively;
 - [ ] bicycle-model straight and turning cases verified;
 - [ ] differential-drive, bicycle, and skid-steer assumptions compared;
@@ -265,12 +347,17 @@ Do not compare trajectories point by point unless they use the same time samples
 - completed `src/differential_drive.py` and `src/bicycle_model.py`;
 - any documented changes to `src/run_experiments.py`;
 - differential-drive, odometry-sensitivity, and bicycle-model plots;
+- completed TurtleBot qualitative-comparison table and one screenshot of a commanded motion case;
 - final-pose and error tables;
 - completed `answers.md`;
-- optional F1TENTH or live TurtleBot comparison only if assigned.
+- optional F1TENTH observations only if assigned.
 
 ## Troubleshooting
 
+- If TurtleBot does not respond, confirm that Gazebo is playing and that `ros2 topic info /cmd_vel` reports the bridge as a subscriber.
+- If TurtleBot continues moving after a test, publish the one-time zero `Twist` command again before doing anything else.
+- If motion is inconsistent, stop any `teleop_twist_keyboard` process so only the test publisher writes to `/cmd_vel`.
+- If TurtleBot becomes trapped or leaves the useful area, send the zero command and reset or relaunch the simulation.
 - Verify the wheel-speed-to-twist calculation before debugging pose integration.
 - Print one update and compare it with a hand calculation.
 - If equal positive wheel speeds do not produce zero yaw rate, check the subtraction order.
