@@ -318,6 +318,39 @@ gz topic -l
 
 **Command breakdown:** `ros2 topic list` displays the ROS 2 topic graph, while `gz topic -l` displays the separate Gazebo Transport topic graph. Comparing them reveals which data has not yet been bridged.
 
+<details>
+<summary>Expected ROS 2 and Gazebo topic lists before bridging</summary>
+
+![ROS 2 and Gazebo Transport topic lists before starting the clock bridge](images/gazebo-practice4-01-ros-gazebo-topic-lists.png)
+
+*The first two entries, `/parameter_events` and `/rosout`, are the ROS 2 topic list. The entries beginning with `/gazebo`, `/gui`, and `/world/eel4332_gazebo_practice` are the separate Gazebo Transport topic list. The exact entries may vary slightly.*
+
+</details>
+
+### Why a bridge is necessary
+
+Gazebo and ROS 2 use separate communication systems. Gazebo publishes `gz.msgs.Clock` messages through Gazebo Transport, while ROS 2 nodes exchange `rosgraph_msgs/msg/Clock` messages through ROS middleware. A topic existing in the Gazebo graph therefore does not make it visible in the ROS graph.
+
+The bridge acts as a translator and relay:
+
+```text
+Gazebo physics
+    │ publishes gz.msgs.Clock
+    ▼
+/world/eel4332_gazebo_practice/clock       ← Gazebo Transport topic
+    │
+    ▼
+ros_gz_bridge                              ← receives and converts each message
+    │ publishes rosgraph_msgs/msg/Clock
+    ▼
+/clock                                     ← ROS 2 topic
+    │
+    ▼
+ROS 2 nodes using simulation time
+```
+
+The bridge does not run the physics or create a second clock. It copies the simulated time produced by Gazebo into a message and transport format that ROS 2 nodes understand. A ROS node configured with `use_sim_time:=true` reads `/clock`, so its timers and timestamps advance with Gazebo and stop when Gazebo is paused. Similar bridges later carry camera images, laser scans, odometry, transforms, and robot commands between the two systems.
+
 Seeing the world-scoped clock in Gazebo does not guarantee that `/clock` is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third WSL/Ubuntu Terminal and remap its ROS-side name to the conventional `/clock` topic:
 
 ```bash
@@ -338,6 +371,31 @@ ros2 topic echo /clock --once
 ```
 
 **Command breakdown:** `source` prepares the verification terminal. `ros2 topic info /clock --verbose` shows the topic type and endpoint details. `ros2 topic echo /clock --once` prints one bridged clock message and exits.
+
+<details>
+<summary>Expected ROS clock information and one bridged message</summary>
+
+![ROS clock topic information and one message received through the Gazebo bridge](images/gazebo-practice4-02-ros-clock-after-bridge.png)
+
+*The bridge appears as the ROS publisher, and the final `clock` value confirms that Gazebo simulation time reached the ROS graph.*
+
+</details>
+
+Read the important lines of the output as follows:
+
+| Output | Meaning |
+|---|---|
+| `Type: rosgraph_msgs/msg/Clock` | ROS sees `/clock` with the standard ROS clock-message type, not the original Gazebo message type. |
+| `Publisher count: 1` | One ROS publisher currently supplies `/clock`. |
+| `Node name: ros_gz_bridge` | That publisher is the bridge process, confirming where the ROS data came from. |
+| `Endpoint type: PUBLISHER` | The displayed endpoint sends messages into the ROS topic. |
+| `Reliability: RELIABLE` | The endpoint requests reliable delivery rather than intentionally dropping messages. |
+| `Durability: VOLATILE` | Old clock messages are not retained for subscribers that join later; they receive new messages. |
+| `Subscription count: 0` | No persistent subscriber existed when `topic info` took its snapshot. This is normal because the next `echo --once` command had not started yet. |
+| `clock: sec: 46, nanosec: 987000000` | The bridged simulation time was `46.987` seconds when that message was received. |
+| `---` | This marks the end of the message printed by `ros2 topic echo`. |
+
+`ros2 topic echo /clock --once` temporarily becomes a subscriber, waits for one message, prints it, and exits. That is why it can receive a message even though the earlier `topic info` output reported zero subscribers. The type hash, GID, and other low-level endpoint fields help ROS verify compatibility and uniquely identify connections; students do not need to memorize those values.
 
 The bridge syntax used here means:
 
