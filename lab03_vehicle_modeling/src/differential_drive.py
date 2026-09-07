@@ -34,6 +34,11 @@ def wheel_speeds_to_twist(
       yaw_rate: vehicle yaw rate in rad/s
 
     TODO: implement the differential-drive forward-kinematics equations.
+
+    Hints:
+      - The average of the two wheel-edge speeds determines forward motion.
+      - Their right-minus-left difference determines the yaw direction.
+      - Equal wheel speeds are a useful zero-yaw check.
     """
     linear_speed = wheel_radius * (left_speed + right_speed) / 2.0
     yaw_rate = wheel_radius * (right_speed - left_speed) / track_width
@@ -66,6 +71,10 @@ def step_differential_drive(
       2. Express body-forward speed in the world frame using state.yaw.
       3. Integrate x, y, and yaw for one time step.
       4. Return the new state.
+
+    Hint: the cosine and sine of the current yaw project body-forward speed
+    onto the world x and y axes. Multiply each rate by dt only when updating
+    its corresponding state value.
     """
     linear_speed, yaw_rate = wheel_speeds_to_twist(
         left_speed, right_speed, wheel_radius, track_width
@@ -106,6 +115,10 @@ def simulate_differential_drive(
 
     TODO: repeatedly call step_differential_drive and store the trajectory.
     Include the initial state as the first row.
+
+    Hint: each update must start from the state returned by the previous
+    update. For a duration divided into fixed steps, the initial sample makes
+    the trajectory contain one more row than the number of updates.
     """
     trajectory = [initial_state]
     current_state = initial_state

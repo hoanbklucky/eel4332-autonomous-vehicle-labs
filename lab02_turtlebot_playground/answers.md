@@ -20,7 +20,7 @@ Record or paste one representative message.
 
 ### `/odom` change
 
-Paste one representative message after motion and identify one position or orientation field that changed.
+Record the before-and-after values of one position or orientation field around the direct terminal command and identify what changed.
 
 ## Engineering questions
 

@@ -20,6 +20,8 @@ Select one target. Before running the program, record the wheel-speed relationsh
 
 Insert one screenshot showing TurtleBot during a commanded motion case and identify whether it shows straight motion, curved motion, or in-place rotation.
 
+Record the `pose.pose.position.x` and `.y` values from `/odom` before and after the straight command. Briefly explain how this change relates to the pose integration in `differential_drive.py`.
+
 ## Bicycle-model observations
 
 Record the body-forward speed and yaw rate produced by `wheel_speed_to_twist` for each case. Explain the effects of zero steering and increasing steering magnitude.

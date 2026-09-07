@@ -37,6 +37,12 @@ def wheel_speed_to_twist(
          ideal rolling without slip.
       2. Use the bicycle-model steering geometry to compute vehicle yaw rate.
       3. Return body-forward speed and vehicle yaw rate.
+
+    Hints:
+      - Start with the tangential speed at the driven wheel's rim.
+      - Zero steering must give zero yaw rate.
+      - For fixed speed and wheelbase, increasing steering magnitude should
+        increase yaw-rate magnitude.
     """
     linear_speed = wheel_speed * wheel_radius
     yaw_rate = linear_speed * np.tan(steering) / wheelbase
@@ -69,6 +75,9 @@ def step_bicycle(
       2. Express body-forward speed in the world frame using state.yaw.
       3. Integrate one step.
       4. Return the new state.
+
+    Hint: use the current yaw, not the newly updated yaw, when computing this
+    explicit Euler step's world-frame position rates.
     """
     speed, yaw_dot = wheel_speed_to_twist(
         wheel_speed, wheel_radius, steering, wheelbase
@@ -108,6 +117,9 @@ def simulate(
       x and y are in m and yaw is in rad
 
     TODO: repeatedly call step_bicycle and store the trajectory.
+
+    Hint: store initial_state first, then repeatedly advance from the most
+    recently returned BicycleState until all fixed time steps are complete.
     """
     num_steps = int(duration / dt)
     trajectory = np.zeros((num_steps + 1, 3))

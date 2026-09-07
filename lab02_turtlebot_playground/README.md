@@ -26,6 +26,7 @@ Plan for approximately 45–60 minutes.
 - operate TurtleBot safely in a Gazebo simulation;
 - use Gazebo camera, play, pause, and reset controls;
 - command forward, reverse, curved, and in-place motion with the keyboard;
+- publish a numerical velocity command directly from a ROS 2 terminal;
 - relate keyboard commands to the ROS `/cmd_vel` topic;
 - recognize `/odom` as the robot's changing motion estimate;
 - explain why an autonomous vehicle needs sensing, state estimation, planning, and control rather than continuous human input.
@@ -337,7 +338,35 @@ Press movement and stop keys in WSL/Ubuntu Terminal 2. Observe which `linear` an
 
 </details>
 
-Now inspect the odometry estimate:
+#### Send a velocity command without the keyboard node
+
+The keyboard program is only one way to publish `/cmd_vel`. After observing its messages, focus **Terminal 2**, press `k` to stop the robot, and press `Ctrl+C` to stop `teleop_twist_keyboard`. Do not leave both control methods running because competing `/cmd_vel` publishers can make the robot's behavior confusing.
+
+First, capture the current odometry in Terminal 3 so you have a before-motion value:
+
+```bash
+ros2 topic echo /odom --once
+```
+
+In the same sourced terminal, send a slow forward command for approximately one second, followed by an explicit stop:
+
+```bash
+ros2 topic pub -r 10 -t 10 /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.10}, angular: {z: 0.0}}"
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.0}, angular: {z: 0.0}}"
+```
+
+**Command breakdown:** The first command publishes a `Twist` directly instead of obtaining one from a key press. `-r 10` means 10 messages per second and `-t 10` means stop after 10 messages, giving approximately one second of motion. Positive `linear.x` requests forward motion and zero `angular.z` requests no turn. The second command sends one all-zero `Twist` to stop.
+
+Observe that TurtleBot responds even though the keyboard node is no longer running. Both methods ultimately publish the same message type on the same topic:
+
+```text
+keyboard → teleop_twist_keyboard → /cmd_vel
+terminal command ─────────────────→ /cmd_vel
+```
+
+Now capture the odometry estimate again in Terminal 3:
 
 ```bash
 ros2 topic echo /odom --once
@@ -345,7 +374,7 @@ ros2 topic echo /odom --once
 
 **Command breakdown:** `ros2 topic echo` displays messages from `/odom`; `--once` prints one message and exits instead of streaming continuously.
 
-Drive to a different location and run the same command again. Find the changed position or orientation fields. You do not need to interpret the quaternion yet.
+Compare the before-and-after messages and find the changed position or orientation fields. You do not need to interpret the quaternion yet.
 
 <details>
 <summary>Example `/odom` message after motion</summary>
@@ -364,8 +393,8 @@ Record one forward `/cmd_vel` message, one turning `/cmd_vel` message, and one q
 
 At the end of the activity:
 
-1. Focus WSL/Ubuntu Terminal 2 and press `k`.
-2. Press `Ctrl+C` to stop keyboard teleoperation.
+1. Send the one-time all-zero `/cmd_vel` command again from Terminal 2.
+2. Press `Ctrl+C` in any terminal still echoing a topic.
 3. Press `Ctrl+C` in WSL/Ubuntu Terminal 1 to stop the launch.
 4. Wait for shutdown, then close any remaining Gazebo window.
 
@@ -375,7 +404,7 @@ If the robot becomes trapped, tips over, or leaves the useful area, stop teleope
 
 Answer these questions in `answers.md`:
 
-1. Which `linear.x` and `angular.z` values changed for forward motion, turning, and stopping, and what does each value command?
+1. Which `linear.x` and `angular.z` values changed for forward motion, turning, and stopping, and how did the keyboard node and direct terminal command publish the same kind of command?
 2. Which position or orientation fields changed in `/odom`, and why is odometry called an estimate?
 3. Why is a `/cmd_vel` velocity command alone insufficient to make the robot reach a specified destination?
 4. In this playground, which observe–decide–command tasks did you perform that autonomous software must perform later?
@@ -385,6 +414,7 @@ Answer these questions in `answers.md`:
 - [ ] TurtleBot launched and moved in Gazebo without RViz2 or Nav2 startup.
 - [ ] Forward, reverse, curved, and in-place motion demonstrated.
 - [ ] Approach, rotation, slalom, parking, and return challenges attempted.
+- [ ] One numerical `/cmd_vel` command published directly from the terminal and explicitly stopped.
 - [ ] `/cmd_vel` and `/odom` changes observed.
 - [ ] Core engineering questions completed.
 

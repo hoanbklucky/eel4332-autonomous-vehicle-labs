@@ -244,6 +244,8 @@ Record whether each case should move straight, curve left, curve right, or rotat
 
 **Why this part matters:** This step translates the wheel-motion equations from lecture into an executable estimate of robot pose.
 
+Before editing, temporarily disable any **AI code-completion** extension for this workspace so that you practice translating the equations yourself. In VS Code, open the Extensions view, select each AI completion extension you use, select its gear menu, and choose **Disable (Workspace)**. Restart the extension host if prompted. Keep the Microsoft Python and Pylance extensions enabled: ordinary syntax checking, identifier completion, and function documentation are useful, but accepting an AI-generated function defeats this activity's learning objective. Re-enable your AI extension after the lab if desired.
+
 Open:
 
 ```text
@@ -366,6 +368,25 @@ Camera movement changes only the viewpoint; it does not move the robot. Avoid be
 
 > **Do not click Gazebo's circular Reset button in this simulation.** The launch process loads the playground world and then dynamically spawns `turtlebot3_waffle`. A full Gazebo reset can reload the base world without rerunning the ROS spawning action, causing the robot to disappear. The Entity Tree should contain both `turtlebot3_world` and `turtlebot3_waffle`. If `turtlebot3_waffle` is missing, stop the launch with `Ctrl+C` in Terminal 1 and run the launch command again.
 
+#### Observe the odometry produced by the simulated drive system
+
+Gazebo's 3-D view draws the robot at its physics-computed world pose; it does not normally display the ROS `/odom` message numerically. When a model is selected, Gazebo's component inspector may show its simulated pose, but that is the physics pose rather than wheel odometry. Inspect the separate odometry estimate through ROS instead.
+
+Before sending the first motion command, open **WSL/Ubuntu Terminal 3** and capture a baseline message:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 topic echo /odom --once
+```
+
+In the output, locate:
+
+- `pose.pose.position.x` and `.y`, which are the integrated planar position estimate;
+- `pose.pose.orientation`, which stores estimated orientation as a quaternion;
+- `twist.twist.linear.x` and `angular.z`, which report estimated body-forward speed and vehicle yaw rate.
+
+After completing and stopping the straight-motion command below, run `ros2 topic echo /odom --once` again. Compare the two position values. The pose remains at its new estimate after the stop, while the twist should return close to zero. This is the simulator's version of the same wheel-to-twist conversion and repeated pose integration implemented in Parts 2 and 3; the message uses a quaternion for orientation whereas your Python array stores yaw directly.
+
 In **WSL/Ubuntu Terminal 2**, run each test separately. The first command in each block publishes 10 messages at 10 Hz, so the command lasts approximately one second. Here, `-t 10` means **10 messages**, not 10 seconds. The second command sends an explicit stop.
 
 **Straight motion:**
@@ -417,7 +438,7 @@ Because these are qualitative path-shape tests, you may perform the next test fr
 
 Observe the straight, curved, and in-place motions. No additional prediction table is required. Save one screenshot that clearly shows one commanded motion case and identify which case it shows in `answers.md`.
 
-You may inspect `/odom` as in Lab 2, but do not treat it as Gazebo ground truth. TurtleBot's odometry is generated from the simulated drive system and can continue accumulating wheel motion when the body is blocked by an obstacle.
+Do not treat `/odom` as Gazebo ground truth. TurtleBot's odometry is generated from the simulated wheel motion and can continue accumulating when the wheels rotate while the body is blocked by an obstacle. The Gazebo scene would show the physics body remaining against the obstacle while `/odom` could report estimated movement.
 
 When finished, send the zero command once more and stop the launch with `Ctrl+C` in Terminal 1.
 
@@ -551,6 +572,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] straight, curved, pivot, and in-place cases verified;
 - [ ] one wheel-angular-velocity pair designed and tested against a selected Part 3 motion target;
 - [ ] straight, curved, and in-place TurtleBot motions observed in Gazebo;
+- [ ] TurtleBot `/odom` captured before and after a commanded motion and connected to the Python odometry calculation;
 - [ ] bicycle driven-wheel angular velocity converted to body-forward speed and vehicle yaw rate with correct units;
 - [ ] bicycle-model straight and turning cases verified;
 - [ ] differential-drive, bicycle, and skid-steer assumptions compared;
