@@ -73,7 +73,7 @@ The `/cmd_vel` topic does not say where the robot should ultimately go. It reque
 
 ### Why this lab uses only Gazebo
 
-Gazebo is the 3-D physics view and is sufficient for this driving exercise. RViz2, localization, Nav2 lifecycle services, map initialization, and the dedicated TF bridge are intentionally excluded. Lab 4 introduces those layers after you have modeled the platform's motion in Lab 3.
+Gazebo is the 3-D physics view and is sufficient for this driving exercise. RViz2, localization, active Nav2 navigation, map initialization, and detailed TF analysis are intentionally excluded. The launch file still translates the basic `/tf` data along with the other feedback topics, but you do not need to inspect it yet. Lab 4 introduces those system layers after you have modeled the platform's motion in Lab 3.
 
 TurtleBot uses idealized differential-drive motion in this simulation. It can turn by moving its left and right wheels at different speeds and can approximately rotate in place. Lab 3 develops the mathematical model behind that behavior and compares it with Goosebot's four-wheel skid steering.
 
@@ -134,6 +134,35 @@ ros2 launch nav2_bringup tb3_simulation_launch.py \
 
 </details>
 
+#### The launch file starts the bridges for you
+
+In [Lab 1's bridge exercise](../lab01_ros2_gazebo_fundamentals/gazebo_fundamentals.md#why-a-bridge-is-necessary), you manually started a bridge to make Gazebo simulation time available as a ROS 2 topic. This TurtleBot launch file starts a `ros_gz_bridge` process automatically and configures several message translations at once. The line `[parameter_bridge-2]: process started` in the launch output is evidence that this process was created.
+
+| Direction | Important examples | Why the bridge is needed |
+|---|---|---|
+| ROS 2 → Gazebo | `/cmd_vel` | Converts the keyboard node's ROS `geometry_msgs/msg/Twist` command into a Gazebo `gz.msgs.Twist` command that the simulated drive system understands. |
+| Gazebo → ROS 2 | `/clock`, `/odom`, `/scan`, `/imu`, and `/joint_states` | Converts simulated time, motion estimates, and sensor or robot-state data into ROS message types that ROS nodes and command-line tools understand. |
+| Gazebo → ROS 2 | `/tf` | Converts Gazebo's changing pose relationships from `gz.msgs.Pose_V` to ROS `tf2_msgs/msg/TFMessage` so ROS knows where the moving robot frame is relative to the odometry frame. |
+
+Without the `/cmd_vel` bridge, the teleop node could publish commands in ROS 2 but Gazebo would not receive them, so the simulated robot would not respond. Without the Gazebo-to-ROS bridges, the robot could move in Gazebo, but ROS 2 software could not observe its simulated clock, odometry, or sensors. Later labs depend on these feedback topics for estimation, visualization, planning, and control.
+
+##### Why the TF bridge is especially important
+
+**TF** means *transform*. A transform describes the position and orientation of one coordinate frame relative to another at a particular time. Robots use multiple frames because odometry, the body, and each sensor describe data from different locations. A simplified TurtleBot frame chain is:
+
+```text
+odom  →  base_footprint  →  base_link  →  base_scan
+ ^            ^                ^              ^
+reference   robot on         robot body     lidar sensor
+frame       the floor
+```
+
+Gazebo's differential-drive system calculates the changing relationship from `odom` to `base_footprint`. The TF bridge translates that relationship into a ROS `/tf` message. ROS's `robot_state_publisher` supplies additional relationships from the robot description, such as `base_footprint` to `base_link` and onward to sensor frames. Together, these transforms form a connected frame tree.
+
+For example, a laser scan is measured in `base_scan`, but a mapping or navigation node may need those points in `odom`. TF lets the node transform the scan through the connected frame chain. Without the changing `odom`-to-robot transform, ROS could still receive numerical `/scan` and `/odom` messages, but it could not consistently place the moving scan in the odometry frame. RViz and navigation software would commonly report missing-transform errors or be unable to align the data.
+
+Do not memorize this frame tree yet. The important idea is that `/odom` reports a motion estimate, while `/tf` tells the rest of ROS how coordinate frames are related so data from different parts of the robot can be combined. Lab 4 examines TF in detail.
+
 Keep WSL/Ubuntu Terminal 1 open. Wait for Gazebo to show TurtleBot in the obstacle world.
 
 <details>
@@ -144,8 +173,6 @@ Keep WSL/Ubuntu Terminal 1 open. Wait for Gazebo to show TurtleBot in the obstac
 *The exact initial camera angle may differ. Look for the walls, cylinders, and `turtlebot3_waffle` in the Entity Tree.*
 
 </details>
-
-**INSTRUCTOR VALIDATION REQUIRED:** verify this simplified launch and the exact teleoperation topic on the final course image before releasing the lab.
 
 #### Observe the world and choose a camera view
 
