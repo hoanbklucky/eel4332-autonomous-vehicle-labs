@@ -16,10 +16,10 @@ from differential_drive import DifferentialDriveState, simulate_differential_dri
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 
-# TODO(student): Add the three motion-design cases required in Part 3 of the
-# README. Each tuple has the form (case_name, left_speed, right_speed), with
-# wheel angular velocities in rad/s. Do not change the robot geometry to meet
-# the motion targets.
+# TODO(student): Add one motion-design case selected from Part 3 of the README.
+# Each tuple has the form (case_name, left_speed, right_speed), with wheel
+# angular velocities in rad/s. Do not change the robot geometry to meet the
+# motion target.
 STUDENT_MOTION_CASES: list[tuple[str, float, float]] = []
 
 
@@ -46,7 +46,7 @@ def run_differential_drive_experiments() -> None:
 
     if not STUDENT_MOTION_CASES:
         print(
-            "\nStudent motion-design cases have not been added. "
+            "\nA student motion-design case has not been added. "
             "Complete STUDENT_MOTION_CASES in run_experiments.py."
         )
 

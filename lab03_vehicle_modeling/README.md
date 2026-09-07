@@ -25,7 +25,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 - compare differential-drive model predictions with visible TurtleBot motion in Gazebo;
 - implement the planar kinematic bicycle model;
 - compare differential-drive, bicycle, and four-wheel skid-steer motion;
-- quantify the effect of one model parameter or numerical setting.
+- explain how persistent wheel or calibration error accumulates into odometry drift.
 
 ## Prerequisites
 
@@ -191,7 +191,8 @@ lab03_vehicle_modeling/
 │   ├── README.md
 │   ├── correll-mobile-robot-frames.png
 │   ├── correll-differential-wheel-kinematics.png
-│   └── correll-ackermann-bicycle.png
+│   ├── correll-ackermann-bicycle.png
+│   └── turtlebot-part4-01-straight-motion.png
 ├── src/
 │   ├── differential_drive.py
 │   ├── bicycle_model.py
@@ -210,7 +211,7 @@ The propagation functions contain required `TODO` sections. Do not replace them 
 | Implement | How kinematic equations become pose updates | The required functions produce a trajectory containing the initial pose. |
 | Test special cases | How simple cases isolate sign and unit errors | Straight motion has negligible yaw; in-place rotation has negligible translation. |
 | Observe the robot | How mathematical motion categories appear physically | TurtleBot visibly performs the same straight, curved, and rotating cases. |
-| Expose a limitation | Why odometry and numerical models drift | One controlled parameter or integration change produces a measured final error. |
+| Explain a limitation | Why persistent measurement or calibration bias causes odometry drift | A worked example shows a small wheel-speed error accumulating into a large heading error. |
 | Compare platforms | Why robot geometry selects the model | Plots distinguish differential-drive motion from car-like bicycle motion. |
 
 Do not accept a plausible-looking plot by itself. A result passes a checkpoint only when its direction, final pose, and limiting cases agree with your prediction.
@@ -219,7 +220,7 @@ Do not accept a plausible-looking plot by itself. A result passes a checkpoint o
 
 ## Step-by-Step Procedure
 
-The work progresses from hand predictions to code, visual simulation, sensitivity analysis, and model comparison so that each implementation result has both a physical and mathematical reference.
+The work progresses from hand predictions to code, visual simulation, a short odometry-drift example, and model comparison so that each implementation result has both a physical and mathematical reference.
 
 ### Part 1 — Predict differential-drive motion by hand
 
@@ -256,7 +257,17 @@ Use fixed-step Euler integration and include the initial pose as the first traje
 
 **Why this part matters:** Straight, rotating, and curved cases isolate different behaviors and make implementation errors easier to diagnose.
 
-For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simulate at least:
+Use these fixed robot and simulation values:
+
+| Symbol | Python variable | Meaning | Value and unit |
+|---|---|---|---|
+| $r$ | `wheel_radius` | radius of each drive wheel, measured from the wheel center to its rolling surface | 0.033 m |
+| $b$ | `track_width` | lateral distance between the left and right wheel contact lines | 0.16 m |
+| $\Delta t$ | `dt` | integration time step: the amount of simulated time advanced by each Euler update | 0.02 s |
+
+Track width $b$ is the left-to-right wheel spacing; it is not the front-to-rear **wheelbase** $L$ used by the bicycle model. The time step $\Delta t$ is also not the total experiment duration. The driver repeatedly advances the state by 0.02 s until it reaches the separately defined `duration`.
+
+With these values, simulate at least:
 
 1. equal positive wheel angular velocities;
 2. one stationary wheel;
@@ -289,7 +300,7 @@ Do not validate from the planar-path panel alone. An in-place rotation appears a
 
 **Why this activity matters:** The four supplied cases check whether the model behaves correctly, but autonomous-vehicle work also requires solving the inverse question: “What wheel commands will create the motion I want?”
 
-Open `src/run_experiments.py` and find `STUDENT_MOTION_CASES`. Without changing `wheel_radius`, `track_width`, `dt`, or `duration`, add three named wheel-command pairs that produce:
+Open `src/run_experiments.py` and find `STUDENT_MOTION_CASES`. Choose **one** of the following targets. Without changing `wheel_radius`, `track_width`, `dt`, or `duration`, add one named wheel-command pair that produces:
 
 1. straight backward travel ending between 0.75 m and 0.85 m behind the initial pose, with final yaw approximately zero;
 2. one counterclockwise in-place revolution, with final yaw approximately $2\pi$ rad and essentially no position change;
@@ -301,13 +312,13 @@ Each entry uses this format:
 ("descriptive case name", left_wheel_angular_velocity, right_wheel_angular_velocity)
 ```
 
-Both numerical values are in rad/s. Before running the program, calculate or predict the required wheel-speed relationship and record your reasoning in `answers.md`. Then rerun the differential experiment, inspect both panels and the final-pose table, and adjust your values if necessary. Do not copy one of the supplied validation pairs unchanged; your commands must satisfy the targets above.
+Both numerical values are in rad/s. Before running the program, calculate or predict the required wheel-speed relationship and record your reasoning in `answers.md`. Then rerun the differential experiment, inspect both panels and the final-pose table, and adjust your values if necessary. Do not copy one of the supplied validation pairs unchanged; your command must satisfy the selected target.
 
-Wheel angular velocities are the **inputs you command**. Wheel radius and track width describe the **robot you are modeling**. Changing a geometry value merely to reach a desired motion would describe a different robot. You will deliberately perturb geometry later in the odometry-sensitivity experiment to study modeling error.
+Wheel angular velocities are the **inputs you command**. Wheel radius and track width describe the **robot you are modeling**. Changing a geometry value merely to reach a desired motion would describe a different robot. Part 5 explains how an incorrect measurement or geometry value can instead make the estimated motion drift away from the real motion.
 
-### Part 4 — Compare the model with TurtleBot motion in Gazebo
+### Part 4 — Observe the corresponding TurtleBot motions in Gazebo
 
-**Why this part matters:** The plots in Part 3 are mathematical predictions. Watching TurtleBot perform the same motion categories connects those curves to a physical robot and checks whether you are interpreting $v$ and $\dot{\theta}$ correctly.
+**Why this part matters:** Watching TurtleBot move connects the mathematical motion categories from Part 3 to a simulated physical robot.
 
 The TurtleBot simulator accepts body velocity on `/cmd_vel`, where `linear.x` corresponds to model output $v$ and `angular.z` corresponds to $\dot{\theta}$. It does not accept the model's left and right wheel angular velocities directly. Therefore, this is a qualitative comparison of motion type—not an independent numerical validation of your wheel equations.
 
@@ -346,6 +357,10 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
 
 **Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 10` stops after 10 messages, giving an approximate duration of 10 messages ÷ 10 messages/s = 1 second. Positive `linear.x` requests body-forward speed and zero `angular.z` requests zero vehicle yaw rate. The second command uses `--once` to replace the motion request with zero forward speed and yaw rate.
 
+![Split-screen view showing ten forward velocity messages, the explicit stop message, and TurtleBot in Gazebo](images/turtlebot-part4-01-straight-motion.png)
+
+*The terminal shows the repeated forward commands ending at `publishing #10`, followed by one zero-velocity message. Gazebo remains visible beside the terminal, and `turtlebot3_waffle` remains present in the Entity Tree. The exact robot position and camera angle may differ.*
+
 **Curved motion:**
 
 ```bash
@@ -377,29 +392,42 @@ Because these are qualitative path-shape tests, you may perform the next test fr
 3. Wait until `turtlebot3_waffle` appears in the Entity Tree and Gazebo is playing.
 4. Reestablish the overhead view, then run the next motion command from Terminal 2.
 
-For each case, compare the visible motion with the corresponding Part 3 trajectory and record:
-
-| Command case | Predicted path shape | Observed Gazebo motion | Did they agree qualitatively? |
-|---|---|---|---|
-| straight | | | |
-| curved | | | |
-| in-place rotation | | | |
+Observe the straight, curved, and in-place motions. No additional prediction table is required. Save one screenshot that clearly shows one commanded motion case and identify which case it shows in `answers.md`.
 
 You may inspect `/odom` as in Lab 2, but do not treat it as Gazebo ground truth. TurtleBot's odometry is generated from the simulated drive system and can continue accumulating wheel motion when the body is blocked by an obstacle.
 
 When finished, send the zero command once more and stop the launch with `Ctrl+C` in Terminal 1.
 
-### Part 5 — Conduct an odometry-sensitivity experiment
+### Part 5 — Understand how odometry drift accumulates
 
-**Why this part matters:** Changing model assumptions shows why small wheel or geometry errors accumulate into odometry drift.
+**Why this part matters:** A small persistent measurement or calibration error can become a large pose error because odometry repeatedly integrates it.
 
-Choose **one** experiment:
+Suppose a robot is actually driving straight, but a 1% encoder-scale error makes its odometry calculation report
 
-- repeat a curved trajectory with at least three integration time steps;
-- introduce a small left/right wheel-angular-velocity mismatch during nominally straight motion;
-- use a slightly incorrect wheel radius or track width in the odometry calculation.
+$$
+\omega_L=5.00\ \text{rad/s},
+\qquad
+\omega_R=5.05\ \text{rad/s}.
+$$
 
-Treat one trajectory as the reference. Report final position error and final heading error for the other cases. Explain why the error accumulates even when the wheel-angular-velocity input is constant.
+Using $r=0.033\ \text{m}$ and $b=0.16\ \text{m}$, the odometry calculation produces a small false yaw rate:
+
+$$
+\dot{\theta}_{\text{estimated}}
+=\frac{0.033(5.05-5.00)}{0.16}
+\approx 0.0103\ \text{rad/s}.
+$$
+
+After 60 seconds, that persistent error accumulates to approximately
+
+$$
+\Delta\theta
+\approx 0.0103(60)
+\approx 0.62\ \text{rad}
+\approx 35^\circ.
+$$
+
+The error does not disappear merely because each individual time step is small: every update adds another heading error, and the incorrect heading also rotates future forward-motion updates into the wrong world-frame direction. The estimated $x$ and $y$ therefore drift as well. A biased encoder scale, unequal effective wheel radii, an incorrect track width, and wheel slip can all create this kind of systematic disagreement. No additional experiment or submission is required for this part.
 
 ### Part 6 — Implement and test the bicycle model
 
@@ -473,9 +501,8 @@ Your results must include:
 
 - differential-drive plots for the four special cases;
 - a table of final $x$, $y$, and $\theta$ for those cases;
-- the three student-designed wheel-command cases, including predictions and final poses;
-- the Part 4 TurtleBot qualitative-comparison table;
-- the Part 5 odometry-sensitivity plot and its final position and heading errors;
+- one student-designed wheel-command case, including the calculation or prediction and final pose;
+- one Part 4 TurtleBot motion screenshot;
 - one bicycle-model plot containing the three Part 6 cases;
 - a concise comparison of the assumptions behind all three platform models.
 
@@ -497,9 +524,8 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] differential-drive forward kinematics implemented and unit-checked;
 - [ ] wheel odometry integrated from an initial pose;
 - [ ] straight, curved, pivot, and in-place cases verified;
-- [ ] three wheel-angular-velocity pairs designed and tested against the Part 3 motion targets;
-- [ ] straight, curved, and in-place model predictions compared with TurtleBot motion;
-- [ ] one odometry-sensitivity experiment completed quantitatively;
+- [ ] one wheel-angular-velocity pair designed and tested against a selected Part 3 motion target;
+- [ ] straight, curved, and in-place TurtleBot motions observed in Gazebo;
 - [ ] bicycle-model straight and turning cases verified;
 - [ ] differential-drive, bicycle, and skid-steer assumptions compared;
 - [ ] required plots and tables saved in `results/`.
@@ -508,9 +534,9 @@ Do not compare trajectories point by point unless they use the same time samples
 
 - completed `src/differential_drive.py` and `src/bicycle_model.py`;
 - completed `STUDENT_MOTION_CASES` in `src/run_experiments.py`;
-- differential-drive, odometry-sensitivity, and bicycle-model plots;
-- completed TurtleBot qualitative-comparison table and one screenshot of a commanded motion case;
-- final-pose and error tables;
+- differential-drive and bicycle-model plots;
+- one screenshot of a commanded TurtleBot motion case, identified in `answers.md`;
+- final-pose table;
 - completed `answers.md`;
 - optional F1TENTH observations only if assigned.
 

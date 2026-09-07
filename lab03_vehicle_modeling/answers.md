@@ -10,27 +10,15 @@ Summarize the final pose of each special case and explain any disagreement with 
 
 ## Student motion-design challenge
 
-Before running the program, record the wheel-speed relationship or calculation you used for each target. After running it, record the chosen values and resulting final pose.
+Select one target. Before running the program, record the wheel-speed relationship or calculation you used. After running it, record the chosen values and resulting final pose.
 
 | Motion target | Predicted wheel-speed relationship or calculation | Chosen $\omega_L$ [rad/s] | Chosen $\omega_R$ [rad/s] | Final $(x,y,\theta)$ | Target met? |
 |---|---|---:|---:|---|---|
-| straight backward 0.75–0.85 m | | | | | |
-| one counterclockwise in-place revolution | | | | | |
-| forward right-hand curve | | | | | |
+| selected target: | | | | | |
 
-## TurtleBot visual comparison
+## TurtleBot visual checkpoint
 
-Insert one screenshot showing TurtleBot during a commanded motion case, then complete the qualitative comparison.
-
-| Command case | Predicted path shape | Observed Gazebo motion | Did they agree qualitatively? |
-|---|---|---|---|
-| straight | | | |
-| curved | | | |
-| in-place rotation | | | |
-
-## Odometry-sensitivity experiment
-
-Identify the reference trajectory, changed variable, final position error, and final heading error. Explain the accumulation mechanism.
+Insert one screenshot showing TurtleBot during a commanded motion case and identify whether it shows straight motion, curved motion, or in-place rotation.
 
 ## Bicycle-model observations
 
