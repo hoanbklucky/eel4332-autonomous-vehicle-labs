@@ -220,26 +220,59 @@ gz service -l
 
 **Command breakdown:** `source` prepares the newly opened terminal. In the Gazebo CLI, `topic -l` lists Transport topics and `service -l` lists Transport services; `-l` means **list**.
 
+<details>
+<summary>Expected Gazebo topic and service lists</summary>
+
+![Gazebo Transport topic and service lists for the EEL 4332 practice world](images/gazebo-practice3-01-topic-service-lists.png)
+
+*The exact list may vary, but it should include world-scoped entries containing `eel4332_gazebo_practice`, including the clock topic.*
+
+</details>
+
 Terminal 1 runs the simulated world. Terminal 2 lets you inspect that running simulation without stopping it.
 
 These lists belong to Gazebo Transport, not ROS 2. Find the clock topic:
 
 ```bash
-gz topic -l | grep clock
-gz topic -i -t /clock
+gz topic -l | grep '/clock$'
+gz topic -i -t /world/eel4332_gazebo_practice/clock
 ```
 
-**Command breakdown:** The pipe (`|`) sends the topic list to `grep clock`, which keeps only lines containing `clock`. `gz topic -i` requests information and `-t /clock` selects the `/clock` topic.
+**Command breakdown:** The pipe (`|`) sends the topic list to `grep`, which keeps the name ending in `/clock`. `gz topic -i` requests publisher and subscriber information, and `-t` selects the fully qualified clock topic for this world.
+
+The expected topic is `/world/eel4332_gazebo_practice/clock`. Gazebo topic names are exact: querying `/clock` instead may report `No publishers on topic [/clock]` because `/clock` and the world-scoped name are different topics.
 
 Echo a few clock messages, then stop with `Ctrl+C`:
 
 ```bash
-gz topic -e -t /clock
+gz topic -e -t /world/eel4332_gazebo_practice/clock
 ```
 
-**Command breakdown:** `gz topic -e` echoes incoming messages and `-t /clock` chooses the topic. The command continues until you press `Ctrl+C`.
+**Command breakdown:** `gz topic -e` echoes incoming messages and `-t` chooses the world's clock topic. The command continues until you press `Ctrl+C`.
 
-Repeat while Gazebo is playing and paused. The simulation-time values should advance only while the world is playing.
+Each clock message can contain three time values:
+
+- `system` is the computer's system clock and continues changing while Gazebo is paused;
+- `real` is elapsed real time tracked by the simulation;
+- `sim` is elapsed simulated time and should advance only while the world is playing.
+
+Gazebo uses Protocol Buffers text formatting, which omits numeric fields whose value is zero. Therefore, `real {}` or `sim {}` represents a time value whose seconds and nanoseconds are currently zero; it does not mean that the clock command failed.
+
+<details>
+<summary>Expected output before the simulation begins playing</summary>
+
+![Gazebo clock messages with advancing system time and empty real and simulation time fields](images/gazebo-practice3-02-clock-paused.png)
+
+*This output is valid while the world is paused at its initial time: `system` changes while the zero-valued `real` and `sim` fields appear empty.*
+
+</details>
+
+Perform this comparison while the echo command remains running:
+
+1. Leave the world paused and observe that `sim` remains unchanged. It may appear as `sim {}` while its value is zero.
+2. Click **Play** in Gazebo and verify that values appear inside `real` and `sim` and begin increasing.
+3. Click **Pause** again. Confirm that `system` continues changing while `sim` stops increasing.
+4. Press `Ctrl+C` in Terminal 2 to stop echoing messages.
 
 World-specific topics and services include the world name `eel4332_gazebo_practice`. Names can differ in other worlds, so discover them with `gz topic -l` and `gz service -l` instead of guessing.
 
@@ -256,15 +289,16 @@ gz topic -l
 
 **Command breakdown:** `ros2 topic list` displays the ROS 2 topic graph, while `gz topic -l` displays the separate Gazebo Transport topic graph. Comparing them reveals which data has not yet been bridged.
 
-Seeing `/clock` in Gazebo does not guarantee that it is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third WSL/Ubuntu Terminal:
+Seeing the world-scoped clock in Gazebo does not guarantee that `/clock` is available to ROS 2. Start a one-way Gazebo-to-ROS bridge in a third WSL/Ubuntu Terminal and remap its ROS-side name to the conventional `/clock` topic:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ros2 run ros_gz_bridge parameter_bridge \
-  '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
+  '/world/eel4332_gazebo_practice/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock' \
+  --ros-args -r '/world/eel4332_gazebo_practice/clock:=/clock'
 ```
 
-**Command breakdown:** `ros2 run PACKAGE EXECUTABLE` starts `parameter_bridge` from the `ros_gz_bridge` package. The bridge specification names the topic, ROS message type, and Gazebo message type. The `[` requests the Gazebo-to-ROS direction, and `\` continues one command on the next displayed line.
+**Command breakdown:** `ros2 run PACKAGE EXECUTABLE` starts `parameter_bridge` from the `ros_gz_bridge` package. The bridge specification names the Gazebo topic, ROS message type, and Gazebo message type. The `[` requests the Gazebo-to-ROS direction. `--ros-args` introduces ROS options, and `-r OLD:=NEW` renames only the ROS side to `/clock`. Each `\` continues the command on the next displayed line.
 
 Keep the bridge running. In another WSL/Ubuntu Terminal, verify the ROS topic:
 
@@ -274,14 +308,15 @@ ros2 topic info /clock --verbose
 ros2 topic echo /clock --once
 ```
 
-**Command breakdown:** `source` prepares Terminal 3. `ros2 topic info /clock --verbose` shows the topic type and endpoint details. `ros2 topic echo /clock --once` prints one bridged clock message and exits.
+**Command breakdown:** `source` prepares the verification terminal. `ros2 topic info /clock --verbose` shows the topic type and endpoint details. `ros2 topic echo /clock --once` prints one bridged clock message and exits.
 
 The bridge syntax used here means:
 
-- `/clock` is the topic name;
+- `/world/eel4332_gazebo_practice/clock` is the Gazebo topic name;
 - `rosgraph_msgs/msg/Clock` is the ROS message type;
 - `gz.msgs.Clock` is the Gazebo message type;
-- `[` requests Gazebo-to-ROS communication.
+- `[` requests Gazebo-to-ROS communication;
+- the remapping rule publishes the converted data as ROS topic `/clock`.
 
 Stop the bridge with `Ctrl+C`. Gazebo can continue simulating, but ROS 2 no longer receives new clock messages through that bridge. Later course launch files create several bridges automatically. Lab 4 also makes one TF bridge explicit so you can see exactly how Gazebo motion reaches ROS localization and visualization.
 
@@ -309,7 +344,7 @@ Submit or show the instructor:
 
 - one screenshot of the practice world with the Entity Tree visible;
 - the original and modified red-box poses;
-- output showing `/clock` in the Gazebo topic list;
+- output showing `/world/eel4332_gazebo_practice/clock` in the Gazebo topic list;
 - output from `ros2 topic echo /clock --once` while the bridge is running;
 - two or three sentences explaining the different jobs of Gazebo, ROS 2, and RViz2.
 
@@ -330,7 +365,9 @@ Submit or show the instructor:
 - If `gz` is not found, return to Part 4 of [Lab 00](../lab00_setup/README.md).
 - If `ros2` is not found, source `/opt/ros/jazzy/setup.bash`.
 - If the bridge package is missing, install `ros-jazzy-ros-gz`.
-- If `/clock` does not advance, confirm Gazebo is playing.
+- If `gz topic -i -t /clock` reports no publishers, use the discovered world-scoped topic `/world/eel4332_gazebo_practice/clock` instead.
+- If the Gazebo clock does not advance, confirm Gazebo is playing.
+- If the ROS `/clock` topic is missing, confirm the bridge is still running and that its command uses the world-scoped Gazebo topic plus the `/clock` remapping rule.
 - If a model is visible but passes through another object, inspect its collision geometry rather than only its visual geometry.
 
 ## Official References
