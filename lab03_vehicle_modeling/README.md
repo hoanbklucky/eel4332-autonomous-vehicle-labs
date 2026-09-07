@@ -48,13 +48,19 @@ where $x$ and $y$ are expressed in a fixed world or odometry frame and $\theta$ 
 
 Before using the equations, identify the frames and quantities in the differential-drive model:
 
-![Differential-drive geometry showing the world and body frames, wheel velocities, track width, wheel radius, forward speed, and yaw rate](images/differential-drive-frames.svg)
+![Correll diagram showing a mobile robot's inertial frame, robot frame, and heading](images/correll-mobile-robot-frames.png)
 
-*Figure 1. Differential-drive geometry adapted into the notation used in this lab. The wheel angular velocities $\omega_L$ and $\omega_R$ create wheel-edge speeds $u_L$ and $u_R$. Their average produces body-forward speed $v$; their difference produces vehicle yaw rate $\dot{\theta}$. Track width $b$ is the lateral distance between the wheel contact lines, and $r$ is effective wheel radius.*
+*Figure 1. The fixed inertial frame $\{I\}$ is the world frame used in this lab. Correll's moving robot frame $\{R\}$ is this lab's body frame $B$: its $x_R$ axis points forward and its $y_R$ axis points left. The heading $\theta_I$ is this lab's $\theta$. Source: Correll, [“Forward Kinematics of Selected Mechanisms,” Figure 3.2.3](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
 
 The fixed **world frame** describes the pose $(x,y,\theta)$. The **body frame** $B$ is attached to the robot: $x_B$ points forward and $y_B$ points left. The ideal differential-drive model has two independently driven wheels with radius $r$, separated by track width $b$. Let $\omega_L$ and $\omega_R$ be the left and right **wheel angular velocities** in radians per second.
 
 #### Why multiplying meters by radians gives meters
+
+The right side of Figure 2 shows the wheel geometry behind this relationship:
+
+![Correll diagrams showing a differential robot pivoting about one wheel and a rolling wheel's arc length](images/correll-differential-wheel-kinematics.png)
+
+*Figure 2. Right: rotating a wheel through angle $\phi$ sweeps arc length $r\phi$. Left: when one differential-drive wheel is stationary, the robot pivots about that wheel; Correll labels the wheel separation $d$, which is the track width $b$ used in this lab. Source: Correll, [Figure 3.2.4](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
 
 An angle measured in radians is defined as a ratio:
 
@@ -130,11 +136,11 @@ TurtleBot is well approximated by a two-wheel differential-drive model. Goosebot
 
 ### Car-like bicycle model
 
-Before using the bicycle equations, compare the geometry with the differential-drive figure:
+Before using the bicycle equations, compare the geometry with the differential-drive figures:
 
-![Kinematic bicycle geometry showing rear and front reference points, wheelbase, steering angle, forward speed, yaw rate, and turning radius](images/bicycle-model-geometry.svg)
+![Correll diagram showing car-like steering, its bicycle approximation, and an Ackermann steering mechanism](images/correll-ackermann-bicycle.png)
 
-*Figure 2. The bicycle abstraction replaces the two rear wheels with reference point $P_r$ and the two steered front wheels with point $P_f$. Wheelbase $L$ is the distance from $P_r$ to $P_f$; $\delta$ is the front steering angle. Lines perpendicular to the ideal wheel directions meet at the instantaneous center of rotation, giving turning radius $R=L/\tan\delta$ and yaw rate $\dot{\theta}=v/R$.*
+*Figure 3. Left: the front and rear wheel pairs are replaced by a bicycle model whose wheels follow circles about a common center. $L$ is wheelbase and $R$ is turning radius. Correll uses $\phi$ for the bicycle steering angle; this lab uses $\delta$ to avoid confusing steering angle with wheel rotation angle. Right: an Ackermann linkage gives the physical front wheels different steering angles so their rolling directions share the same center of rotation. Source: Correll, [Figure 3.2.5](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
 
 The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points. Its inputs are **longitudinal speed**, also called **body-forward speed**, $v$, and steering angle $\delta$. Its wheelbase is $L$:
 
@@ -182,8 +188,10 @@ Use meters, seconds, meters per second, radians, and radians per second. This la
 lab03_vehicle_modeling/
 ├── README.md
 ├── images/
-│   ├── differential-drive-frames.svg
-│   └── bicycle-model-geometry.svg
+│   ├── README.md
+│   ├── correll-mobile-robot-frames.png
+│   ├── correll-differential-wheel-kinematics.png
+│   └── correll-ackermann-bicycle.png
 ├── src/
 │   ├── differential_drive.py
 │   ├── bicycle_model.py
