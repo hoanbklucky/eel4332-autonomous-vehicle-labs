@@ -242,6 +242,15 @@ gz topic -i -t /world/eel4332_gazebo_practice/clock
 
 The expected topic is `/world/eel4332_gazebo_practice/clock`. Gazebo topic names are exact: querying `/clock` instead may report `No publishers on topic [/clock]` because `/clock` and the world-scoped name are different topics.
 
+<details>
+<summary>Expected clock topic information</summary>
+
+![Gazebo clock topic information showing one Clock publisher and no subscribers](images/gazebo-practice3-02-clock-topic-info.png)
+
+*The `gz.msgs.Clock` publisher confirms that Gazebo is providing the topic. `No subscribers` is normal at this point because the echo command and bridge have not been started yet.*
+
+</details>
+
 Echo a few clock messages, then stop with `Ctrl+C`:
 
 ```bash
@@ -250,29 +259,49 @@ gz topic -e -t /world/eel4332_gazebo_practice/clock
 
 **Command breakdown:** `gz topic -e` echoes incoming messages and `-t` chooses the world's clock topic. The command continues until you press `Ctrl+C`.
 
-Each clock message can contain three time values:
+Each clock message can contain three different time values:
 
-- `system` is the computer's system clock and continues changing while Gazebo is paused;
-- `real` is elapsed real time tracked by the simulation;
-- `sim` is elapsed simulated time and should advance only while the world is playing.
+- `system` is the computer's wall-clock timestamp. Its large `sec` value counts from the Unix epoch, so it advances whether Gazebo is playing or paused.
+- `real` is the wall-clock duration Gazebo has accumulated while actively running the simulation. It describes how much actual computer time the active simulation has used and excludes time spent paused.
+- `sim` is time inside the simulated world. Gazebo advances it using the physics step size, so simulated sensors, motion, and ROS nodes using simulation time follow this clock.
+
+Therefore, your observation is correct: while the world is playing, both `real` and `sim` increase; while it is paused, both stop; `system` continues in either state.
+
+`real` and `sim` answer different questions. If Gazebo runs near real time, they increase by similar amounts. If the computer needs two real seconds to calculate one simulated second, `real` increases faster than `sim` and the real-time factor is approximately `0.5`. In general:
+
+\[
+\text{real-time factor} = \frac{\Delta \text{sim time}}{\Delta \text{real time}}
+\]
+
+A factor near `1.0` means simulation time and active real time advance at nearly the same rate. A factor below `1.0` means the simulation is running slower than real time; a factor above `1.0` means it is running faster.
 
 Gazebo uses Protocol Buffers text formatting, which omits numeric fields whose value is zero. Therefore, `real {}` or `sim {}` represents a time value whose seconds and nanoseconds are currently zero; it does not mean that the clock command failed.
 
 <details>
 <summary>Expected output before the simulation begins playing</summary>
 
-![Gazebo clock messages with advancing system time and empty real and simulation time fields](images/gazebo-practice3-02-clock-paused.png)
+![Gazebo clock messages with advancing system time and empty real and simulation time fields](images/gazebo-practice3-03-clock-paused.png)
 
 *This output is valid while the world is paused at its initial time: `system` changes while the zero-valued `real` and `sim` fields appear empty.*
 
 </details>
 
+<details>
+<summary>Expected output while the simulation is playing</summary>
+
+![Gazebo running while real and simulation clock values increase](images/gazebo-practice3-04-clock-running.png)
+
+*Both `real` and `sim` increase while Gazebo is playing. Their similar values and the displayed real-time factor near 100% show that this simulation is running close to real time.*
+
+</details>
+
 Perform this comparison while the echo command remains running:
 
-1. Leave the world paused and observe that `sim` remains unchanged. It may appear as `sim {}` while its value is zero.
+1. Leave the world paused and observe that `real` and `sim` remain unchanged. They may appear as empty braces while their values are zero.
 2. Click **Play** in Gazebo and verify that values appear inside `real` and `sim` and begin increasing.
-3. Click **Pause** again. Confirm that `system` continues changing while `sim` stops increasing.
-4. Press `Ctrl+C` in Terminal 2 to stop echoing messages.
+3. Compare the change in `real` with the change in `sim`. They should be similar when the displayed real-time factor is near 100%.
+4. Click **Pause** again. Confirm that `system` continues changing while both `real` and `sim` stop increasing.
+5. Press `Ctrl+C` in Terminal 2 to stop echoing messages.
 
 World-specific topics and services include the world name `eel4332_gazebo_practice`. Names can differ in other worlds, so discover them with `gz topic -l` and `gz service -l` instead of guessing.
 
