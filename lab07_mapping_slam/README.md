@@ -162,7 +162,9 @@ Create two maps using different driving strategies, for example:
 - fast/aggressive;
 - with/without revisiting a loop.
 
-Keep the simulator world, initial pose, approximate driving duration, and map-saving procedure the same between runs. Change only the driving strategy being studied. Record the duration and approximate distance traveled so that the comparison is reproducible.
+Before driving, design both routes and identify one intentional difference between them. Describe or sketch the planned order of regions, turn behavior, speed policy, and whether the route revisits a distinctive area. Predict which strategy will produce better coverage, lower distortion, and stronger loop-closure evidence, and explain why.
+
+Keep the simulator world, initial pose, approximate driving duration, and map-saving procedure the same between runs. Change only the driving strategy being studied. Record the duration and approximate distance traveled so that the comparison is reproducible. If the actual route differs substantially from the plan, document the deviation instead of silently redefining the strategy afterward.
 
 Compare:
 
@@ -200,6 +202,7 @@ Define the chosen measure before comparing the runs. Report its units, calculati
 - [ ] an occupancy map is generated and changes as new space is observed;
 - [ ] each saved map includes the course-required image and metadata files;
 - [ ] two mapping strategies are compared under documented, approximately matched conditions;
+- [ ] both routes and their expected effects are recorded before mapping and compared with the resulting maps;
 - [ ] one quantitative quality measure with units and method is reported for both maps.
 
 ## What to Submit
@@ -207,6 +210,7 @@ Define the chosen measure before comparing the runs. Report its units, calculati
 - two map images;
 - one short mapping video/screenshot sequence;
 - quality comparison;
+- pre-run route plans, hypotheses, and post-run evidence table;
 - completed `answers.md`.
 
 ## Troubleshooting

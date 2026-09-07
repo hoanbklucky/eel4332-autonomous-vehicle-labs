@@ -576,6 +576,37 @@ Record:
 
 For each selected topic, observe its rate for at least 10 seconds. Report the approximate mean rate and note any long pauses or missing messages. A topic that merely appears in `ros2 topic list` has not yet been shown to carry useful data.
 
+### Trace one student-selected data flow
+
+**Why this activity matters:** A topic list names interfaces, but tracing one signal shows how a physical quantity travels through publishers, bridges, ROS messages, and consumers.
+
+Choose one live sensor topic, preferably LiDAR or IMU data. Before inspecting its endpoints, predict:
+
+- which simulated sensor produces the data;
+- whether a ROS–Gazebo bridge is required;
+- which ROS node or visualization consumes it;
+- what will happen to message delivery when Gazebo is paused.
+
+Test the prediction with the live graph:
+
+```bash
+ros2 topic info /TOPIC --verbose
+ros2 node info /PUBLISHER_NODE
+ros2 node info /CONSUMER_NODE
+```
+
+**Command breakdown:** `topic info --verbose` identifies the topic type and endpoint nodes. Each `node info` command shows the selected node's publishers, subscribers, services, and actions. Replace every placeholder with a name observed on your system.
+
+If the publisher is a ROS–Gazebo bridge, use `gz topic -l` to find the corresponding Gazebo Transport topic and inspect it with:
+
+```bash
+gz topic -i -t /GAZEBO_TOPIC
+```
+
+**Command breakdown:** `gz topic -i` reports information about one Gazebo Transport topic, and `-t` selects the observed topic name. Do not assume that its name or message type is identical to the ROS interface.
+
+Finally, echo the ROS topic continuously, pause Gazebo for several seconds, and resume it. Record whether messages stop and restart. Explain which blocks in your predicted data flow the evidence confirmed or corrected. Restore the simulation to its running state before continuing.
+
 ## Part 3 — Inspect Coordinate Frames
 
 **Why this part matters:** Sensor values are only meaningful when you know the coordinate frame in which their positions and directions are expressed.
@@ -638,6 +669,7 @@ Answer in `answers.md`.
 - [ ] simulation launches;
 - [ ] ROS nodes/topics can be inspected and at least one publisher/subscriber relationship is identified;
 - [ ] at least four sensor/state topics have a recorded type, approximate 10-second rate, and downstream consumer;
+- [ ] one student-selected sensor flow is predicted and traced from its simulated source through any bridge to a ROS consumer;
 - [ ] the `map → odom → base_footprint` or instructor-validated equivalent TF chain is connected;
 - [ ] the base frame and at least two sensor frames are identified;
 - [ ] a sensor-to-function table is completed;
@@ -647,6 +679,7 @@ Answer in `answers.md`.
 
 - completed `answers.md`;
 - sensor/topic characterization table;
+- completed data-flow prediction and evidence table;
 - architecture diagram;
 - one screenshot of RViz2 showing the robot and sensor frames;
 - optional short screen recording.

@@ -8,6 +8,16 @@ Record the predicted motion and signs of body-forward speed and vehicle yaw rate
 
 Summarize the final pose of each special case and explain any disagreement with your hand prediction.
 
+## Student motion-design challenge
+
+Before running the program, record the wheel-speed relationship or calculation you used for each target. After running it, record the chosen values and resulting final pose.
+
+| Motion target | Predicted wheel-speed relationship or calculation | Chosen $\omega_L$ [rad/s] | Chosen $\omega_R$ [rad/s] | Final $(x,y,\theta)$ | Target met? |
+|---|---|---:|---:|---|---|
+| straight backward 0.75–0.85 m | | | | | |
+| one counterclockwise in-place revolution | | | | | |
+| forward right-hand curve | | | | | |
+
 ## TurtleBot visual comparison
 
 Insert one screenshot showing TurtleBot during a commanded motion case, then complete the qualitative comparison.

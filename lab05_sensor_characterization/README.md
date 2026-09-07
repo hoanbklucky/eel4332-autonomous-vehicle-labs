@@ -88,6 +88,8 @@ Use at least two numeric sensor/state signals from the instructor simulation, su
 - wheel/odometry velocity;
 - GNSS-like position if available.
 
+Before recording data, state what you expect each selected signal to do while the robot is stationary and during your planned controlled motion. Predict the direction of any mean change, how each signal's variability should change between conditions, and whether its sample rate should change. These are hypotheses to test, not answers to revise after seeing the plots.
+
 ### Part 2 — Record a stationary experiment
 
 **Why this part matters:** Holding the robot still isolates measurement bias and random noise from changes caused by motion.
@@ -108,7 +110,9 @@ ros2 topic hz /TOPIC
 
 **Why this part matters:** A repeatable motion test shows how the sensor behaves under the dynamic conditions an autonomous system actually encounters.
 
-Use a simple repeatable motion, such as constant forward speed or a constant turn.
+Choose a simple repeatable motion, such as constant forward speed or a constant turn. Define the commanded speed, duration, starting condition, and stopping rule before recording. Change only the motion condition between the stationary and controlled trials; keep the selected signals, collection method, and analysis method the same.
+
+After collecting both datasets, compare the measured direction, variability, and sample rate with your predictions. Identify at least one agreement or discrepancy and explain a plausible physical, simulation, or processing cause.
 
 ### Part 4 — Analyze statistics
 
@@ -165,6 +169,7 @@ and identify what each term represents in your experiment.
 
 - [ ] two numeric signals recorded;
 - [ ] stationary and controlled-motion data collected;
+- [ ] signal behavior predicted before collection and compared with measured results;
 - [ ] mean/std/variance computed;
 - [ ] timing statistics reported;
 - [ ] one measurement model written;
@@ -175,7 +180,8 @@ and identify what each term represents in your experiment.
 - completed `sensor_stats.py`;
 - plots/tables in `results/`;
 - completed `answers.md`;
-- short description of data-collection procedure.
+- short description of data-collection procedure;
+- pre-run prediction and evidence table.
 
 ## Troubleshooting
 

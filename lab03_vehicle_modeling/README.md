@@ -274,7 +274,7 @@ python lab03_vehicle_modeling/src/run_experiments.py --model differential
 
 The terminal command above is the recommended way to run this stage because it includes the required `--model differential` argument. The Microsoft Python extension for VS Code is helpful for editing and debugging, but it is not required for this terminal command; the Python interpreter and course virtual environment perform the execution. If VS Code reports that it cannot find Python, complete the Python-extension and interpreter-selection steps in Lab 00 and confirm that VS Code is connected to WSL.
 
-The command prints a final-pose table containing $x$, $y$, and yaw and saves `results/differential_drive_trajectories.png`. The figure contains both the planar $x$–$y$ path and yaw versus time.
+The command prints a final-pose table containing $x$, $y$, and yaw and saves `results/differential_drive_trajectories.png`. The figure contains both the planar position path and yaw versus time.
 
 For every case, compare the printed table and figure with your Part 1 prediction:
 
@@ -283,7 +283,27 @@ For every case, compare the printed table and figure with your Part 1 prediction
 - equal and opposite wheel angular velocities should change yaw while $x$ and $y$ remain approximately constant;
 - slightly unequal positive wheel angular velocities should produce a gentle curve rather than a perfectly straight path.
 
-Do not validate from the $x$–$y$ panel alone. An in-place rotation appears as a single point there but is clearly visible in the yaw-versus-time panel and final-yaw value. If a result disagrees with the hand prediction, return to the corresponding conversion, sign, or integration step before continuing.
+Do not validate from the planar-path panel alone. An in-place rotation appears as a single point there but is clearly visible in the yaw-versus-time panel and final-yaw value. If a result disagrees with the hand prediction, return to the corresponding conversion, sign, or integration step before continuing.
+
+#### Student motion-design challenge
+
+**Why this activity matters:** The four supplied cases check whether the model behaves correctly, but autonomous-vehicle work also requires solving the inverse question: “What wheel commands will create the motion I want?”
+
+Open `src/run_experiments.py` and find `STUDENT_MOTION_CASES`. Without changing `wheel_radius`, `track_width`, `dt`, or `duration`, add three named wheel-command pairs that produce:
+
+1. straight backward travel ending between 0.75 m and 0.85 m behind the initial pose, with final yaw approximately zero;
+2. one counterclockwise in-place revolution, with final yaw approximately $2\pi$ rad and essentially no position change;
+3. a forward right-hand curve using two positive, nonzero wheel angular velocities.
+
+Each entry uses this format:
+
+```python
+("descriptive case name", left_wheel_angular_velocity, right_wheel_angular_velocity)
+```
+
+Both numerical values are in rad/s. Before running the program, calculate or predict the required wheel-speed relationship and record your reasoning in `answers.md`. Then rerun the differential experiment, inspect both panels and the final-pose table, and adjust your values if necessary. Do not copy one of the supplied validation pairs unchanged; your commands must satisfy the targets above.
+
+Wheel angular velocities are the **inputs you command**. Wheel radius and track width describe the **robot you are modeling**. Changing a geometry value merely to reach a desired motion would describe a different robot. You will deliberately perturb geometry later in the odometry-sensitivity experiment to study modeling error.
 
 ### Part 4 — Compare the model with TurtleBot motion in Gazebo
 
@@ -437,6 +457,7 @@ Your results must include:
 
 - differential-drive plots for the four special cases;
 - a table of final $x$, $y$, and $\theta$ for those cases;
+- the three student-designed wheel-command cases, including predictions and final poses;
 - the Part 4 TurtleBot qualitative-comparison table;
 - the Part 5 odometry-sensitivity plot and its final position and heading errors;
 - one bicycle-model plot containing the three Part 6 cases;
@@ -460,6 +481,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] differential-drive forward kinematics implemented and unit-checked;
 - [ ] wheel odometry integrated from an initial pose;
 - [ ] straight, curved, pivot, and in-place cases verified;
+- [ ] three wheel-angular-velocity pairs designed and tested against the Part 3 motion targets;
 - [ ] straight, curved, and in-place model predictions compared with TurtleBot motion;
 - [ ] one odometry-sensitivity experiment completed quantitatively;
 - [ ] bicycle-model straight and turning cases verified;
@@ -469,7 +491,7 @@ Do not compare trajectories point by point unless they use the same time samples
 ## What to Submit
 
 - completed `src/differential_drive.py` and `src/bicycle_model.py`;
-- any documented changes to `src/run_experiments.py`;
+- completed `STUDENT_MOTION_CASES` in `src/run_experiments.py`;
 - differential-drive, odometry-sensitivity, and bicycle-model plots;
 - completed TurtleBot qualitative-comparison table and one screenshot of a commanded motion case;
 - final-pose and error tables;
@@ -486,7 +508,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - Print one update and compare it with a hand calculation.
 - If equal positive wheel angular velocities do not produce zero yaw rate, check the subtraction order.
 - If a left turn appears as a right turn, check wheel labels and the yaw sign convention.
-- If in-place rotation seems motionless on the $x$–$y$ plot, inspect yaw versus time.
+- If in-place rotation seems motionless on the planar-path plot, inspect yaw versus time.
 - Check radians versus degrees, wheel angular velocity versus linear wheel-edge speed, and wheel rotation versus vehicle yaw rate.
 - If results change greatly when the time step is halved, investigate integration error before interpreting vehicle behavior.
 

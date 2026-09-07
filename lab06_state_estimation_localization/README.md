@@ -113,7 +113,9 @@ Run at least three configurations:
 - trust measurements more;
 - balanced configuration.
 
-Plot the resulting estimates.
+Choose and record the numerical $Q$ and $R$ values for all three configurations before running them. For each configuration, predict relative smoothness, response to a new measurement, and uncertainty. Hold the dataset, initial state, and all non-$Q$/$R$ settings constant so the covariance assumptions are the controlled change.
+
+Plot the resulting estimates. Compare the measured response and error metrics with the predictions; do not select a preferred configuration solely because its curve looks smooth.
 
 ## Part 4 — Localization Dataset / Simulation
 
@@ -140,6 +142,8 @@ Repeat with one degradation:
 - artificial bias;
 - reduced measurement frequency.
 
+Before applying the degradation, predict which output or metric will change most, the direction of that change, and how the estimator should behave when valid measurements return. Then test the prediction using the same estimator configuration and initial condition as the undegraded baseline.
+
 ## Quantitative Analysis
 
 Report at least two metrics, for example:
@@ -161,6 +165,7 @@ Report at least two metrics, for example:
 
 - [ ] Kalman predict/update implemented;
 - [ ] Q/R parameter study completed;
+- [ ] Q/R and degradation outcomes predicted before testing and compared with evidence;
 - [ ] raw vs fused estimates compared;
 - [ ] at least two localization metrics reported;
 - [ ] one degradation experiment analyzed.
@@ -170,6 +175,7 @@ Report at least two metrics, for example:
 - completed filter code;
 - plots;
 - metric table;
+- completed tuning/failure prediction tables;
 - `answers.md`.
 
 ## Troubleshooting

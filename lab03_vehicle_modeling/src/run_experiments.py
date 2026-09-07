@@ -16,9 +16,15 @@ from differential_drive import DifferentialDriveState, simulate_differential_dri
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 
+# TODO(student): Add the three motion-design cases required in Part 3 of the
+# README. Each tuple has the form (case_name, left_speed, right_speed), with
+# wheel angular velocities in rad/s. Do not change the robot geometry to meet
+# the motion targets.
+STUDENT_MOTION_CASES: list[tuple[str, float, float]] = []
+
 
 def run_differential_drive_experiments() -> None:
-    """Run and save the required constant-wheel-angular-velocity checks.
+    """Run and save the validation checks and student-designed motion cases.
 
     Returns:
       None. Prints final poses and saves path and yaw plots in the Lab 3 results
@@ -30,12 +36,19 @@ def run_differential_drive_experiments() -> None:
     dt = 0.02
     duration = 8.0
 
-    experiments = [
+    validation_experiments = [
         ("equal positive", 5.0, 5.0),
         ("left wheel stationary", 0.0, 5.0),
         ("equal and opposite", -3.0, 3.0),
         ("slight mismatch", 5.0, 4.8),
     ]
+    experiments = validation_experiments + STUDENT_MOTION_CASES
+
+    if not STUDENT_MOTION_CASES:
+        print(
+            "\nStudent motion-design cases have not been added. "
+            "Complete STUDENT_MOTION_CASES in run_experiments.py."
+        )
 
     fig, (path_ax, yaw_ax) = plt.subplots(1, 2, figsize=(11, 4.5))
     final_poses = []
