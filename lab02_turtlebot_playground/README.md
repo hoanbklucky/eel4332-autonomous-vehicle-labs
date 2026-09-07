@@ -287,6 +287,15 @@ ros2 topic echo /cmd_vel
 
 Press movement and stop keys in WSL/Ubuntu Terminal 2. Observe which `linear` and `angular` values change, then stop the echo with `Ctrl+C`.
 
+<details>
+<summary>Example forward command on `/cmd_vel`</summary>
+
+![Keyboard teleoperation beside forward velocity messages from cmd_vel](images/playground-part4-01-cmd-vel-observation.png)
+
+*The relevant output begins at `ros2 topic echo /cmd_vel`; the `/clock` text above it is leftover output from an earlier command. For forward motion, `linear.x` is `0.15` while `angular.z` is `0.0`. A turning command changes `angular.z`, and `k` produces a stop command with both values equal to zero.*
+
+</details>
+
 Now inspect the odometry estimate:
 
 ```bash
@@ -296,6 +305,15 @@ ros2 topic echo /odom --once
 **Command breakdown:** `ros2 topic echo` displays messages from `/odom`; `--once` prints one message and exits instead of streaming continuously.
 
 Drive to a different location and run the same command again. Find the changed position or orientation fields. You do not need to interpret the quaternion yet.
+
+<details>
+<summary>Example `/odom` message after motion</summary>
+
+![One odometry message showing the robot pose after it moved](images/playground-part4-02-odom-message.png)
+
+*`frame_id: odom` names the reference frame, and `child_frame_id: base_footprint` identifies the robot frame being estimated. The position contains planar `x` and `y` coordinates. Orientation is represented by quaternion components; you only need to recognize that these values can change when the robot turns. Odometry is an estimate based on wheel motion and can disagree with physical motion if the wheels slip or push against an obstacle.*
+
+</details>
 
 Record one forward `/cmd_vel` message, one turning `/cmd_vel` message, and one qualitative change observed in `/odom`.
 
@@ -312,28 +330,14 @@ At the end of the activity:
 
 If the robot becomes trapped, tips over, or leaves the useful area, stop teleoperation and restart the simulation. Recovery is part of learning the simulator; do not continue sending commands to a robot you cannot see.
 
-## Experiment / Quantitative Analysis
-
-Choose a short route containing at least two turns and one narrow passage. Complete two attempts and record:
-
-| Attempt | Approximate time | Collisions | Stops/corrections | Observation |
-|---|---:|---:|---:|---|
-| 1 | | | | |
-| 2 | | | | |
-
-Use a phone timer or wall clock; precise synchronization is not required. Explain one reason the second attempt was easier, faster, safer, or more consistent—or why it was not.
-
 ## Engineering Questions
 
 Answer these questions in `answers.md`:
 
-1. Which motion was easiest to control, and which was hardest?
-2. How did camera placement affect your driving?
-3. What happened in `/cmd_vel` during forward motion, turning, and stopping?
-4. What changed in `/odom` after the robot moved?
-5. Why is a velocity command alone insufficient to complete a destination-based mission?
-6. Which human tasks in this exercise will later be performed by sensing, localization, planning, and control software?
-7. Why might the same keyboard commands produce different motion on physical Goosebot?
+1. Which `linear.x` and `angular.z` values changed for forward motion, turning, and stopping, and what does each value command?
+2. Which position or orientation fields changed in `/odom`, and why is odometry called an estimate?
+3. Why is a `/cmd_vel` velocity command alone insufficient to make the robot reach a specified destination?
+4. In this playground, which observe–decide–command tasks did you perform that autonomous software must perform later?
 
 ## Success Criteria
 
@@ -341,16 +345,15 @@ Answer these questions in `answers.md`:
 - [ ] Forward, reverse, curved, and in-place motion demonstrated.
 - [ ] Approach, rotation, slalom, parking, and return challenges attempted.
 - [ ] `/cmd_vel` and `/odom` changes observed.
-- [ ] Two route attempts recorded and compared.
-- [ ] Playground reflection completed.
+- [ ] Core engineering questions completed.
 
 ## What to Submit
 
 - completed `answers.md`;
 - one screenshot showing TurtleBot during or after a driving challenge;
-- the two-attempt route table;
 - one captured or transcribed forward `/cmd_vel` message;
-- one captured or transcribed turning `/cmd_vel` message.
+- one captured or transcribed turning `/cmd_vel` message;
+- one captured `/odom` message after the robot moved.
 
 Store screenshots or other local evidence in `lab02_turtlebot_playground/results/` unless the instructor specifies another submission method.
 

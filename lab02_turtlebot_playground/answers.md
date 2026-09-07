@@ -20,17 +20,8 @@ Record or paste one representative message.
 
 ### `/odom` change
 
-Describe one position or orientation field that changed after motion.
-
-## Two-attempt route experiment
-
-| Attempt | Approximate time | Collisions | Stops/corrections | Observation |
-|---|---:|---:|---:|---|
-| 1 | | | | |
-| 2 | | | | |
-
-Explain one reason the second attempt was easier, faster, safer, or more consistent—or why it was not.
+Paste one representative message after motion and identify one position or orientation field that changed.
 
 ## Engineering questions
 
-Answer Questions 1–7 from the README using observations from your own simulation session.
+Answer Questions 1–4 from the README using observations from your own simulation session.
