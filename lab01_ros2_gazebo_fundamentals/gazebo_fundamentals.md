@@ -331,6 +331,8 @@ gz topic -l
 
 Gazebo and ROS 2 use separate communication systems. Gazebo publishes `gz.msgs.Clock` messages through Gazebo Transport, while ROS 2 nodes exchange `rosgraph_msgs/msg/Clock` messages through ROS middleware. A topic existing in the Gazebo graph therefore does not make it visible in the ROS graph.
 
+> **In one sentence:** A bridge converts Gazebo messages into the corresponding ROS 2 message types and relays them between the two communication systems. A bridge can also work in the other direction—for example, converting a ROS 2 velocity command into a message Gazebo understands.
+
 The bridge acts as a translator and relay:
 
 ```text
