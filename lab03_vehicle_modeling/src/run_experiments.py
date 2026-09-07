@@ -10,7 +10,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from bicycle_model import BicycleState, simulate
+from bicycle_model import BicycleState, simulate, wheel_speed_to_twist
 from differential_drive import DifferentialDriveState, simulate_differential_drive
 
 
@@ -93,9 +93,11 @@ def run_bicycle_experiments() -> None:
     """Run and save a compact set of bicycle-model cases.
 
     Returns:
-      None. Saves a labeled trajectory figure in the Lab 3 results directory.
+      None. Prints the input-to-twist conversion and saves a labeled
+      trajectory figure in the Lab 3 results directory.
     """
     initial = BicycleState(0.0, 0.0, 0.0)
+    wheel_radius = 0.30
     wheelbase = 2.8
     dt = 0.02
     duration = 8.0
@@ -107,9 +109,34 @@ def run_bicycle_experiments() -> None:
     ]
 
     fig, ax = plt.subplots()
-    for name, speed, steering in experiments:
-        trajectory = simulate(initial, speed, steering, wheelbase, dt, duration)
+    body_velocities = []
+    for name, wheel_speed, steering in experiments:
+        speed, yaw_rate = wheel_speed_to_twist(
+            wheel_speed, wheel_radius, steering, wheelbase
+        )
+        trajectory = simulate(
+            initial,
+            wheel_speed,
+            wheel_radius,
+            steering,
+            wheelbase,
+            dt,
+            duration,
+        )
         ax.plot(trajectory[:, 0], trajectory[:, 1], label=name)
+        body_velocities.append((name, wheel_speed, steering, speed, yaw_rate))
+
+    print("\nBicycle-model wheel-to-body conversion")
+    print(
+        f"{'case':<18} {'wheel [rad/s]':>14} {'steer [rad]':>13} "
+        f"{'speed [m/s]':>13} {'yaw rate [rad/s]':>17}"
+    )
+    print("-" * 79)
+    for name, wheel_speed, steering, speed, yaw_rate in body_velocities:
+        print(
+            f"{name:<18} {wheel_speed:>14.3f} {steering:>13.3f} "
+            f"{speed:>13.3f} {yaw_rate:>17.3f}"
+        )
 
     ax.set_xlabel("x [m]")
     ax.set_ylabel("y [m]")

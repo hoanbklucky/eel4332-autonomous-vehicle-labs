@@ -22,7 +22,7 @@ Insert one screenshot showing TurtleBot during a commanded motion case and ident
 
 ## Bicycle-model observations
 
-Explain the effects of zero steering and increasing steering magnitude.
+Record the body-forward speed and yaw rate produced by `wheel_speed_to_twist` for each case. Explain the effects of zero steering and increasing steering magnitude.
 
 ## Model comparison
 

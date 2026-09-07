@@ -20,6 +20,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 ## Learning Objectives
 
 - convert left and right wheel angular velocities into body-forward speed and vehicle yaw rate;
+- convert a car-like model's driven-wheel angular velocity and steering angle into body-forward speed and vehicle yaw rate;
 - numerically integrate differential-drive wheel odometry;
 - recognize why odometry is an estimate rather than ground truth;
 - compare differential-drive model predictions with visible TurtleBot motion in Gazebo;
@@ -152,7 +153,7 @@ $$
 \dot{\theta}=\frac{v}{L}\tan\delta.
 $$
 
-The model usually receives $v$ directly. If instead $v$ is inferred from the angular velocity $\omega_w$ of an equivalent driven rear wheel with effective radius $r_w$, ideal rolling without slip gives
+The core bicycle model may receive $v$ directly. In this lab, you first infer $v$ from the angular velocity $\omega_w$ of an equivalent driven rear wheel with effective radius $r_w$. Under ideal rolling without slip,
 
 $$
 v=r_w\omega_w,
@@ -160,7 +161,9 @@ v=r_w\omega_w,
 \dot{\theta}=\frac{r_w\omega_w}{L}\tan\delta.
 $$
 
-This conversion uses the angular velocity of the equivalent rear/reference wheel. A measured steered-front-wheel speed or a slipping tire requires additional geometry or a more detailed model.
+Here, $r_w$ is the effective driven-wheel radius in meters, $\omega_w$ is the driven-wheel angular velocity in rad/s, $L$ is the front-to-rear wheelbase in meters, and $\delta$ is the equivalent front-wheel steering angle in radians. The function `wheel_speed_to_twist` implements this conversion and returns $v$ and $\dot{\theta}$.
+
+This simplified conversion uses the angular velocity of the equivalent rear/reference wheel. A measured steered-front-wheel speed or a slipping tire requires additional geometry or a more detailed model.
 
 Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 8. It is not a model of Goosebot.
 
@@ -192,6 +195,8 @@ lab03_vehicle_modeling/
 │   ├── correll-mobile-robot-frames.png
 │   ├── correll-differential-wheel-kinematics.png
 │   ├── correll-ackermann-bicycle.png
+│   ├── differential-drive-validation-trajectories.png
+│   ├── bicycle-model-validation-trajectories.png
 │   └── turtlebot-part4-01-straight-motion.png
 ├── src/
 │   ├── differential_drive.py
@@ -296,6 +301,10 @@ For every case, compare the printed table and figure with your Part 1 prediction
 
 Do not validate from the planar-path panel alone. An in-place rotation appears as a single point there but is clearly visible in the yaw-versus-time panel and final-yaw value. If a result disagrees with the hand prediction, return to the corresponding conversion, sign, or integration step before continuing.
 
+![Example differential-drive output with planar paths and heading over time](images/differential-drive-validation-trajectories.png)
+
+*Example output after a correct implementation. Equal positive wheel speeds produce a straight path with constant heading. One stationary wheel produces an arc, equal-and-opposite speeds change heading at essentially one position, and a small speed mismatch produces a gradual curve. Exact values depend on the supplied inputs.*
+
 #### Student motion-design challenge
 
 **Why this activity matters:** The four supplied cases check whether the model behaves correctly, but autonomous-vehicle work also requires solving the inverse question: “What wheel commands will create the motion I want?”
@@ -321,6 +330,20 @@ Wheel angular velocities are the **inputs you command**. Wheel radius and track 
 **Why this part matters:** Watching TurtleBot move connects the mathematical motion categories from Part 3 to a simulated physical robot.
 
 The TurtleBot simulator accepts body velocity on `/cmd_vel`, where `linear.x` corresponds to model output $v$ and `angular.z` corresponds to $\dot{\theta}$. It does not accept the model's left and right wheel angular velocities directly. Therefore, this is a qualitative comparison of motion type—not an independent numerical validation of your wheel equations.
+
+#### How the kinematic model connects to Gazebo
+
+The Python model from Part 3 and the Gazebo simulation do **not** call each other. They represent the same differential-drive geometry at different levels:
+
+| Stage | What happens |
+|---|---|
+| Python model | Your code assumes ideal rolling and directly integrates wheel-derived $v$ and $\dot{\theta}$ to predict $x$, $y$, and $\theta$. It does not model mass, motor force, collision, or friction. |
+| ROS–Gazebo bridge | The bridge translates the ROS 2 `Twist` message on `/cmd_vel` into the corresponding Gazebo Transport message. It changes the communication format; it does not calculate the robot pose. |
+| Gazebo DiffDrive system | The controller uses wheel radius and track width to convert the requested body-forward speed and yaw rate into left and right wheel-joint velocity commands. This is **inverse differential-drive kinematics**. |
+| Gazebo physics | The physics engine advances the linked robot using those joint commands together with gravity, collisions, and contact friction. The robot's simulated world pose therefore comes from the physics simulation, not from your Python Euler-integration function. |
+| Gazebo odometry | The DiffDrive system reads the wheel-joint positions and uses differential-drive **forward kinematics** to estimate and publish odometry. This calculation is the closest counterpart to the code you write in Part 3. |
+
+In short, Gazebo uses both kinematics and physics: kinematics converts between body motion and wheel motion, while physics determines how the simulated body actually moves. Under ideal free-space rolling, the kinematic prediction and Gazebo motion should look similar. Contact with an obstacle, wheel slip, or imperfect geometry can make the physical pose and wheel-derived odometry disagree. Gazebo's [DiffDrive source](https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc#L475-L590) shows both the body-to-wheel conversion and the wheel-position odometry update.
 
 Close any older TurtleBot, Gazebo, or keyboard-teleoperation processes. In **WSL/Ubuntu Terminal 1**, launch the same known-good simulator used in Lab 2:
 
@@ -439,21 +462,40 @@ Open:
 src/bicycle_model.py
 ```
 
-Complete its existing `TODO` sections. Test these compact cases:
+Complete its `TODO` sections in this order:
 
-1. zero steering;
-2. one constant positive steering angle;
-3. the same speed with a larger steering angle.
+1. `wheel_speed_to_twist`;
+2. `step_bicycle`;
+3. `simulate`.
 
-Confirm that zero steering produces a straight line and that increasing steering magnitude reduces turning radius. The bicycle portion is intentionally smaller than the differential-drive portion.
+The provided `run_bicycle_experiments` function supplies $r_w=0.30\ \text{m}$, $\omega_w=5.0\ \text{rad/s}$, and $L=2.8\ \text{m}$ to all three cases. It changes only the steering angle:
 
-After completing both bicycle-model functions, run its cases independently with:
+| Driver case | Wheel angular velocity | Steering angle | Expected check |
+|---|---:|---:|---|
+| `straight` | 5.0 rad/s | 0 rad | zero yaw rate and a straight path |
+| `gentle_turn` | 5.0 rad/s | 0.12 rad | positive yaw rate and a left-curving path |
+| `tighter_turn` | 5.0 rad/s | 0.25 rad | larger positive yaw rate and a tighter left curve |
+
+After completing all three bicycle-model functions, test them from the repository root:
 
 ```bash
+source ~/venvs/eel4332/bin/activate
 python lab03_vehicle_modeling/src/run_experiments.py --model bicycle
 ```
 
-This option is useful when debugging the bicycle model because a failure in the differential-drive code cannot interrupt its experiment.
+**Command breakdown:** `source` activates the course Python environment. The Python command runs only the three bicycle cases, so a problem in the differential-drive implementation cannot interrupt this test. `--model bicycle` selects those cases.
+
+Use the output in this order:
+
+1. Check the printed conversion table. All three cases use the same wheel angular velocity and radius, so they should have the same positive body-forward speed. The zero-steering case should have zero yaw rate, and the larger positive steering angle should produce the larger positive yaw rate.
+2. Check the displayed trajectory figure. `straight` should remain on a line, while `gentle_turn` and `tighter_turn` should curve left. The tighter-turn path should have the smaller turning radius.
+3. Confirm that the same figure was saved as `lab03_vehicle_modeling/results/bicycle_trajectories.png`.
+
+![Example bicycle-model output showing straight, gentle-turn, and tighter-turn trajectories](images/bicycle-model-validation-trajectories.png)
+
+*Example output after a correct implementation. Zero steering produces the horizontal straight path. With the same wheel speed, positive steering curves left, and the larger steering angle produces the tighter curve.*
+
+If the conversion table is wrong, inspect `wheel_speed_to_twist`. If the table is correct but the paths are wrong, inspect `step_bicycle` and then `simulate`. The bicycle portion is intentionally smaller than the differential-drive portion.
 
 ### Part 7 — Run and compare the models
 
@@ -475,25 +517,8 @@ Use your results to compare:
 | Platform/model | Motion inputs | Can rotate in place? | Important limitation |
 |---|---|---:|---|
 | TurtleBot ideal differential drive | left/right wheel angular velocities | yes | omits real slip and calibration error |
-| kinematic bicycle | speed and steering angle | no | omits tire-force dynamics and lateral slip |
+| kinematic bicycle | driven-wheel angular velocity and steering angle | no | assumes ideal wheel rolling and omits tire-force dynamics and lateral slip |
 | Goosebot four-wheel skid steer | four motor commands reduced to left/right motion | physically possible | turning depends strongly on tire scrub and slip |
-
-### Part 8 — Optional F1TENTH visual checkpoint
-
-**Why this part matters:** TurtleBot makes differential-drive motion visible; F1TENTH makes the bicycle model's car-like steering constraints visible. Seeing both platforms emphasizes that the correct kinematic model depends on how the vehicle is built.
-
-Complete this part only as an instructor demonstration or when the instructor provides a pinned, course-tested F1TENTH Jazzy environment. Do not install an arbitrary upstream version during the graded lab. The Python bicycle-model work remains required even when this visual checkpoint is unavailable.
-
-Using the instructor-provided launch and drive commands, observe these low-speed cases:
-
-1. positive speed with zero steering angle;
-2. the same speed with a small positive steering angle;
-3. the same speed with a larger positive steering angle;
-4. zero speed with a nonzero steering angle.
-
-Compare the motion with your Part 6 plots. The first case should be straight, the next two should form increasingly tight arcs, and the stationary car may turn its front wheels but should not change its vehicle heading. This last observation is the visible contrast with TurtleBot's in-place rotation.
-
-**INSTRUCTOR VALIDATION REQUIRED:** before assigning this checkpoint, pin a ROS 2 Jazzy-compatible F1TENTH commit or container and provide the exact launch command, command topic and message type, safe speed and steering values, and shutdown procedure.
 
 ## Experiment / Quantitative Analysis
 
@@ -506,7 +531,7 @@ Your results must include:
 - one bicycle-model plot containing the three Part 6 cases;
 - a concise comparison of the assumptions behind all three platform models.
 
-Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A steering angle and a left/right wheel-angular-velocity pair are different physical inputs.
+Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A bicycle-model driven-wheel angular velocity plus steering angle and a differential-drive left/right wheel-angular-velocity pair are different physical inputs.
 
 ## Engineering Questions
 
@@ -526,6 +551,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] straight, curved, pivot, and in-place cases verified;
 - [ ] one wheel-angular-velocity pair designed and tested against a selected Part 3 motion target;
 - [ ] straight, curved, and in-place TurtleBot motions observed in Gazebo;
+- [ ] bicycle driven-wheel angular velocity converted to body-forward speed and vehicle yaw rate with correct units;
 - [ ] bicycle-model straight and turning cases verified;
 - [ ] differential-drive, bicycle, and skid-steer assumptions compared;
 - [ ] required plots and tables saved in `results/`.
@@ -537,8 +563,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - differential-drive and bicycle-model plots;
 - one screenshot of a commanded TurtleBot motion case, identified in `answers.md`;
 - final-pose table;
-- completed `answers.md`;
-- optional F1TENTH observations only if assigned.
+- completed `answers.md`.
 
 ## Troubleshooting
 

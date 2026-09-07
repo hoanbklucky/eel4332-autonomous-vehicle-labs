@@ -13,3 +13,13 @@ They are used under the [Creative Commons Attribution-NonCommercial 4.0 Internat
 | `correll-ackermann-bicycle.png` | Figure 3.2.5 | car-like steering, bicycle approximation, wheelbase, steering angle, and turning radius |
 
 No modifications were made to the downloaded images. The Lab 3 captions map the source notation to the notation used in the course.
+
+## Course-generated output images
+
+The remaining PNG files in this directory are screenshots generated while testing the supplied Lab 3 programs and TurtleBot procedure:
+
+- `differential-drive-validation-trajectories.png`;
+- `bicycle-model-validation-trajectories.png`;
+- `turtlebot-part4-01-straight-motion.png`.
+
+They illustrate the expected type of output; students' exact poses and camera views may differ.

@@ -14,9 +14,39 @@ class BicycleState:
     yaw: float
 
 
+def wheel_speed_to_twist(
+    wheel_speed: float,
+    wheel_radius: float,
+    steering: float,
+    wheelbase: float,
+) -> tuple[float, float]:
+    """Return body-forward speed and yaw rate for the bicycle model.
+
+    Parameters are SI units:
+      wheel_speed: equivalent driven-wheel angular velocity in rad/s
+      wheel_radius: effective driven-wheel radius in m
+      steering: equivalent front-wheel steering angle in rad
+      wheelbase: distance between equivalent front and rear axles in m
+
+    Returns:
+      linear_speed: body-forward speed in m/s
+      yaw_rate: vehicle yaw rate in rad/s
+
+    TODO:
+      1. Convert driven-wheel angular velocity to body-forward speed using
+         ideal rolling without slip.
+      2. Use the bicycle-model steering geometry to compute vehicle yaw rate.
+      3. Return body-forward speed and vehicle yaw rate.
+    """
+    linear_speed = wheel_speed * wheel_radius
+    yaw_rate = linear_speed * np.tan(steering) / wheelbase
+    return linear_speed, yaw_rate
+
+
 def step_bicycle(
     state: BicycleState,
-    speed: float,
+    wheel_speed: float,
+    wheel_radius: float,
     steering: float,
     wheelbase: float,
     dt: float,
@@ -25,7 +55,8 @@ def step_bicycle(
 
     Parameters are SI units:
       state: current planar pose; x and y in m, yaw in rad
-      speed: constant body-forward speed in m/s during this step
+      wheel_speed: equivalent driven-wheel angular velocity in rad/s
+      wheel_radius: effective driven-wheel radius in m
       steering: front-wheel steering angle in rad
       wheelbase: distance between equivalent front and rear axles in m
       dt: integration time step in s
@@ -34,16 +65,28 @@ def step_bicycle(
       BicycleState: new pose after one time step; x and y in m, yaw in rad
 
     TODO:
-      1. Compute x_dot, y_dot, and yaw_dot.
-      2. Integrate one step.
-      3. Return the new state.
+      1. Call wheel_speed_to_twist.
+      2. Express body-forward speed in the world frame using state.yaw.
+      3. Integrate one step.
+      4. Return the new state.
     """
-    raise NotImplementedError("Implement the bicycle-model propagation")
+    speed, yaw_dot = wheel_speed_to_twist(
+        wheel_speed, wheel_radius, steering, wheelbase
+    )
+    x_dot = speed * np.cos(state.yaw)
+    y_dot = speed * np.sin(state.yaw)
+
+    x = state.x + x_dot * dt
+    y = state.y + y_dot * dt
+    yaw = state.yaw + yaw_dot * dt
+
+    return BicycleState(x, y, yaw)
 
 
 def simulate(
     initial_state: BicycleState,
-    speed: float,
+    wheel_speed: float,
+    wheel_radius: float,
     steering: float,
     wheelbase: float,
     dt: float,
@@ -53,7 +96,8 @@ def simulate(
 
     Parameters are SI units:
       initial_state: pose at time zero; x and y in m, yaw in rad
-      speed: constant body-forward speed in m/s
+      wheel_speed: constant equivalent driven-wheel angular velocity in rad/s
+      wheel_radius: effective driven-wheel radius in m
       steering: constant front-wheel steering angle in rad
       wheelbase: distance between equivalent front and rear axles in m
       dt: fixed integration time step in s
@@ -65,4 +109,15 @@ def simulate(
 
     TODO: repeatedly call step_bicycle and store the trajectory.
     """
-    raise NotImplementedError("Implement trajectory simulation")
+    num_steps = int(duration / dt)
+    trajectory = np.zeros((num_steps + 1, 3))
+    trajectory[0] = [initial_state.x, initial_state.y, initial_state.yaw]
+
+    state = initial_state
+    for i in range(1, num_steps + 1):
+        state = step_bicycle(
+            state, wheel_speed, wheel_radius, steering, wheelbase, dt
+        )
+        trajectory[i] = [state.x, state.y, state.yaw]
+
+    return trajectory
