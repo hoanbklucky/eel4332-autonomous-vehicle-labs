@@ -40,9 +40,7 @@ def wheel_speeds_to_twist(
       - Their right-minus-left difference determines the yaw direction.
       - Equal wheel speeds are a useful zero-yaw check.
     """
-    linear_speed = wheel_radius * (left_speed + right_speed) / 2.0
-    yaw_rate = wheel_radius * (right_speed - left_speed) / track_width
-    return linear_speed, yaw_rate
+    raise NotImplementedError("TODO: implement wheel_speeds_to_twist")
 
 
 def step_differential_drive(
@@ -76,18 +74,7 @@ def step_differential_drive(
     onto the world x and y axes. Multiply each rate by dt only when updating
     its corresponding state value.
     """
-    linear_speed, yaw_rate = wheel_speeds_to_twist(
-        left_speed, right_speed, wheel_radius, track_width
-    )
-    x_dot = linear_speed * np.cos(state.yaw)
-    y_dot = linear_speed * np.sin(state.yaw)
-    yaw_dot = yaw_rate
-
-    new_x = state.x + x_dot * dt
-    new_y = state.y + y_dot * dt
-    new_yaw = state.yaw + yaw_dot * dt
-
-    return DifferentialDriveState(new_x, new_y, new_yaw)
+    raise NotImplementedError("TODO: implement step_differential_drive")
 
 
 def simulate_differential_drive(
@@ -120,18 +107,4 @@ def simulate_differential_drive(
     update. For a duration divided into fixed steps, the initial sample makes
     the trajectory contain one more row than the number of updates.
     """
-    trajectory = [initial_state]
-    current_state = initial_state
-
-    for _ in range(int(duration / dt)):
-        current_state = step_differential_drive(
-            current_state,
-            left_speed,
-            right_speed,
-            wheel_radius,
-            track_width,
-            dt
-        )
-        trajectory.append(current_state)
-
-    return np.array([[state.x, state.y, state.yaw] for state in trajectory])
+    raise NotImplementedError("TODO: implement simulate_differential_drive")

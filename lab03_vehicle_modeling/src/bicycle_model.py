@@ -44,9 +44,7 @@ def wheel_speed_to_twist(
       - For fixed speed and wheelbase, increasing steering magnitude should
         increase yaw-rate magnitude.
     """
-    linear_speed = wheel_speed * wheel_radius
-    yaw_rate = linear_speed * np.tan(steering) / wheelbase
-    return linear_speed, yaw_rate
+    raise NotImplementedError("TODO: implement wheel_speed_to_twist")
 
 
 def step_bicycle(
@@ -79,17 +77,7 @@ def step_bicycle(
     Hint: use the current yaw, not the newly updated yaw, when computing this
     explicit Euler step's world-frame position rates.
     """
-    speed, yaw_dot = wheel_speed_to_twist(
-        wheel_speed, wheel_radius, steering, wheelbase
-    )
-    x_dot = speed * np.cos(state.yaw)
-    y_dot = speed * np.sin(state.yaw)
-
-    x = state.x + x_dot * dt
-    y = state.y + y_dot * dt
-    yaw = state.yaw + yaw_dot * dt
-
-    return BicycleState(x, y, yaw)
+    raise NotImplementedError("TODO: implement step_bicycle")
 
 
 def simulate(
@@ -121,15 +109,4 @@ def simulate(
     Hint: store initial_state first, then repeatedly advance from the most
     recently returned BicycleState until all fixed time steps are complete.
     """
-    num_steps = int(duration / dt)
-    trajectory = np.zeros((num_steps + 1, 3))
-    trajectory[0] = [initial_state.x, initial_state.y, initial_state.yaw]
-
-    state = initial_state
-    for i in range(1, num_steps + 1):
-        state = step_bicycle(
-            state, wheel_speed, wheel_radius, steering, wheelbase, dt
-        )
-        trajectory[i] = [state.x, state.y, state.yaw]
-
-    return trajectory
+    raise NotImplementedError("TODO: implement simulate")
