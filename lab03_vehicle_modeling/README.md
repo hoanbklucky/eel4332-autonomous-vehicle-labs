@@ -19,7 +19,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 
 ## Learning Objectives
 
-- convert left and right wheel speeds into robot linear and angular velocity;
+- convert left and right wheel angular velocities into body-forward speed and vehicle yaw rate;
 - numerically integrate differential-drive wheel odometry;
 - recognize why odometry is an estimate rather than ground truth;
 - compare differential-drive model predictions with visible TurtleBot motion in Gazebo;
@@ -31,7 +31,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 
 - Complete [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).
 - Recall how straight, curved, and in-place TurtleBot motion appeared in Gazebo, and how `/cmd_vel` and `/odom` changed while the robot moved.
-- Review planar position, heading, angular velocity, and fixed-step numerical integration.
+- Review planar position, heading, vehicle yaw rate, and fixed-step numerical integration.
 - Use the course Python virtual environment from Lab 00.
 
 Both models use the planar pose
@@ -46,15 +46,55 @@ where $x$ and $y$ are expressed in a fixed world or odometry frame and $\theta$ 
 
 ### From wheel rotation to robot motion
 
-The ideal differential-drive model has two independently driven wheels with radius $r$, separated by track width $b$. Let $\omega_L$ and $\omega_R$ be the left and right wheel angular speeds in radians per second. The forward speed $v$ and yaw rate $\dot{\theta}$ of the robot are
+Before using the equations, identify the frames and quantities in the differential-drive model:
+
+![Differential-drive geometry showing the world and body frames, wheel velocities, track width, wheel radius, forward speed, and yaw rate](images/differential-drive-frames.svg)
+
+*Figure 1. Differential-drive geometry adapted into the notation used in this lab. The wheel angular velocities $\omega_L$ and $\omega_R$ create wheel-edge speeds $u_L$ and $u_R$. Their average produces body-forward speed $v$; their difference produces vehicle yaw rate $\dot{\theta}$. Track width $b$ is the lateral distance between the wheel contact lines, and $r$ is effective wheel radius.*
+
+The fixed **world frame** describes the pose $(x,y,\theta)$. The **body frame** $B$ is attached to the robot: $x_B$ points forward and $y_B$ points left. The ideal differential-drive model has two independently driven wheels with radius $r$, separated by track width $b$. Let $\omega_L$ and $\omega_R$ be the left and right **wheel angular velocities** in radians per second.
+
+#### Why multiplying meters by radians gives meters
+
+An angle measured in radians is defined as a ratio:
 
 $$
-v=\frac{r}{2}(\omega_R+\omega_L),
+\phi=\frac{s}{r},
+$$
+
+where $s$ is arc length and $r$ is radius. Because both $s$ and $r$ have units of meters, their units cancel. A radian is therefore **dimensionless**; `rad` is retained as a descriptive label so that an angular quantity is not confused with an ordinary unitless number.
+
+Rearranging the definition gives the rolling-distance relationship
+
+$$
+s=r\phi.
+$$
+
+Dimensionally, this is $\text{m}\times 1=\text{m}$. Differentiating with respect to time gives
+
+$$
+u=\frac{ds}{dt}=r\frac{d\phi}{dt}=r\omega,
+$$
+
+so $\text{m}\times\text{rad/s}$ is dimensionally $\text{m/s}$. The angle must be expressed in **radians**, not degrees, for these formulas to apply directly. Under ideal rolling without slip, applying this relationship to the two wheels gives
+
+$$
+u_L=r\omega_L,
 \qquad
-\dot{\theta}=\frac{r}{b}(\omega_R-\omega_L).
+u_R=r\omega_R.
 $$
 
-The body-forward speed must then be expressed in the fixed frame:
+Here, $u_L$ and $u_R$ have units of meters per second. The robot-center **body-forward speed** $v$ is the average of those two wheel-edge speeds, while the **vehicle yaw rate** $\dot{\theta}$ is their difference divided by the track width:
+
+$$
+v=\frac{u_R+u_L}{2}
+  =\frac{r}{2}(\omega_R+\omega_L),
+\qquad
+\dot{\theta}=\frac{u_R-u_L}{b}
+  =\frac{r}{b}(\omega_R-\omega_L).
+$$
+
+This is the wheel-angular-velocity-to-body-velocity conversion developed in [Correll's differential-wheel forward-kinematics derivation](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms). The body-forward speed must then be expressed in the fixed frame:
 
 $$
 \dot{x}=v\cos\theta,
@@ -64,14 +104,14 @@ $$
 
 These equations predict important special cases:
 
-- equal wheel speeds produce straight motion;
+- equal wheel angular velocities produce straight motion;
 - one stationary wheel produces a turn about the stationary side;
-- equal and opposite wheel speeds produce an in-place rotation;
+- equal and opposite wheel angular velocities produce an in-place rotation;
 - a faster right wheel produces a counterclockwise turn under the sign convention used in this lab.
 
 ### From forward kinematics to odometry
 
-**Forward kinematics** converts wheel speeds into instantaneous robot velocity. **Wheel odometry** repeatedly integrates that velocity to estimate pose:
+**Forward kinematics** converts wheel angular velocities into instantaneous robot velocity. **Wheel odometry** repeatedly integrates that velocity to estimate pose:
 
 $$
 \mathbf{x}_{k+1}\approx \mathbf{x}_k+
@@ -90,7 +130,13 @@ TurtleBot is well approximated by a two-wheel differential-drive model. Goosebot
 
 ### Car-like bicycle model
 
-The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points. Its inputs are longitudinal speed $v$ and steering angle $\delta$, and its wheelbase is $L$:
+Before using the bicycle equations, compare the geometry with the differential-drive figure:
+
+![Kinematic bicycle geometry showing rear and front reference points, wheelbase, steering angle, forward speed, yaw rate, and turning radius](images/bicycle-model-geometry.svg)
+
+*Figure 2. The bicycle abstraction replaces the two rear wheels with reference point $P_r$ and the two steered front wheels with point $P_f$. Wheelbase $L$ is the distance from $P_r$ to $P_f$; $\delta$ is the front steering angle. Lines perpendicular to the ideal wheel directions meet at the instantaneous center of rotation, giving turning radius $R=L/\tan\delta$ and yaw rate $\dot{\theta}=v/R$.*
+
+The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points. Its inputs are **longitudinal speed**, also called **body-forward speed**, $v$, and steering angle $\delta$. Its wheelbase is $L$:
 
 $$
 \dot{x}=v\cos\theta,
@@ -100,7 +146,31 @@ $$
 \dot{\theta}=\frac{v}{L}\tan\delta.
 $$
 
+The model usually receives $v$ directly. If instead $v$ is inferred from the angular velocity $\omega_w$ of an equivalent driven rear wheel with effective radius $r_w$, ideal rolling without slip gives
+
+$$
+v=r_w\omega_w,
+\qquad
+\dot{\theta}=\frac{r_w\omega_w}{L}\tan\delta.
+$$
+
+This conversion uses the angular velocity of the equivalent rear/reference wheel. A measured steered-front-wheel speed or a slipping tire requires additional geometry or a more detailed model.
+
 Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 8. It is not a model of Goosebot.
+
+### Terminology used in this lab
+
+Several sources and ROS messages use different names for closely related quantities. This lab uses the terms below consistently:
+
+| Quantity | Equivalent terminology used here | Symbol and units | Important distinction |
+|---|---|---|---|
+| wheel angular velocity | wheel rotational speed; wheel angular speed | $\omega_L$, $\omega_R$, or $\omega_w$ in rad/s | Rotation of a wheel about its axle. |
+| wheel-edge speed | tangential wheel speed; linear wheel speed | $u=r\omega$ in m/s | Linear speed at the tire circumference under ideal rolling. |
+| body-forward speed | forward speed; longitudinal speed; body-frame `linear.x` | $v$ in m/s | Translation along the vehicle's forward axis. |
+| vehicle yaw rate | heading rate; angular velocity about the vertical $z$-axis; body-frame `angular.z` | $\dot{\theta}$ or $\omega_z$ in rad/s | Rotation of the whole vehicle, not rotation of a wheel. |
+| heading | yaw angle | $\theta$ in rad | Vehicle orientation, whose time derivative is yaw rate. |
+
+Avoid the unqualified phrase “angular speed” when the context could mean either wheel rotation or vehicle rotation. In equations and explanations, say **wheel angular velocity** for $\omega_L$, $\omega_R$, or $\omega_w$, and **vehicle yaw rate** for $\dot{\theta}$.
 
 ### Frames, signs, and units
 
@@ -111,6 +181,9 @@ Use meters, seconds, meters per second, radians, and radians per second. This la
 ```text
 lab03_vehicle_modeling/
 ├── README.md
+├── images/
+│   ├── differential-drive-frames.svg
+│   └── bicycle-model-geometry.svg
 ├── src/
 │   ├── differential_drive.py
 │   ├── bicycle_model.py
@@ -125,7 +198,7 @@ The propagation functions contain required `TODO` sections. Do not replace them 
 
 | Stage | What you are learning | Visible checkpoint |
 |---|---|---|
-| Predict | What each wheel-speed combination should do | A hand table identifies straight, curved, and in-place motion before coding. |
+| Predict | What each wheel-angular-velocity combination should do | A hand table identifies straight, curved, and in-place motion before coding. |
 | Implement | How kinematic equations become pose updates | The required functions produce a trajectory containing the initial pose. |
 | Test special cases | How simple cases isolate sign and unit errors | Straight motion has negligible yaw; in-place rotation has negligible translation. |
 | Observe the robot | How mathematical motion categories appear physically | TurtleBot visibly performs the same straight, curved, and rotating cases. |
@@ -134,7 +207,7 @@ The propagation functions contain required `TODO` sections. Do not replace them 
 
 Do not accept a plausible-looking plot by itself. A result passes a checkpoint only when its direction, final pose, and limiting cases agree with your prediction.
 
-**Optional challenge after the required work:** Choose wheel speeds that produce a visibly gentle curve, predict its direction and approximate radius, and test it with the completed simulator. State your assumptions; no additional submission is required unless assigned.
+**Optional challenge after the required work:** Choose wheel angular velocities that produce a visibly gentle curve, predict its direction and approximate radius, and test it with the completed simulator. State your assumptions; no additional submission is required unless assigned.
 
 ## Step-by-Step Procedure
 
@@ -169,7 +242,7 @@ Complete the `TODO` sections in this order:
 2. `step_differential_drive`;
 3. `simulate_differential_drive`.
 
-Use fixed-step Euler integration and include the initial pose as the first trajectory sample. Keep wheel angular speeds separate from linear wheel-edge speeds and verify their units.
+Use fixed-step Euler integration and include the initial pose as the first trajectory sample. Keep wheel angular velocities separate from linear wheel-edge speeds and verify their units.
 
 ### Part 3 — Validate differential-drive special cases
 
@@ -177,10 +250,10 @@ Use fixed-step Euler integration and include the initial pose as the first traje
 
 For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simulate at least:
 
-1. equal positive wheel speeds;
+1. equal positive wheel angular velocities;
 2. one stationary wheel;
-3. equal and opposite wheel speeds;
-4. slightly unequal positive wheel speeds.
+3. equal and opposite wheel angular velocities;
+4. slightly unequal positive wheel angular velocities.
 
 For every case, compare the simulated result with your Part 1 prediction. An in-place rotation changes yaw while $x$ and $y$ remain approximately constant; it may appear as a single point on an $x$–$y$ plot, so also inspect the final yaw.
 
@@ -188,7 +261,7 @@ For every case, compare the simulated result with your Part 1 prediction. An in-
 
 **Why this part matters:** The plots in Part 3 are mathematical predictions. Watching TurtleBot perform the same motion categories connects those curves to a physical robot and checks whether you are interpreting $v$ and $\dot{\theta}$ correctly.
 
-The TurtleBot simulator accepts body velocity on `/cmd_vel`, where `linear.x` corresponds to model output $v$ and `angular.z` corresponds to $\dot{\theta}$. It does not accept the model's left and right wheel speeds directly. Therefore, this is a qualitative comparison of motion type—not an independent numerical validation of your wheel equations.
+The TurtleBot simulator accepts body velocity on `/cmd_vel`, where `linear.x` corresponds to model output $v$ and `angular.z` corresponds to $\dot{\theta}$. It does not accept the model's left and right wheel angular velocities directly. Therefore, this is a qualitative comparison of motion type—not an independent numerical validation of your wheel equations.
 
 Close any older TurtleBot, Gazebo, or keyboard-teleoperation processes. In **WSL/Ubuntu Terminal 1**, launch the same known-good simulator used in Lab 2:
 
@@ -214,7 +287,7 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.0}, angular: {z: 0.0}}"
 ```
 
-**Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 20` stops after 20 messages. Positive `linear.x` requests forward motion and zero `angular.z` requests no turn. The second command uses `--once` to replace the motion request with zero linear and angular velocity.
+**Command breakdown:** The first `ros2 topic pub` sends a `Twist` command to `/cmd_vel`; `-r 10` publishes at 10 Hz and `-t 20` stops after 20 messages. Positive `linear.x` requests body-forward speed and zero `angular.z` requests zero vehicle yaw rate. The second command uses `--once` to replace the motion request with zero forward speed and yaw rate.
 
 **Curved motion:**
 
@@ -259,10 +332,10 @@ When finished, send the zero command once more and stop the launch with `Ctrl+C`
 Choose **one** experiment:
 
 - repeat a curved trajectory with at least three integration time steps;
-- introduce a small left/right wheel-speed mismatch during nominally straight motion;
+- introduce a small left/right wheel-angular-velocity mismatch during nominally straight motion;
 - use a slightly incorrect wheel radius or track width in the odometry calculation.
 
-Treat one trajectory as the reference. Report final position error and final heading error for the other cases. Explain why the error accumulates even when the wheel-speed input is constant.
+Treat one trajectory as the reference. Report final position error and final heading error for the other cases. Explain why the error accumulates even when the wheel-angular-velocity input is constant.
 
 ### Part 6 — Implement and test the bicycle model
 
@@ -301,7 +374,7 @@ Use your results to compare:
 
 | Platform/model | Motion inputs | Can rotate in place? | Important limitation |
 |---|---|---:|---|
-| TurtleBot ideal differential drive | left/right wheel speeds | yes | omits real slip and calibration error |
+| TurtleBot ideal differential drive | left/right wheel angular velocities | yes | omits real slip and calibration error |
 | kinematic bicycle | speed and steering angle | no | omits tire-force dynamics and lateral slip |
 | Goosebot four-wheel skid steer | four motor commands reduced to left/right motion | physically possible | turning depends strongly on tire scrub and slip |
 
@@ -333,13 +406,13 @@ Your results must include:
 - one bicycle-model plot containing the three Part 6 cases;
 - a concise comparison of the assumptions behind all three platform models.
 
-Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A steering angle and a left/right wheel-speed pair are different physical inputs.
+Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A steering angle and a left/right wheel-angular-velocity pair are different physical inputs.
 
 ## Engineering Questions
 
 1. Why is integrating wheel-derived velocity called dead reckoning?
-2. Which differential wheel-speed combinations produce straight motion, curved motion, and an in-place turn?
-3. Why can a small wheel-radius or wheel-speed mismatch create a large position error after a long drive?
+2. Which differential wheel-angular-velocity combinations produce straight motion, curved motion, and an in-place turn?
+3. Why can a small wheel-radius or wheel-angular-velocity mismatch create a large position error after a long drive?
 4. Why is `/odom` an estimate rather than ground truth?
 5. Why can the bicycle model not represent an in-place turn?
 6. How do wheelbase and steering angle affect bicycle-model turning radius?
@@ -373,12 +446,12 @@ Do not compare trajectories point by point unless they use the same time samples
 - If TurtleBot continues moving after a test, publish the one-time zero `Twist` command again before doing anything else.
 - If motion is inconsistent, stop any `teleop_twist_keyboard` process so only the test publisher writes to `/cmd_vel`.
 - If TurtleBot becomes trapped or leaves the useful area, send the zero command and reset or relaunch the simulation.
-- Verify the wheel-speed-to-twist calculation before debugging pose integration.
+- Verify the wheel-angular-velocity-to-twist calculation before debugging pose integration.
 - Print one update and compare it with a hand calculation.
-- If equal positive wheel speeds do not produce zero yaw rate, check the subtraction order.
+- If equal positive wheel angular velocities do not produce zero yaw rate, check the subtraction order.
 - If a left turn appears as a right turn, check wheel labels and the yaw sign convention.
 - If in-place rotation seems motionless on the $x$–$y$ plot, inspect yaw versus time.
-- Check radians versus degrees and angular wheel speed versus linear wheel-edge speed.
+- Check radians versus degrees, wheel angular velocity versus linear wheel-edge speed, and wheel rotation versus vehicle yaw rate.
 - If results change greatly when the time step is halved, investigate integration error before interpreting vehicle behavior.
 
 After completing this lab, continue to [Lab 4 — Autonomous-System Architecture and Sensors](../lab04_system_architecture_sensors/README.md).

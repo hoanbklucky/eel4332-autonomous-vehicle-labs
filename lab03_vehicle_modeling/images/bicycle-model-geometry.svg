@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="590" viewBox="0 0 1000 590" role="img" aria-labelledby="title desc">
+  <title id="title">Kinematic bicycle model geometry</title>
+  <desc id="desc">Top view of the bicycle abstraction showing rear and front reference points, wheelbase, steering angle, longitudinal speed, yaw rate, instantaneous center of rotation, and turning radius.</desc>
+  <defs>
+    <marker id="b-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/>
+    </marker>
+    <marker id="b-arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d95f02"/>
+    </marker>
+    <marker id="b-arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#455a64"/>
+    </marker>
+    <style>
+      .label { font: 20px sans-serif; fill: #17202a; }
+      .small { font: 17px sans-serif; fill: #37474f; }
+      .blue { stroke: #1565c0; fill: none; stroke-width: 5; marker-end: url(#b-arrow-blue); }
+      .orange { stroke: #d95f02; fill: none; stroke-width: 5; marker-end: url(#b-arrow-orange); }
+      .axis { stroke: #455a64; fill: none; stroke-width: 3; marker-end: url(#b-arrow-gray); }
+      .dim { stroke: #5f6368; fill: none; stroke-width: 2.5; marker-start: url(#b-arrow-gray); marker-end: url(#b-arrow-gray); }
+      .guide { stroke: #9aa0a6; fill: none; stroke-width: 2.5; stroke-dasharray: 9 7; }
+    </style>
+  </defs>
+  <rect width="1000" height="590" fill="#ffffff"/>
+  <text x="34" y="38" class="label" font-weight="700">Kinematic bicycle (Ackermann-style) abstraction: top view</text>
+
+  <!-- Simplified vehicle body -->
+  <path d="M255 205 Q255 165 305 155 H675 Q725 165 725 205 V315 Q725 355 675 365 H305 Q255 355 255 315 Z" fill="#e5f3e6" stroke="#263238" stroke-width="3"/>
+  <path d="M350 180 H625 L675 270 L625 340 H350 L295 270 Z" fill="#b7dfba" stroke="#78909c" stroke-width="2"/>
+
+  <!-- Bicycle reference line and contact points -->
+  <path d="M335 270 H650" stroke="#263238" stroke-width="5"/>
+  <circle cx="335" cy="270" r="9" fill="#263238"/>
+  <circle cx="650" cy="270" r="9" fill="#263238"/>
+  <text x="290" y="248" class="small">rear point Pᵣ</text>
+  <text x="610" y="248" class="small">front point P<tspan baseline-shift="sub">f</tspan></text>
+
+  <!-- Rear wheel and steered front wheel -->
+  <rect x="280" y="254" width="110" height="32" rx="8" fill="#263238"/>
+  <g transform="rotate(-58 650 270)">
+    <rect x="595" y="254" width="110" height="32" rx="8" fill="#263238"/>
+    <path d="M650 270 H850" class="blue"/>
+  </g>
+
+  <!-- Body frame and v -->
+  <path d="M335 270 H835" class="axis"/>
+  <path d="M335 270 V120" class="axis"/>
+  <text x="840" y="278" class="small">x<tspan baseline-shift="sub">B</tspan></text>
+  <text x="345" y="118" class="small">y<tspan baseline-shift="sub">B</tspan></text>
+  <path d="M335 270 H545" class="blue"/>
+  <text x="390" y="305" class="label" fill="#1565c0">v = r<tspan baseline-shift="sub">w</tspan>ω<tspan baseline-shift="sub">w</tspan></text>
+
+  <!-- Wheelbase dimension -->
+  <path d="M335 395 H650" class="dim"/>
+  <path d="M335 285 V405 M650 285 V405" stroke="#5f6368" stroke-width="2"/>
+  <text x="480" y="425" class="label">wheelbase L</text>
+
+  <!-- Steering angle -->
+  <path d="M650 270 H775" class="guide"/>
+  <path d="M735 270 A85 85 0 0 0 695 198" fill="none" stroke="#7b1fa2" stroke-width="4"/>
+  <text x="720" y="205" class="label" fill="#7b1fa2">steering δ</text>
+
+  <!-- ICR construction and radius -->
+  <circle cx="335" cy="70" r="8" fill="#c62828"/>
+  <text x="355" y="78" class="label" fill="#c62828">instantaneous center of rotation (ICR)</text>
+  <path d="M335 270 V70" class="guide"/>
+  <path d="M650 270 L335 70" class="guide"/>
+  <path d="M310 270 V70" class="dim"/>
+  <text x="45" y="165" class="label">turning radius R = L / tan δ</text>
+
+  <!-- Yaw-rate indication -->
+  <path d="M480 235 A120 120 0 0 0 440 145" class="orange"/>
+  <text x="500" y="155" class="label" fill="#d95f02">vehicle yaw rate θ̇ = v / R</text>
+
+  <text x="34" y="565" class="small">The bicycle model collapses the two rear wheels to Pᵣ and the two steered front wheels to P<tspan baseline-shift="sub">f</tspan>.</text>
+</svg>

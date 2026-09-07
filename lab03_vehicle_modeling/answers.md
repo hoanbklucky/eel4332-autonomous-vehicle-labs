@@ -2,7 +2,7 @@
 
 ## Part 1 predictions
 
-Record the predicted motion and signs of linear speed and yaw rate for each wheel-speed case.
+Record the predicted motion and signs of body-forward speed and vehicle yaw rate for each wheel-angular-velocity case.
 
 ## Differential-drive validation
 

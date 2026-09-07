@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
+  <title id="title">Differential-drive geometry, frames, and velocities</title>
+  <desc id="desc">Top view of a differential-drive robot showing world and body frames, wheel angular velocities, wheel-edge speeds, track width, wheel radius, body-forward speed, and vehicle yaw rate.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d95f02"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#37474f"/>
+    </marker>
+    <style>
+      .label { font: 20px sans-serif; fill: #17202a; }
+      .small { font: 17px sans-serif; fill: #37474f; }
+      .blue { stroke: #1565c0; fill: none; stroke-width: 5; marker-end: url(#arrow-blue); }
+      .orange { stroke: #d95f02; fill: none; stroke-width: 5; marker-end: url(#arrow-orange); }
+      .axis { stroke: #37474f; fill: none; stroke-width: 3; marker-end: url(#arrow-gray); }
+      .dim { stroke: #5f6368; fill: none; stroke-width: 2.5; marker-start: url(#arrow-gray); marker-end: url(#arrow-gray); }
+    </style>
+  </defs>
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="34" y="38" class="label" font-weight="700">Differential-drive model: top view</text>
+
+  <!-- World frame -->
+  <g>
+    <circle cx="115" cy="455" r="5" fill="#37474f"/>
+    <path d="M115 455 H245" class="axis"/>
+    <path d="M115 455 V330" class="axis"/>
+    <text x="250" y="462" class="small">x (world)</text>
+    <text x="65" y="322" class="small">y (world)</text>
+  </g>
+
+  <!-- Robot rotated by heading theta -->
+  <g transform="rotate(-20 535 280)">
+    <rect x="395" y="205" width="280" height="150" rx="26" fill="#dcecff" stroke="#263238" stroke-width="3"/>
+    <path d="M675 235 L735 280 L675 325 Z" fill="#8bbcf2" stroke="#263238" stroke-width="3"/>
+    <rect x="455" y="170" width="135" height="32" rx="8" fill="#263238"/>
+    <rect x="455" y="358" width="135" height="32" rx="8" fill="#263238"/>
+    <circle cx="535" cy="280" r="7" fill="#17202a"/>
+
+    <!-- Body frame and forward velocity -->
+    <path d="M535 280 H705" class="axis"/>
+    <path d="M535 280 V120" class="axis"/>
+    <text x="705" y="270" class="small">x<tspan baseline-shift="sub">B</tspan></text>
+    <text x="545" y="118" class="small">y<tspan baseline-shift="sub">B</tspan></text>
+    <path d="M535 280 H825" class="blue"/>
+    <text x="735" y="312" class="label" fill="#1565c0">v (body-forward)</text>
+
+    <!-- Wheel-edge speeds -->
+    <path d="M505 150 H675" class="blue"/>
+    <text x="595" y="137" class="label" fill="#1565c0">u<tspan baseline-shift="sub">L</tspan> = rω<tspan baseline-shift="sub">L</tspan></text>
+    <path d="M505 408 H675" class="blue"/>
+    <text x="595" y="442" class="label" fill="#1565c0">u<tspan baseline-shift="sub">R</tspan> = rω<tspan baseline-shift="sub">R</tspan></text>
+
+    <!-- Track-width dimension -->
+    <path d="M415 186 V374" class="dim"/>
+    <path d="M425 186 H455 M425 374 H455" stroke="#5f6368" stroke-width="2"/>
+    <text x="380" y="288" class="label">b</text>
+
+    <!-- Vehicle yaw rate -->
+    <path d="M625 260 A105 105 0 0 0 595 160" class="orange"/>
+    <text x="635" y="175" class="label" fill="#d95f02">yaw rate θ̇</text>
+  </g>
+
+  <!-- Heading theta shown relative to world x -->
+  <path d="M535 280 H700" stroke="#9aa0a6" stroke-width="2" stroke-dasharray="8 7"/>
+  <path d="M645 280 A110 110 0 0 0 638 242" fill="none" stroke="#7b1fa2" stroke-width="4"/>
+  <text x="665" y="253" class="label" fill="#7b1fa2">heading θ</text>
+
+  <!-- Wheel-radius inset -->
+  <g transform="translate(790 370)">
+    <rect x="0" y="0" width="175" height="155" rx="12" fill="#fafafa" stroke="#b0bec5" stroke-width="2"/>
+    <text x="15" y="27" class="small" font-weight="700">Wheel side view</text>
+    <circle cx="82" cy="88" r="43" fill="#eceff1" stroke="#263238" stroke-width="5"/>
+    <circle cx="82" cy="88" r="5" fill="#263238"/>
+    <path d="M82 88 L116 62" class="dim"/>
+    <text x="105" y="95" class="label">r</text>
+    <path d="M32 118 A58 58 0 0 1 32 59" class="orange"/>
+    <text x="9" y="146" class="small">wheel ω</text>
+  </g>
+
+  <text x="35" y="535" class="small">B = robot body frame. Positive yaw is counterclockwise about the vertical z-axis.</text>
+</svg>
