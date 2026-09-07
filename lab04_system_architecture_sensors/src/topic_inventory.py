@@ -7,6 +7,14 @@ import subprocess
 
 
 def main():
+    """Print the live ROS 2 topic names and message types.
+
+    Returns:
+      None. Exits with the ROS command's nonzero status if topic discovery fails.
+
+    Notes:
+      ROS 2 must be sourced and the course simulation must be running.
+    """
     result = subprocess.run(
         ["ros2", "topic", "list", "-t"],
         check=False,

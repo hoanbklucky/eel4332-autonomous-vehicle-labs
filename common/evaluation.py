@@ -5,7 +5,18 @@ import numpy as np
 
 
 def rmse(reference, estimate) -> float:
-    """Return root-mean-square error between equal-shaped arrays."""
+    """Return root-mean-square error between equal-shaped arrays.
+
+    Parameters:
+      reference: array-like reference values
+      estimate: array-like estimated values with the same shape as reference
+
+    Returns:
+      float: root-mean-square error in the same units as the input values
+
+    Raises:
+      ValueError: if reference and estimate have different shapes
+    """
     reference = np.asarray(reference, dtype=float)
     estimate = np.asarray(estimate, dtype=float)
     if reference.shape != estimate.shape:
@@ -14,7 +25,18 @@ def rmse(reference, estimate) -> float:
 
 
 def mae(reference, estimate) -> float:
-    """Return mean absolute error."""
+    """Return mean absolute error between equal-shaped arrays.
+
+    Parameters:
+      reference: array-like reference values
+      estimate: array-like estimated values with the same shape as reference
+
+    Returns:
+      float: mean absolute error in the same units as the input values
+
+    Raises:
+      ValueError: if reference and estimate have different shapes
+    """
     reference = np.asarray(reference, dtype=float)
     estimate = np.asarray(estimate, dtype=float)
     if reference.shape != estimate.shape:

@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 
 class SafetyState(Enum):
+    """Discrete operating states selected by the safety monitor."""
+
     NORMAL = auto()
     DEGRADED = auto()
     STOP = auto()
@@ -13,6 +15,16 @@ class SafetyState(Enum):
 
 @dataclass
 class HealthInputs:
+    """Health measurements used for one safety decision.
+
+    Fields:
+      sensor_age_s: elapsed time since the latest sensor measurement in s
+      localization_ok: whether the localization health check currently passes
+      path_available: whether a valid path is currently available
+      obstacle_distance_m: nearest relevant obstacle distance in m
+      forward_speed_mps: current body-forward speed in m/s
+    """
+
     sensor_age_s: float
     localization_ok: bool
     path_available: bool
@@ -21,7 +33,13 @@ class HealthInputs:
 
 
 def evaluate_health(h: HealthInputs) -> SafetyState:
-    """Return NORMAL, DEGRADED, or STOP.
+    """Select NORMAL, DEGRADED, or STOP from one health snapshot.
+
+    Parameters:
+      h: current timing, localization, path, obstacle, and motion health inputs
+
+    Returns:
+      SafetyState: selected operating state for the current snapshot
 
     TODO:
       Define a small, defensible rule set based on the lab requirements.

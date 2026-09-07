@@ -50,7 +50,7 @@ Before using the equations, identify the frames and quantities in the differenti
 
 ![Correll diagram showing a mobile robot's inertial frame, robot frame, and heading](images/correll-mobile-robot-frames.png)
 
-*Figure 1. The fixed inertial frame $\{I\}$ is the world frame used in this lab. Correll's moving robot frame $\{R\}$ is this lab's body frame $B$: its $x_R$ axis points forward and its $y_R$ axis points left. The heading $\theta_I$ is this lab's $\theta$. Source: Correll, [“Forward Kinematics of Selected Mechanisms,” Figure 3.2.3](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
+**Figure 1.** The fixed inertial frame `{I}` is the world frame used in this lab. Correll's moving robot frame `{R}` is this lab's body frame `B`: its `x_R` axis points forward and its `y_R` axis points left. The heading `θ_I` is this lab's `θ`. Source: Correll, [“Forward Kinematics of Selected Mechanisms,” Figure 3.2.3](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
 
 The fixed **world frame** describes the pose $(x,y,\theta)$. The **body frame** $B$ is attached to the robot: $x_B$ points forward and $y_B$ points left. The ideal differential-drive model has two independently driven wheels with radius $r$, separated by track width $b$. Let $\omega_L$ and $\omega_R$ be the left and right **wheel angular velocities** in radians per second.
 
@@ -60,7 +60,7 @@ The right side of Figure 2 shows the wheel geometry behind this relationship:
 
 ![Correll diagrams showing a differential robot pivoting about one wheel and a rolling wheel's arc length](images/correll-differential-wheel-kinematics.png)
 
-*Figure 2. Right: rotating a wheel through angle $\phi$ sweeps arc length $r\phi$. Left: when one differential-drive wheel is stationary, the robot pivots about that wheel; Correll labels the wheel separation $d$, which is the track width $b$ used in this lab. Source: Correll, [Figure 3.2.4](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
+**Figure 2.** Right: rotating a wheel through angle `φ` sweeps arc length `rφ`. Left: when one differential-drive wheel is stationary, the robot pivots about that wheel; Correll labels the wheel separation `d`, which is the track width `b` used in this lab. Source: Correll, [Figure 3.2.4](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
 
 An angle measured in radians is defined as a ratio:
 
@@ -140,7 +140,7 @@ Before using the bicycle equations, compare the geometry with the differential-d
 
 ![Correll diagram showing car-like steering, its bicycle approximation, and an Ackermann steering mechanism](images/correll-ackermann-bicycle.png)
 
-*Figure 3. Left: the front and rear wheel pairs are replaced by a bicycle model whose wheels follow circles about a common center. $L$ is wheelbase and $R$ is turning radius. Correll uses $\phi$ for the bicycle steering angle; this lab uses $\delta$ to avoid confusing steering angle with wheel rotation angle. Right: an Ackermann linkage gives the physical front wheels different steering angles so their rolling directions share the same center of rotation. Source: Correll, [Figure 3.2.5](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).*
+**Figure 3.** Left: the front and rear wheel pairs are replaced by a bicycle model whose wheels follow circles about a common center. `L` is wheelbase and `R` is turning radius. Correll uses `φ` for the bicycle steering angle; this lab uses `δ` to avoid confusing steering angle with wheel rotation angle. Right: an Ackermann linkage gives the physical front wheels different steering angles so their rolling directions share the same center of rotation. Source: Correll, [Figure 3.2.5](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms), used under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
 
 The kinematic bicycle model replaces a four-wheel car with equivalent front and rear contact points. Its inputs are **longitudinal speed**, also called **body-forward speed**, $v$, and steering angle $\delta$. Its wheelbase is $L$:
 
@@ -263,7 +263,27 @@ For $r=0.033\ \text{m}$, $b=0.16\ \text{m}$, and $\Delta t=0.02\ \text{s}$, simu
 3. equal and opposite wheel angular velocities;
 4. slightly unequal positive wheel angular velocities.
 
-For every case, compare the simulated result with your Part 1 prediction. An in-place rotation changes yaw while $x$ and $y$ remain approximately constant; it may appear as a single point on an $x$–$y$ plot, so also inspect the final yaw.
+The provided experiment driver contains these four validation cases. From the repository root, run:
+
+```bash
+source ~/venvs/eel4332/bin/activate
+python lab03_vehicle_modeling/src/run_experiments.py --model differential
+```
+
+**Command breakdown:** `source` activates the course Python environment. The Python command runs only the differential-drive validation, so `bicycle_model.py` does not need to be complete yet. `--model differential` selects the four cases above.
+
+The terminal command above is the recommended way to run this stage because it includes the required `--model differential` argument. The Microsoft Python extension for VS Code is helpful for editing and debugging, but it is not required for this terminal command; the Python interpreter and course virtual environment perform the execution. If VS Code reports that it cannot find Python, complete the Python-extension and interpreter-selection steps in Lab 00 and confirm that VS Code is connected to WSL.
+
+The command prints a final-pose table containing $x$, $y$, and yaw and saves `results/differential_drive_trajectories.png`. The figure contains both the planar $x$–$y$ path and yaw versus time.
+
+For every case, compare the printed table and figure with your Part 1 prediction:
+
+- equal positive wheel angular velocities should change position with approximately zero yaw change;
+- one stationary wheel should produce both translation and rotation;
+- equal and opposite wheel angular velocities should change yaw while $x$ and $y$ remain approximately constant;
+- slightly unequal positive wheel angular velocities should produce a gentle curve rather than a perfectly straight path.
+
+Do not validate from the $x$–$y$ panel alone. An in-place rotation appears as a single point there but is clearly visible in the yaw-versus-time panel and final-yaw value. If a result disagrees with the hand prediction, return to the corresponding conversion, sign, or integration step before continuing.
 
 ### Part 4 — Compare the model with TurtleBot motion in Gazebo
 
@@ -363,6 +383,14 @@ Complete its existing `TODO` sections. Test these compact cases:
 
 Confirm that zero steering produces a straight line and that increasing steering magnitude reduces turning radius. The bicycle portion is intentionally smaller than the differential-drive portion.
 
+After completing both bicycle-model functions, run its cases independently with:
+
+```bash
+python lab03_vehicle_modeling/src/run_experiments.py --model bicycle
+```
+
+This option is useful when debugging the bicycle model because a failure in the differential-drive code cannot interrupt its experiment.
+
 ### Part 7 — Run and compare the models
 
 **Why this part matters:** Common plots and metrics make similarities, limitations, and modeling errors easier to evaluate objectively.
@@ -371,10 +399,10 @@ From the Lab 3 directory, run:
 
 ```bash
 source ~/venvs/eel4332/bin/activate
-python src/run_experiments.py
+python src/run_experiments.py --model all
 ```
 
-**Command breakdown:** `source` activates the course Python environment. `python src/run_experiments.py` runs the experiment driver using that environment's interpreter and dependencies.
+**Command breakdown:** `source` activates the course Python environment. The Python command runs both completed model experiment sets; `--model all` makes that choice explicit.
 
 The script saves plots in `results/`. Add plot titles or captions that identify each model, its inputs, its parameters, and the coordinate convention.
 

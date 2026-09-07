@@ -12,7 +12,17 @@ def steering_command(
     wheelbase: float,
     lookahead: float,
 ) -> float:
-    """Return steering angle in radians.
+    """Return the bicycle-model steering angle toward a look-ahead target.
+
+    Parameters are SI units in one common fixed frame:
+      vehicle_x, vehicle_y: current vehicle position in m
+      vehicle_yaw: current vehicle heading in rad
+      target_x, target_y: selected look-ahead point position in m
+      wheelbase: distance between equivalent front and rear axles in m
+      lookahead: distance used by the Pure Pursuit controller in m
+
+    Returns:
+      float: front-wheel steering angle in rad for the bicycle model
 
     TODO:
       1. Express the target point relative to the vehicle.

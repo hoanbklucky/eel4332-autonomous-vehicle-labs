@@ -9,6 +9,7 @@ class CounterPublisher(Node):
     """Publish increasing integers at a configurable startup rate."""
 
     def __init__(self) -> None:
+        """Initialize the ROS node, publisher, counter, and periodic timer."""
         super().__init__("counter_publisher")
         self.declare_parameter("rate_hz", 2.0)
         rate_hz = self.get_parameter("rate_hz").value
@@ -21,6 +22,11 @@ class CounterPublisher(Node):
         self.get_logger().info(f"Publishing /practice/count at {rate_hz:.1f} Hz")
 
     def publish_count(self) -> None:
+        """Publish the current count, log it, and increment the stored value.
+
+        Returns:
+          None.
+        """
         message = Int32()
         message.data = self.count
         self.publisher.publish(message)
@@ -29,6 +35,14 @@ class CounterPublisher(Node):
 
 
 def main(args=None) -> None:
+    """Run the counter publisher until shutdown or a keyboard interrupt.
+
+    Parameters:
+      args: optional ROS 2 command-line arguments passed to rclpy.init
+
+    Returns:
+      None.
+    """
     rclpy.init(args=args)
     node = CounterPublisher()
     try:

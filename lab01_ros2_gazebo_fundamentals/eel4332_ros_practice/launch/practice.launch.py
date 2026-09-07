@@ -8,6 +8,11 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description() -> LaunchDescription:
+    """Create the launch description for the counter publisher and subscriber.
+
+    Returns:
+      LaunchDescription: two ROS nodes plus the configurable `rate_hz` argument
+    """
     rate_hz = LaunchConfiguration("rate_hz")
 
     return LaunchDescription(

@@ -181,8 +181,7 @@ VS Code is the course-supported editor. Install the graphical application on **W
 1. Download and install [Visual Studio Code for Windows](https://code.visualstudio.com/download).
 2. During installation, enable **Add to PATH** when offered.
 3. Open VS Code and install the **WSL** extension published by Microsoft.
-4. Install the **Python** extension published by Microsoft. When a course folder is open through WSL, make sure the extension is also installed in that WSL environment if VS Code offers **Install in WSL**.
-5. Close and reopen the WSL/Ubuntu Terminal so it receives the updated Windows PATH.
+4. Close and reopen the WSL/Ubuntu Terminal so it receives the updated Windows PATH.
 
 Test the connection from a WSL/Ubuntu Terminal:
 
@@ -206,7 +205,22 @@ uname -a
 
 The integrated WSL/Ubuntu Terminal should show a Linux path and identify Linux/WSL. If VS Code opens the folder locally on Windows instead, use the lower-left remote indicator and select **Connect to WSL**, then reopen the folder.
 
-Keep course repositories in the Linux filesystem, such as `~/courses`, rather than under `/mnt/c`, unless the instructor directs otherwise. After creating the Python environment later in this lab, select `~/venvs/eel4332/bin/python` when VS Code asks for the course Python interpreter.
+### Install the Microsoft Python extension in WSL
+
+The Python extension adds syntax checking, code completion, interpreter selection, the **Run Python File** button, and debugging. It is useful for the Python labs, but it does not install Python itself. A `.py` file can still be run from a WSL/Ubuntu Terminal with the `python` command after the course environment is created in Part 7.
+
+Install the extension while VS Code is connected to WSL:
+
+1. Confirm that **WSL: Ubuntu-24.04** appears in the lower-left corner of VS Code.
+2. Open **Extensions** from the Activity Bar, or press **Ctrl+Shift+X**.
+3. Search for `@id:ms-python.python`.
+4. Select **Python**, published by **Microsoft**. Do not choose one of the similarly named third-party extensions.
+5. Select **Install in WSL: Ubuntu-24.04** if that button appears. If the button says **Uninstall**, the extension is already installed.
+6. Confirm that the extension page says it is enabled in the **Remote Extension Host**. This means it runs where the course files and Python interpreter are located: inside WSL.
+
+You will select the course interpreter after creating it in Part 7.
+
+Keep course repositories in the Linux filesystem, such as `~/courses`, rather than under `/mnt/c`, unless the instructor directs otherwise.
 
 Official references:
 
@@ -416,14 +430,6 @@ source ~/venvs/eel4332/bin/activate
 
 **Command breakdown:** `source` runs the virtual environment's activation script in the current shell, changing `python` and `pip` to the isolated course versions.
 
-When the repository is open in VS Code, use **Python: Select Interpreter** from the Command Palette and choose:
-
-```text
-~/venvs/eel4332/bin/python
-```
-
-The selected interpreter controls Python editing, running, and debugging in VS Code. It does not replace the need to source `/opt/ros/jazzy/setup.bash` in WSL/Ubuntu Terminals that run ROS commands.
-
 In Ubuntu:
 
 ```bash
@@ -434,6 +440,15 @@ python -m pip install --upgrade pip setuptools
 ```
 
 **Command breakdown:** `apt install` provides Python's virtual-environment and package tools. `python3 -m venv` creates the environment, `source` activates it, and `python -m pip install --upgrade` updates its packaging tools.
+
+Now tell the Microsoft Python extension to use the environment you just created:
+
+1. Open the repository in a WSL-connected VS Code window.
+2. Press **Ctrl+Shift+P** to open the Command Palette.
+3. Run **Python: Select Interpreter**.
+4. Select `~/venvs/eel4332/bin/python`. If it is not listed, choose **Enter interpreter path** and enter that path.
+
+The selected interpreter controls Python editing, the **Run Python File** button, and debugging in VS Code. It does not automatically activate existing terminals, and it does not replace the need to source `/opt/ros/jazzy/setup.bash` in terminals that run ROS commands. When in doubt, activate the environment in the terminal and use the explicit course command shown in each lab.
 
 Make sure you are still at the repository root established in Part 6, then run:
 
