@@ -549,8 +549,11 @@ The script saves plots in `results/`. Add plot titles or captions that identify 
 After both models work correctly, replay their planar trajectories with moving position and heading markers:
 
 ```bash
+source ~/venvs/eel4332/bin/activate
 python src/run_experiments.py --model all --animate
 ```
+
+Run `source` once in each new terminal. If the prompt already begins with `(eel4332)`, the course environment is active and you may skip that line.
 
 The colored circle shows the calculated robot position and the short line attached to it shows heading. Watch the equal-and-opposite differential-drive case carefully: its position marker remains in one place while its heading line rotates. This makes an in-place turn visible even though it appears as only one point on the static $x$–$y$ path.
 
