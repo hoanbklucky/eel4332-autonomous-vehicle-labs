@@ -385,7 +385,7 @@ In the output, locate:
 - `pose.pose.orientation`, which stores estimated orientation as a quaternion;
 - `twist.twist.linear.x` and `angular.z`, which report estimated body-forward speed and vehicle yaw rate.
 
-After completing and stopping the straight-motion command below, run `ros2 topic echo /odom --once` again. Compare the two position values. The pose remains at its new estimate after the stop, while the twist should return close to zero. This is the simulator's version of the same wheel-to-twist conversion and repeated pose integration implemented in Parts 2 and 3; the message uses a quaternion for orientation whereas your Python array stores yaw directly.
+Keep Terminal 3 open so you can capture a second message after moving the robot.
 
 In **WSL/Ubuntu Terminal 2**, run each test separately. The first command in each block publishes 10 messages at 10 Hz, so the command lasts approximately one second. Here, `-t 10` means **10 messages**, not 10 seconds. The second command sends an explicit stop.
 
@@ -437,6 +437,16 @@ Because these are qualitative path-shape tests, you may perform the next test fr
 4. Reestablish the overhead view, then run the next motion command from Terminal 2.
 
 Observe the straight, curved, and in-place motions. No additional prediction table is required. Save one screenshot that clearly shows one commanded motion case and identify which case it shows in `answers.md`.
+
+#### Check `/odom` after motion
+
+After the robot has moved and you have sent the zero-velocity stop command, return to **Terminal 3** and run:
+
+```bash
+ros2 topic echo /odom --once
+```
+
+Compare this message with the baseline captured before motion. Record the before-and-after `pose.pose.position.x` and `.y` values in `answers.md`. The pose should retain the new estimated location after the robot stops, while `twist.twist.linear.x` and `angular.z` should be close to zero. This is the simulator's version of the wheel-to-twist conversion and repeated pose integration implemented in Parts 2 and 3; the ROS message represents orientation as a quaternion, whereas your Python trajectory stores yaw directly.
 
 Do not treat `/odom` as Gazebo ground truth. TurtleBot's odometry is generated from the simulated wheel motion and can continue accumulating when the wheels rotate while the body is blocked by an obstacle. The Gazebo scene would show the physics body remaining against the obstacle while `/odom` could report estimated movement.
 
