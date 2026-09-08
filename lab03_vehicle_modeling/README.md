@@ -544,6 +544,18 @@ python src/run_experiments.py --model all
 
 The script saves plots in `results/`. Add plot titles or captions that identify each model, its inputs, its parameters, and the coordinate convention.
 
+#### Optional trajectory playback
+
+After both models work correctly, replay their planar trajectories with moving position and heading markers:
+
+```bash
+python src/run_experiments.py --model all --animate
+```
+
+The colored circle shows the calculated robot position and the short line attached to it shows heading. Watch the equal-and-opposite differential-drive case carefully: its position marker remains in one place while its heading line rotates. This makes an in-place turn visible even though it appears as only one point on the static $x$–$y$ path.
+
+The supplied animation code only replays the trajectory arrays produced by your model; it is not another student TODO and it does not run Gazebo physics. Close the Matplotlib windows when you finish. The saved PNG files remain static so they can be compared and submitted.
+
 Use your results to compare:
 
 | Platform/model | Motion inputs | Can rotate in place? | Important limitation |
