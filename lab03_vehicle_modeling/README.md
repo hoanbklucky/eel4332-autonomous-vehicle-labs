@@ -532,14 +532,15 @@ If the conversion table is wrong, inspect `wheel_speed_to_twist`. If the table i
 
 **Why this part matters:** Common plots and metrics make similarities, limitations, and modeling errors easier to evaluate objectively.
 
-From the Lab 3 directory, run:
+Change from the repository root into the Lab 3 directory, then run:
 
 ```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs/lab03_vehicle_modeling
 source ~/venvs/eel4332/bin/activate
 python src/run_experiments.py --model all
 ```
 
-**Command breakdown:** `source` activates the course Python environment. The Python command runs both completed model experiment sets; `--model all` makes that choice explicit.
+**Command breakdown:** `cd` changes into the directory that contains Lab 3's `src/` folder. Your terminal prompt should now end with `/lab03_vehicle_modeling$`. `source` activates the course Python environment. The Python command runs both completed model experiment sets; `--model all` makes that choice explicit.
 
 The script saves plots in `results/`. Add plot titles or captions that identify each model, its inputs, its parameters, and the coordinate convention.
 
