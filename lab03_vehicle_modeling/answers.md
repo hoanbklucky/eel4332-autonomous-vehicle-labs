@@ -28,8 +28,8 @@ Record the body-forward speed and yaw rate produced by `wheel_speed_to_twist` fo
 
 ## Model comparison
 
-Compare the inputs, motion capabilities, and limitations of ideal differential drive, the kinematic bicycle model, and Goosebot skid steering.
+Compare the inputs, motion capabilities, and limitations of ideal differential drive and the kinematic bicycle model.
 
 ## Engineering questions
 
-Answer Questions 1–8 from the README. Use equations, units, plots, or table values where they support your explanation.
+Answer Questions 1–6 from the README. Use equations, units, plots, or table values where they support your explanation.

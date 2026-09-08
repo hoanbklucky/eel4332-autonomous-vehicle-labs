@@ -25,7 +25,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 - recognize why odometry is an estimate rather than ground truth;
 - compare differential-drive model predictions with visible TurtleBot motion in Gazebo;
 - implement the planar kinematic bicycle model;
-- compare differential-drive, bicycle, and four-wheel skid-steer motion;
+- compare differential-drive and bicycle-model motion;
 - explain how persistent wheel or calibration error accumulates into odometry drift.
 
 ## Prerequisites
@@ -133,7 +133,7 @@ This is a dead-reckoning estimate, not a direct measurement of world position. W
 
 This progression follows the textbook treatment from [differential-wheel forward kinematics to odometry, followed by car-like steering](https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Introduction_to_Autonomous_Robots_%28Correll%29/03%3A_Forward_and_Inverse_Kinematics/3.02%3A_Forward_kinematics_of_selected_Mechanisms).
 
-TurtleBot is well approximated by a two-wheel differential-drive model. Goosebot also turns through left/right velocity differences, but it has four conventional wheels with fixed parallel axes. Its tires must scrub sideways during a turn, so ideal differential-drive odometry does not capture all Goosebot slip.
+TurtleBot is well approximated by a two-wheel differential-drive model, making it a useful visible reference for the equations implemented in this lab.
 
 ### Car-like bicycle model
 
@@ -165,7 +165,7 @@ Here, $r_w$ is the effective driven-wheel radius in meters, $\omega_w$ is the dr
 
 This simplified conversion uses the angular velocity of the equivalent rear/reference wheel. A measured steered-front-wheel speed or a slipping tire requires additional geometry or a more detailed model.
 
-Unlike differential drive, this model cannot rotate in place. It represents car-like steering and remains useful for comparing platform assumptions and for the Pure Pursuit exercise in Lab 8. It is not a model of Goosebot.
+Unlike differential drive, this model cannot rotate in place. It represents car-like steering and provides a contrasting set of platform assumptions.
 
 ### Terminology used in this lab
 
@@ -550,7 +550,6 @@ Use your results to compare:
 |---|---|---:|---|
 | TurtleBot ideal differential drive | left/right wheel angular velocities | yes | omits real slip and calibration error |
 | kinematic bicycle | driven-wheel angular velocity and steering angle | no | assumes ideal wheel rolling and omits tire-force dynamics and lateral slip |
-| Goosebot four-wheel skid steer | four motor commands reduced to left/right motion | physically possible | turning depends strongly on tire scrub and slip |
 
 ## Experiment / Quantitative Analysis
 
@@ -561,7 +560,7 @@ Your results must include:
 - one student-designed wheel-command case, including the calculation or prediction and final pose;
 - one Part 4 TurtleBot motion screenshot;
 - one bicycle-model plot containing the three Part 6 cases;
-- a concise comparison of the assumptions behind all three platform models.
+- a concise comparison of TurtleBot's ideal differential-drive model and the car-like kinematic bicycle model.
 
 Do not compare trajectories point by point unless they use the same time samples, initial pose, and compatible commands. A bicycle-model driven-wheel angular velocity plus steering angle and a differential-drive left/right wheel-angular-velocity pair are different physical inputs.
 
@@ -573,8 +572,6 @@ Do not compare trajectories point by point unless they use the same time samples
 4. Why is `/odom` an estimate rather than ground truth?
 5. Why can the bicycle model not represent an in-place turn?
 6. How do wheelbase and steering angle affect bicycle-model turning radius?
-7. Why can TurtleBot’s differential-drive model approximate Goosebot while missing four-wheel tire scrub and slip?
-8. Which model should be used for the Pure Pursuit steering-angle exercise in Lab 8, and which model better prepares you to interpret TurtleBot odometry?
 
 ## Success Criteria
 
@@ -586,7 +583,7 @@ Do not compare trajectories point by point unless they use the same time samples
 - [ ] TurtleBot `/odom` captured before and after a commanded motion and connected to the Python odometry calculation;
 - [ ] bicycle driven-wheel angular velocity converted to body-forward speed and vehicle yaw rate with correct units;
 - [ ] bicycle-model straight and turning cases verified;
-- [ ] differential-drive, bicycle, and skid-steer assumptions compared;
+- [ ] differential-drive and bicycle-model assumptions compared;
 - [ ] required plots and tables saved in `results/`.
 
 ## What to Submit
