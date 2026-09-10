@@ -206,7 +206,7 @@ lab03_vehicle_modeling/
 └── answers.md
 ```
 
-The propagation functions contain required `TODO` sections. Do not replace them with an external kinematics or vehicle-dynamics library.
+The model files are guided starter code rather than blank programming exercises. Their function signatures, data structures, loops, state storage, and return statements are already supplied. Students replace only the clearly labeled `_student_todo(...)` expressions. Do not replace the scaffold with an external kinematics or vehicle-dynamics library.
 
 ## Learning Path and Visible Checkpoints
 
@@ -252,13 +252,13 @@ Open:
 src/differential_drive.py
 ```
 
-Complete the `TODO` sections in this order:
+Complete the scaffold in this order:
 
 1. `wheel_speeds_to_twist`;
 2. `step_differential_drive`;
 3. `simulate_differential_drive`.
 
-Use fixed-step Euler integration and include the initial pose as the first trajectory sample. Keep wheel angular velocities separate from linear wheel-edge speeds and verify their units.
+Search for `_student_todo` and replace each of the six calls inside these three functions with one Python expression. Do not edit or remove the `_student_todo` helper itself. The surrounding code shows where each result belongs, and each placeholder's message describes the missing calculation. Run the program after completing each function so that an error remains close to the expression you just changed. Use fixed-step Euler integration and include the initial pose as the first trajectory sample. Keep wheel angular velocities separate from linear wheel-edge speeds and verify their units.
 
 ### Part 3 — Validate differential-drive special cases
 
@@ -493,11 +493,13 @@ Open:
 src/bicycle_model.py
 ```
 
-Complete its `TODO` sections in this order:
+Complete its scaffold in this order:
 
 1. `wheel_speed_to_twist`;
 2. `step_bicycle`;
 3. `simulate`.
+
+As in the differential-drive file, replace each of the six `_student_todo(...)` calls inside these functions with one Python expression; keep the supplied function calls, loop structure, state storage, and return statements. Run the program after completing each function, and use the equations and symbol definitions in the Background section as your primary hints.
 
 The provided `run_bicycle_experiments` function supplies $r_w=0.30\ \text{m}$, $\omega_w=5.0\ \text{rad/s}$, and $L=2.8\ \text{m}$ to all three cases. It changes only the steering angle:
 

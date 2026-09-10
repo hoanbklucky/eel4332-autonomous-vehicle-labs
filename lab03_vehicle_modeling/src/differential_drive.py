@@ -7,6 +7,11 @@ from dataclasses import dataclass
 import numpy as np
 
 
+def _student_todo(description: str):
+    """Mark one expression that students must replace in the starter code."""
+    raise NotImplementedError(f"Replace this _student_todo expression: {description}")
+
+
 @dataclass
 class DifferentialDriveState:
     """Planar pose in meters and radians."""
@@ -33,14 +38,17 @@ def wheel_speeds_to_twist(
       linear_speed: body-forward speed in m/s
       yaw_rate: vehicle yaw rate in rad/s
 
-    TODO: implement the differential-drive forward-kinematics equations.
+    TODO: replace the two _student_todo expressions below with the
+    differential-drive forward-kinematics equations.
 
     Hints:
       - The average of the two wheel-edge speeds determines forward motion.
       - Their right-minus-left difference determines the yaw direction.
       - Equal wheel speeds are a useful zero-yaw check.
     """
-    raise NotImplementedError("TODO: implement wheel_speeds_to_twist")
+    linear_speed = _student_todo("average the left and right wheel-edge speeds")
+    yaw_rate = _student_todo("use the right-minus-left wheel-speed difference")
+    return linear_speed, yaw_rate
 
 
 def step_differential_drive(
@@ -64,17 +72,23 @@ def step_differential_drive(
       DifferentialDriveState: new pose after one time step; x and y in m,
       yaw in rad
 
-    TODO:
-      1. Call wheel_speeds_to_twist.
-      2. Express body-forward speed in the world frame using state.yaw.
-      3. Integrate x, y, and yaw for one time step.
-      4. Return the new state.
+    TODO: replace the three _student_todo expressions below. The function
+    call, Euler updates, and return statement are provided as scaffolding.
 
     Hint: the cosine and sine of the current yaw project body-forward speed
     onto the world x and y axes. Multiply each rate by dt only when updating
     its corresponding state value.
     """
-    raise NotImplementedError("TODO: implement step_differential_drive")
+    linear_speed, yaw_rate = wheel_speeds_to_twist(
+        left_speed, right_speed, wheel_radius, track_width
+    )
+    x_rate = _student_todo("project forward speed onto the world x-axis")
+    y_rate = _student_todo("project forward speed onto the world y-axis")
+
+    new_x = state.x + x_rate * dt
+    new_y = state.y + y_rate * dt
+    new_yaw = _student_todo("integrate yaw_rate for one time step")
+    return DifferentialDriveState(x=new_x, y=new_y, yaw=new_yaw)
 
 
 def simulate_differential_drive(
@@ -100,11 +114,28 @@ def simulate_differential_drive(
       np.ndarray: trajectory with one pose per row and columns [x, y, yaw];
       x and y are in m, yaw is in rad, and the first row is initial_state
 
-    TODO: repeatedly call step_differential_drive and store the trajectory.
-    Include the initial state as the first row.
+    TODO: replace the one _student_todo expression below. Array creation,
+    initial-state storage, the model call, loop structure, and sample storage
+    are provided.
 
     Hint: each update must start from the state returned by the previous
     update. For a duration divided into fixed steps, the initial sample makes
     the trajectory contain one more row than the number of updates.
     """
-    raise NotImplementedError("TODO: implement simulate_differential_drive")
+    num_steps = _student_todo("calculate the number of fixed Euler updates")
+    trajectory = np.zeros((num_steps + 1, 3))
+    trajectory[0] = [initial_state.x, initial_state.y, initial_state.yaw]
+
+    state = initial_state
+    for step_index in range(num_steps):
+        state = step_differential_drive(
+            state,
+            left_speed,
+            right_speed,
+            wheel_radius,
+            track_width,
+            dt,
+        )
+        trajectory[step_index + 1] = [state.x, state.y, state.yaw]
+
+    return trajectory
