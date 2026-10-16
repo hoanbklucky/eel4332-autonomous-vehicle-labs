@@ -52,6 +52,25 @@ Simulation also provides controlled starting poses and repeatable obstacles, so 
 
 Every useful sensor message needs more than numeric values. Its message type defines the fields and units, its timestamp says when the measurement applies, and its frame ID says where the measurement is expressed. TF connects those frames over time. A topic can therefore be publishing at a healthy rate while still being unusable because its timestamps or frame chain are wrong.
 
+### Where task execution fits in an autonomy stack
+
+A navigation system answers several *different* questions. **Mission planning** selects the goals and their order (for example, visit pickup A, then delivery B). **Task execution** decides what the robot should do *now* (navigate, wait, recover, or stop). **Path planning** computes a route through free space to a selected goal, and **tracking/control** turns a feasible route into motion commands. Sensing, localization, and mapping supply the information these components need.
+
+A useful conceptual pipeline is:
+
+```text
+Mission goals -> Task executive -> Path planner -> Path tracker -> Vehicle
+                    ^                 ^                ^
+                    |                 |                |
+              success/failure    map + robot pose   measured state
+                    ^                 ^                ^
+                    +------------ sensing and estimation ---------+
+```
+
+The arrows represent responsibilities, not necessarily literal ROS topic connections. A high-level decision does not replace the lower-level planner or a safety override. In ROS 2, Nav2 can use a **Behavior Tree** to orchestrate navigation actions (such as planning a path, following it, and recovery); it does not mean every sensor or controller must be implemented as a tree node.
+
+**Reading check:** A robot has a valid map and path but stops because it loses localization. Which component detects invalid state information, which component decides whether to retry or abort, and which component must have authority to stop the motors?
+
 ## Provided Files
 
 ```text

@@ -53,6 +53,30 @@ LiDAR observations constrain nearby geometry while odometry connects observation
 
 A typical mapping chain connects `map`, `odom`, the robot base, and the LiDAR frame. Each transform has a specific owner; publishing competing versions of the same transform can make the tree unstable. Sensor timestamps must be transformable at the time of each scan, and all simulation nodes must use a consistent clock.
 
+### How occupancy probabilities become a useful map
+
+For each grid cell \(m_i\), an occupancy-grid mapper represents a belief such as \(P(m_i=\mathrm{occupied}\mid z_{1:t},x_{1:t})\), given sensor readings \(z\) and estimated poses \(x\). A common implementation updates **log-odds** rather than multiplying probabilities repeatedly:
+
+\[
+L_t(m_i)=L_{t-1}(m_i)+\log\frac{p_i}{1-p_i}-L_0(m_i),
+\]
+
+where \(p_i\) is the inverse-sensor-model occupancy estimate for the current observation and \(L_0\) is the prior log-odds. This is a conceptual update rule, **not an implementation requirement for this lab**. Range beams typically provide evidence of free space along a ray and occupied space near a detected endpoint, subject to sensor limits and model assumptions.
+
+A grid cell marked **unknown** is not automatically free. Navigation may classify occupancy above a threshold as blocked, keep uncertain cells separate, and **inflate** obstacles by the robot's footprint plus a safety margin. At \(0.05\) m/cell, a \(4\) m-wide corridor spans about 80 cells; decreasing the cell size improves detail but increases grid storage and search work quadratically for a fixed 2-D area.
+
+### Why SLAM needs both sensing and localization
+
+Dead reckoning integrates wheel/IMU motion and therefore drifts. Scan matching compares a new observation with earlier observations or the emerging map to constrain relative motion. **Loop closure** adds a constraint when the robot revisits an area, potentially correcting both past poses and map alignment. A false match can instead distort the entire map. Inspect whether an apparent improvement is supported by the scan geometry rather than assuming a closed loop is always correct.
+
+Distinguish the frames: `odom` should provide locally continuous motion estimates, while `map` supplies a globally corrected reference and may shift when SLAM revises its estimate. Plan and display data in compatible frames; do not treat a discontinuity in `map -> odom` as the wheels physically teleporting.
+
+### Connection to mission planning and path planning
+
+A planner usually consumes a **costmap**, not only a pretty occupancy-grid image. Costmaps distinguish traversable, dangerous, occupied, and sometimes unexplored areas. A mission may be impossible because the map is incomplete, the goal lies inside inflation space, or localization is uncertain—even when there is an apparent visual gap. Better exploration trajectories improve both future mapping quality and the availability of feasible paths.
+
+**Reading check:** If an aisle is 0.7 m wide but the vehicle is 0.6 m wide, why might a planner still reject it? Consider localization error, grid resolution, and clearance margins.
+
 ## Provided Files
 
 ```text

@@ -45,6 +45,29 @@ Each connection between components is an interface contract: message type, units
 
 Ground truth available in Gazebo is useful for evaluation but should not silently become an autonomy input. On Goosebot, define an independent reference or acknowledge when a metric cannot be measured directly.
 
+### Mission planning across multiple waypoints
+
+A **mission** is an ordered or constrained set of goals, not just one path. Define a mission as a list of waypoints and acceptance conditions, for example: (1) leave the start zone, (2) visit inspection point A, (3) visit inspection point B, (4) return to the start zone. In a more advanced mission, a planner may choose the visit order using estimated path costs while satisfying requirements such as "A before B" or a battery reserve.
+
+A simple executable mission loop is:
+
+```text
+choose next goal -> request navigation -> monitor feedback
+         ^                                  |
+         |                       success / failure / timeout
+         +----------- advance, retry, or abort -----------+
+```
+
+Make the completion test measurable (goal tolerance, allowable elapsed time, or all required checkpoints reached). Record per-waypoint outcomes, elapsed time, total traveled distance, number of replans, and any safety stops. A high success rate without identifying failures and recovery behavior is insufficient evidence of robustness.
+
+### Combining map, path, trajectory, and safety decisions
+
+The robot needs a map suitable for collision checking, an estimate of its pose *in the map*, a feasible path, a controller that respects motion constraints, and an executive that decides when to send the next goal. A **path** gives geometric waypoints; a **trajectory** additionally assigns velocities/timing and must respect acceleration/turning constraints. The simulation platform and Goosebot have different turning/slip behavior, so track actual errors and tune safely rather than assuming the simulated commands transfer unchanged.
+
+A minimal task executive can use mission progress states such as `READY`, `NAVIGATING`, `RECOVERING`, `COMPLETED`, and `ABORTED`. Students may reason about these as a simple FSM without implementing a framework. Nav2's Behavior Tree already provides much of the lower-level navigation/recovery orchestration. A separate safety supervisor should still be able to stop motion when sensor freshness, localization quality, communication, or nearby obstacle clearance becomes unacceptable.
+
+**Design questions before deployment:** How is the next waypoint selected? What observable event means it has been reached? How many retries are permitted? What happens when localization becomes invalid? Who has final authority to stop the motors? What evidence shows the mission completed without bypassing safety constraints?
+
 ## Provided Files
 
 ```text

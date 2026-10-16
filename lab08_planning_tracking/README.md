@@ -47,6 +47,40 @@ An occupancy grid becomes a graph whose free cells are states and whose allowed 
 
 Pure Pursuit selects a target ahead on the reference path and commands curvature toward it. Short look-ahead distances can react quickly but amplify oscillation; long distances smooth motion but can cut corners. Speed, sampling interval, path spacing, steering limits, and the motion model interact, so change one experimental factor at a time and report failures as well as successful trials.
 
+### From mission goals to a route
+
+**Mission planning** selects *what* goals to achieve, in what order, and under what constraints. For example, a campus delivery robot might need to visit a pickup point, then a drop-off point, then return to its charging station. A mission planner can optimize task order using travel time, deadlines, energy budget, or precedence constraints. The **path planner** then solves the different problem of finding a traversable route to the current goal. A **task executive** monitors whether a navigation action succeeds, fails, or needs to be retried. These distinctions matter because the shortest path to the wrong destination does not satisfy the mission.
+
+For a simple multi-stop mission, one can compare candidate orders using a travel-cost matrix \(c_{ij}\), where each entry estimates the cost of navigating from waypoint \(i\) to \(j\). If the robot must visit A before B, a shorter permutation that visits B first is **invalid** even if its geometric distance is lower. We focus this lab's graded work on planning and tracking, not on coding a full mission scheduler.
+
+### Dijkstra and A*: selecting an efficient path
+
+For each graph node \(n\), **Dijkstra's algorithm** prioritizes the known accumulated cost \(g(n)\). **A\*** prioritizes:
+
+\[
+f(n)=g(n)+h(n),
+\]
+
+where \(h(n)\) estimates the cheapest remaining cost to the goal. For a shortest-path guarantee under standard A* graph-search assumptions, use an admissible (and normally consistent) heuristic; with 4-connected, unit-cost moves, Manhattan distance is appropriate, while 8-connected grids require a heuristic compatible with diagonal move costs (such as octile distance for unit/\(\sqrt{2}\) costs). The heuristic should **not overestimate** the true remaining cost. Setting \(h=0\) reduces A* to uniform-cost/Dijkstra-style search.
+
+Obstacle inflation prevents the reference point of a robot from passing too close to obstacles. Adjacent diagonal cells can create an illegal corner-cutting shortcut if the algorithm does not enforce a collision rule for intervening occupied cells. A* returns a discrete **geometric path**; it does not by itself ensure acceptable speed, acceleration, curvature, or steering actuation.
+
+### Vehicle feasibility, trajectory planning, and tracking
+
+A geometric **path** describes where to go, often as \((x(s),y(s))\) parameterized by distance \(s\). A **trajectory** additionally specifies *when* to be there: \((x(t),y(t),v(t))\) and possibly heading, curvature, and acceleration. Planning a path and then imposing a feasible time/speed profile are separate steps.
+
+For an ideal bicycle-model car, curvature \(\kappa\), wheelbase \(L\), and front steering angle \(\delta\) satisfy:
+
+\[
+\kappa=\frac{\tan\delta}{L},\qquad R=\frac{1}{|\kappa|}.
+\]
+
+Thus a finite steering limit imposes a **minimum turning radius**. An arbitrary occupancy-grid path with sharp 90-degree corners may be collision-free for a point but impossible to follow with car-like steering. **Hybrid A\*** or curvature-constrained methods address this by considering heading and feasible motion primitives; their implementation is *not required* here. TurtleBot's differential-drive simulation and Goosebot's skid-steer platform have different turning constraints than a bicycle-model car—do not use the above steering equation as their motor model.
+
+Pure Pursuit supplies a steering/curvature command toward a look-ahead target; it is a **tracking controller**, not a mission planner or a substitute for collision checking. If the planned route becomes blocked or the robot loses localization, the higher-level system must decide whether to replan, stop, or abort.
+
+**Reading check:** A* finds a path through free cells, but the robot clips a corner. Name one map-related cause, one geometry/vehicle-model cause, and one tracking-related cause; propose a measurement for each.
+
 ## Provided Files
 
 ```text

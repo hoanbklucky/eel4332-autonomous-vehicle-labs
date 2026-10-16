@@ -45,6 +45,35 @@ A **fault** is an underlying problem, such as dropped scans. A **symptom** is ob
 
 Safety monitoring depends on data validity, freshness, coordinate-frame connectivity, estimator health, path status, motion state, and obstacle geometry. A safe response also needs command authority: detecting danger without inhibiting motion is only an alarm. State transitions should be deterministic, logged, and recoverable through an explicit reset policy.
 
+### Reactive control, finite state machines, and Behavior Trees
+
+**Reactive control** chooses an immediate response from current measurements (for example, slow down or stop when an obstacle violates a distance threshold). It is useful for fast safety responses but can be short-sighted without a global route or mission context.
+
+A **finite state machine (FSM)** models discrete operational modes plus guarded transitions. A simple navigation executive might have `IDLE`, `NAVIGATING`, `WAITING`, `RECOVERY`, and `SAFE_STOP` modes:
+
+```text
+IDLE --new goal--> NAVIGATING --goal reached--> IDLE
+                       |     ^
+                path failure  | successful recovery
+                       v     |
+                    RECOVERY
+                       |
+                 retry limit exceeded
+                       v
+                    SAFE_STOP
+
+Any active state --critical safety fault--> SAFE_STOP
+SAFE_STOP --explicit reset + validated conditions--> IDLE
+```
+
+This is an *illustration*, not required implementation logic. Separate a **guard** (the condition permitting a transition) from an **action** (e.g., send a zero-velocity command), and specify whether a fault must be acknowledged before leaving `SAFE_STOP`. A state label alone cannot physically stop a robot.
+
+A **Behavior Tree (BT)** organizes decisions into reusable conditions and actions. Typical control nodes include a **Sequence** (run children in order, failing when a child fails) and a **Fallback/Selector** (try alternatives until one succeeds). Leaf nodes return `SUCCESS`, `FAILURE`, or `RUNNING`. An illustrative navigation BT may try *follow path* after *compute path*, and invoke a bounded recovery when navigation fails. ROS 2 Nav2 uses BTs for navigation orchestration. Students need to recognize this role, not build a BT engine or a hierarchical FSM in this lab.
+
+FSMs are easy to draw for a few clear modes; BTs often make retry/recovery flows easier to compose. **Neither replaces a safety monitor**. A safety override must have a reliable route to inhibit motion independently of normal mission progress. Test stale-data detection, bounded retry counts, logging, and explicit reset behavior in simulation before considering real hardware.
+
+**Reading check:** A LiDAR topic is still publishing, but each message is two seconds old. Why is “topic exists” insufficient, what state transition would be reasonable, and what should prevent a stale navigation command from moving the vehicle?
+
 ## Provided Files
 
 ```text
