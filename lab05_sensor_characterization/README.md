@@ -160,10 +160,45 @@ and identify what each term represents in your experiment.
 ## Engineering Questions
 
 1. Can a sensor be precise but inaccurate?
+
+   <details>
+   <summary>Show answer</summary>
+
+   Yes. Precision describes repeatability, while accuracy describes closeness to a reference. A range sensor that repeatedly reads 1.10 m for a target actually 1.00 m away is precise but has a +0.10 m bias and is inaccurate.
+
+   </details>
 2. Why is a constant bias dangerous for dead reckoning?
+
+   <details>
+   <summary>Show answer</summary>
+
+   A constant bias accumulates when measurements are integrated. For example, a constant velocity bias produces position error that grows with elapsed time. A heading-rate bias accumulates heading error, which also sends the estimated trajectory in the wrong direction. Repeated samples do not average away a systematic offset.
+
+   </details>
 3. Why does differentiating a noisy signal often make the noise worse?
+
+   <details>
+   <summary>Show answer</summary>
+
+   A numerical derivative subtracts nearby samples and divides by their time separation. Noise in those samples can therefore become a large fluctuation, especially at short sample intervals. Differentiation emphasizes rapid changes, including high-frequency noise; filtering can help but may introduce delay.
+
+   </details>
 4. How could timestamp jitter affect sensor fusion?
+
+   <details>
+   <summary>Show answer</summary>
+
+   If an estimator assumes regular timing despite jitter, it may propagate state over the wrong interval or combine measurements from different physical instants. This can distort innovations, estimated motion, and uncertainty. Use measurement timestamps and actual elapsed intervals; distinguish measurement-time jitter from variable message-delivery delay.
+
+   </details>
 5. Which pair of sensors in your experiment would be most complementary?
+
+   <details>
+   <summary>Show answer</summary>
+
+   The answer depends on the signals you actually recorded. Look for different strengths and failure modes. For example, wheel-derived velocity and IMU angular velocity provide complementary information about forward motion and turning, although neither alone supplies an absolute global position reference. If available, a global position measurement can complement drifting dead reckoning. Support your choice with the measured bias, variability, timing, and limitations of your selected signals.
+
+   </details>
 
 ## Success Criteria
 

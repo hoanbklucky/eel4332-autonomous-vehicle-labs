@@ -156,10 +156,45 @@ Report at least two metrics, for example:
 ## Engineering Questions
 
 1. What does a larger \(Q\) communicate about the process model?
+
+   <details>
+   <summary>Show answer</summary>
+
+   A larger process-noise covariance Q represents greater uncertainty from the motion model and unmodeled disturbances over a prediction interval. Increasing a relevant variance generally increases predicted uncertainty and allows compatible measurements to exert more influence, with other settings fixed. Q must match the state units and time-step model; it does not change the nominal motion equations.
+
+   </details>
 2. What does a larger \(R\) communicate about the measurements?
+
+   <details>
+   <summary>Show answer</summary>
+
+   A larger measurement-noise covariance R represents less confidence in the affected measurements. With the same predicted uncertainty and measurement model, increasing a measurement variance generally reduces the influence of that measurement during correction. R describes measurement uncertainty in measurement units squared, rather than the sensor update rate.
+
+   </details>
 3. Why can a filter produce a smooth but wrong estimate?
+
+   <details>
+   <summary>Show answer</summary>
+
+   Smoothness only describes how rapidly an estimate changes. A biased sensor, incorrect motion model, frame or timestamp mismatch, or excessive confidence in a drifting model can yield a smooth trajectory far from the true one. Compare against an independent reference and inspect error metrics and innovations, rather than judging only by appearance.
+
+   </details>
 4. What happened during your failure experiment?
+
+   <details>
+   <summary>Show answer</summary>
+
+   This answer requires your recorded experiment. State which degradation you applied and when, compare the estimate and uncertainty with the matched baseline, and describe recovery after valid measurements return. A dropout may allow dead-reckoning error and uncertainty to grow; a bias may pull the estimate away from the reference. Report what your plots and metrics actually show, including any disagreement with your prediction.
+
+   </details>
 5. Which metric best revealed the estimator weakness?
+
+   <details>
+   <summary>Show answer</summary>
+
+   There is no single best metric for every failure. Position RMSE summarizes error over the trial, maximum position error exposes a brief large deviation, final drift shows accumulated endpoint error, and heading RMSE reveals orientation weakness. Choose the metric that most clearly exposed your observed failure and explain why, using values from the baseline and degraded runs. Align timestamps and frames before comparing trajectories.
+
+   </details>
 
 ## Success Criteria
 

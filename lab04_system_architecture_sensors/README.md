@@ -52,6 +52,64 @@ Simulation also provides controlled starting poses and repeatable obstacles, so 
 
 Every useful sensor message needs more than numeric values. Its message type defines the fields and units, its timestamp says when the measurement applies, and its frame ID says where the measurement is expressed. TF connects those frames over time. A topic can therefore be publishing at a healthy rate while still being unusable because its timestamps or frame chain are wrong.
 
+### What TF does: connect different coordinate systems
+
+A **coordinate frame** is an origin plus directions for its axes. A point described as "2 m ahead" needs a frame: ahead of the LiDAR, ahead of the robot, or along the map's x-axis? Those can be different directions and start at different locations.
+
+A **transform** describes the position and orientation of one frame relative to another. ROS 2's **tf2** library stores these relationships over time and lets a consumer convert coordinates between connected frames. In this lab, **TF** refers to this transform system. Nodes publish frame relationships; consumers such as RViz2 and navigation nodes use them to interpret data together.
+
+#### Example: placing a LiDAR detection on the map
+
+Consider a simplified top-down example, using metres:
+
+1. A LiDAR detects an obstacle 2.0 m along its own positive x-axis.
+2. The LiDAR is mounted 0.2 m ahead of the robot base, with the same axis directions. The obstacle is therefore 2.2 m ahead of the base.
+3. The base is at map coordinates (3.0, 1.0), facing along the map's positive y-axis. The same obstacle is therefore at map coordinates (3.0, 3.2).
+
+The sensor measurement, mounting offset, and robot pose supply different pieces of information. TF connects the frames so a consumer can combine them. Without the mounting transform, the consumer cannot correctly place the scan relative to the robot. Without the robot-to-map chain, it cannot place that scan on the map. Merely changing a message's `frame_id` does not convert its coordinates.
+
+#### The frame tree used in this lab
+
+```text
+map
+  -> odom
+       -> base_footprint
+            -> base_link
+                 -> sensor frames
+```
+
+These arrows mean **parent-to-child frame relationships**, rather than sensor-data flow. Exact sensor frame names must be read from the running simulation.
+
+| Relationship | What it contributes | Source in this lab |
+|---|---|---|
+| `map -> odom` | Global localization correction; can change as localization corrects drift | AMCL |
+| `odom -> base_footprint` | Locally continuous robot motion; can accumulate drift | Gazebo motion through the dedicated TF bridge |
+| `base_footprint -> base_link` | Relationship between the planar base reference and robot body | Robot model through robot-state publisher |
+| Body/joint frames to sensor frames | Sensor mounting positions and orientations | Robot model through robot-state publisher |
+
+A consumer can combine several edges to relate a sensor directly to `map`; a separate publisher for every pair is unnecessary. Fixed mounting relationships normally use `/tf_static`. Changing relationships use `/tf`. A sensor on a moving joint needs changing transforms even though it remains attached to the robot.
+
+#### Why time matters
+
+If the robot turns after a scan was captured, using its current orientation to place the old scan puts obstacles in the wrong locations. Consumers need the transforms valid at the measurement timestamp. tf2 keeps a buffer of dynamic transform history, but a lookup can fail if the requested time is outside that buffer, clocks disagree, or an edge is missing.
+
+#### What TF supplies, and where its information comes from
+
+Localization, odometry, and the robot model determine frame relationships; TF distributes those relationships for other components to use. A connected tree can still contain an incorrect pose or mounting offset. TF connectivity therefore establishes that coordinate conversion is available, while calibration and estimation quality determine whether it is accurate.
+
+In this simulation, the dedicated bridge makes Gazebo's moving pose relationship available on ROS `/tf`. This explains why Gazebo can show motion while RViz2 cannot place the robot correctly: the physics may work even when the ROS frame relationship is missing. Likewise, receiving `/odom` messages does not by itself guarantee that the corresponding TF edge is being published.
+
+**Reading check:** A LiDAR scan arrives normally, but TF has no connection from the LiDAR frame to the robot base. Can RViz2 correctly place the scan in the map frame? Would increasing the scan rate fix the problem?
+
+<details>
+<summary>Show answer</summary>
+
+No. The consumer lacks the sensor's position and orientation relative to the robot, so it cannot complete the transformation into the map frame. Increasing the scan rate supplies more measurements without the missing spatial relationship. Restore the correct mounting transform and verify the rest of the chain at the scan timestamp.
+
+</details>
+
+For further explanation, see the official [ROS 2 Jazzy tf2 overview](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Tf2.html).
+
 ### Where task execution fits in an autonomy stack
 
 A navigation system answers several *different* questions. **Mission planning** selects the goals and their order (for example, visit pickup A, then delivery B). **Task execution** decides what the robot should do *now* (navigate, wait, recover, or stop). **Path planning** computes a route through free space to a selected goal, and **tracking/control** turns a feasible route into motion commands. Sensing, localization, and mapping supply the information these components need.
