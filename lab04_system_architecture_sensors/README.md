@@ -151,19 +151,31 @@ lab04_system_architecture_sensors/
 
 | Stage | What you are learning | Visible checkpoint |
 |---|---|---|
-| Launch a baseline | What a healthy integrated simulation looks like | TurtleBot appears in Gazebo and the corresponding ROS data appears in RViz2. |
+| Confirm the baseline | What a healthy integrated simulation looks like | TurtleBot appears in Gazebo and the corresponding ROS data appears in RViz2. |
 | Verify the bridge and TF | How simulated motion becomes usable ROS frame data | `tf2_echo` reports a changing transform through the expected frame chain. |
 | Observe a mission | How sensing, localization, planning, and control cooperate | A Nav2 goal produces a path and robot motion in both graphical views. |
-| Measure interfaces | How to distinguish presence from usable data | Required topics have the expected types, frames, and nonzero rates. |
+| Measure interfaces | How to distinguish presence from usable data | The selected sensor has an identified type, frame, advancing timestamps, and a measured rate. |
 | Explain the architecture | How individual components contribute to autonomy | Your diagram traces one sensor measurement through a decision to robot motion. |
 
 Use the supplied Gazebo and RViz2 figures as baseline references. Exact colors or camera angles can differ; the robot, map, sensor data, transforms, path, and resulting motion must have the roles described in this lab.
 
 **Optional challenge after the required inspection:** Pick one displayed ROS layer, temporarily hide only its RViz2 display, and explain why the underlying simulation continues running. Restore the display afterward. This is not an additional submission unless assigned.
 
-## Part 1 — Launch a Known-Good Simulation
+## Part 1 - Confirm the Simulation Baseline
 
-**Why this part matters:** A complete working system provides a baseline before you inspect individual nodes, frames, and sensor connections.
+**Why this part matters:** A working baseline lets you focus on how data moves through the system.
+
+Start the simulation using the workflow practiced in earlier labs. This lab needs the course Nav2 TurtleBot baseline so localization and navigation are available. If your earlier simulation lacks those components, use the launch reference below. If the baseline is already running, check it without launching another instance:
+
+- Gazebo is playing and shows the robot in its world.
+- RViz2 shows the map, robot, and laser scan.
+- The transforms from `odom` to `base_footprint` and from `map` to `base_link` are available. Use the reference's `tf2_echo` commands if needed.
+- A nearby navigation goal in open space produces motion in both windows. Wait for the robot to stop before inspecting data.
+
+If a check fails, expand the reference. Once the baseline works, continue to Part 2: the main experiment is tracing and interpreting a sensor signal.
+
+<details>
+<summary><strong>Launch reference, platform background, and recovery instructions</strong></summary>
 
 For Lab 4, use the official Nav2 TurtleBot 3 simulation. It provides an integrated ROS 2 system with a simulated mobile robot, sensor data, odometry, coordinate transforms, RViz2, and navigation components.
 
@@ -611,7 +623,9 @@ Other available fallback demonstrations include `camera.launch.py` and the Gazeb
 
 </details>
 
-## Part 2 — Inspect the ROS Graph
+</details>
+
+## Part 2 - Trace One Sensor Through the ROS Graph
 
 **Why this part matters:** The ROS graph reveals which software components exist and which topic interfaces connect them.
 
@@ -639,7 +653,7 @@ ros2 topic list
 
 **Command breakdown:** `ros2 node list` inventories running components, while `ros2 topic list` inventories their named communication streams.
 
-Choose at least four relevant topics and inspect them:
+Choose one live sensor topic, preferably LiDAR or IMU data, and use it throughout Parts 2 and 3. Before inspecting its endpoints, record predictions in `answers.md` for its simulated source, whether a bridge is needed, a ROS consumer, and the effect of pausing Gazebo. Then inspect the selected topic:
 
 ```bash
 ros2 topic info /TOPIC
@@ -655,23 +669,18 @@ Record:
 - topic name;
 - message type;
 - approximate rate;
-- physical quantity represented;
+- selected numeric field, physical quantity, and SI unit;
+- message `header.frame_id`;
+- two measurement timestamps and whether they advance while Gazebo runs;
 - likely downstream consumer.
 
-For each selected topic, observe its rate for at least 10 seconds. Report the approximate mean rate and note any long pauses or missing messages. A topic that merely appears in `ros2 topic list` has not yet been shown to carry useful data.
+For the selected topic, observe its rate for at least 10 seconds. Report the approximate mean rate and note any long pauses or missing messages. A topic that merely appears in `ros2 topic list` has not yet been shown to carry useful data.
 
 ### Trace one student-selected data flow
 
 **Why this activity matters:** A topic list names interfaces, but tracing one signal shows how a physical quantity travels through publishers, bridges, ROS messages, and consumers.
 
-Choose one live sensor topic, preferably LiDAR or IMU data. Before inspecting its endpoints, predict:
-
-- which simulated sensor produces the data;
-- whether a ROS–Gazebo bridge is required;
-- which ROS node or visualization consumes it;
-- what will happen to message delivery when Gazebo is paused.
-
-Test the prediction with the live graph:
+Use the same sensor topic and test your recorded prediction with the live graph:
 
 ```bash
 ros2 topic info /TOPIC --verbose
@@ -706,9 +715,11 @@ ros2 topic echo /tf_static --once
 
 Use RViz2 to identify the base frame and at least two sensor frames.
 
-Explain why the pose of a sensor relative to the vehicle matters.
+For your selected sensor, record the connected frame chain from `map` through the robot base to the message's `header.frame_id`. Identify which relationships change as the robot moves and which describe fixed mounting geometry. Use the TF display in RViz2 to inspect the chain.
 
-## Part 4 — Run the Topic Inventory Helper
+Explain how a consumer uses this chain at the measurement timestamp to place the measurement on the map. Describe what would fail if the mounting transform were missing or the transform history did not cover that timestamp.
+
+## Part 4 - Optional Topic Inventory Helper
 
 **Why this part matters:** A repeatable inventory turns a large, changing topic list into organized evidence you can compare and debug.
 
@@ -718,9 +729,9 @@ python3 src/topic_inventory.py
 
 **Command breakdown:** `python3` runs the provided helper script from the lab directory. The relative path `src/topic_inventory.py` assumes your current directory is this lab's root.
 
-The helper prints available topics and their message types. It is intentionally a utility; you are still responsible for interpreting the topics.
+The helper prints available topics and their message types. Use it if it helps organize your inspection; no separate helper output is required. You are still responsible for interpreting the selected sensor.
 
-## Part 5 — Sensor-to-Function Mapping
+## Part 5 - Explain the Autonomy Architecture
 
 **Why this part matters:** Mapping each signal to an autonomy function connects low-level data streams to the purpose they serve in the full system.
 
@@ -738,6 +749,10 @@ For each, identify:
 3. which autonomy function uses it;
 4. another sensor that complements it.
 
+Mark sensors absent from the running simulation as unavailable; discuss their conceptual roles without inventing live interfaces.
+
+Use the table and your trace to draw the sensing-to-actuation diagram requested in Engineering Question 5. Label your selected sensor's source, any bridge, ROS topic, and observed consumer. Show where localization, planning, and control fit, and annotate where TF and timestamps are needed. Distinguish observed connections from conceptual relationships. The diagram brings together the evidence from this lab.
+
 ## Engineering Questions
 
 Answer in `answers.md`.
@@ -752,17 +767,17 @@ Answer in `answers.md`.
 
 - [ ] simulation launches;
 - [ ] ROS nodes/topics can be inspected and at least one publisher/subscriber relationship is identified;
-- [ ] at least four sensor/state topics have a recorded type, approximate 10-second rate, and downstream consumer;
+- [ ] one sensor topic has a recorded type, numeric field/unit, frame, advancing timestamps, approximate 10-second rate, and downstream consumer;
 - [ ] one student-selected sensor flow is predicted and traced from its simulated source through any bridge to a ROS consumer;
 - [ ] the `map → odom → base_footprint` or instructor-validated equivalent TF chain is connected;
-- [ ] the base frame and at least two sensor frames are identified;
+- [ ] the base frame and at least two sensor frames are identified, and the selected sensor's TF chain and timing requirements are explained;
 - [ ] a sensor-to-function table is completed;
 - [ ] an autonomy architecture diagram is produced.
 
 ## What to Submit
 
 - completed `answers.md`;
-- sensor/topic characterization table;
+- selected-sensor interface table, including field/unit, frame, timestamps, rate, and consumer;
 - completed data-flow prediction and evidence table;
 - architecture diagram;
 - one screenshot of RViz2 showing the robot and sensor frames;
