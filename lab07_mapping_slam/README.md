@@ -77,6 +77,13 @@ A planner usually consumes a **costmap**, not only a pretty occupancy-grid image
 
 **Reading check:** If an aisle is 0.7 m wide but the vehicle is 0.6 m wide, why might a planner still reject it? Consider localization error, grid resolution, and clearance margins.
 
+<details>
+<summary>Show answer</summary>
+
+Even when perfectly centered, the vehicle has only (0.7 - 0.6) / 2 = 0.05 m of clearance on each side. Localization error and required clearance margins can consume that space. Grid discretization can also represent the aisle as narrower than its physical width. With the configured footprint, obstacle inflation, and collision rules, the planner may therefore find no traversable passage. Compare the physical width with the mapped free width and the clearance required by the configured footprint and margins.
+
+</details>
+
 ## Provided Files
 
 ```text

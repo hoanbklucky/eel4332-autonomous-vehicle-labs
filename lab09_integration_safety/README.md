@@ -74,6 +74,13 @@ FSMs are easy to draw for a few clear modes; BTs often make retry/recovery flows
 
 **Reading check:** A LiDAR topic is still publishing, but each message is two seconds old. Why is “topic exists” insufficient, what state transition would be reasonable, and what should prevent a stale navigation command from moving the vehicle?
 
+<details>
+<summary>Show answer</summary>
+
+Topic presence shows that an interface is advertised; even continued delivery does not prove that its measurements are current. Compare measurement timestamps with the current time using a consistent clock. Two-second-old scans describe past obstacle positions and can invalidate navigation decisions. A reasonable response is to leave NAVIGATING for SAFE_STOP when freshness violates the allowed limit. A safety override on the final command path, together with command-freshness checks or a base-controller watchdog, must inhibit motion so that an old navigation command cannot keep the vehicle moving. Resume only after valid data and the specified reset conditions are restored.
+
+</details>
+
 ## Provided Files
 
 ```text

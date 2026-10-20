@@ -81,6 +81,17 @@ Pure Pursuit supplies a steering/curvature command toward a look-ahead target; i
 
 **Reading check:** A* finds a path through free cells, but the robot clips a corner. Name one map-related cause, one geometry/vehicle-model cause, and one tracking-related cause; propose a measurement for each.
 
+<details>
+<summary>Show answer</summary>
+
+Several explanations are possible:
+
+- **Map:** Coarse resolution or insufficient obstacle inflation leaves a path too close to the corner. Measure the mapped obstacle boundary against a reference and the minimum path-to-obstacle clearance in metres.
+- **Geometry/vehicle model:** A point-robot collision check ignores the vehicle footprint, or the turn exceeds the vehicle's motion constraints. Measure the swept-footprint clearance and compare the required turn with the platform's measured turning capability.
+- **Tracking:** A long look-ahead distance can cut the corner even when the reference path has clearance. Record the executed trajectory and cross-track error near the corner, then compare matched trials with different look-ahead distances.
+
+</details>
+
 ## Provided Files
 
 ```text

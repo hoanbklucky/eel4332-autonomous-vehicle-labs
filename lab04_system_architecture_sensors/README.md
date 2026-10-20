@@ -71,6 +71,13 @@ The arrows represent responsibilities, not necessarily literal ROS topic connect
 
 **Reading check:** A robot has a valid map and path but stops because it loses localization. Which component detects invalid state information, which component decides whether to retry or abort, and which component must have authority to stop the motors?
 
+<details>
+<summary>Show answer</summary>
+
+The localization/estimation component reports pose validity or uncertainty, and a health or safety monitor checks that the state is usable, including freshness and TF availability. The task executive (for example, a navigation Behavior Tree) decides whether to retry localization, recover, or abort. A safety override with authority over the final motor-command path must inhibit motion when the state is unsafe; a valid map and path alone do not authorize movement.
+
+</details>
+
 ## Provided Files
 
 ```text
