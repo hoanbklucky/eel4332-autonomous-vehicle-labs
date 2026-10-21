@@ -626,4 +626,4 @@ Do not compare trajectories point by point unless they use the same time samples
 - Check radians versus degrees, wheel angular velocity versus linear wheel-edge speed, and wheel rotation versus vehicle yaw rate.
 - If results change greatly when the time step is halved, investigate integration error before interpreting vehicle behavior.
 
-After completing this lab, continue to [Lab 4 — Autonomous-System Architecture and Sensors](../lab04_system_architecture_sensors/README.md).
+After completing this lab, continue to [Lab 4 - Build a Map with SLAM](../lab04_slam/README.md).

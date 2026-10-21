@@ -17,7 +17,7 @@ If the command prints nothing, run `git pull --rebase`. If it lists files, prote
 
 **Take manual control of TurtleBot in Gazebo, explore how it moves, and complete a short obstacle-course challenge.**
 
-This is an exploration lab. You are not expected to understand localization, Nav2, costmaps, or autonomous planning yet. Use observation and trial and error. The motion you observe will motivate the differential-drive model in Lab 3 and the larger autonomous-system investigation in Lab 4.
+This is an exploration lab. You are not expected to understand localization, Nav2, costmaps, or autonomous planning yet. Use observation and trial and error. The motion you observe will motivate the differential-drive model in Lab 3 and the mapping mission in Lab 4.
 
 Plan for approximately 45–60 minutes.
 

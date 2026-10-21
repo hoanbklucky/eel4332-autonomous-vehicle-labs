@@ -1,24 +1,20 @@
 # EEL 4332 Laboratory-to-Course Map
 
-| Course module/topic | Repository activity |
-|---|---|
-| ROS 2 and Gazebo foundations | Lab 01 |
-| TurtleBot operation and manual control | Lab 02 |
-| Automation levels & architecture | Lab 04 |
-| Hardware/software architecture | Lab 04 |
-| Differential-drive kinematics and wheel odometry | Lab 03 |
-| Differential drive vs. four-wheel skid steer vs. bicycle model | Labs 03–04 |
-| Vehicle dynamics/modeling | Lab 03 experiments + lecture/homework |
-| AV sensors | Lab 04 + Lab 05 |
-| Sensor uncertainty | Lab 05 |
-| State estimation / Kalman filter | Lab 06 |
-| Localization | Lab 06 |
-| Mapping / SLAM | Lab 07 |
-| Path planning | Lab 08 |
-| Path tracking / basic control | Lab 08 |
-| Integration / safety / failures | Lab 09 |
-| TurtleBot simulation to Goosebot skid-steer transfer | Lab 09 + Final project |
-| Goosebot SLAM | Final project milestone |
-| Goosebot localization / Nav2 | Final project milestone |
+| Course topic | Required hands-on activity | Additional theory / practice |
+|---|---|---|
+| ROS 2 and Gazebo | Lab 01: nodes, interfaces, bridges, simulation | Lab 01 references |
+| Robot operation | Lab 02: driving, stopping, resetting | Lab 02 explanations |
+| Vehicle modeling and odometry | Lab 03: student implementations and experiments | Lecture/homework mathematics |
+| Sensors, architecture, TF, timing | Lab 04: verify mapper inputs | [SLAM optional background](../lab04_slam/OPTIONAL_BACKGROUND.md) |
+| Sensor uncertainty | Lab 04: explain input/map limitations | Optional sensor-statistics exercise |
+| Mapping and SLAM | [Lab 04](../lab04_slam/README.md): configure, build, compare, export maps | SLAM optional background |
+| Estimation/localization | Lab 05: initialize and verify AMCL | [Navigation optional background](../lab05_navigation/OPTIONAL_BACKGROUND.md); required Lab 4 Kalman experiment |
+| Planning/tracking | [Lab 05](../lab05_navigation/README.md): configure Nav2 and compare missions | Navigation optional background; required A*/Pure Pursuit experiments |
+| Execution/failure handling | Lab 05: student mission client, timeout/cancellation, recovery | Required safety-monitor implementation and STOP-to-cancellation test |
+| Hardware transfer | [Final project](../final_project_goosebot/README.md): validate Goosebot and mission | Instructor platform validation |
 
-The laboratory sequence is intentionally smaller than the number of lecture modules. Each lab integrates multiple related concepts.
+Required progression: **00 setup -> 01 foundations -> 02 driving -> 03 modeling -> 04 SLAM -> 05 Nav2 -> final project**.
+
+The former Labs 04-09 are condensed into two integrated labs. Students configure and test autonomy components, write mission code, produce reusable artifacts, and quantify repeatability.
+
+The [optional previous sequence](../optional_legacy/previous_lab_sequence/README.md) retains algorithm starters. Kalman filtering remains required in Lab 4; A*, Pure Pursuit, and safety-monitor logic remain required in Lab 5. Their starters are in the active lab folders and their measured experiments are assessed alongside SLAM/Nav2 integration. Detailed theory remains optional reading; lecture/homework provides the mathematical derivations. SLAM and Nav2 are central integration tasks alongside the sensing, estimation, control, and safety concepts they depend on.

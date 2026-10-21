@@ -1,5 +1,7 @@
 # Lab 4 — Autonomous-System Architecture and Sensors
 
+> **Optional legacy exercise.** This is part of the previous six-lab sequence. Its original requirements and numbering apply only if the instructor assigns this archived version. Required algorithm implementations now live in the active Labs 4 and 5. The current required sequence is [Lab 4 - SLAM](../../../lab04_slam/README.md) and [Lab 5 - Nav2 Navigation](../../../lab05_navigation/README.md).
+
 ## Before You Begin — Update Course Files
 
 In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
@@ -11,7 +13,7 @@ git status --short
 
 **Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
 
-If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../../../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Mission
 
@@ -29,10 +31,10 @@ By the end of this lab, you should be able to:
 
 ## Prerequisites
 
-- Complete [Lab 00 — Software Setup](../lab00_setup/README.md).
-- Complete [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).
-- Complete [Lab 2 — TurtleBot Playground](../lab02_turtlebot_playground/README.md).
-- Complete [Lab 3 — Differential-Drive Odometry and Vehicle Modeling](../lab03_vehicle_modeling/README.md).
+- Complete [Lab 00 — Software Setup](../../../lab00_setup/README.md).
+- Complete [Lab 1 — ROS 2 and Gazebo Fundamentals](../../../lab01_ros2_gazebo_fundamentals/README.md).
+- Complete [Lab 2 — TurtleBot Playground](../../../lab02_turtlebot_playground/README.md).
+- Complete [Lab 3 — Differential-Drive Odometry and Vehicle Modeling](../../../lab03_vehicle_modeling/README.md).
 - ROS 2 Jazzy and Gazebo must launch.
 - Review course material on autonomous-driving architecture and sensor roles.
 
@@ -787,6 +789,6 @@ Answer in `answers.md`.
 
 If no topics appear, confirm that the simulation is running and that your ROS environment is sourced.
 
-See [`../docs/TROUBLESHOOTING.md`](../docs/TROUBLESHOOTING.md).
+See [`../docs/TROUBLESHOOTING.md`](../../../docs/TROUBLESHOOTING.md).
 
 After completing this lab, continue to [Lab 5 — Sensor Characterization and Measurement Uncertainty](../lab05_sensor_characterization/README.md).

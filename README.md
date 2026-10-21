@@ -35,35 +35,23 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 
 ## Required lab sequence
 
-| Lab | Mission | Main concepts |
+| Lab | Mission | Student work |
 |---|---|---|
-| 01 | Learn the ROS 2 and Gazebo workflow | nodes, interfaces, workspaces, launch files, simulation, bridges |
-| 02 | Explore TurtleBot through manual driving | Gazebo operation, teleoperation, `/cmd_vel`, `/odom` preview |
-| 03 | Predict motion from wheel speeds and steering | differential-drive kinematics, wheel odometry, bicycle model |
-| 04 | Inspect an autonomous system and its sensors | ROS 2 architecture, topics, frames, sensors |
-| 05 | Characterize noisy sensors | bias, variance, sampling, measurement models |
-| 06 | Estimate vehicle state and evaluate localization | Kalman filtering, odometry, localization error |
-| 07 | Build and evaluate a map | occupancy grids, SLAM, loop closure, map quality |
-| 08 | Plan a path and track it | A*, path metrics, Pure Pursuit, car-like tracking limits |
-| 09 | Make autonomy fail safely | system integration, timing, sensor faults, safety monitor |
-| Final | Complete an autonomous navigation mission | SLAM/localization/Nav2/Goosebot integration |
+| [00](lab00_setup/README.md) | Set up the course environment | Install and verify the supported tools |
+| [01](lab01_ros2_gazebo_fundamentals/README.md) | Learn ROS 2 and Gazebo | Build nodes, inspect interfaces, and bridge simulation data |
+| [02](lab02_turtlebot_playground/README.md) | Drive TurtleBot | Complete manual-driving challenges and practice stopping/resetting |
+| [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
+| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Implement/test a Kalman filter; configure SLAM, compare maps, and select one |
+| [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Implement/test A*, Pure Pursuit, and safety logic; write and evaluate a Nav2 mission client |
+| [Final](final_project_goosebot/README.md) | Transfer autonomy to Goosebot | Integrate, evaluate, and validate the physical platform |
 
 ## How these labs map to the course
 
-The labs deliberately group related lecture topics into larger engineering tasks.
+Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 integrates localization, planning, tracking, mission execution, and failure handling into a navigation mission. The final project validates these workflows on Goosebot's four-wheel skid-steer platform.
 
-- **Lab 01** establishes the ROS 2 and Gazebo foundation used by later labs.
-- **Lab 02** builds confidence and motivation through manual TurtleBot driving.
-- **Lab 03** supports differential-drive kinematics, wheel odometry, and car-like vehicle modeling.
-- **Lab 04** supports system architecture and autonomous-vehicle sensors.
-- **Lab 05** supports sensor uncertainty and measurement models.
-- **Lab 06** supports state estimation and localization.
-- **Lab 07** supports mapping and SLAM.
-- **Lab 08** supports path planning and path tracking/control.
-- **Lab 09** supports system integration, safety, and failure handling.
-- **Final Project** supports end-to-end autonomy and sim-to-real deployment.
+The former Labs 04-09 are condensed into required Labs 04 and 05. Detailed theory and reading checks are in each new lab's **OPTIONAL_BACKGROUND.md**. Required steps, experiments, and submissions remain in the README. Kalman filtering is required within Lab 4; A*, Pure Pursuit, and safety-monitor implementations are required within Lab 5. Their unfinished starters are in the active labs. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) preserves the former manuals as optional references. Two integrated labs replace six separate lab numbers; the required algorithms remain assessed, so each integrated lab may span multiple sessions. Lecture/homework mathematics remains distinct from the simulation work.
 
-The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, mapping, localization, Nav2, and safety concepts transfer from TurtleBot simulation. The final project then requires students to validate Goosebot's four-wheel skid-steer interface, dimensions, sensor frames, slip behavior, and safety limits.
+See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation runbook](docs/SIMULATION_WORKFLOW.md) for the shared launch workflow.
 
 ## Start here
 
@@ -78,33 +66,19 @@ The simulation-to-hardware transfer is intentionally layered. ROS topics, TF, ma
 
 ```text
 eel4332-autonomous-vehicle-labs/
-├── README.md
-├── AGENTS.md
-├── requirements.txt
-├── lab00_setup/
-├── docs/
-├── common/
-├── lab01_ros2_gazebo_fundamentals/
-├── lab02_turtlebot_playground/
-├── lab03_vehicle_modeling/
-├── lab04_system_architecture_sensors/
-├── lab05_sensor_characterization/
-├── lab06_state_estimation_localization/
-├── lab07_mapping_slam/
-├── lab08_planning_tracking/
-├── lab09_integration_safety/
-└── final_project_goosebot/
+  lab00_setup/
+  lab01_ros2_gazebo_fundamentals/
+  lab02_turtlebot_playground/
+  lab03_vehicle_modeling/
+  lab04_slam/
+  lab05_navigation/
+  final_project_goosebot/
+  docs/
+  common/
+  optional_legacy/previous_lab_sequence/
 ```
 
-Each required technical lab generally follows this structure:
-
-```text
-labXX_.../
-├── README.md
-├── src/
-├── results/
-└── answers.md
-```
+Labs 4 and 5 contain a required `README.md`, an `OPTIONAL_BACKGROUND.md` reference, an `answers.md` experiment record, and directories for configurations and results. Lab 5 also provides mission-client starter code and a recording utility. See [REPOSITORY_CONTENTS.txt](REPOSITORY_CONTENTS.txt) for the file inventory.
 
 ## Rules for student code
 

@@ -51,45 +51,33 @@ Complete this checklist before publishing the repository to students.
 - [ ] pin F1TENTH/RoboRacer Gym commit or environment only if the optional extension is assigned
 - [ ] verify example trajectory comparison
 
-## Lab 04
+## Lab 04 - SLAM
 
-- [ ] choose the exact simulation launch command
-- [ ] confirm camera/LiDAR/IMU/odometry topic names
-- [ ] confirm TF frame names
+- [ ] Validate the shared [simulation runbook](SIMULATION_WORKFLOW.md) on the final course image and record package versions.
+- [ ] Confirm exact scan/odometry topics, sensor/base frames, command message type, and one TF owner per edge.
+- [ ] Confirm the simulator can run with localization/navigation inactive while standalone SLAM Toolbox maps.
+- [ ] Verify the copied asynchronous SLAM config, simulation clock, node activation, and map publication.
+- [ ] Verify the required seeded Kalman dataset, independent one-step check, three Q/R runs, and dropout evaluation without reference leakage.
+- [ ] Run two planned routes from fresh simulator and mapper states.
+- [ ] Provide independent reference geometry for two wall segments, or explicitly use the documented consistency alternative.
+- [ ] Save both maps and verify YAML/image copies load correctly in Lab 5.
 
-## Lab 05
+## Lab 05 - Nav2 Navigation
 
-- [ ] define the exact sensor-recording/export workflow
-- [ ] provide a reference dataset in case ROS bag collection fails
+- [ ] Validate the saved-map AMCL startup and initial-pose sequence with no running mapper.
+- [ ] Confirm installed Jazzy Simple Commander methods, goal acceptance/results, timeout, and cancellation behavior.
+- [ ] Confirm the recorder receives odometry with its sensor-data QoS and rejects time resets.
+- [ ] Select conservative inflation radii, verify actual parameter paths, and confirm both full configurations load.
+- [ ] Complete three matched trials per configuration with the same map, goals, initial pose, and success criteria.
+- [ ] Verify cancellation reaches a terminal result and actual motion stops; validate the manual pause/shutdown fallback.
+- [ ] Verify the recovery run and that telemetry supports goal-time/distance analysis.
+- [ ] Validate required A* grid/path checks, Pure Pursuit circle-tracking experiments using the student Lab 3 model, and safety-policy boundary tests.
+- [ ] Verify the implemented monitor's injected STOP cancels the live goal and inhibits automatic mission continuation.
+- [ ] Confirm required implementation TODOs remain unsolved and that workload is scheduled over enough sessions.
 
-## Lab 06
+## Optional legacy exercises
 
-- [ ] choose the warm-up KF dataset
-- [ ] choose localization/fusion dataset or simulation topics
-- [ ] confirm ground-truth source
-
-## Lab 07
-
-- [ ] pin simulation robot/world
-- [ ] verify `/scan`, `/odom`, TF
-- [ ] verify SLAM launch
-- [ ] verify map-save command
-
-## Lab 08
-
-- [ ] provide occupancy grid/map input for A*
-- [ ] verify the required bicycle-model tracking environment
-- [ ] verify F1TENTH only if the optional extension is assigned
-- [ ] define track/path file format
-- [ ] validate the ROS/RViz2 planning-visualization wrapper if that extension is required
-
-## Lab 09
-
-- [ ] define supported fault-injection methods
-- [ ] decide which safety state/command students can actually publish
-- [ ] verify baseline mission
-- [ ] validate Nav2 cancellation and command arbitration for simulated safe stop
-- [ ] verify the two-speed collision-approach experiment remains simulation-only
+The previous Labs 04-09 are archived under `optional_legacy/previous_lab_sequence/`. If assigning them, separately validate their datasets, algorithm harnesses, and any old simulation commands. Their original numbering does not extend the new required sequence.
 
 ## Final Project
 
