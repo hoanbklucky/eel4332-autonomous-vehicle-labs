@@ -1,5 +1,13 @@
 # Lab 5 — Navigate on Your Map
 
+> **Copying ROBOTIS commands:** A leading `$` is a terminal-prompt symbol, not part of the command. Some copy buttons include it. Copy only the command after `$ `, or paste into the editor first and remove that prefix from each command line. For example, `$ sudo apt update` must be entered as:
+>
+> ```bash
+> sudo apt update
+> ```
+>
+> If you see `$: command not found`, remove the leading `$ ` and rerun. **Keep dollar signs inside commands**, such as `$HOME`, `$PWD`, `${TURTLEBOT3_MODEL}`, and `$(...)`; those have a different meaning.
+
 ## Mission
 
 Follow the official ROBOTIS navigation tutorial to localize on your Lab 4 map and reach three destinations.
