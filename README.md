@@ -10,6 +10,21 @@ The laboratory sequence complements lecture, in-class problem solving, homework,
 
 The course uses a simulation-first workflow and ends with a **TurtleBot simulation delivery project**. Autonomous lane following on **Goosebot** provides the course's hardware experience; physical SLAM/Nav2 deployment is optional.
 
+## Official simulation tutorials — start here
+
+Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Burger in TurtleBot3 World** throughout.
+
+| Step | Official guide | Course assignment |
+|---|---|---|
+| Install robot software | [PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy) | [Lab 00](lab00_setup/README.md) |
+| Install/run simulation | [Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy) | [Lab 2](lab02_turtlebot_playground/README.md) |
+| Build/save a map | [SLAM Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy) | [Lab 4](lab04_slam/README.md) |
+| Navigate on that map | [Navigation Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy) | [Lab 5](lab05_navigation/README.md) |
+
+Our READMEs contain WSL notes and submission requirements; ROBOTIS maintains installation/launch procedures. Existing Ubuntu/ROS installations need only the missing TurtleBot3 software. The official workspace is `~/turtlebot3_ws`; the course repository holds assignments and results.
+
+This replaces the earlier Nav2-minimal simulator and standalone SLAM Toolbox workflow. Stop old processes before switching; do not combine launch commands or apply the old mesh/TF workarounds. Earlier screenshots retained in the repository depict that previous setup.
+
 ## Course software stack
 
 The intended course environment is:
@@ -20,8 +35,8 @@ The intended course environment is:
 - **Gazebo Harmonic / modern Gazebo**
 - **RViz2**
 - **Nav2**
-- **SLAM Toolbox**
-- **robot_localization**
+- **Cartographer** through the official TurtleBot3 SLAM tutorial; SLAM Toolbox is optional
+- **robot_localization** (optional reference)
 - **Python 3 + NumPy + Matplotlib**
 - **Git** for version control and course updates
 - **Visual Studio Code + WSL extension** as the supported editor workflow
@@ -41,7 +56,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [01](lab01_ros2_gazebo_fundamentals/README.md) | Learn ROS 2 and Gazebo | Build nodes, inspect interfaces, and bridge simulation data |
 | [02](lab02_turtlebot_playground/README.md) | Drive TurtleBot | Complete manual-driving challenges and practice stopping/resetting |
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
-| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Configure SLAM, compare maps, and select one |
+| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Follow official Cartographer tutorial and save a map |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Load your map, localize, visit goals, and practice cancellation |
 | [Final](final_project_simulation/README.md) | Autonomous campus delivery in simulation | Write a mission client, visit three destinations and return home, evaluate trials and an obstacle |
 
@@ -147,7 +162,7 @@ Useful official references:
 - F1TENTH open course labs: https://github.com/f1tenth/f1tenth_labs_openrepo
 - Goosebot course/platform repository: https://github.com/hoanbklucky/goose
 
-The instructions in this repository take precedence for **EEL 4332** because they define the versions, deliverables, and workflow used in this course.
+Use official ROBOTIS Jazzy tutorials for installation and launch commands. This repository defines the course model/world, assignment scope, and submissions.
 
 ## Instructor note
 

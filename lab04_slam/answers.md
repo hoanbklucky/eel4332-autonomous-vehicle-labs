@@ -1,35 +1,11 @@
-# Lab 4 - SLAM Experiment Record
+# Lab 4 — Mapping record
 
-## Input and configuration check
+- ROS distribution / TurtleBot3 package versions:
+- Model and world:
+- Commands used:
+- Saved map YAML/image paths:
+- Resolution (m/cell):
+- What changed after revisiting an area?
+- One map-quality limitation:
 
-| Scan topic/type/frame | Rate over 10 s | Two timestamps | Observed publisher/bridge and consumer | Base/odom/map frame parameters | Map resolution (m/cell) |
-|---|---|---|---|---|---|
-| | | | | | |
-
-Record the sensor-to-base-to-odom TF chain and the actual start pose. Explain how you verified advancing time and changing odometry before mapping.
-
-## Plan before running
-
-| Run | Route sketch / region order | Single factor changed | Speed policy / duration target | Revisit plan | Predicted outcome |
-|---|---|---|---|---|---|
-| A | | | | | |
-| B | | | | | |
-
-Record world, configuration file, initial pose, and reset method held constant.
-
-## Results
-
-| Run | Duration (s) | Wall 1 endpoints / length (m) | Wall 2 endpoints / length (m) | Reference errors or between-map differences (m) | Missing/duplicated regions | Revisit evidence |
-|---|---|---|---|---|---|---|
-| A | | | | | | |
-| B | | | | | | |
-
-Identify the independent reference source, or explicitly label results as consistency rather than accuracy. Explain endpoint-selection uncertainty and deviations from each route plan.
-
-## Selected map handoff
-
-Record the selected YAML and image paths, selection evidence, limitations, and saved-map starting pose for navigation. Verify the copied YAML's image reference. In Lab 5 record whether it loads and supports localization.
-
-## Engineering questions
-
-Answer Questions 1-3 from the README using your evidence.
+Link the Gazebo screenshot, before/after mapping screenshots, and demonstration. Answer the three README questions.

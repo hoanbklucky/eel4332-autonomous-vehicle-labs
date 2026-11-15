@@ -38,7 +38,7 @@ F1TENTH / RoboRacer Gym is optional and is not required to begin the course. The
 
 Autonomous-vehicle software spans several layers. Ubuntu provides the operating environment; ROS 2 connects software components; Gazebo simulates a physical world and sensors; RViz2 visualizes ROS data; and Nav2 supplies localization, planning, and navigation components. Installing the programs is only the first step—students must also learn how to inspect each layer and the interfaces between them.
 
-Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundamentals/README.md) teaches ROS 2 and Gazebo through small systems, [Lab 2](../lab02_turtlebot_playground/README.md) provides a low-pressure TurtleBot driving playground, Lab 3 models the motion students observed, and Lab 4 combines the ROS and Gazebo ideas in a complete TurtleBot/Nav2 simulation.
+Lab 00 installs and verifies those tools. [Lab 1](../lab01_ros2_gazebo_fundamentals/README.md) teaches ROS 2 and Gazebo through small systems, [Lab 2](../lab02_turtlebot_playground/README.md) provides a low-pressure TurtleBot driving playground, Lab 3 models the motion students observed, and Lab 4 introduces mapping and Lab 5 introduces saved-map Nav2 navigation using official ROBOTIS tutorials.
 
 Resolve missing prerequisites now; otherwise a later algorithm problem can be confused with an installation or environment problem.
 
@@ -277,7 +277,7 @@ rosdep update
 
 Run `sudo rosdep init` only once. If it reports that the default sources list already exists, leave that file in place and continue with `rosdep update`.
 
-Lab 1 provides guided ROS 2 and Gazebo exercises, and Lab 2 provides manual TurtleBot practice before students model its motion in Lab 3 and use the larger TurtleBot/Nav2 system in Lab 4.
+Lab 1 provides guided ROS 2 and Gazebo exercises, and Lab 2 provides manual TurtleBot practice before students model its motion in Lab 3 and use SLAM in Lab 4 and Nav2 in Lab 5.
 
 To source ROS automatically:
 
@@ -323,38 +323,36 @@ The same window opens.
 
 ---
 
-## Part 5 — Install navigation / localization packages
+## Part 5 — Official TurtleBot3 setup (Jazzy)
 
-**Why this part matters:** Later labs use these packages for mapping, localization, planning, and navigation, so installing them now prevents interruptions later.
+Use the official ROBOTIS instructions for robot packages and simulation. Select **Jazzy** on every page.
+
+1. Complete the software/dependency and TurtleBot3 workspace sections of [PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy).
+2. Complete **Install Simulation Package** and test **TurtleBot3 World** in [Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy).
+3. Use **Burger** (`TURTLEBOT3_MODEL=burger`) consistently for the course.
+
+If Ubuntu 24.04 and ROS 2 Jazzy are already installed, keep them and install only missing dependencies/packages. “Remote PC” means your Ubuntu/WSL computer. SBC, OpenCR, physical-robot bringup, and hardware/network setup are not required for simulation.
+
+Keep the official robot workspace at `~/turtlebot3_ws` and the course repository at `~/courses/eel4332-autonomous-vehicle-labs`; these serve different purposes. Follow the official build/dependency instructions; do not clone duplicate copies of the same packages into one workspace.
+
+In every new Ubuntu terminal after the workspace has been built:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=burger
+```
+
+Use VS Code's integrated terminal connected to WSL or a separate Ubuntu terminal. If previously using the course's Nav2 minimal simulator, terminate those processes first. Existing packages can stay installed, but do not mix their launch files, TF bridges, SLAM Toolbox instructions, or mesh workarounds with ROBOTIS commands.
+
+The official mapping tutorial uses **Cartographer**. Nav2 provides saved-map navigation. SLAM Toolbox and robot_localization are optional references, not required installations for this workflow.
+
+For the final's Python mission client, install its additional API if missing:
 
 ```bash
 sudo apt update
-sudo apt install \
-  ros-jazzy-navigation2 \
-  ros-jazzy-nav2-bringup \
-  ros-jazzy-nav2-minimal-tb3-sim \
-  ros-jazzy-slam-toolbox \
-  ros-jazzy-robot-localization
+sudo apt install ros-jazzy-nav2-simple-commander
 ```
-
-**Command breakdown:** `apt install` installs the navigation, TurtleBot simulation, SLAM, and localization packages listed after it. The trailing `\` characters make the displayed lines one command.
-
-For Lab 00, installing these packages is the only required action in this part. You do **not** need to complete a TurtleBot, Nav2, or SLAM tutorial yet. The course introduces those workflows gradually in later labs using course-tested commands.
-
-<details>
-<summary><strong>Optional references for later labs — not required in Lab 00</strong></summary>
-
-The following official pages are useful when you reach navigation and mapping later in the course:
-
-- [Nav2 Gazebo setup guide](https://docs.nav2.org/setup_guides/gazebo.html)
-- [TurtleBot 3 Gazebo simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy)
-- [TurtleBot 3 SLAM simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy)
-
-The ROBOTIS pages use the `turtlebot3_gazebo` package workflow, while the first course labs use the installed `nav2_bringup` and `nav2_minimal_tb3_sim` packages. Do not clone another TurtleBot workspace, install additional packages, or substitute website launch commands for course commands unless the instructor asks you to do so.
-
-When a later lab directs you to one of these pages, confirm that its **Jazzy** tab is selected and return to the course README for the required command and deliverables.
-
-</details>
 
 ---
 
@@ -512,6 +510,7 @@ Source ROS 2 and activate the Python environment before running the verification
 ```bash
 source ~/venvs/eel4332/bin/activate
 source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
 chmod +x lab00_setup/verify_installation.sh
 ./lab00_setup/verify_installation.sh
 ```
@@ -527,17 +526,7 @@ If there is no missing, the output should look like below
 
 ## Part 10 — Goosebot
 
-**Why this part matters:** Identifying the simulation-to-hardware boundary prepares you for later Goosebot work without assuming an unverified hardware interface.
-
-Do **not** install Goosebot-specific dependencies during the first week unless instructed.
-
-The final physical deployment will use:
-
-https://github.com/hoanbklucky/goose
-
-The instructor will provide the final ROS 2 branch/package names and network/hardware configuration before the physical-robot project.
-
-Goosebot is a four-wheel skid-steer robot. It has four conventional wheels, each powered by a DC motor, with fixed parallel wheel axes and no geometric steering linkage. Turning requires different left- and right-side wheel velocities and lateral tire slip. Before deployment, the instructor must document how motion commands are mapped to the four motors. The TurtleBot simulation is not an exact Goosebot model; it is used to exercise the ROS 2 autonomy layers before the physical interface is introduced.
+Goosebot autonomous lane following is the course's hardware component. The required [final project](../final_project_simulation/README.md) uses TurtleBot3 simulation. Physical Goosebot SLAM/Nav2 deployment is optional and requires separately validated interfaces.
 
 ---
 

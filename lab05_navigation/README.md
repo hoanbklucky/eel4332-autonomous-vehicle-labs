@@ -1,88 +1,58 @@
-# Lab 5 — Navigate on your SLAM map
+# Lab 5 — Navigate on Your Map
 
 ## Mission
 
-Load your Lab 4 map, localize TurtleBot with AMCL, and use Nav2 to reach three goals in Gazebo. This guided lab prepares you for the [simulation final project](../final_project_simulation/README.md).
-
-## Learning Objectives
-
-- distinguish mapping from localization on a saved map;
-- inspect the global path, local costmap, and executed motion;
-- send navigation goals and recognize success, failure, and cancellation;
-- save reproducible mission inputs and evidence.
+Follow the official ROBOTIS navigation tutorial to localize on your Lab 4 map and reach three destinations.
 
 ## Prerequisites
 
-Complete Lab 4 and retain the selected map YAML/image pair. Use ROS 2 Jazzy and Gazebo Harmonic. Follow the [shared runbook](../docs/SIMULATION_WORKFLOW.md) for terminal commands, startup, and stopping.
+Complete [Lab 4](../lab04_slam/README.md) and retain its map YAML/image pair. Select **Jazzy** in the official tutorial.
 
-## Background
+## Procedure
 
-SLAM Toolbox builds the map during mapping. In saved-map navigation, stop SLAM and let AMCL estimate the pose on that map. Nav2 supplies planning, control, and recovery. Your project client will choose destinations and handle results.
+Run commands in **VS Code's integrated terminal connected to WSL** or a separate **Ubuntu/WSL terminal**. Both work; do not use PowerShell. “Remote PC” in the ROBOTIS instructions means your Ubuntu/WSL computer, not a physical robot.
 
-Your optional Python A* and Pure Pursuit exercises are independent of Nav2; they are not plugins used by the live robot. See [optional background](OPTIONAL_BACKGROUND.md) and [optional algorithm exercises](ALGORITHM_EXPERIMENTS.md).
+In each new terminal, after completing the official setup:
 
-## Provided Files
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=burger
+```
 
-- `src/mission_client.py`: final-project mission scaffold; the guided lab can use RViz2.
-- `src/record_odometry.py`: ready-to-use odometry recorder.
-- `config/goals.csv`: header for three delivery destinations.
-- `answers.md`: lab record.
-- [Simulation runbook](../docs/SIMULATION_WORKFLOW.md#navigation-mode).
+Use the same model (**Burger**) and environment (**TurtleBot3 World**) throughout Labs 2, 4, 5, and the final.
 
-## Step-by-Step Procedure
+1. Stop all applications from mapping with **Ctrl+C**, including Cartographer and teleoperation.
+2. Follow [ROBOTIS Navigation Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy), in order: **Launch Simulation World → Run Navigation Node → Estimate Initial Pose → Set Navigation Goal**.
+3. Use the same world/model as mapping. Replace the tutorial's example map path with the **absolute path to your Lab 4 `map.yaml`**. Keep the referenced map image beside the YAML.
+4. Initialize the robot pose in RViz2 and check scan/wall alignment. If using teleoperation to refine localization as the tutorial describes, stop and terminate that keyboard node before sending navigation goals.
+5. Reach three open-space destinations, one at a time. Record their map-frame x/y coordinates (metres), yaw (radians), outcomes, and approximate simulation-time durations in `answers.md`. Save destinations in `config/goals.csv`.
+6. Capture a screenshot showing the map, robot, scan, and planned path. Save the home/start pose and exact launch commands for the final.
 
-### 1. Load your map and localize
+Keep the simulator and navigation terminals running while sending goals. Do not run Cartographer or SLAM Toolbox during saved-map navigation, or add the old custom lifecycle-startup/TF-bridge commands.
 
-Stop the mapper, teleoperation, and previous simulator. Follow Navigation mode in the runbook. Copy the installed full Nav2 configuration as described there, pass your own map and parameter paths, and use simulation time.
-
-Initialize AMCL with **2D Pose Estimate** at the starting pose expressed in your saved map. Check laser/wall alignment and `map -> odom -> base_link` connectivity before activating navigation. Keep teleoperation stopped.
-
-### 2. Reach three destinations
-
-Choose three reachable, open-space poses. Record map-frame x/y in metres and yaw in radians in `config/goals.csv`. Use RViz2 **Nav2 Goal** to visit them one at a time. Observe the planned path and actual motion. Confirm each result before sending the next goal.
-
-Capture one screenshot showing the map, robot, scan, global path, and costmap. Label what each display represents. A visible path alone is not evidence that the destination was reached.
-
-### 3. Practice cancellation and restart
-
-Send a reachable goal, then cancel it in RViz2 while the robot moves. Confirm both the action result and actual stopping in Gazebo/odometry. If motion continues, pause Gazebo and follow the runbook shutdown procedure.
-
-Restart cleanly, reinitialize localization, and reach one goal again. Do not collect data across a simulator clock reset.
-
-### 4. Prepare the final-project handoff
-
-Save the map pair, full Nav2 configuration, three goal poses, map-frame home pose, and exact launch commands. Identify the installed planner/controller plugins and footprint or robot radius. Reuse these artifacts in the final rather than remapping unnecessarily.
-
-## Experiment / Quantitative Analysis
-
-For this guided lab, record three goal outcomes and approximate simulation-time durations. Explain one difference between the planned path and observed motion. Repeated trials, CSV metrics, and the obstacle challenge belong to the final project.
-
-Optional: compare two inflation-radius settings while holding the map, goals, initial pose, and other parameters fixed. Inflation changes costs around obstacles; it does not guarantee minimum clearance. Do not alter the footprint to force passage.
-
-## Engineering Questions
-
-1. Why does loading the map not tell AMCL the robot's initial pose?
-2. What is the difference between the global path and the robot's executed trajectory?
-3. What evidence shows that cancellation actually stopped the robot?
-4. Which components would need platform-specific validation on Goosebot?
-
-## Success Criteria
-
-- [ ] Your own saved SLAM map loads and localization aligns with it.
-- [ ] Three reachable goals complete using Nav2.
-- [ ] Cancellation and a clean restart are demonstrated.
-- [ ] Map, configuration, and destination poses are ready for the final.
+**Stopping:** use RViz2's navigation cancel control if available and confirm actual stopping in Gazebo. If motion continues unexpectedly, pause Gazebo and end the launch processes before a clean restart. Do not treat a new destination at the current pose as a guaranteed stop.
 
 ## What to Submit
 
-Completed `answers.md`, the goal CSV, full Nav2 configuration, map identity/path, and screenshots or a short demonstration. The separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional; the mission client is completed for the final.
+- Completed `answers.md` and `config/goals.csv`.
+- Map identity/path, home pose, and the navigation configuration path/version used (copy the full file if modified).
+- A screenshot and short demonstration of three successful goals.
+
+## Questions
+
+1. How does localization differ from building a map?
+2. How does the planned path differ from actual robot motion?
+3. What would need validation before using this system on Goosebot?
+
+## Final Handoff
+
+Reuse your map, goals, and working official navigation setup in the [delivery final](../final_project_simulation/README.md). The mission-client scaffold and odometry recorder in `src/` support that project. Separate A*, Pure Pursuit, and safety-monitor exercises are optional.
+
+## Optional Background
+
+[Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md).
 
 ## Troubleshooting
 
-- Misaligned scans: check the selected map, initial pose, TF, and clocks.
-- No route: check occupied/unknown cells, footprint, and goal placement.
-- No motion: check lifecycle states, simulation play state, and command type.
-- Conflicting commands: stop teleoperation and extra mission clients.
-- Use the [troubleshooting guide](../docs/TROUBLESHOOTING.md).
-
-**Instructor validation:** the runbook must be tested on the course image before student use. No new end-to-end simulation test is claimed by these instructions.
+Check the map path, initial pose, Jazzy tab, sourced workspace, model, and duplicate command publishers before changing parameters. The official tutorial supplies startup instructions; this README supplies the course tasks. The instructor must test the workflow on the course WSL image.

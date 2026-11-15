@@ -17,11 +17,11 @@ Your Goosebot autonomous lane-following work is the course's hardware achievemen
 
 Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use the same instructor-validated Gazebo world and TurtleBot model. Do not spend project time building a new world.
 
-The instructor must publish the exact world/model, reset/start pose, baseline configuration, and obstacle placement before the obstacle trial. Follow the [simulation runbook](../docs/SIMULATION_WORKFLOW.md).
+The instructor must publish the exact world/model, reset/start pose, baseline configuration, and obstacle placement before the obstacle trial. Use **Burger in TurtleBot3 World** and follow [ROBOTIS Navigation Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy) with your Lab 4 map, as practiced in Lab 5. Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and set `TURTLEBOT3_MODEL=burger` in each terminal. Stop mapping/teleoperation before navigation. Do not use the previous Nav2 minimal simulator.
 
 ## Background
 
-SLAM Toolbox creates your map. During the delivery mission, stop SLAM and use AMCL on the saved map. Nav2 supplies the live planner, controller, and navigation recovery. Your Python client sequences destinations and handles outcomes.
+The official ROBOTIS Cartographer tutorial creates your map. During the delivery mission, stop SLAM and use AMCL on the saved map. Nav2 supplies the live planner, controller, and navigation recovery. Your Python client sequences destinations and handles outcomes.
 
 The final does not require implementing SLAM, A*, Pure Pursuit, Kalman filtering, a custom Nav2 plugin, autonomous exploration, or a synthetic safety monitor.
 
@@ -31,7 +31,7 @@ The final does not require implementing SLAM, A*, Pure Pursuit, Kalman filtering
 - [Odometry recorder](../lab05_navigation/src/record_odometry.py): provided utility.
 - [Goal CSV](../lab05_navigation/config/goals.csv): three delivery poses.
 - [Results template](results_template.md).
-- Your Lab 4 map YAML/image and Lab 5 full Nav2 configuration.
+- Your Lab 4 map YAML/image and Lab 5 navigation setup/configuration record. Use the official TurtleBot3 model-specific configuration; preserve a copy of any modified full parameter file.
 
 Keep final code and configuration in `final_project_simulation/src/` and `config/`, and evidence in `results/`. Create those directories in your submission. Preserve the supplied algorithms' TODOs unless you elect to complete an optional exercise.
 
@@ -90,7 +90,7 @@ Predict the response, then run the same mission once. Capture RViz2 costmap/path
 
 ### 5. Demonstrate cancellation and discuss transfer
 
-Reuse the Lab 5 cancellation/restart evidence if it already shows both action outcome and actual stopping. Otherwise perform one separate cancellation trial. Never treat cancellation status alone as proof of zero motion. Use the runbook pause/shutdown procedure if needed.
+Reuse Lab 5 cancellation/restart evidence if it already shows both action outcome and actual stopping. Otherwise perform one separate cancellation trial. Never treat cancellation status alone as proof of zero motion. If cancellation fails to stop motion, pause Gazebo, end the launch processes, and restart cleanly.
 
 Include a short discussion of the sensing, wheel odometry, TF, footprint, motor interface, skid-steer slip, and stopping checks needed to transfer this system to Goosebot. Physical SLAM/Nav2 deployment is not required.
 
@@ -150,6 +150,6 @@ For an instructor-designated one-week version, the instructor may provide a work
 
 ## Troubleshooting
 
-Use the [runbook](../docs/SIMULATION_WORKFLOW.md) and [troubleshooting guide](../docs/TROUBLESHOOTING.md). Confirm map identity, initial pose, time, TF, and lifecycle states before tuning. Keep teleoperation stopped during autonomous missions.
+Use the official Jazzy simulation/navigation instructions linked above. Confirm map identity, initial pose, time, TF, and lifecycle states before tuning. Keep teleoperation stopped during autonomous missions.
 
 **INSTRUCTOR VALIDATION REQUIRED:** test the full mapping-to-delivery sequence, exact obstacle world/placement, and cancellation on the course image before release. This document does not certify an end-to-end run.
