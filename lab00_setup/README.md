@@ -1,5 +1,13 @@
 # EEL 4332 Software Setup
 
+> **Copying ROBOTIS commands:** A leading `$` is a terminal-prompt symbol, not part of the command. Some copy buttons include it. Copy only the command after `$ `, or paste into the editor first and remove that prefix from each command line. For example, `$ sudo apt update` must be entered as:
+>
+> ```bash
+> sudo apt update
+> ```
+>
+> If you see `$: command not found`, remove the leading `$ ` and rerun. **Keep dollar signs inside commands**, such as `$HOME`, `$PWD`, `${TURTLEBOT3_MODEL}`, and `$(...)`; those have a different meaning.
+
 ## Before You Begin — Update Course Files
 
 If this is your first setup, skip this update check; Part 2 installs Git and Part 6 forks/clones the repository. If you already have a local copy, open a **WSL/Ubuntu Terminal** and run:
