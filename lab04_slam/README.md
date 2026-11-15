@@ -138,6 +138,40 @@ After saving, stop teleop, Cartographer, and the simulator with Ctrl+C in their 
 
 ## Troubleshooting
 
+### Robot missing after relaunch: check leftover Gazebo processes
+
+If the launch reports **Entity creation successful** but the Entity Tree has no `waffle`, and the log warns **Found additional publishers on /clock** or **/stats**, another simulation may still be running. This cleanup resolved that symptom on the instructor's WSL system.
+
+1. Stop motion. Save any map/results you need, then press **Ctrl+C** in all simulator, teleoperation, SLAM, and navigation launch terminals.
+2. In a separate Ubuntu/WSL terminal, inspect remaining Gazebo processes:
+
+```bash
+pgrep -af 'gz sim|gz-sim'
+```
+
+3. If the output lists leftover Gazebo processes and you intend to stop **all Gazebo simulations owned by your user**, run:
+
+```bash
+pkill -f 'gz sim'
+pkill -f 'gz-sim'
+pgrep -af 'gz sim|gz-sim'
+```
+
+No output from the final check means no matching processes remain. These commands close matching Gazebo servers/GUI processes, so use them only for cleanup, not during a trial you want to keep.
+
+4. Relaunch **one** world:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation, SLAM, or navigation in separate sourced terminals. If the robot is still absent, capture the complete launch output rather than repeatedly launching more worlds.
+
+
+
 - Package not found: confirm installation/build succeeded, then source the workspace in that terminal.
 - No robot motion: click the keyboard terminal, check printed velocities, and confirm Gazebo is playing.
 - No map: inspect Cartographer's full error output and check `ros2 topic echo /scan --once`.
