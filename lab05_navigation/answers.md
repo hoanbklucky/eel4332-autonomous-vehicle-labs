@@ -1,11 +1,5 @@
-# Lab 5 — Navigation record
+# Lab 5 — Optional personal notes
 
-Record model/world, package versions, map YAML/image paths, home/start pose, exact launch commands, and navigation configuration path/version. Explain how you verified localization.
+The required submission is one successful navigation video and one short explanation in your own words; see README.md. This file is optional and need not be submitted.
 
-| Goal | x (m) | y (m) | yaw (rad) | Outcome | Approximate simulation time (s) |
-|---|---|---|---|---|---|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-
-Link screenshot/video and answer the three README questions. Describe one observed navigation issue or limitation.
+You may record map paths, working commands, goal/home poses, and observations here for the final project.

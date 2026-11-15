@@ -2,7 +2,7 @@
 
 ## Mission
 
-Load your Lab 4 map, localize Waffle with AMCL, and reach three destinations with Nav2.
+Load your Lab 4 map, localize Waffle with AMCL, and complete a successful navigation to a chosen destination with Nav2.
 
 Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 
@@ -23,6 +23,38 @@ AMCL maintains many candidate poses, called **particles**. As the robot moves an
 | “What does the environment look like, and where am I?” | “Where am I on this map?” |
 
 In RViz2, **2D Pose Estimate** supplies an initial position/heading guess; it does not command the robot to move there. AMCL refines that guess as observations arrive. Check that laser returns align with mapped walls before sending a goal. Nav2 then uses the estimated pose to plan and control motion toward the destination.
+
+## How does Nav2 work?
+
+For the official TurtleBot3 Jazzy Waffle configuration, the **NavFn global planner uses Dijkstra's expansion** (`use_astar: false`), and **DWB** supplies local control. Nav2 is configurable; other parameter files can select different algorithms.
+
+| Component | Role |
+|---|---|
+| AMCL | Estimates the robot's pose on the saved map. |
+| Costmaps | Represent obstacles and costs using the map and live sensor data. Inflation adds higher costs near obstacles. |
+| NavFn global planner | Finds a route from the estimated pose to the goal through the global costmap. Setting `use_astar: true` selects A* instead of Dijkstra. |
+| DWB local controller | Samples forward/turning velocities, predicts short motions, scores them for obstacle avoidance and path/goal progress, and sends a velocity command. |
+| Behavior Tree | Coordinates planning, following, replanning, and recovery. |
+
+When you send a goal, Nav2 plans a route, follows it with repeated velocity commands, and uses new sensor/odometry information to update its decisions. The simulator executes those commands. **Global planning chooses the route; local control chooses what motion to command now.** Colored inflation bands in RViz2 are costs, not physical walls or a guarantee of minimum clearance.
+
+<details>
+<summary>Optional — verify the running planner and controller</summary>
+
+In a new sourced Ubuntu/WSL terminal while navigation is running:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 param get /planner_server GridBased.plugin
+ros2 param get /planner_server GridBased.use_astar
+ros2 param get /controller_server FollowPath.plugin
+```
+
+The course configuration is expected to report `nav2_navfn_planner::NavfnPlanner`, `False`, and `dwb_core::DWBLocalPlanner`. Plugin IDs/node names can differ if you change configuration.
+
+</details>
 
 ## 1. Install and check packages
 
@@ -113,11 +145,31 @@ Click that terminal before driving slowly. Press `s` to stop, then **Ctrl+C to t
 
 **Run the source and export commands in each new terminal.** Each separately opened terminal has its own environment: setting `TURTLEBOT3_MODEL=waffle` in Terminal 1 does not set it in Terminal 3. The complete command block above includes everything Terminal 3 needs.
 
-## 5. Reach three goals
+## 5. Send a goal and navigate
 
 Click **Navigation2 Goal / Nav2 Goal** in RViz2, click a reachable location, and drag toward the desired final heading. Wait for completion before sending the next goal.
 
-Visit three open-space destinations. Record map-frame x/y (metres), yaw (radians), outcome, and approximate simulation-time duration in `answers.md`; put the poses in `config/goals.csv`. Capture the map, robot, scan, and planned path. Record the home/start pose and launch commands for the final.
+Choose an open-space destination and record the robot navigating to it. Show Gazebo and RViz2 clearly, including the planned path and the robot reaching/stopping at the destination. Show the reported successful goal result in RViz2 or the navigation terminal; an active goal or a visible path alone is not completion evidence.
+
+You may practice additional destinations, but only **one successful navigation video** is required. Keep your map and useful destination/home poses for the final; no goal CSV or experiment table is required for this lab.
+
+<details>
+<summary>Expected output — selecting a navigation goal</summary>
+
+![Gazebo and RViz2 while selecting a goal pose](images/navigation_goal.png)
+
+The green arrow specifies the destination position and final heading. This screenshot shows goal selection, not proof of arrival.
+
+</details>
+
+<details>
+<summary>Expected output — navigation in progress</summary>
+
+![Waffle moving in Gazebo with an active Nav2 task and path in RViz2](images/navigation_running.png)
+
+The path, moving robot, and active feedback show execution. This screenshot is an in-progress example; continue until your goal completes successfully.
+
+</details>
 
 To stop early, use RViz2's navigation cancellation control if available and confirm actual stopping. If unexpected motion continues, pause Gazebo and end the launch processes before restarting. Do not treat a new goal at the current pose as a guaranteed stop.
 
@@ -125,15 +177,12 @@ After finishing, stop navigation (Terminal 2), then simulation (Terminal 1) with
 
 ## What to Submit
 
-- `answers.md`, `config/goals.csv`, map identity/path, and home pose.
-- Navigation configuration path/version; copy the full file if modified.
-- Screenshot and short demonstration of three successful goals.
+Submit only:
 
-## Questions
+1. **One screen-recording video** showing a successful navigation to a chosen goal, with Gazebo and RViz2 visible.
+2. **One short paragraph in your own words** explaining how AMCL, the costmap, the global planner, and the local controller work together to move the robot to that goal.
 
-1. How does localization differ from building a map?
-2. How does the planned path differ from actual robot motion?
-3. What would need validation before using this system on Goosebot?
+No separate screenshots, report, `answers.md`, goal CSV, or results table is required. Keep your saved map and working setup for the final project.
 
 ## Final Handoff and Optional Background
 
@@ -182,8 +231,11 @@ The instructor must test saved-map navigation and cancellation on the course WSL
 ## References
 
 These procedures adapt the official **Jazzy** workflow, with explicit per-terminal environment setup:
+
 - [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy)
 - [ROBOTIS Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy)
 - [ROBOTIS SLAM Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy)
 - [ROBOTIS Navigation Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy)
 
+
+Algorithm references: [TurtleBot3 Jazzy Waffle parameters](https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_navigation2/param/waffle.yaml), [NavFn planner](https://docs.nav2.org/jazzy/configuration_and_development/configuration_guide/planners_plugins/configuring_navfn/), and [DWB controller](https://docs.nav2.org/jazzy/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/).
