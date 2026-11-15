@@ -11,7 +11,7 @@ git status --short
 
 **Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
 
-If the command prints nothing, run `git pull --rebase`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+If the command prints nothing, run `git pull --ff-only origin main`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
 
 ## Goal
 
@@ -403,6 +403,10 @@ code .
 
 **Command breakdown:** `git status` summarizes local changes, `git remote -v` shows the connected remote repository, `git branch --show-current` identifies the active branch, and `code .` opens the repository in VS Code.
 
+To receive instructor updates, save all files and check `git status --short`. If clean and on the course `main` branch with the correct `origin`, run `git pull --ff-only origin main`, or use **Source Control → … → Pull** in VS Code. Opening `code .` does not pull updates. **Sync Changes** also pushes commits. For local changes, conflicts, and step-by-step instructions, see [Open and Update the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md).
+
+If `code .` displays an Installing/Updating VS Code Server download, wait for completion; that download updates WSL editor support, not course files.
+
 The VS Code Explorer should show `lab00_setup`, `lab01_ros2_gazebo_fundamentals`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands in integrated WSL/Ubuntu Terminals in this workspace, not from a separate Windows copy of the folder.
 
 ---
@@ -463,7 +467,7 @@ The command is successful when it ends with `Successfully installed` or reports 
 If an older copy of this repository reports that ROS packages such as `generate-parameter-library-py` or `launch-ros` require `setuptools`, `jinja2`, or `typeguard`, update the repository and run the requirements command again:
 
 ```bash
-git pull
+git pull --ff-only origin main
 python -m pip install -r requirements.txt
 ```
 
