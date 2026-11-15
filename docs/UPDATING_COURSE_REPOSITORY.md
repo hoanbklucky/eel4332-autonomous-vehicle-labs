@@ -1,73 +1,130 @@
-# Updating the Course Repository
+# Open and Update the Course Repository
 
-Use these steps to get the newest course files without losing your own work. Run all commands in a **WSL/Ubuntu Terminal**.
+Use your existing clone in **WSL/Ubuntu**. Opening VS Code does not download course updates; pulling does. You do not need to clone again for each lab.
 
-## 1. Go to Your Local Course Repository
+## 1. Open the repository in VS Code
 
-If you cloned the repository in the recommended location, run:
+Open an Ubuntu terminal and run:
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
+code .
 ```
 
-**Command breakdown:** `cd` changes the current directory, and `~` represents your Ubuntu home directory.
+`cd` enters your local repository; `code .` opens that folder in VS Code. Use your actual path if you cloned elsewhere. If several similarly named folders exist, open the student course repository rather than an instructor or backup copy.
 
-Here, `~` means your Ubuntu home directory, such as `/home/your_username`. If you cloned the repository somewhere else, change the command to that location.
+The first launch may display **Installing/Updating VS Code Server** and a download percentage. Wait for it to finish. This updates VS Code's WSL support, not the course repository.
 
-## 2. Check for Local Changes
+Confirm:
+
+- The lower-left indicator shows **WSL: Ubuntu** (possibly with the distribution version).
+- Explorer shows the repository's top-level `README.md` and lab folders.
+- **Terminal → New Terminal** opens an Ubuntu shell in this repository.
+
+If the folder opens in Windows mode, use the Command Palette (**Ctrl+Shift+P**) and **WSL: Reopen Folder in WSL**. Install the Microsoft WSL extension if needed.
+
+## 2. Check your copy before updating
+
+Save all open files, then run in the integrated Ubuntu terminal:
 
 ```bash
+pwd
+git remote -v
+git branch --show-current
 git status --short
 ```
 
-**Command breakdown:** `git status` compares your working files with the current commit; `--short` uses a compact one-line format for each changed file.
+For a direct clone of the course repository, `origin` should point to:
+`https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git`
+(the equivalent SSH URL is also valid), and the branch should be `main`.
 
-This command compares your working files with your most recent local commit:
+If your origin is a personal fork or you use a different branch, do not change remotes or switch branches blindly; ask the instructor which upstream workflow to use.
 
-- **No output** means the tracked files are unchanged. Continue to Step 3.
-- **Listed files** mean you have local changes or new files. Follow Step 4 before pulling.
+No output from `git status --short` means there are no reported uncommitted changes. Listed files mean you must protect local work using Section 4 first. A clean working tree does not mean your clone is up to date.
 
-## 3. Update a Clean Repository
+## 3. Get the latest version — choose either method
 
-When `git status --short` prints nothing, run:
+### Method A: VS Code Source Control
+
+For a clean working tree on the course `main` branch:
+
+1. Open **Source Control** (**Ctrl+Shift+G**).
+2. If multiple repositories appear, select this course repository.
+3. Open the **…** menu and choose **Pull** (it may appear under **Pull, Push**).
+4. Wait for completion and review any reported error before continuing.
+
+Use **Pull** to receive instructor updates. **Sync Changes** performs a pull followed by a push and may try to upload your local commits; it is not needed to download course files. **Settings Sync** synchronizes editor settings, not repository contents. Pulling does not submit your lab work.
+
+### Method B: Ubuntu command line
+
+From a clean working tree on the course `main` branch:
 
 ```bash
-git pull --rebase
+git pull --ff-only origin main
 ```
 
-**Command breakdown:** `git pull` downloads and integrates changes from the configured remote branch. `--rebase` reapplies your local commits after the downloaded commits, avoiding an unnecessary merge commit.
+`pull` fetches and integrates instructor changes. `--ff-only` updates only when no merge or rebase is needed; it stops if local and remote history diverge. If it stops, ask the instructor/TA for help rather than forcing an update.
 
-Git will either report `Already up to date.` or download and apply newer course files. Pulling updates does **not** submit your lab work.
+For a routine update after checking your copy:
 
-## 4. Protect Local Work Before Updating
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git status --short
+```
 
-Complete this step **only when `git status --short` lists one or more files**. If the command printed nothing and you already completed Step 3, skip Step 4; there is no local work to stash.
+If nothing is listed, run:
 
-First, make a backup copy of any important work outside the repository. Then temporarily store both tracked and untracked changes:
+```bash
+git pull --ff-only origin main
+code .
+```
+
+Git reports either `Already up to date.` or a summary of updated files. Opening `code .` alone does not perform this pull.
+
+## 4. Preserve uncommitted student work
+
+Only use this section when `git status --short` lists files. Save editor buffers and back up important code/results outside the repository first. Ignored files such as bags/build outputs are not included by the stash command below.
+
+Run:
 
 ```bash
 git stash push --include-untracked -m "My work before course update"
-git pull --rebase
-git stash pop
 ```
 
-**Command breakdown:** `git stash push` temporarily stores tracked and untracked changes; `-m` labels that saved state. After `git pull --rebase` updates the repository, `git stash pop` reapplies the stored work.
-
-`git stash` sets your unfinished changes aside, `git pull --rebase` updates the course files, and `git stash pop` reapplies your changes.
-
-## If Git Reports a Conflict
-
-A conflict means both you and the course update changed the same part of a file. Your work is not automatically lost.
-
-1. Run `git status` to identify the conflicted files.
-2. Open each file in VS Code and use the Merge Editor, or resolve the sections marked with `<<<<<<<`, `=======`, and `>>>>>>>`.
-3. Save the resolved file and run `git add path/to/file`.
-4. If Git says a rebase is in progress, run `git rebase --continue`. If the conflict appeared after `git stash pop`, do not run `git rebase --continue`; resolve and stage the files normally.
-
-If you are unsure how to resolve a conflict, stop and ask the instructor or teaching assistant. Do not use `git reset --hard`, force a pull, or delete and clone the repository again; those actions can discard your work. If a pull rebase is still in progress and you need to return to the state before the pull, run:
+Confirm Git reports that it saved your changes, then run:
 
 ```bash
-git rebase --abort
+git pull --ff-only origin main
 ```
 
-**Command breakdown:** `git rebase --abort` cancels an in-progress rebase and restores the repository to its state before that rebase began. It does not resolve a conflict caused only by `git stash pop`.
+Only after the pull succeeds, restore your work:
+
+```bash
+git stash apply
+git status
+```
+
+`stash apply` restores the saved changes while keeping the stash as a backup. Verify your files before optionally removing that saved stash with `git stash drop`. Do not repeatedly apply the same stash.
+
+If the pull fails, stop before restoring and ask for help; your saved work remains in the stash. Stashing does not resolve diverged committed history.
+
+## 5. Conflicts and update verification
+
+If restoring work reports conflicts, run `git status`, open the affected files in VS Code, and reconcile your work with the course update. Ask the instructor/TA if unsure. The stash remains available after `stash apply`. Do not use **Discard Changes**, `git reset --hard`, or delete your clone to resolve the problem.
+
+After a successful update:
+
+```bash
+git log -1 --oneline
+ls
+```
+
+Check that the current structure includes `lab04_slam/`, `lab05_navigation/`, and `final_project_simulation/`. The older Labs 04–09 are now under `optional_legacy/previous_lab_sequence/`; locally modified/untracked old files may remain and should be reviewed rather than deleted blindly.
+
+Reopen the updated README in VS Code. If an update changes dependencies, follow the relevant setup instructions; Git updates files but does not install ROS packages or Python dependencies.
+
+## Official references
+
+- [VS Code in WSL](https://code.visualstudio.com/docs/remote/wsl)
+- [VS Code source control](https://code.visualstudio.com/docs/sourcecontrol/overview)
+- [Git pull](https://git-scm.com/docs/git-pull)
