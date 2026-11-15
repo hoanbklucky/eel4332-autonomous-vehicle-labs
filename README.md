@@ -62,6 +62,25 @@ See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation
 5. Keep all experimental results in each lab's `results/` directory.
 6. Do not commit large ROS build artifacts or recorded bags unless instructed.
 
+## Open in VS Code and get updates
+
+Run in a WSL/Ubuntu terminal:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+code .
+```
+
+Wait for any VS Code Server installation/update to finish and confirm the **WSL: Ubuntu** indicator. Opening the folder does not update its files.
+
+Before each lab, save your files and run `git status --short`. If it prints nothing and you are on the course `main` branch with the correct `origin`, run:
+
+```bash
+git pull --ff-only origin main
+```
+
+Alternatively, use VS Code **Source Control → … → Pull**. **Sync Changes** also pushes local commits; use **Pull** when you only need instructor updates. If you have local changes, preserve them first using the [opening and update guide](docs/UPDATING_COURSE_REPOSITORY.md).
+
 ## Repository structure
 
 ```text
