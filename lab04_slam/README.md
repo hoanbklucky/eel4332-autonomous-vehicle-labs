@@ -89,14 +89,27 @@ ros2 run ros_gz_bridge parameter_bridge \
 
 Use another sourced terminal for the remaining checks. Do not add this bridge if TF already works. If it still fails, stop and check the simulator/bridge output before continuing.
 
-Check the remaining transforms, pressing **Ctrl+C** after each prints output:
+Check the base transform, then press **Ctrl+C** after it prints translation/rotation output:
 
 ```bash
 ros2 run tf2_ros tf2_echo base_footprint base_link
-ros2 run tf2_ros tf2_echo base_link SCAN_FRAME
 ```
 
-Replace `SCAN_FRAME` with the actual `header.frame_id` printed by `/scan`. This verifies `odom -> base_footprint -> base_link -> sensor`. If your model uses different names, match the YAML to the observed frames rather than inventing a transform.
+Read the LiDAR's actual frame name:
+
+```bash
+ros2 topic echo /scan --once --field header.frame_id
+```
+
+The course TurtleBot reports **`base_scan`**. Check its transform with:
+
+```bash
+ros2 run tf2_ros tf2_echo base_link base_scan
+```
+
+Expect repeated translation/rotation output; the tested setup reports approximately `[-0.064, 0.000, 0.122]` m and zero rotation. An initial “frame does not exist” message can appear while the listener receives TF; if transforms follow, the check succeeded. `At time 0.0` is normal for this static sensor mounting transform. Press **Ctrl+C** after confirming output.
+
+This verifies `odom -> base_footprint -> base_link -> base_scan`. If your scan reports another frame, replace only `base_scan` in the command with that exact name. If errors persist without transform output, check the simulator and robot-state publisher before continuing.
 
 **Terminal 3 — standalone mapper:** run the common source/`cd` commands, then leave this running:
 
