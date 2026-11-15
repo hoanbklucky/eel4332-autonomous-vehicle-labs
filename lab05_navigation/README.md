@@ -108,6 +108,40 @@ Reuse the map, goals, and launch sequence in the [delivery final](../final_proje
 
 ## Troubleshooting
 
+### Robot missing after relaunch: check leftover Gazebo processes
+
+If the launch reports **Entity creation successful** but the Entity Tree has no `waffle`, and the log warns **Found additional publishers on /clock** or **/stats**, another simulation may still be running. This cleanup resolved that symptom on the instructor's WSL system.
+
+1. Stop motion. Save any map/results you need, then press **Ctrl+C** in all simulator, teleoperation, SLAM, and navigation launch terminals.
+2. In a separate Ubuntu/WSL terminal, inspect remaining Gazebo processes:
+
+```bash
+pgrep -af 'gz sim|gz-sim'
+```
+
+3. If the output lists leftover Gazebo processes and you intend to stop **all Gazebo simulations owned by your user**, run:
+
+```bash
+pkill -f 'gz sim'
+pkill -f 'gz-sim'
+pgrep -af 'gz sim|gz-sim'
+```
+
+No output from the final check means no matching processes remain. These commands close matching Gazebo servers/GUI processes, so use them only for cleanup, not during a trial you want to keep.
+
+4. Relaunch **one** world:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation, SLAM, or navigation in separate sourced terminals. If the robot is still absent, capture the complete launch output rather than repeatedly launching more worlds.
+
+
+
 Package errors: check the build and sourcing. Misaligned scans: check map, initial pose, and world/model. Conflicting motion: stop all teleoperation publishers. Record the exact command and full error when requesting help.
 
 The instructor must test saved-map navigation and cancellation on the course WSL image.
