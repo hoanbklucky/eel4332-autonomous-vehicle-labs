@@ -4,6 +4,8 @@ This **24 × 30 m teaching arena** is inspired by the supplied Florida Polytechn
 
 ![Campus layout and delivery locations](campus_plan.svg)
 
+Want a different layout? You may instead follow [Create your own Gazebo world](../CREATE_YOUR_OWN_WORLD.md). Both choices use the same final-project requirements.
+
 ## What is provided?
 
 - `campus.sdf`: baseline Gazebo world, without external world/mesh downloads.
