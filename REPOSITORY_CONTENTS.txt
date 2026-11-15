@@ -157,3 +157,6 @@ final_project_simulation/config/.gitkeep
 final_project_simulation/results/.gitkeep
 final_project_simulation/results_template.md
 final_project_simulation/src/.gitkeep
+lab04_slam/images/mapping_first_visit.png
+lab04_slam/images/mapping_revisit.png
+lab04_slam/images/map_saved.png

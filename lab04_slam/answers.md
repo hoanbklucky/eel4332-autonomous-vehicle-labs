@@ -1,11 +1,5 @@
-# Lab 4 — Mapping record
+# Lab 4 — Optional personal notes
 
-- ROS distribution / TurtleBot3 package versions:
-- Model and world:
-- Commands used:
-- Saved map YAML/image paths:
-- Resolution (m/cell):
-- What changed after revisiting an area?
-- One map-quality limitation:
+No written submission is required. Submit only the two first-visit/revisit videos described in README.md.
 
-Link the Gazebo screenshot, before/after mapping screenshots, and demonstration. Answer the three README questions.
+Optional notes for Lab 5: model/world, commands, saved map YAML/image path, resolution, and observed limitations. Keep the saved map files for navigation.

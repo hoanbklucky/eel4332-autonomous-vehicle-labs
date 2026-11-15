@@ -99,7 +99,29 @@ ros2 run turtlebot3_teleop teleop_keyboard
 
 Click inside Terminal 3. Use `w/x` to increase/decrease linear velocity, `a/d` to change turning velocity, and `s` or Space to stop. Watch the printed velocities and drive slowly. Every terminal needs its own source/export commands; `KeyError: 'TURTLEBOT3_MODEL'` indicates a missing export.
 
-Explore the reachable regions, then revisit an area. Capture comparable RViz2 screenshots before and after the revisit and explain whether a correction is visible. Stop before switching windows.
+Record **Video 1 — first visit** while exploring previously unseen regions, then **Video 2 — revisit** while returning through an area already mapped. Keep the same simulator and Cartographer session running between recordings so the mapper retains its history. Show both Gazebo and RViz2's map clearly; the terminal does not need to fill the screen. Stop motion before switching windows.
+
+In the revisit video, briefly point out any visible change or state that no clear correction is visible. A revisit does not guarantee a visible loop-closure correction.
+
+<details>
+<summary>Expected output — first exploration</summary>
+
+![Expected output — first exploration](images/mapping_first_visit.png)
+
+Gazebo shows the robot while RViz2 builds the occupancy map. Your exploration route and map appearance may differ.
+
+</details>
+
+<details>
+<summary>Expected output — later exploration / revisit</summary>
+
+![Expected output — later exploration / revisit](images/mapping_revisit.png)
+
+Use the same mapping session to revisit known areas. This screenshot illustrates a more complete map; a still image alone does not prove loop closure.
+
+</details>
+
+The screenshots also show an old `slam.yaml` editor tab. It is incidental: this lab runs Cartographer and does not require editing that SLAM Toolbox file.
 
 ## 5. Save your map — Terminal 4
 
@@ -117,16 +139,40 @@ realpath results/map.yaml
 
 Use your actual course path if different. Keep `map.yaml` and its referenced image (normally `map.pgm`) together. Inspect the image and YAML's resolution, origin, and image filename. Record the absolute YAML path for Lab 5.
 
+<details>
+<summary>Expected output — map saved successfully</summary>
+
+![Expected output — map saved successfully](images/map_saved.png)
+
+Look for “Map saved successfully” and the generated map.pgm/map.yaml files. Warnings about unspecified thresholds/image format can accompany a successful save.
+
+</details>
+
+
+### View the saved .pgm map
+
+A `.pgm` is a grayscale image; VS Code may not preview it directly. From `lab04_slam/`, create a PNG preview:
+
+```bash
+sudo apt install python3-pil
+python3 -c "from PIL import Image; Image.open('results/map.pgm').save('results/map_preview.png')"
+code results/map_preview.png
+```
+
+Run these in a normal Ubuntu/WSL terminal (outside a Python virtual environment). Black pixels typically indicate occupied cells, light pixels free space, and gray unknown space; interpret them with the saved YAML thresholds. Keep the original `.pgm` and `.yaml` for Lab 5; the PNG is only a viewing copy.
+
 After saving, stop teleop, Cartographer, and the simulator with Ctrl+C in their terminals. Restart fresh for a new map; restarting only Gazebo does not clear an existing mapper.
 
 ## What to Submit
 
-- Map YAML/image pair.
-- One Gazebo screenshot and two mapping screenshots showing the revisit.
-- Brief `answers.md`: model/world, commands, map path/resolution, observed quality, and one limitation.
-- Short mapping demonstration.
+Submit **only two screen-recording videos**:
 
-## Questions
+1. **First visit:** show the robot exploring new areas in Gazebo and the map forming in RViz2.
+2. **Revisit:** show the robot returning through previously mapped areas in the **same mapping session**, with the map visible. Briefly describe any observed change, or say that no clear correction was visible.
+
+Keep each recording focused on the relevant motion/map behavior. No separate report, `answers.md`, screenshots, or map upload is required for Lab 4. Still save and retain your map YAML/image pair for Lab 5.
+
+## Discussion Questions (not a separate submission)
 
 1. Why does mapping need robot motion information as well as laser scans?
 2. How might revisiting an area improve a map?
@@ -182,6 +228,7 @@ The instructor must test installation, mapping, and map handoff on the course WS
 ## References
 
 These procedures adapt the official **Jazzy** workflow, with explicit per-terminal environment setup:
+
 - [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy)
 - [ROBOTIS Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy)
 - [ROBOTIS SLAM Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy)
