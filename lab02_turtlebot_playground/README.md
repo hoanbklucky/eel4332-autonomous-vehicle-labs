@@ -16,6 +16,20 @@ Drive TurtleBot3 manually in Gazebo before studying modeling, SLAM, and navigati
 
 Complete [Lab 00](../lab00_setup/README.md), including the official TurtleBot3 setup, and Lab 1. Select **Jazzy** on the ROBOTIS pages.
 
+### After building: refresh the terminal environment
+
+The ROBOTIS simulation installation section ends with a build, but the current terminal may still have the environment from **before** the new packages were installed. After a successful build, and in every new Ubuntu/WSL terminal used for TurtleBot3, run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 pkg prefix turtlebot3_gazebo
+```
+
+The last command must print an installation path before you launch Gazebo. Sourcing makes already-built packages discoverable; it does not install them. If `turtlebot3_gazebo` is still missing, confirm that you installed **`turtlebot3_simulations` separately from PC Setup** and that its build succeeded. If `install/setup.bash` is missing, complete the build first. Use your actual workspace path if different. Even if you added sourcing to `~/.bashrc`, rerun it in the current terminal after building new packages.
+
+
 ## Procedure
 
 Run commands in **VS Code's integrated terminal connected to WSL** or a separate **Ubuntu/WSL terminal**. Both work; do not use PowerShell. “Remote PC” in the ROBOTIS instructions means your Ubuntu/WSL computer, not a physical robot.
