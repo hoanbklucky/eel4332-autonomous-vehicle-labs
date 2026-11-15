@@ -41,7 +41,12 @@ ros2 pkg prefix nav2_map_server
 ros2 pkg prefix nav2_simple_commander
 ```
 
-Each check must print a path. If `turtlebot3_navigation2` is missing, verify that the official `turtlebot3` source is in `~/turtlebot3_ws/src` on branch `jazzy`. Reinstall dependencies/build it:
+Each check must print a path. **If all checks succeed, skip the recovery block below and go directly to Step 2. No rebuild is needed.**
+
+<details>
+<summary>Only if turtlebot3_navigation2 is not found — dependency/build recovery</summary>
+
+Run these commands **only if** `ros2 pkg prefix turtlebot3_navigation2` reports “Package not found” after sourcing the workspace. First verify that the official `turtlebot3` source is in `~/turtlebot3_ws/src` on branch `jazzy`. If the source workspace is missing, complete Lab 4's installation section instead.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -52,7 +57,11 @@ source install/setup.bash
 ros2 pkg prefix turtlebot3_navigation2
 ```
 
-Continue only after success. If the source workspace itself is missing, complete Lab 4's installation section first; Ubuntu/ROS do not need reinstalling.
+Continue only after the recovery check prints an installation path. Ubuntu/ROS do not need reinstalling.
+
+</details>
+
+If another package check fails, resolve that package before continuing; the recovery above specifically addresses `turtlebot3_navigation2`.
 
 ## 2. Start a fresh world — Terminal 1
 
