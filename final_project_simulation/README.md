@@ -31,7 +31,7 @@ AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's su
 
 ![IST teaching interior](ist/ist_plan.png)
 
-Yellow is the connected hallway network, including the two end cross-passages and the central passage through both sides. North/south entrances are at the left/right ends; rooms 1045/1048 and 1002/1068 flank those lobbies. The 42 room footprints are traced from the photograph; dimensions and doors remain illustrative. Delivery stops are in the hallway. **Version 3 replaces the earlier IST geometry: rebuild your SLAM map and reselect goals.**
+Classroom identities and relative positions come from the first image's labels/black partitions; the oval hallway, both end cross-passages and central through-passage come from the second image. **Evacuation arrows and colored zone boundaries are excluded from geometry.** Rooms 1045/1048 and 1002/1068 flank the north/south entrance lobbies. Dimensions and doors remain illustrative. Yellow is actual hallway floor, not evacuation routes. **Version 4 replaces earlier IST geometry: rebuild your SLAM map and reselect goals.**
 
 </details>
 
@@ -227,7 +227,7 @@ Select destinations and home on **your SLAM map**. The `mission.json` coordinate
 
 Stop all launches and restart Step 3 with `ist/ist_blocked.sdf` (or `campus/campus_blocked.sdf`). Keep your **baseline saved map**, robot, settings, and goals. Relaunch AMCL/Nav2 and initialize the pose again; do not remap the barrier.
 
-For IST the barrier crosses the upper hallway near the central junction at (0.5, 7.6) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
+For IST the barrier crosses the upper hallway near the central junction at (0.5, 8.2) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
 
 ## What to submit
 
