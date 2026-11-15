@@ -1,42 +1,53 @@
-# IST interior — image-derived teaching world
+# IST interior — photograph-traced teaching world
 
-Choose this world or the outdoor campus for the **same Goosebot final project**. All installation, sensor-assignment, launch, mapping, navigation, and submission commands are in the [main project README](../README.md). This folder does not require a second setup procedure.
+Use this world or the campus for the same Goosebot final project. All required setup, LiDAR, launch, mapping and navigation commands remain in the [main project README](../README.md).
 
-![IST oval hallway](ist_plan.png)
+![Corrected IST classroom and hallway layout](ist_plan.png)
 
-## What the model represents
+## Layout corrections — version 3
 
-- An approximately **56 × 28 m** oval building with a continuous main hallway, outer classroom band, simplified inner rooms, end atria, and a central cross passage.
-- The supplied photograph's orientation is retained: **north at left**, south at right. World +x points right on this diagram; +y points up. This is not a geographic north-up map.
-- Room labels such as 1045, 1044, 1031, 1003 and 1066 identify approximate locations. The red/green/yellow routes in the references indicate the hallway/evacuation routes, **not physical walls**.
-- Wall height 2.4 m, thickness 0.16 m, open classroom doorways around 1.2 m, and dimensions/partitions are illustrative. No measurements were supplied. This is a teaching reconstruction, **not a surveyed floor plan, digital twin, or evacuation model**. Not all real rooms/details are represented.
-- Both variants have actual wall collision geometry. No roof allows inspection from above. Yellow floor strips identify the corridor visually and do not block motion. Classroom interiors can be explored, but delivery pads are in the hallway.
+- **North entrance at the left, south entrance at the right.** These are open entrance lobbies. Rooms **1045/1048** flank the north lobby; **1002/1068** flank the south lobby, as in the photograph. They no longer occupy the entrance centers.
+- The main oval hallway connects to **curved cross-passages near both ends**, behind the entrance-side rooms/stair areas, and the **central passage extends through the upper and lower sides** to exit landings.
+- **42 labeled room footprints** are manually digitized from the evacuation-plan photograph. Room order, unequal widths, inner rooms, central core and left/right asymmetry follow that image rather than evenly spaced oval sectors. The central labels include 1027, 1028B, 1034, 1023, 1022, 1085, 1087, 1016, 1019, 1020, 1021 and 1061.
+- White atrium areas are protected by low simulated railings. Stair areas are closed teaching obstacles, not working stairs. The world represents one level only.
+
+**Accuracy:** this is an image-traced teaching reconstruction. Room positions follow the photograph, but perspective, line thickness and small labels limit precision. The assumed scale is 0.1 m per source pixel (main building approximately 52 × 26 m, plus entrance landings). Wall heights/thickness, doors and landing depths are illustrative. Exact measured architecture cannot be recovered from the photo alone. This is not an evacuation model or surveyed floor plan.
 
 <details>
-<summary>Source images supplied by the instructor</summary>
+<summary>Reference — instructor's missing-hallway annotations</summary>
 
-![IST evacuation-plan photo](images/ist_evacuation_reference.png)
-![Oval-hallway reference](images/ist_hallway_reference.png)
+![Annotated hallways and entrance/exit connections](images/ist_hallway_corrections.png)
 
-User-supplied reference images; no measured scale. They are visual references, not occupancy maps.
+The marked connections are represented in the corrected geometry, not just painted onto the preview.
 
 </details>
 
-## Files and locations
+<details>
+<summary>Reference — classroom locations in the supplied photograph</summary>
+
+![IST evacuation-plan photograph](images/ist_evacuation_reference.png)
+
+The photograph's orientation is retained: north left, south right. World +x points right and +y up on the preview. Colored evacuation paths are not walls.
+
+</details>
+
+## Files and use
 
 | File | Purpose |
 |---|---|
-| `ist.sdf` | Baseline world, no robot embedded |
-| `ist_blocked.sdf` | Same world plus an orange upper-hallway barrier |
-| `generate_ist.py` | Standard-library generator; edit here and regenerate to customize |
-| `ist_plan.svg`, `ist_plan.png` | Overhead layout preview (PNG rendered from SVG) |
-| `reference.yaml`, `reference.pgm` | Geometric instructor reference, not a student SLAM result |
-| `mission.json` | World/reference-frame home and suggested hall destinations |
+| `layout.json` | Digitized room polygons/labels, hallway paths, entrance landings, source scale and mission points |
+| `generate_ist.py` | Standard-library generator reading that layout |
+| `ist.sdf`, `ist_blocked.sdf` | Baseline and upper-hallway blocked worlds; matching visual/collision walls |
+| `ist_plan.svg`, `ist_plan.png` | Corrected plan preview; PNG rendered separately from SVG |
+| `reference.yaml`, `reference.pgm` | Generated geometric instructor map; not student SLAM output |
+| `mission.json` | Spawn/home and example hallway deliveries in the world/reference frame |
 
-The Goosebot launch wrapper reads Home from `mission.json`: **(-23, 0) m, yaw π/2**. Suggested deliveries are near 1044, 1003, and 1066. Select coordinates on your own saved SLAM map because its origin/rotation may differ.
+The existing Goosebot launch reads the updated home automatically: **(-22.3, 0) m, yaw π/2**, in the north lobby. Suggested deliveries remain in the hallway near **1044, 1003, and 1066**. Select actual mission poses on your own SLAM map.
 
-The blocked variant places a **2.8 × 0.35 × 1 m** barrier at **(0, 9.25) m**, yaw π/2, across the upper hallway. It leaves the lower oval route and central passage available. Use the same baseline map for the blocked trial.
+The blocked variant adds a **2.0 × 0.35 × 1 m** barrier at **(0.5, 7.6) m**, yaw π/2, across the upper hallway near the central junction. The lower oval and end/central connections remain available. Use the original baseline map for this trial.
 
-To regenerate SDFs, map, SVG and mission: `python3 final_project_simulation/ist/generate_ist.py` from the repository root. The script does not regenerate the PNG preview; render the SVG separately after changing geometry. Map geometry and SDF walls come from the same wall list. Regeneration overwrites these generated files.
+Edit `layout.json`, then run `python3 final_project_simulation/ist/generate_ist.py` from the repository root to regenerate SDFs, reference map, SVG and mission. It overwrites those files. The PNG preview must be rerendered separately after geometry changes.
 
-**Offline checks:** Python/XML syntax, matching box geometry/map, reachable hall destinations in both variants at 0.25 m grid clearance. **Still requires instructor pilot:** Gazebo rendering, sensors/TF, odometry, SLAM, AMCL, and actual Nav2 driving. A geometric path does not guarantee the robot/controller can traverse it.
+**Updating from the previous IST world:** rebuild your SLAM map and reselect goals. Old maps and coordinates are incompatible with these revised walls/entrances. Keep each YAML with its matching image.
+
+**Checked offline:** Python/XML syntax, deterministic generation, map/wall agreement, mission reachability, all four entrance/exit landings and both added end cross-passages in baseline/blocked geometry at 0.20 m grid clearance. **Still requires instructor pilot:** Gazebo rendering, robot sensors/TF, mapping, AMCL and actual Nav2 driving. Connectivity is not proof of controller performance.

@@ -22,7 +22,7 @@ AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's su
 
 | Environment | Features | Baseline / blocked world |
 |---|---|---|
-| **IST interior — recommended for a shorter project** | Approximate oval hallway, classroom partitions/doors, end atria, central passage | `ist/ist.sdf` / `ist/ist_blocked.sdf` |
+| **IST interior — recommended for a shorter project** | Photo-traced classrooms, oval hallway, two end cross-passages, north/south entrance lobbies and central side exits | `ist/ist.sdf` / `ist/ist_blocked.sdf` |
 | **Florida Poly campus** | Geographic footprints, lake chain, roads and causeways; larger mapping area | `campus/campus.sdf` / `campus/campus_blocked.sdf` |
 | Optional custom world | Same mission; requires checking collision geometry and a feasible alternative route | See [optional builder guide](CREATE_YOUR_OWN_WORLD.md) |
 
@@ -31,7 +31,7 @@ AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's su
 
 ![IST teaching interior](ist/ist_plan.png)
 
-Yellow is the oval hallway and cross passage. Room numbers are location labels; delivery stops are **in the hallway**, not inside classrooms. The image-derived layout has illustrative dimensions (56 × 28 m), partitions, and doors; it is not an architectural or evacuation model.
+Yellow is the connected hallway network, including the two end cross-passages and the central passage through both sides. North/south entrances are at the left/right ends; rooms 1045/1048 and 1002/1068 flank those lobbies. The 42 room footprints are traced from the photograph; dimensions and doors remain illustrative. Delivery stops are in the hallway. **Version 3 replaces the earlier IST geometry: rebuild your SLAM map and reselect goals.**
 
 </details>
 
@@ -170,7 +170,7 @@ source ~/goosebot_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval and the central passage; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
 
 **Terminal 4 — visualization:**
 
@@ -227,7 +227,7 @@ Select destinations and home on **your SLAM map**. The `mission.json` coordinate
 
 Stop all launches and restart Step 3 with `ist/ist_blocked.sdf` (or `campus/campus_blocked.sdf`). Keep your **baseline saved map**, robot, settings, and goals. Relaunch AMCL/Nav2 and initialize the pose again; do not remap the barrier.
 
-For IST the barrier crosses the upper hallway at (0, 9.25) m; the lower loop and central passage provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
+For IST the barrier crosses the upper hallway near the central junction at (0.5, 7.6) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
 
 ## What to submit
 

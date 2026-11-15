@@ -1,47 +1,48 @@
 {
+  "version": 3,
   "stops": [
     {
-      "name": "Home / north end",
+      "name": "Home / north entrance lobby",
       "xy": [
-        -23,
-        0
+        -22.3,
+        0.0
       ],
       "yaw": 1.5707963267948966
     },
     {
       "name": "Near 1044",
       "xy": [
-        -20.276390505200574,
-        4.366282506931414
+        -18.3,
+        3.7
       ],
       "yaw": 0
     },
     {
       "name": "Near 1003",
       "xy": [
-        21.184402862066356,
-        3.6021196663550175
+        19.0,
+        3.1
       ],
       "yaw": 0
     },
     {
       "name": "Near 1066",
       "xy": [
-        19.608064007368633,
-        -4.834856867608598
+        14.700000000000001,
+        -6.0
       ],
       "yaw": 0
     }
   ],
   "barrier": {
     "name": "hall_barrier",
-    "x": 0,
-    "y": 9.25,
-    "w": 2.8,
+    "x": 0.5,
+    "y": 7.6000000000000005,
+    "w": 2.0,
     "d": 0.35,
-    "h": 1,
+    "h": 1.0,
     "yaw": 1.5707963267948966
   },
-  "dimensions": "approximate 56 x 28 m",
-  "orientation": "north at left in supplied photo; not geographic north-up"
+  "orientation": "north at left; south at right; x right, y up",
+  "scale_note": "Scale is illustrative; room polygons/labels are manually traced in image coordinates. Not surveyed."
 }
