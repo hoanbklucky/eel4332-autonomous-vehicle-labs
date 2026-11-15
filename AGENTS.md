@@ -10,6 +10,13 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Keep the lab sequence stable unless explicitly asked to reorganize it.
 - Preserve the distinction between lecture/homework mathematics and simulation-based lab work.
 
+## Current semester scope
+
+- Required final: `final_project_simulation/README.md`; Goosebot lane following is the completed hardware component.
+- Physical Goosebot SLAM/Nav2 is optional.
+- Separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional extensions. Preserve their TODOs.
+- Labs 4–5 provide guided mapping/navigation preparation; the final mission client remains student work.
+
 ## Student code
 
 - Do not solve student-required algorithms.

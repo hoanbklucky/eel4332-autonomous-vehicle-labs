@@ -1,6 +1,10 @@
-# Required Experiment - Student Kalman Filter
+# Optional extension — Kalman-filter experiment
 
-This is a required part of [Lab 4](README.md). Use the assigned lecture equations; supporting theory is in [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md). You implement the filter rather than calling a library estimator. This small Python experiment tests estimation behavior independently of SLAM Toolbox; it does not replace SLAM Toolbox's estimator or feed ground truth into ROS.
+This extension is not required for the SLAM lab or simulation final. If assigned separately, complete the experiment below. SLAM Toolbox uses its own estimator; this Python filter is not connected to the mapper.
+
+# optional Experiment - Student Kalman Filter
+
+This is a optional part of [Lab 4](README.md). Use the assigned lecture equations; supporting theory is in [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md). You implement the filter rather than calling a library estimator. This small Python experiment tests estimation behavior independently of SLAM Toolbox; it does not replace SLAM Toolbox's estimator or feed ground truth into ROS.
 
 ## 1. Generate repeatable inputs
 
@@ -32,4 +36,4 @@ Repeat one chosen configuration with `dropout.csv`, using the same initial condi
 
 ## Submit with the SLAM results
 
-Submit completed `kalman_filter.py`, your `run_estimation.py`, the one-step verification, Q/R table, baseline/dropout metrics, and plots. Include the random seed and data-generation command. Both this experiment and the SLAM map deliverable are required to complete Lab 4.
+Submit completed `kalman_filter.py`, your `run_estimation.py`, the one-step verification, Q/R table, baseline/dropout metrics, and plots. Include the random seed and data-generation command. Both this experiment and the SLAM map deliverable are optional to complete Lab 4.

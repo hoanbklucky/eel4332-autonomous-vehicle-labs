@@ -74,6 +74,15 @@ Between independent maps, stop teleoperation, SLAM, the optional dedicated bridg
 
 ## Navigation mode
 
+Create a full editable baseline configuration once, from the repository root:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+cp "$(ros2 pkg prefix --share nav2_bringup)/params/nav2_params.yaml" lab05_navigation/config/nav2_a.yaml
+```
+
+The instructor must validate this configuration for the exact simulator/model and publish the frozen baseline. Do not treat copied upstream defaults as a tested course configuration. Keep the full file, including plugin definitions. Inspect the installed planner/controller, footprint/radius, and simulation-time settings. A second configuration is optional.
+
 Stop every mapping-mode process first, especially SLAM Toolbox. From the repository root in Terminal 1, set paths to your own map and configuration:
 
 ```bash
@@ -107,13 +116,27 @@ ros2 service call /lifecycle_manager_navigation/manage_nodes \
   nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
 ```
 
-After `success: true`, send a nearby open-space goal using **Nav2 Goal**. Do not repeatedly call startup after success; check lifecycle state if a later call reports failure. For the student mission, run the client and recorder from the Lab 5 README. Keep teleoperation stopped during navigation.
+After `success: true`, send a nearby open-space goal using **Nav2 Goal**. Do not repeatedly call startup after success; check lifecycle state if a later call reports failure. For the guided lab, send the three goals through RViz2. For the final, complete the mission scaffold and run the client/recorder as described in the [delivery project](../final_project_simulation/README.md). Keep teleoperation stopped during navigation.
 
 ## Stop and restart
 
 For normal navigation stopping, cancel the active goal through the mission client or RViz2 and verify zero motion in Gazebo and odometry. A cancellation request is not proof of a stop. If motion continues unexpectedly, pause Gazebo immediately, terminate the client and launch processes, and investigate before a fresh launch. Do not resume an unsafe command after pausing.
 
 For an independent trial, shut down all involved processes and relaunch. Reinitialize localization at the documented starting pose. Do not record a trajectory across a simulator clock reset. These instructions are for simulation; Goosebot requires instructor-validated command arbitration and physical stop procedures.
+
+## Instructor baseline and visual checkpoints
+
+Before release, record the tested package versions, robot/world, observed topic types/frames, starting pose, and full configuration paths in the [validation checklist](INSTRUCTOR_VALIDATION.md). Capture actual screenshots on that image; do not use illustrative images as proof of operation.
+
+| Checkpoint | Expected evidence |
+|---|---|
+| Mapping | RViz2 map grows; laser aligns with nearby walls; connected TF; clock advances |
+| Localization | Saved map loads with SLAM stopped; initial pose/scan alignment is correct |
+| Navigation | Global path and local costmap visible; robot reaches a nearby goal |
+| Delivery | Three deliveries and return home appear in action logs |
+| Obstacle | Instructor's fixed obstacle appears in laser/costmap; response is documented |
+
+The final obstacle variant must be separately tested and published with exact size, world-frame pose, and reset procedure. This runbook does not currently provide a tested obstacle-world launch command.
 
 ## References
 

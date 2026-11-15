@@ -1,4 +1,4 @@
-"""Student Nav2 mission scaffold. Run in a sourced ROS 2 Jazzy terminal.
+"""Student Nav2 delivery-project mission scaffold. Run in a sourced ROS 2 Jazzy terminal.
 
 Pose construction and file parsing are utilities. Mission sequencing,
 result handling, timeout, and cancellation remain student work.
@@ -40,7 +40,7 @@ def make_pose(navigator, goal):
 
 
 def run_mission(navigator, goals, output, timeout):
-    """Complete the required mission behavior described in the README.
+    """Complete the mission behavior in final_project_simulation/README.md.
 
     Suggested API roles (check installed Jazzy signatures):
       waitUntilNav2Active: readiness after initial pose is set in RViz2
@@ -54,8 +54,9 @@ def run_mission(navigator, goals, output, timeout):
     """
     # TODO: Implement readiness, sequential goals, and result logging.
     # TODO: Implement per-goal timeout and interruption/cancellation handling.
-    # TODO: Integrate your safety monitor and documented injected-health sequence;
-    # STOP must cancel the active task and inhibit subsequent goals until restart.
+    # TODO (final project): add --home X Y YAW, return home after three deliveries,
+    # and wait 3 simulation seconds after each successful delivery.
+    # Optional extension: integrate the synthetic-health safety monitor.
     raise NotImplementedError("Implement and test your Nav2 mission client")
 
 

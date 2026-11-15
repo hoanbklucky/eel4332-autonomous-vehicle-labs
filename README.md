@@ -8,7 +8,7 @@ The laboratory sequence complements lecture, in-class problem solving, homework,
 
 > **model → sense → estimate → localize → map → plan → control → integrate**
 
-The course uses a simulation-first workflow and ends with deployment on the **Goosebot** physical platform.
+The course uses a simulation-first workflow and ends with a **TurtleBot simulation delivery project**. Autonomous lane following on **Goosebot** provides the course's hardware experience; physical SLAM/Nav2 deployment is optional.
 
 ## Course software stack
 
@@ -27,7 +27,7 @@ The intended course environment is:
 - **Visual Studio Code + WSL extension** as the supported editor workflow
 - **TurtleBot 3 in Gazebo** as the primary simulation platform
 - **F1TENTH / RoboRacer Gym** only as an optional car-like path-tracking extension
-- **Goosebot** for final physical deployment
+- **Goosebot** for autonomous lane following; SLAM/Nav2 hardware transfer is optional
 
 ROS 2, Gazebo, and TurtleBot 3 are used for autonomy-system integration. Goosebot is a four-wheel skid-steer robot: it has four conventional wheels powered by four DC motors, all four wheel axes are fixed and parallel, and there is no geometric steering linkage. It turns by producing different left- and right-side velocities, which requires lateral tire slip. TurtleBot is not a digital twin of Goosebot, but its differential-drive motion is a useful approximation for learning the ROS/Nav2 workflow. The instructor must still validate Goosebot's motor-command mapping, slip, and exact kinematic parameters.
 
@@ -41,15 +41,15 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [01](lab01_ros2_gazebo_fundamentals/README.md) | Learn ROS 2 and Gazebo | Build nodes, inspect interfaces, and bridge simulation data |
 | [02](lab02_turtlebot_playground/README.md) | Drive TurtleBot | Complete manual-driving challenges and practice stopping/resetting |
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
-| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Implement/test a Kalman filter; configure SLAM, compare maps, and select one |
-| [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Implement/test A*, Pure Pursuit, and safety logic; write and evaluate a Nav2 mission client |
-| [Final](final_project_goosebot/README.md) | Transfer autonomy to Goosebot | Integrate, evaluate, and validate the physical platform |
+| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Configure SLAM, compare maps, and select one |
+| [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Load your map, localize, visit goals, and practice cancellation |
+| [Final](final_project_simulation/README.md) | Autonomous campus delivery in simulation | Write a mission client, visit three destinations and return home, evaluate trials and an obstacle |
 
 ## How these labs map to the course
 
-Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 integrates localization, planning, tracking, mission execution, and failure handling into a navigation mission. The final project validates these workflows on Goosebot's four-wheel skid-steer platform.
+Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 introduces saved-map localization and guided navigation. The final reuses the lab artifacts for a delivery mission, repeated trials, and an obstacle challenge in Gazebo.
 
-The former Labs 04-09 are condensed into required Labs 04 and 05. Detailed theory and reading checks are in each new lab's **OPTIONAL_BACKGROUND.md**. Required steps, experiments, and submissions remain in the README. Kalman filtering is required within Lab 4; A*, Pure Pursuit, and safety-monitor implementations are required within Lab 5. Their unfinished starters are in the active labs. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) preserves the former manuals as optional references. Two integrated labs replace six separate lab numbers; the required algorithms remain assessed, so each integrated lab may span multiple sessions. Lecture/homework mathematics remains distinct from the simulation work.
+The former Labs 04-09 are condensed into Labs 04 and 05. Detailed theory is in each lab's **OPTIONAL_BACKGROUND.md**. Separate Kalman-filter, A*, Pure Pursuit, and safety-monitor implementations are optional extensions. Nav2 supplies the live planner/controller. The final project's main programming task is a small mission client. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) remains an optional reference.
 
 See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation runbook](docs/SIMULATION_WORKFLOW.md) for the shared launch workflow.
 
@@ -72,7 +72,8 @@ eel4332-autonomous-vehicle-labs/
   lab03_vehicle_modeling/
   lab04_slam/
   lab05_navigation/
-  final_project_goosebot/
+  final_project_simulation/
+  final_project_goosebot/  # optional hardware extension
   docs/
   common/
   optional_legacy/previous_lab_sequence/

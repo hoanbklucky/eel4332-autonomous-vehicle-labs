@@ -1,6 +1,10 @@
-# Required Experiments - Planning, Tracking, and Safety
+# Optional extensions — Planning, tracking, and safety
 
-These are required parts of [Lab 5](README.md), alongside the live Nav2 mission. Implement the assigned algorithms yourself; use lecture equations and [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md) as references. Library planners/controllers do not satisfy these implementation requirements.
+These exercises are not required for Lab 5 or the simulation final. Complete them only if assigned separately. Nav2 supplies the live planner and controller. The synthetic-health monitor experiment is an optional extension, not a prerequisite for navigation.
+
+# optional Experiments - Planning, Tracking, and Safety
+
+These are optional parts of [Lab 5](README.md), alongside the live Nav2 mission. Implement the assigned algorithms yourself; use lecture equations and [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md) as references. Library planners/controllers do not satisfy these implementation requirements.
 
 Write `src/run_algorithms.py` to run the experiments below and save paths, trajectories, decisions, tables, and plots. Submit the runner with your completed starters. State each coordinate convention and use SI units outside the discrete grid.
 
@@ -30,12 +34,12 @@ This is a car-like Python simulation for studying steering. TurtleBot is differe
 
 Complete `src/safety_monitor.py`. Define a documented policy for NORMAL, DEGRADED, and STOP using measurement age, localization validity, path availability, obstacle distance, and forward speed. Use a speed-dependent collision-urgency rule and explicit treatment of nonfinite or invalid inputs. Choose and record thresholds before testing; distinguish units and justify each choice.
 
-Create a table of expected states for healthy inputs, a missing path, stale sensing, invalid localization, invalid numeric data, and close obstacles at two positive forward speeds. Include cases just below and above each chosen boundary. Run your function against that table and report disagreements and fixes. These are required tests of your policy; no completed safety rule set is provided.
+Create a table of expected states for healthy inputs, a missing path, stale sensing, invalid localization, invalid numeric data, and close obstacles at two positive forward speeds. Include cases just below and above each chosen boundary. Run your function against that table and report disagreements and fixes. These are optional tests of your policy; no completed safety rule set is provided.
 
-In your mission client, use STOP decisions from a documented simulated-health input sequence to cancel an active goal and prevent advancing to the next goal. At minimum, demonstrate a healthy-to-stale-sensor input transition during the separate failure trial. Label the injected health values as synthetic; they do not prove live sensor monitoring. Confirm terminal action status and actual stopping using the README's observation procedure. Clearing the injected fault must not automatically resume the interrupted mission: require an explicit restart after conditions are verified.
+In your mission client, use STOP decisions from a documented simulated-health input sequence to cancel an active goal and prevent advancing to the next goal. At minimum, demonstrate a healthy-to-stale-sensor input transition during the separate failure trial. Label the injected health values as synthetic; they do not prove live sensor monitoring. Confirm terminal action status and actual stopping in Gazebo and odometry. Before the test, define a near-zero velocity threshold and observation window; log cancellation-request, terminal-result, and observed-stop times. If motion persists, pause Gazebo and follow the shared runbook. Clearing the injected fault must not automatically resume the interrupted mission: require an explicit restart after conditions are verified.
 
 This tests decision-to-action integration in simulation. It is not a validated hardware safety system and does not replace the manual Gazebo pause/shutdown fallback.
 
 ## Submit with the Nav2 results
 
-Submit completed A*, Pure Pursuit, safety-monitor code, the experiment runner, path-validity checks, tracking plots/metrics, policy/threshold table, expected-versus-observed decisions, and evidence that STOP reaches mission cancellation. The three implementations, mission client, and live Nav2 comparison are all required for Lab 5.
+Submit completed A*, Pure Pursuit, safety-monitor code, the experiment runner, path-validity checks, tracking plots/metrics, policy/threshold table, expected-versus-observed decisions, and evidence that STOP reaches mission cancellation. These submissions apply only if this optional extension is assigned; the required final mission client is described in the simulation project.

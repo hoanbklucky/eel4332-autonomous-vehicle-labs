@@ -68,8 +68,12 @@ fi
 if command -v ros2 >/dev/null 2>&1; then
   distro="${ROS_DISTRO:-not-sourced}"
   echo "[INFO]    ROS_DISTRO=$distro"
+  if [ "$distro" != "jazzy" ]; then
+    echo "[MISSING] Source the supported ROS 2 Jazzy environment"
+    missing=$((missing+1))
+  fi
 
-  for pkg in demo_nodes_py turtlesim rqt_image_view teleop_twist_keyboard rosbag2_transport ros_gz_bridge ros_gz_sim; do
+  for pkg in demo_nodes_py turtlesim rqt_image_view teleop_twist_keyboard rosbag2_transport ros_gz_bridge ros_gz_sim slam_toolbox nav2_bringup nav2_map_server nav2_simple_commander nav2_minimal_tb3_sim; do
     if ros2 pkg prefix "$pkg" >/dev/null 2>&1; then
       echo "[OK]      ROS package: $pkg"
       ok=$((ok+1))

@@ -2,11 +2,10 @@
 
 ## Mission
 
-**Build, evaluate, and save a map that another team could use for navigation.** You will implement and evaluate a Kalman filter, configure SLAM Toolbox, drive two planned exploration routes, measure map quality, and select a map for Lab 5.
+**Build, evaluate, and save a map that another team could use for navigation.** You will configure SLAM Toolbox, drive two planned exploration routes, measure map quality, and select a map for Lab 5.
 
 ## Learning Objectives
 
-- implement Kalman prediction/correction and evaluate uncertainty and dropout behavior;
 - connect LiDAR, odometry, TF, and simulation time to a working mapper;
 - edit and run a reproducible SLAM configuration;
 - compare two exploration strategies using measured evidence;
@@ -20,23 +19,19 @@ Complete [setup](../lab00_setup/README.md) and Labs [1](../lab01_ros2_gazebo_fun
 
 SLAM estimates robot pose and a map together. Odometry connects observations over motion; LiDAR provides evidence about nearby geometry. TF supplies the coordinate relationships needed to place each scan at its measurement time.
 
-The required work combines student algorithm implementation with configuring, building, testing, and evaluating the mapping system. Derivations, detailed sensor theory, TF examples, and reading checks with collapsed answers are in [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md). They are supporting references, not extra submissions.
+The required work focuses on configuring, building, testing, and evaluating the mapping system. The separate Kalman-filter implementation is an optional extension. Derivations, detailed sensor theory, TF examples, and reading checks with collapsed answers are in [OPTIONAL_BACKGROUND.md](OPTIONAL_BACKGROUND.md). They are supporting references, not extra submissions.
 
 ## Provided Files
 
-- `src/kalman_filter.py`: required student predict/update starter.
+- `src/kalman_filter.py`: optional student predict/update starter.
 - `src/make_estimation_data.py` and `src/localization_metrics.py`: provided data/metric utilities.
-- [Required Kalman experiment](ALGORITHM_EXPERIMENT.md): implementation, verification, tuning, and dropout tasks.
+- [Optional Kalman experiment](ALGORITHM_EXPERIMENT.md): optional implementation, verification, tuning, and dropout tasks.
 - `answers.md`: experiment plans and evidence tables.
 - `config/`: your saved SLAM parameter file.
 - `results/`: your maps, measurements, and screenshots.
 - [Simulation runbook](../docs/SIMULATION_WORKFLOW.md): launch, TF bridge, stop, and restart commands.
 
 ## Step-by-Step Procedure
-
-### 0. Implement and evaluate your estimator
-
-Complete the [required Kalman-filter experiment](ALGORITHM_EXPERIMENT.md), including your experiment runner, independent one-step verification, three Q/R configurations, and dropout comparison. This is a required part of Lab 4. It studies estimation independently; SLAM Toolbox continues to use its own estimator in the mapping steps below.
 
 ### 1. Prepare your SLAM configuration
 
@@ -131,7 +126,6 @@ If no independent reference is available, report the difference in each wall len
 
 ## Success Criteria
 
-- [ ] Your Kalman predict/update implementation passes your one-step check and produces tuning/dropout results.
 - [ ] SLAM runs with your saved configuration and verified sensor/time/TF inputs.
 - [ ] Two maps come from fresh runs with planned, comparable routes.
 - [ ] Both maps include an image and matching YAML metadata.
@@ -140,14 +134,13 @@ If no independent reference is available, report the difference in each wall len
 
 ## What to Submit
 
-- completed Kalman-filter code, your estimation runner, one-step check, Q/R table, and normal/dropout metrics/plots;
 - `config/slam.yaml`;
 - both YAML/image pairs and the selected map pair;
 - route plans, input checks, and quantitative tables in `answers.md`;
 - comparable screenshots and a short mapping demonstration;
 - answers to the three engineering questions.
 
-The Kalman implementation and SLAM map experiments are both required. The former standalone sensor-statistics exercise remains an optional extension in the [legacy archive](../optional_legacy/previous_lab_sequence/README.md).
+Only the SLAM map experiments above are required; the Kalman implementation is optional. The former standalone sensor-statistics exercise remains an optional extension in the [legacy archive](../optional_legacy/previous_lab_sequence/README.md).
 
 ## Troubleshooting
 

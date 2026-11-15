@@ -152,3 +152,8 @@ optional_legacy/previous_lab_sequence/lab09_integration_safety/answers.md
 optional_legacy/previous_lab_sequence/lab09_integration_safety/results/.gitkeep
 optional_legacy/previous_lab_sequence/lab09_integration_safety/src/safety_monitor.py
 requirements.txt
+final_project_simulation/README.md
+final_project_simulation/config/.gitkeep
+final_project_simulation/results/.gitkeep
+final_project_simulation/results_template.md
+final_project_simulation/src/.gitkeep
