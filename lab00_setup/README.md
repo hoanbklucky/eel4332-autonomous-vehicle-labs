@@ -378,6 +378,23 @@ ros2 pkg prefix turtlebot3_gazebo
 The last command must print an installation path before you launch Gazebo. Sourcing makes already-built packages discoverable; it does not install them. If `turtlebot3_gazebo` is still missing, confirm that you installed **`turtlebot3_simulations` separately from PC Setup** and that its build succeeded. If `install/setup.bash` is missing, complete the build first. Use your actual workspace path if different. Even if you added sourcing to `~/.bashrc`, rerun it in the current terminal after building new packages.
 
 
+### Choose one world at a time
+
+The ROBOTIS page lists **alternative launch choices**, not commands to run together:
+
+| Environment | Launch file |
+|---|---|
+| Empty World | `empty_world.launch.py` |
+| TurtleBot3 World | `turtlebot3_world.launch.py` |
+| TurtleBot3 House | `turtlebot3_house.launch.py` |
+
+For this course, use **Burger in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Keep `TURTLEBOT3_MODEL=burger` even when a website example shows another model.
+
+To switch worlds: stop robot motion, stop teleoperation and any SLAM/navigation nodes with **Ctrl+C**, then press **Ctrl+C in the terminal running the current Gazebo launch**. Wait for its processes to exit before running the next world's launch command. Closing only the Gazebo window may leave the simulation server running. Start the required nodes again after the new world loads.
+
+For saved-map navigation, use the same world/model that produced the map. A map from one environment does not describe another.
+
+
 ## Part 6 — Fork and clone the course repository
 
 Create your own copy so you can push your lab edits.
