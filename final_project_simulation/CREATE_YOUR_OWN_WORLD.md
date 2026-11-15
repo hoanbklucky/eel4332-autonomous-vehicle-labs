@@ -1,5 +1,7 @@
 # Create your own Gazebo world (optional)
 
+> The required final uses Goosebot with your added LiDAR. The simple builder below creates environment geometry; use the final README's Goosebot world wrapper with your generated `campus.sdf` and adjacent `mission.json`. The TurtleBot launch examples below are optional reference checks, not the assessed robot workflow.
+
 You may use the instructor's campus world or design your own. Both options have the **same mission requirements and grading**; visual complexity earns no extra credit. Keep the project focused on mapping/navigation.
 
 A **Gazebo world** (`.sdf`) defines 3-D objects, collisions, and sensors' surroundings. A **navigation map** (`.yaml` + image) is the 2-D occupancy representation. First create the world, then run SLAM to map it. Editing only a map image does not change Gazebo.

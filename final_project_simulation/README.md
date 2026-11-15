@@ -1,197 +1,250 @@
-# Final Project — Autonomous Campus Delivery Robot
+# Final Project — Goosebot SLAM and Delivery in Simulation
 
 ## Mission
 
-Use TurtleBot in ROS 2 Jazzy and Gazebo Harmonic to visit three delivery locations and return home using your own SLAM map. At each delivery location, stop and wait for 3 seconds of simulation time. No physical robot, object detection, or manipulation is required.
+Use the **provided Goosebot model**, add a simulated **2-D LiDAR**, build your own SLAM map, and use **AMCL + Nav2** to reach three delivery locations and return home. Choose the supplied **IST interior** or **Florida Poly campus** world. Physical Goosebot SLAM/Nav2 is not required; your lane-following work is the hardware component.
 
-Your Goosebot autonomous lane-following work is the course's hardware achievement. This final assesses map-based autonomy in simulation. Reuse the Lab 4–5 skills and mission code, but create a new SLAM map of your selected final-project world.
+## Learning objectives
 
-## Learning Objectives
+Connect a robot model, sensors, bridges, TF, odometry, SLAM, localization, and navigation. Explain your own changes and diagnose problems rather than only repeating TurtleBot commands.
 
-- integrate mapping, saved-map localization, planning, and mission execution;
-- write a small waypoint client with result handling and cancellation;
-- evaluate repeatability and response to a changed environment;
-- explain which assumptions would need revalidation on Goosebot.
+## Prerequisites and background
 
-## Prerequisites
+Complete Labs 4–5. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `$` prompt.
 
-Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use TurtleBot3 Waffle and choose one of the environment options below.
+The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU, forward ToF, command-derived odometry, and EKF. **The narrow forward ToF is not a 360° mapping LiDAR.** Students add that sensor themselves; no completed LiDAR model is supplied here.
 
-For the supplied arena, follow the [campus launch/mapping instructions](campus/README.md). For a custom arena, follow the [world-building guide](CREATE_YOUR_OWN_WORLD.md). Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and export `TURTLEBOT3_MODEL=waffle` in every terminal. Stop mapping/teleoperation before navigation. The instructor must validate the new world on the course image before release; Lab 5's standard TurtleBot3 World remains a fallback only if the instructor chooses it.
+The original Goosebot default mode uses a pre-baked map and Gazebo ground-truth localization. **Do not use that mode as your final demonstration.** This project instead uses LiDAR SLAM Toolbox for mapping, then a saved map with AMCL. This differs from the TurtleBot/Cartographer preparation in Lab 4. Stereo RTAB-Map is optional. Do not launch the original `nav2_bringup.launch.py` or `stereo_slam.launch.py` alongside the commands below.
 
-## Background
+AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's supplied starting configuration uses **NavFn with Dijkstra** for the global path and **DWB** to choose local motion commands. The global costmap follows the full saved map, rather than the original Goosebot's 20 m rolling window. Students must verify/tune the robot footprint and sensor settings.
 
-The official ROBOTIS Cartographer tutorial creates your map. During the delivery mission, stop SLAM and use AMCL on the saved map. Nav2 supplies the live planner, controller, and navigation recovery. Your Python client sequences destinations and handles outcomes.
+## Provided files and environment choice
 
-The final does not require implementing SLAM, A*, Pure Pursuit, Kalman filtering, a custom Nav2 plugin, autonomous exploration, or a synthetic safety monitor.
-
-## Choose your environment
-
-| Option | Work required |
-|---|---|
-| **A — Supplied campus world (recommended)** | Launch the provided world, build your own SLAM map, and complete the mission. |
-| **B — Your own Gazebo world** | Use the [step-by-step builder guide](CREATE_YOUR_OWN_WORLD.md) to arrange obstacles, define delivery locations, generate/launch the world, then map it with SLAM. |
-
-Both options have the same mission requirements and grading. A custom world is optional; visual complexity earns no extra credit. Either world needs three reachable delivery locations, a home pose, and a reproducible obstacle variant with an alternative route. Keep the chosen world fixed during trials.
-
-The supplied geometric reference map may be used only for instructor-approved checks/fallback. Students normally create their own SLAM map for **either** option.
-
-## Supplied Campus Environment
-
-The earlier rectangular block arrangement has been replaced by a **geographic footprint model**: OSM building/lake outlines and roads/paths, checked against the supplied 2026 PDF. This preserves the actual lake chain, curved IST footprint, BARC, residence cluster, and crossings. Newer PDF-derived buildings are explicitly marked approximate.
+| Environment | Features | Baseline / blocked world |
+|---|---|---|
+| **IST interior — recommended for a shorter project** | Approximate oval hallway, classroom partitions/doors, end atria, central passage | `ist/ist.sdf` / `ist/ist_blocked.sdf` |
+| **Florida Poly campus** | Geographic footprints, lake chain, roads and causeways; larger mapping area | `campus/campus.sdf` / `campus/campus_blocked.sdf` |
+| Optional custom world | Same mission; requires checking collision geometry and a feasible alternative route | See [optional builder guide](CREATE_YOUR_OWN_WORLD.md) |
 
 <details>
-<summary>Preview — north-up campus plan</summary>
+<summary>Preview — IST oval hallway and classroom layout</summary>
 
-![Florida Polytechnic campus layout](campus/campus_plan.svg)
+![IST teaching interior](ist/ist_plan.png)
 
-The plan uses a uniform 0.06 teaching scale in a 73 × 80 m arena. Purple additions come from the perspective PDF and are approximate. Blue areas are non-traversable water; yellow pads mark home and delivery locations.
+Yellow is the oval hallway and cross passage. Room numbers are location labels; delivery stops are **in the hallway**, not inside classrooms. The image-derived layout has illustrative dimensions (56 × 28 m), partitions, and doors; it is not an architectural or evacuation model.
 
 </details>
 
 <details>
-<summary>Preview — 3-D geometry (offline, not a Gazebo screenshot)</summary>
+<summary>Preview — supplied IST reference images</summary>
 
-![Campus geometry preview](campus/campus_geometry_preview.png)
+![Provided evacuation-plan photograph](ist/images/ist_evacuation_reference.png)
+![Provided oval-hallway illustration](ist/images/ist_hallway_reference.png)
 
-Footprint shapes and relative placement follow geographic data; heights, materials, and roof details are simplified. See [sources and limitations](campus/README.md#accuracy-and-teaching-adjustments).
+These references guide the teaching layout; colored evacuation routes are not walls or navigation maps. North is at the left in the photograph.
 
 </details>
 
-The [campus README](campus/README.md) gives the exact launch/map/save/navigation commands, updated spawn/delivery coordinates, and obstacle variant. The launch reads home from `campus/mission.json`.
+<details>
+<summary>Preview — campus layout</summary>
 
-**Upgrading from version 1:** regenerate your SLAM map and reselect goals; the old 24 × 30 m arena's map and coordinates are incompatible. Do not use a campus photograph as a navigation map. The supplied `campus/reference.yaml` is a geometric instructor reference; students normally create their own map.
+![Geographic campus layout](campus/campus_plan.png)
 
-## Provided Files
+The campus is uniformly scaled to a 73 × 80 m teaching arena; some newer footprints and all building heights are approximate. Blue water has solid collision geometry. Grass remains traversable.
 
-- [Mission scaffold](../lab05_navigation/src/mission_client.py): complete its TODOs.
-- [Odometry recorder](../lab05_navigation/src/record_odometry.py): provided utility.
-- [Goal CSV](../lab05_navigation/config/goals.csv): three delivery poses.
-- [Results template](results_template.md).
-- [Campus world, preview, reference map, and launch instructions](campus/README.md).
-- Your newly created campus SLAM map YAML/image and Lab 5 navigation setup/configuration record. Use the official TurtleBot3 model-specific configuration; preserve a copy of any modified full parameter file.
+</details>
 
-Keep final code and configuration in `final_project_simulation/src/` and `config/`, and evidence in `results/`. Create those directories in your submission. Preserve the supplied algorithms' TODOs unless you elect to complete an optional exercise.
+Other supplied files: `goosebot/world.launch.py` (world/spawn wrapper), `goosebot/slam_goosebot.yaml`, and `goosebot/nav2_goosebot.yaml` (starting configurations). The worlds' `reference.yaml` files are geometric instructor references, **not student SLAM results**. The existing [mission-client scaffold](../lab05_navigation/src/mission_client.py) remains available as an optional programming extension; its TODOs are not completed for you.
 
-## Step-by-Step Procedure
+## Step-by-step procedure
 
-### 0. Map your selected arena
+### 1. Install missing dependencies and copy the supplied Goosebot source
 
-Follow the [campus README](campus/README.md), or the [custom-world guide](CREATE_YOUR_OWN_WORLD.md), to launch your baseline world, map the required routes with Cartographer, and save `results/campus_map` or `results/custom_map`. Restart cleanly and verify AMCL alignment with this map. Select your delivery/home coordinates in this map frame. The old TurtleBot3 World map does not describe this arena.
-
-### 1. Freeze the mission
-
-Choose three reachable delivery poses in open mapped space and a home pose. Record all poses in the saved map frame, using metres and radians. Home is the documented starting location. Define goal tolerances, a per-goal timeout (600 simulation seconds is a starting example for this larger arena; pilot runs determine suitable limits), and an overall mission limit before testing.
-
-Use the same map, world, robot, starting pose, goals, order, and configuration throughout evaluation. Record package versions and launch commands. Retain the original map even when an obstacle is added.
-
-### 2. Complete the mission client
-
-Copy the scaffold into your final `src/` directory. Use Nav2 Simple Commander; do not replace Nav2 planning/control with the optional Python algorithms.
-
-Required behavior:
-
-1. Wait for initialized localization and active Nav2.
-2. Visit the three delivery poses in the CSV order, then return home.
-3. Stamp each goal with the current ROS simulation time.
-4. Wait 3 simulation seconds after each successful delivery before continuing.
-5. Log acceptance, terminal outcome, start/end simulation timestamps, and elapsed time for every attempted goal, including home.
-6. Advance only after success. On rejection, failure, timeout, or user interruption, end the mission; cancel an active task and confirm its terminal result.
-7. Keep partial logs and require an explicit restart after interruption/failure. Avoid busy polling.
-
-Add a required `--home X Y YAW` argument to your copied scaffold; its initial CSV parser intentionally reads exactly three delivery goals. Document the command, for example:
+Run once in Ubuntu/WSL. This supplements your existing installation; no Ubuntu/ROS reinstall or Docker is needed.
 
 ```bash
-python3 src/mission_client.py --goals config/goals.csv \
-  --home X_HOME Y_HOME YAW_HOME --output results/baseline1_goals.csv \
-  --timeout 600 --ros-args -p use_sim_time:=true
+sudo apt update
+sudo apt install -y git python3-colcon-common-extensions python3-rosdep \
+  ros-jazzy-ros-gz ros-jazzy-xacro ros-jazzy-robot-state-publisher \
+  ros-jazzy-robot-localization ros-jazzy-slam-toolbox \
+  ros-jazzy-navigation2 ros-jazzy-nav2-bringup \
+  ros-jazzy-teleop-twist-keyboard ros-jazzy-rtabmap-ros
+source /opt/ros/jazzy/setup.bash
 ```
 
-Replace the home placeholders with numbers from your map. The command works only after you implement the client and its added home argument. Explain your own sequencing/result-handling code during the demonstration.
-
-### 3. Evaluate three baseline runs
-
-Start the provided recorder in a separate sourced terminal before each mission:
+In **your fork** of the course repository, copy only the provided source package (not its old build/install/virtual-environment directories). The pinned revision makes the starting model reproducible:
 
 ```bash
-python3 ../lab05_navigation/src/record_odometry.py \
-  --output results/baseline1_odom.csv --ros-args -p use_sim_time:=true
+cd ~/courses/eel4332-autonomous-vehicle-labs
+mkdir -p final_project_simulation/src
+# Run this clone/copy only once. Keep your existing edited package on later updates.
+git clone --filter=blob:none --sparse --single-branch --branch nav2 \
+  https://github.com/hoanbklucky/goose.git /tmp/eel4332-goose-source
+git -C /tmp/eel4332-goose-source sparse-checkout set 11_simulation/ros2_ws/src/goosebot_0
+git -C /tmp/eel4332-goose-source checkout bffaf3cdf2b38f3b5a53a977064e0c787e046ff7
+cp -r -n /tmp/eel4332-goose-source/11_simulation/ros2_ws/src/goosebot_0 final_project_simulation/src/
+# Omit the redundant packaged snapshot; the extracted source is already copied.
+rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
+mkdir -p ~/goosebot_ws/src
+ln -s "$PWD/final_project_simulation/src/goosebot_0" ~/goosebot_ws/src/goosebot_0
+cd ~/goosebot_ws
+rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
+colcon build --symlink-install
+source install/setup.bash
+ros2 pkg prefix goosebot_0
 ```
 
-Run from `final_project_simulation/`. Stop the recorder after the mission. Use fresh labels for every run.
+The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone or symlink already exists, reuse/check it instead of repeating those commands. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
 
-Complete three trials, each from a clean simulator launch and reinitialized localization at the same pose. Keep failures. Do not record across a simulation clock reset. Delivery waits count toward mission duration; setup/localization time does not.
+### 2. Add your 2-D LiDAR — required student work
 
-### 4. Test an additional obstacle
+Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Use its existing front ToF sensor as a syntax example, but **add a separate sensor**:
 
-Use one instructor-approved static obstacle placement, absent from the saved map, that obstructs a baseline route while leaving a feasible alternative. Start a fresh trial with the obstacle already in place before the mission; keep its pose fixed. Do not spawn it onto or immediately in front of a moving robot.
+1. Add a `lidar_link` and a fixed joint to `base_link`. Give the sensor a visual shape and a clear mounting position above the chassis. Document your chosen position; keep the laser plane above the robot and below obstacles.
+2. Add a Gazebo `gpu_lidar` sensor on that link. Starting specifications: **360° horizontal field of view**, 720 horizontal samples, one vertical sample, 10 Hz, minimum range 0.12 m, maximum range 12 m. Angles are in radians (`-3.14159` to `3.14159`). Use the existing sensor's `<lidar><scan>…</scan><range>…</range></lidar>` structure. Set its topic to `scan`, enable it, and set `<gz_frame_id>lidar_link</gz_frame_id>`.
+3. Add this entry to `config/ros_gz_bridge.yaml` in your copied package:
 
-For Option A, `campus/campus_blocked.sdf` is the second world variant; its [README](campus/README.md) gives the launch, barrier dimensions, and pose. For Option B, use your generated blocked variant and document its barrier dimensions and pose. Check that it has collision geometry and is detected by the simulated LiDAR. Students must not improvise moving obstacles or modify the map to hide the challenge.
+```yaml
+- ros_topic_name: /scan
+  gz_topic_name: /scan
+  ros_type_name: sensor_msgs/msg/LaserScan
+  gz_type_name: gz.msgs.LaserScan
+  direction: GZ_TO_ROS
+```
 
-Predict the response, then run the same mission once. Capture RViz2 costmap/path evidence and Gazebo motion. Explain whether you observed local avoidance, a changed global path, recovery, stopping, or failure. A detour alone does not prove global replanning. If the mission fails, retain the logs, diagnose it, and document any additional attempt separately.
+4. Retain the existing EKF and its `odom → base_footprint` transform. Do not add a second odometry TF publisher. Inspect the model/configuration to understand its command-derived odometry: it is not measured wheel-encoder odometry.
+5. Verify the supplied footprint contains the complete robot and your sensor mount; update **both** costmaps if necessary. Record the sensor values, mounting position, and footprint in your short explanation.
 
-### 5. Demonstrate cancellation and discuss transfer
+Adding other sensors is optional: add a link/joint and Gazebo sensor, bridge its correct message type, and configure a consumer. A visible sensor shape alone does not produce measurements. GPS and stereo cameras are not required by this LiDAR workflow.
 
-Reuse Lab 5 cancellation/restart evidence if it already shows both action outcome and actual stopping. Otherwise perform one separate cancellation trial. Never treat cancellation status alone as proof of zero motion. If cancellation fails to stop motion, pause Gazebo, end the launch processes, and restart cleanly.
+### 3. Launch your selected world — Terminal 1
 
-Include a short discussion of the sensing, wheel odometry, TF, footprint, motor interface, skid-steer slip, and stopping checks needed to transfer this system to Goosebot. Physical SLAM/Nav2 deployment is not required.
+Stop all previous Gazebo, TurtleBot, SLAM, teleop, and navigation launches with Ctrl+C before starting. Closing the Gazebo window alone can leave a server running. Use this Goosebot launch, **not** the old TurtleBot campus launch:
 
-## Experiment / Quantitative Analysis
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/ist/ist.sdf"
+```
 
-For each baseline and obstacle trial report:
+For campus, replace the final path with `final_project_simulation/campus/campus.sdf`. The wrapper reads the home pose from the world's adjacent `mission.json` and adds mesh lookup paths. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
 
-- delivery goals succeeded / 3 and whether home was reached;
-- mission success: all three deliveries, all waits, and return home within your fixed limits, without observed collision;
-- elapsed simulation time, including delivery waits;
-- odometry-derived traveled distance over the mission interval;
-- failure/timeout reason and any observed collision or recovery.
+### 4. Check the sensor and TF — Terminal 2
 
-Compute distance by summing consecutive planar odometry-position differences. This estimates traveled distance; it is not independent ground truth. Report success count out of three and mean duration/distance for successful baseline trials only, with sample count. If none succeed, report no successful-run mean. Describe collision observation as visual evidence unless you provide a validated contact measurement.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 topic echo /scan --once --field header.frame_id
+ros2 topic hz /scan
+```
 
-Compare the obstacle trial with the baseline and explain limitations. Parameter tuning or a second configuration is optional; label extra experiments and preserve the required fixed baseline.
+Expect `lidar_link` and approximately your configured rate while Gazebo is playing. Stop `hz` with Ctrl+C, then run these one at a time (Ctrl+C after each check):
 
-## Engineering Questions
+```bash
+ros2 run tf2_ros tf2_echo base_footprint lidar_link
+ros2 run tf2_ros tf2_echo odom base_footprint
+ros2 topic echo /odometry/filtered --once
+```
 
-1. How do SLAM and AMCL serve different roles in your workflow?
-2. Which planner/controller plugins run, and how does your client interact with them?
-3. What evidence supports your explanation of the obstacle response?
-4. What failed or remains unreliable, and what would you improve?
-5. What would need to change or be validated for Goosebot?
+Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration. In RViz2, use Fixed Frame `odom`, add LaserScan `/scan`, and verify walls appear in the correct direction as you drive.
 
-## Success Criteria
+### 5. Build and save your map
 
-- [ ] Your saved map loads and supports AMCL localization.
-- [ ] Your client attempts three deliveries and return home with waits and result handling.
-- [ ] Three baseline runs and one obstacle trial have preserved logs.
-- [ ] Cancellation and actual stopping are demonstrated.
-- [ ] Results are reproducible and failures are explained.
+**Terminal 2 — mapping** (after the checks):
 
-A failed trial is evidence to analyze, not a reason to remove it. Grades consider technical correctness, diagnosis, and understanding as well as mission completion.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
+  slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
+```
 
-## What to Submit
+**Terminal 3 — driving:**
 
-- Source code, map YAML/image, full Nav2 configuration, destination CSV, home pose, versions, and run commands.
-- A 3–5 minute video showing mapping/localization, delivery/return behavior, and obstacle response; include cancellation evidence.
-- A concise report or project README (about 3–5 pages equivalent) with system diagram, results table, one trajectory plot, answers, and limitations.
-- Individual contribution statements. Each student must explain the system and their contribution.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
 
-| Category | Weight |
-|---|---:|
-| Mapping and localization | 20% |
-| Delivery mission and client behavior | 30% |
-| Obstacle response and cancellation | 20% |
-| Quantitative evaluation and explanation | 20% |
-| Reproducibility and individual understanding | 10% |
+Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval and the central passage; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
 
-## Suggested Schedule
+**Terminal 4 — visualization:**
 
-- First week: reuse/verify map and localization; implement the client; complete a baseline mission.
-- Second week: collect trials, test the obstacle, analyze results, and prepare the demonstration.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+rviz2 --ros-args -p use_sim_time:=true
+```
 
-For an instructor-designated one-week version, the instructor may provide a working mission client; students customize destinations/configuration and perform the evaluation. No completed client is supplied in this repository update.
+Set Fixed Frame `map`; add Map `/map`, LaserScan `/scan`, TF, and RobotModel `/robot_description`. The hallway outline should fill in as you explore. Confirm scans follow mapped walls, not a displaced/rotated duplicate.
 
-## Troubleshooting
+Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
 
-Use the campus launch/map commands and Lab 5's scan/map alignment checks. Confirm map identity, initial pose, time, TF, and lifecycle states before tuning. Keep teleoperation stopped during autonomous missions.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
+mkdir -p results
+ros2 run nav2_map_server map_saver_cli -f "$PWD/results/final_map" \
+  --ros-args -p use_sim_time:=true
+```
 
-**INSTRUCTOR VALIDATION REQUIRED:** test the full mapping-to-delivery sequence, exact obstacle world/placement, and cancellation on the course image before release. This document does not certify an end-to-end run.
+Keep the YAML and image together. To view the image, use an Ubuntu image viewer, or `python3 -c "from PIL import Image; Image.open('results/final_map.pgm').save('results/final_map.png')"` from this directory and open the PNG in VS Code (install `python3-pil` if needed). The PNG is a viewing copy; keep the original map files.
+
+### 6. Restart and navigate on your saved map
+
+Stop teleop, SLAM, RViz, and simulator. Relaunch your baseline world using Step 3. **Do not restart SLAM.** In Terminal 2:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch nav2_bringup bringup_launch.py slam:=false use_sim_time:=true \
+  use_composition:=false autostart:=true \
+  map:="$PWD/final_project_simulation/results/final_map.yaml" \
+  params_file:="$PWD/final_project_simulation/goosebot/nav2_goosebot.yaml"
+```
+
+In Terminal 4, use the standard Nav2 RViz layout:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 launch nav2_bringup rviz_launch.py use_sim_time:=true
+```
+
+Use **2D Pose Estimate** at the starting position, dragging in its heading direction. Enable Map and LaserScan `/scan`. **Alignment means live scan points overlap the saved map's wall edges** around several sides of the robot; they should not form a shifted/rotated outline. Costmap inflation colors are clearance margins, not the physical wall. If alignment is poor, correct the initial pose before sending goals. AMCL now owns `map → odom`; the EKF still owns `odom → base_footprint`.
+
+Send a nearby **Nav2 Goal** first, then visit three chosen delivery locations and return home. Wait 3 seconds at each delivery. Clicking goals in RViz is sufficient; autonomous mission sequencing using the existing client scaffold is optional. Keep keyboard teleop stopped during navigation.
+
+Select destinations and home on **your SLAM map**. The `mission.json` coordinates describe Gazebo/the geometric reference map, and may differ from your SLAM frame. Do not blindly copy them. IST example destinations are in the hallway near 1044, 1003, and 1066.
+
+### 7. Test one blocked route
+
+Stop all launches and restart Step 3 with `ist/ist_blocked.sdf` (or `campus/campus_blocked.sdf`). Keep your **baseline saved map**, robot, settings, and goals. Relaunch AMCL/Nav2 and initialize the pose again; do not remap the barrier.
+
+For IST the barrier crosses the upper hallway at (0, 9.25) m; the lower loop and central passage provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
+
+## What to submit
+
+- **One video, about 3–5 minutes:** show your LiDAR/scan display, mapping and a revisit, saved-map localization, successful navigation to three deliveries and home, and a brief blocked-route attempt. Clips may be joined; do not record the entire setup.
+- **Your fork/code:** modified Goosebot xacro and bridge, full SLAM/Nav2 configuration, saved map YAML/image, and the commands you used. Commit source/configuration; exclude `build/`, `install/`, `log/`, databases, and bags.
+- **A short explanation in your own words, about one page:** what you changed; how scans, TF, odometry, SLAM, AMCL, planning and control fit together; one problem/fix; the blocked-route result; and why simulation success does not prove physical Goosebot readiness. List each member's contribution.
+
+No long report, custom planner implementation, or mandatory mission-client implementation is required. Assessment: model/sensor integration 30%, mapping/localization 25%, navigation/obstacle test 25%, explanation/reproducibility 20%. Diagnose and retain failed attempts rather than presenting ground-truth localization as your solution.
+
+## Troubleshooting and references
+
+- **No `/scan`:** check Gazebo playing, sensor enabled, topic spelling, bridge entry, and sensor-rendering plugins. A bridge does not create sensor data by itself.
+- **No motion:** focus the teleop terminal; check `/cmd_vel` type with `ros2 topic info /cmd_vel --verbose` against the supplied bridge. This model expects `geometry_msgs/msg/Twist`; do not enable stamped commands on only one end.
+- **TF problems:** inspect the actual scan frame; exactly one mapper/localizer owns `map → odom`. Never run the original Goosebot perfect-map bridge alongside SLAM or AMCL.
+- **Far goals fail:** verify map coverage and the full-map global costmap. Do not navigate into unmapped space. Sparse outdoor structure and open-loop odometry can make campus mapping harder; IST is the shorter starting option.
+- **Robot invisible / duplicate clocks:** stop all old simulator launches; inspect leftover Gazebo processes before terminating only the stale processes you identify. Launch one world/server at a time.
+
+References: [Goosebot source](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation), [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox), [Nav2 configuration](https://docs.nav2.org/configuration/index.html), [Gazebo sensors](https://gazebosim.org/docs/harmonic/sensors/). All required commands are above.
+
+**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot sensor rendering/TF, mapping, saved-map localization, all deliveries, and both blocked variants on the course WSL installation before release. Starting configurations require local verification and may need tuning.

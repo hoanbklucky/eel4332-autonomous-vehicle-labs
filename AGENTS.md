@@ -15,7 +15,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Required final: `final_project_simulation/README.md`; Goosebot lane following is the completed hardware component.
 - Physical Goosebot SLAM/Nav2 is optional.
 - Separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional extensions. Preserve their TODOs.
-- Labs 4–5 provide guided mapping/navigation preparation; the final mission client remains student work.
+- Labs 4–5 provide guided mapping/navigation preparation. Final student work is the LiDAR/model/bridge integration, mapping, localization, navigation and explanation. The mission-client scaffold is an optional extension; preserve its TODOs.
 
 ## Student code
 
@@ -33,9 +33,9 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 
 ## ROS / Gazebo
 
-- Required Labs 2/4/5 and final follow official ROBOTIS Jazzy tutorials: Waffle, Cartographer mapping, and TurtleBot3 Nav2 navigation. Labs 2/4/5 use TurtleBot3 World; the final allows the supplied schematic campus arena or a student-created world using CREATE_YOUR_OWN_WORLD.md (both need local simulation validation).
+- Labs 2/4/5 follow ROBOTIS Jazzy tutorials: Waffle, Cartographer and TurtleBot3 Nav2 in TurtleBot3 World. The final uses the provided Goosebot model with a REQUIRED student-added 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.
 - Keep required course READMEs self-contained with the necessary official Jazzy commands, explicit sourcing/model exports, and terminal assignments. ROBOTIS links are references, not additional required procedures.
-- Do not reintroduce the old nav2_minimal_tb3_sim/standalone SLAM Toolbox launch workflow. Optional background examples are not required procedures.
+- Do not reintroduce nav2_minimal_tb3_sim or the obsolete TurtleBot SLAM Toolbox workflow into Labs 2/4/5. The final's documented Goosebot LiDAR SLAM Toolbox workflow is explicitly authorized. Do not use the Goosebot ground-truth localizer for assessment.
 
 
 - Target ROS 2 Jazzy and modern Gazebo.

@@ -1,5 +1,7 @@
 # Florida Polytechnic campus world — geographic layout, version 2
 
+> **For the current Goosebot final:** use the complete commands in [the final-project README](../README.md). The TurtleBot launch/mapping instructions below are retained as an optional reference and do not add the required Goosebot LiDAR.
+
 This replaces the earlier arbitrary 24 × 30 m block layout. It uses **OpenStreetMap building, lake, road, parking, and path outlines**, checked against the supplied **2026 printable campus map**. The IST footprint is elongated/curved; BARC and the residence cluster retain their real shapes and relative positions; the lake chain and multiple causeways are preserved.
 
 ![North-up campus plan](campus_plan.svg)
