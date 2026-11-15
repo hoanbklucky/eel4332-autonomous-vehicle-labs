@@ -89,7 +89,16 @@ Replace the quoted map path if your saved map is elsewhere. Keep this terminal r
 
 ## 4. Initialize localization
 
-In RViz2, click **2D Pose Estimate**, click where the robot actually starts on the saved map, and drag toward its heading. Check that laser returns overlap mapped walls.
+In RViz2, click **2D Pose Estimate**, click the robot's approximate starting location **on the saved map**, and drag toward its actual heading. Use Gazebo to identify its location relative to walls/obstacles; the map's orientation may differ from the Gazebo camera view. This supplies a pose guess, not a motion command.
+
+**Check scan/map alignment:**
+
+1. Keep **Map** and **LaserScan** checked in RViz2.
+2. If the view is cluttered, temporarily hide **Amcl Particle Swarm** and the costmap displays inside **Global Planner** and **Controller**. Unchecking these display boxes only hides graphics; it does not disable localization, planning, or obstacle avoidance.
+3. Zoom in and compare the live laser points with mapped wall edges and the visible sides of circular obstacles. They should approximately overlap, rather than forming a shifted or rotated copy. Occlusion and sensor noise mean not every edge will have matching points.
+4. If they are displaced, repeat **2D Pose Estimate** with a better position/heading guess. Small, slow motions using Terminal 3 below may help AMCL refine the estimate. Stop and check again before sending a navigation goal.
+
+**Localization: active** means AMCL is running; it does not by itself prove that the pose is correct. If alignment stays poor, check that you loaded the correct map for the current world/model.
 
 If needed, refine localization with small motions in **Terminal 3**:
 
@@ -100,7 +109,9 @@ export TURTLEBOT3_MODEL=waffle
 ros2 run turtlebot3_teleop teleop_keyboard
 ```
 
-Click that terminal before driving slowly. Press `s` to stop, then **Ctrl+C to terminate teleop before sending navigation goals**. Confirm scan/map alignment. Exporting the model in Terminal 1 does not configure Terminal 3.
+Click that terminal before driving slowly. Press `s` to stop, then **Ctrl+C to terminate teleop before sending navigation goals**. Recheck scan/map alignment as described above.
+
+**Run the source and export commands in each new terminal.** Each separately opened terminal has its own environment: setting `TURTLEBOT3_MODEL=waffle` in Terminal 1 does not set it in Terminal 3. The complete command block above includes everything Terminal 3 needs.
 
 ## 5. Reach three goals
 
