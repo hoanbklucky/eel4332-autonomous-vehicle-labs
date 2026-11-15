@@ -11,8 +11,10 @@ Run from the course repository root:
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
 cp -r -n campus custom_world
-code custom_world/generate_campus.py
+code custom_world/create_simple_world.py
 ```
+
+The geographic campus builder uses polygon data in `layout.json`. For this beginner guide, edit/run the included **`create_simple_world.py`** instead: it keeps the simpler BOXES/STOPS interface described below and writes a matching `mission.json` that the launch reads.
 
 Do this copy only once. If `custom_world` already exists, keep/edit that directory rather than copying into it again. Work in your own fork.
 
@@ -47,7 +49,7 @@ STOPS = [('Home', -8, -11), ('Library', -4, 8),
          ('Office', 6, 6), ('Lab', 6, -9)]
 ```
 
-Keep **Home at (-8, -11)** so the supplied launch file's spawn remains correct. Keep all pads clear of obstacles. Choose locations that require meaningful travel and turns.
+Keep **Home at (-8, -11)** for this beginner example. The simple generator writes it to `mission.json`, which the launch reads; this differs from the geographic campus world's home. Keep all pads clear of obstacles. Choose locations that require meaningful travel and turns.
 
 Edit `BARRIER` to obstruct one baseline route while leaving an alternative:
 
@@ -60,7 +62,7 @@ The barrier is added only to `campus_blocked.sdf`. It must not cover home or a d
 ## 4. Generate and check
 
 ```bash
-python3 custom_world/generate_campus.py
+python3 custom_world/create_simple_world.py
 code custom_world/campus_plan.svg
 ```
 

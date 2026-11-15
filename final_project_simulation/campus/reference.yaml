@@ -1,7 +1,7 @@
-image: reference.pgm
+image: reference.png
 mode: trinary
 resolution: 0.1
-origin: [-12.0, -15.0, 0.0]
+origin: [-30, -44, 0.0]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.25

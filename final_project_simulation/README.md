@@ -38,20 +38,29 @@ The supplied geometric reference map may be used only for instructor-approved ch
 
 ## Supplied Campus Environment
 
-The supplied images inspired a **schematic 24 × 30 m arena**, not an exact geographic reconstruction. Buildings, a central lake chain, crossings, and yellow delivery pads provide the mission setting. Lake regions are solid obstacles in simulation.
+The earlier rectangular block arrangement has been replaced by a **geographic footprint model**: OSM building/lake outlines and roads/paths, checked against the supplied 2026 PDF. This preserves the actual lake chain, curved IST footprint, BARC, residence cluster, and crossings. Newer PDF-derived buildings are explicitly marked approximate.
 
 <details>
-<summary>Preview — campus layout, delivery stops, and obstacle variant</summary>
+<summary>Preview — north-up campus plan</summary>
 
-![Campus-inspired arena](campus/campus_plan.svg)
+![Florida Polytechnic campus layout](campus/campus_plan.svg)
 
-Blue blocks represent non-traversable lakes. The dashed orange barrier appears only in the obstacle variant. Dimensions and building placements are approximate teaching geometry.
+The plan uses a uniform 0.06 teaching scale in a 73 × 80 m arena. Purple additions come from the perspective PDF and are approximate. Blue areas are non-traversable water; yellow pads mark home and delivery locations.
 
 </details>
 
-**How to create the map:** launch `campus/campus.launch.py`, run Cartographer and teleoperation, explore both sides/crossings, then save `results/campus_map.yaml` and its image. The [campus README](campus/README.md) contains the exact commands, spawn pose, delivery locations, and obstacle launch.
+<details>
+<summary>Preview — 3-D geometry (offline, not a Gazebo screenshot)</summary>
 
-Do not turn the supplied campus photograph directly into a navigation map: a map needs metric coordinates and obstacles matching the simulator. The supplied `campus/reference.yaml` is a geometric instructor reference; students create their own SLAM map. World/reference-map coordinates must not be copied blindly into a different SLAM map.
+![Campus geometry preview](campus/campus_geometry_preview.png)
+
+Footprint shapes and relative placement follow geographic data; heights, materials, and roof details are simplified. See [sources and limitations](campus/README.md#accuracy-and-teaching-adjustments).
+
+</details>
+
+The [campus README](campus/README.md) gives the exact launch/map/save/navigation commands, updated spawn/delivery coordinates, and obstacle variant. The launch reads home from `campus/mission.json`.
+
+**Upgrading from version 1:** regenerate your SLAM map and reselect goals; the old 24 × 30 m arena's map and coordinates are incompatible. Do not use a campus photograph as a navigation map. The supplied `campus/reference.yaml` is a geometric instructor reference; students normally create their own map.
 
 ## Provided Files
 
@@ -72,7 +81,7 @@ Follow the [campus README](campus/README.md), or the [custom-world guide](CREATE
 
 ### 1. Freeze the mission
 
-Choose three reachable delivery poses in open mapped space and a home pose. Record all poses in the saved map frame, using metres and radians. Home is the documented starting location. Define goal tolerances, a per-goal timeout (300 simulation seconds is an example for this larger arena), and an overall mission limit before testing.
+Choose three reachable delivery poses in open mapped space and a home pose. Record all poses in the saved map frame, using metres and radians. Home is the documented starting location. Define goal tolerances, a per-goal timeout (600 simulation seconds is a starting example for this larger arena; pilot runs determine suitable limits), and an overall mission limit before testing.
 
 Use the same map, world, robot, starting pose, goals, order, and configuration throughout evaluation. Record package versions and launch commands. Retain the original map even when an obstacle is added.
 
@@ -95,7 +104,7 @@ Add a required `--home X Y YAW` argument to your copied scaffold; its initial CS
 ```bash
 python3 src/mission_client.py --goals config/goals.csv \
   --home X_HOME Y_HOME YAW_HOME --output results/baseline1_goals.csv \
-  --timeout 300 --ros-args -p use_sim_time:=true
+  --timeout 600 --ros-args -p use_sim_time:=true
 ```
 
 Replace the home placeholders with numbers from your map. The command works only after you implement the client and its added home argument. Explain your own sequencing/result-handling code during the demonstration.
