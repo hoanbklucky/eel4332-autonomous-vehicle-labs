@@ -77,24 +77,32 @@ See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation
 5. Keep all experimental results in each lab's `results/` directory.
 6. Do not commit large ROS build artifacts or recorded bags unless instructed.
 
-## Open in VS Code and get updates
+## Fork, open, and sync
 
-Run in a WSL/Ubuntu terminal:
+First **Fork** this repository on GitHub, then clone **your fork**. Replace `YOUR_USERNAME`:
 
 ```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
+mkdir -p ~/courses
+cd ~/courses
+git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+cd eel4332-autonomous-vehicle-labs
+git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
 code .
 ```
 
-Wait for any VS Code Server installation/update to finish and confirm the **WSL: Ubuntu** indicator. Opening the folder does not update its files.
+Use VS Code's **WSL: Ubuntu** workspace. `origin` is your fork (push your work); `upstream` is the instructor repository (receive updates).
 
-Before each lab, save your files and run `git status --short`. If it prints nothing and you are on the course `main` branch with the correct `origin`, run:
+After saving and committing your work on `main`, update with:
 
 ```bash
-git pull --ff-only origin main
+git fetch upstream
+git merge --no-edit upstream/main
+git push -u origin main
 ```
 
-Alternatively, use VS Code **Source Control → … → Pull**. **Sync Changes** also pushes local commits; use **Pull** when you only need instructor updates. If you have local changes, preserve them first using the [opening and update guide](docs/UPDATING_COURSE_REPOSITORY.md).
+Resolve conflicts before pushing. VS Code **Sync Changes** synchronizes your tracked fork branch; it does not fetch instructor updates. Existing direct clones can be converted without deleting files—see [forking, migration, commits, and update instructions](docs/UPDATING_COURSE_REPOSITORY.md).
+
+**Before Lab 4:** complete the official **PC Setup** and **Install Simulation Package** steps listed at the start of its README. Earlier Lab 2 installations may not include these ROBOTIS packages. Lab 5 begins with its own navigation-package installation/check.
 
 ## Repository structure
 

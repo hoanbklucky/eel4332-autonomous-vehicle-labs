@@ -6,7 +6,31 @@ Follow the official ROBOTIS tutorial to create and save a map for navigation. Th
 
 ## Prerequisites
 
-Complete [Lab 00](../lab00_setup/README.md), including TurtleBot3 PC and simulation setup. Always select **Jazzy** on the ROBOTIS pages. If Ubuntu/ROS is already installed, continue with the missing TurtleBot3 packages rather than reinstalling the operating system.
+Complete [Lab 00](../lab00_setup/README.md). Earlier Lab 2 used a different simulator, so completing it does **not** prove that the ROBOTIS packages are installed.
+
+### 0. Install/check packages before launching
+
+Run in Ubuntu/WSL (including VS Code's WSL terminal). Select **Jazzy** on both official setup pages.
+
+1. Follow [ROBOTIS PC Setup — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy), specifically **Install Dependent ROS 2 Packages → Install TurtleBot3 Packages → Environment Configuration**. Keep your existing Ubuntu 24.04, ROS 2 Jazzy, and working Gazebo installation; install only missing dependencies. The PC setup supplies Cartographer, Nav2, and the core TurtleBot3 packages, including `turtlebot3_msgs`.
+2. Follow **Install Simulation Package** in [ROBOTIS Gazebo Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy), then build the workspace. The simulation package is additional to PC Setup; it does not replace it. Use the `jazzy` branch. If a source directory already exists, check it rather than cloning another copy.
+3. Source the built workspace and check packages:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+ros2 pkg prefix turtlebot3_msgs
+ros2 pkg prefix turtlebot3_description
+ros2 pkg prefix turtlebot3_gazebo
+ros2 pkg prefix turtlebot3_teleop
+ros2 pkg prefix turtlebot3_cartographer
+ros2 pkg prefix cartographer_ros
+ros2 pkg prefix nav2_map_server
+```
+
+Every check must print an installation path. If a package is missing, complete its PC/simulation setup step and source the workspace again before continuing. Do not follow SBC/OpenCR hardware setup for this simulation.
+
+Keep `~/turtlebot3_ws` (robot software) separate from your fork of the course repository (lab code/results).
 
 ## Procedure
 

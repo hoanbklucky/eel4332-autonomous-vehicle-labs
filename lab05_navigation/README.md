@@ -6,7 +6,27 @@ Follow the official ROBOTIS navigation tutorial to localize on your Lab 4 map an
 
 ## Prerequisites
 
-Complete [Lab 4](../lab04_slam/README.md) and retain its map YAML/image pair. Select **Jazzy** in the official tutorial.
+Complete [Lab 4](../lab04_slam/README.md), including its **PC Setup and Simulation Package installation**, and retain its map YAML/image pair. Select **Jazzy** in the official tutorial.
+
+### 0. Install/check navigation packages
+
+If not already done, complete **Install Navigation2** and **Install TurtleBot3 Packages** in [ROBOTIS PC Setup — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy). Ubuntu/ROS do not need reinstalling. The core TurtleBot3 workspace supplies the model-specific `turtlebot3_navigation2` launch package.
+
+Install the Nav2 packages and the Python API needed for the final:
+
+```bash
+sudo apt update
+sudo apt install ros-jazzy-navigation2 ros-jazzy-nav2-bringup ros-jazzy-nav2-simple-commander
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+ros2 pkg prefix turtlebot3_gazebo
+ros2 pkg prefix turtlebot3_navigation2
+ros2 pkg prefix nav2_bringup
+ros2 pkg prefix nav2_map_server
+ros2 pkg prefix nav2_simple_commander
+```
+
+Every package check must print a path. If the TurtleBot3 launch package is missing, complete/rebuild the official workspace and source it again before starting navigation.
 
 ## Procedure
 

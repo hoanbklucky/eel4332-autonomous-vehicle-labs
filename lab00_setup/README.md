@@ -2,7 +2,7 @@
 
 ## Before You Begin — Update Course Files
 
-If this is your first setup, skip this update check; Part 6 installs Git and clones the repository. If you already have a local copy, open a **WSL/Ubuntu Terminal** and run:
+If this is your first setup, skip this update check; Part 2 installs Git and Part 6 forks/clones the repository. If you already have a local copy, open a **WSL/Ubuntu Terminal** and run:
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
@@ -11,7 +11,7 @@ git status --short
 
 **Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
 
-If the command prints nothing, run `git pull --ff-only origin main`. If it lists files, protect your work first by following [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md). Use your actual repository path if you cloned it elsewhere.
+Use the [fork/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) to configure `origin`/`upstream`, commit your work, and merge instructor updates. A clean working tree alone does not mean your fork is current. Use your actual repository path if you cloned it elsewhere.
 
 ## Goal
 
@@ -27,8 +27,8 @@ Windows 11
         ├── Gazebo Harmonic
         ├── RViz2
         ├── Nav2
-        ├── SLAM Toolbox
-        ├── robot_localization
+        ├── Cartographer
+        ├── TurtleBot3 packages
         └── Python tools
 ```
 
@@ -356,56 +356,28 @@ sudo apt install ros-jazzy-nav2-simple-commander
 
 ---
 
-## Part 6 — Clone this repository and enter its root
+## Part 6 — Fork and clone the course repository
 
-**Why this part matters:** Your local clone contains the instructions and starter files, and its Git history lets you receive future course updates.
+Create your own copy so you can push your lab edits.
 
-Run these commands in a WSL/Ubuntu Terminal:
+1. Sign in to GitHub, open [the instructor repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and select **Fork → Create fork**.
+2. Replace `YOUR_USERNAME` below with your GitHub username, then run in Ubuntu/WSL:
 
 ```bash
 mkdir -p ~/courses
 cd ~/courses
-git clone https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
+git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
 cd eel4332-autonomous-vehicle-labs
-```
-
-**Command breakdown:** `mkdir -p` creates the course parent directory, `cd` enters it, `git clone` downloads a local repository copy, and the final `cd` enters the new repository root.
-
-If you already cloned the repository, do not clone it again. Enter the existing copy instead:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-```
-
-**Command breakdown:** `cd` changes directly to the recommended repository location. `~` expands to your Ubuntu home directory.
-
-The **repository root** is the `eel4332-autonomous-vehicle-labs` directory that contains the top-level `README.md`, `requirements.txt`, `lab00_setup/`, and the other lab directories. Confirm your current location:
-
-```bash
-pwd
-ls
-```
-
-**Command breakdown:** `pwd` prints the current location, and `ls` lists its contents. Use both to confirm that you are at the repository root.
-
-`pwd` should end with `/eel4332-autonomous-vehicle-labs`, and the `ls` output should include `requirements.txt`. If you cloned the repository somewhere other than `~/courses`, use that location in the `cd` command.
-
-Inspect the repository and open it through the WSL connection:
-
-```bash
-git status
+git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
 git remote -v
-git branch --show-current
 code .
 ```
 
-**Command breakdown:** `git status` summarizes local changes, `git remote -v` shows the connected remote repository, `git branch --show-current` identifies the active branch, and `code .` opens the repository in VS Code.
+`origin` must point to **your fork**; `upstream` must point to **the instructor repository**. Confirm **WSL: Ubuntu** in VS Code. Wait for any VS Code Server update; opening `code .` does not update course files.
 
-To receive instructor updates, save all files and check `git status --short`. If clean and on the course `main` branch with the correct `origin`, run `git pull --ff-only origin main`, or use **Source Control → … → Pull** in VS Code. Opening `code .` does not pull updates. **Sync Changes** also pushes commits. For local changes, conflicts, and step-by-step instructions, see [Open and Update the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md).
+Already cloned the instructor repository? Keep your files. Follow the [existing-clone migration steps](../docs/UPDATING_COURSE_REPOSITORY.md#2-already-cloned-the-instructor-repository) to redirect `origin` to your fork and retain the instructor remote as `upstream`.
 
-If `code .` displays an Installing/Updating VS Code Server download, wait for completion; that download updates WSL editor support, not course files.
-
-The VS Code Explorer should show `lab00_setup`, `lab01_ros2_gazebo_fundamentals`, and the remaining lab folders. The Source Control panel should recognize the Git repository. Run Git commands in integrated WSL/Ubuntu Terminals in this workspace, not from a separate Windows copy of the folder.
+Save and commit your work, then receive course updates with `git fetch upstream` and `git merge --no-edit upstream/main`. Push your combined work to your fork with `git push -u origin main`. These commands assume you are on `main`; see the [Git guide](../docs/UPDATING_COURSE_REPOSITORY.md) for commits, conflicts, authentication, and other branches. VS Code **Sync Changes** synchronizes your fork, not instructor updates.
 
 ---
 
@@ -465,11 +437,12 @@ The command is successful when it ends with `Successfully installed` or reports 
 If an older copy of this repository reports that ROS packages such as `generate-parameter-library-py` or `launch-ros` require `setuptools`, `jinja2`, or `typeguard`, update the repository and run the requirements command again:
 
 ```bash
-git pull --ff-only origin main
+git fetch upstream
+git merge --no-edit upstream/main
 python -m pip install -r requirements.txt
 ```
 
-**Command breakdown:** `git pull` retrieves course updates from the configured remote, and the pip command synchronizes the active environment with any updated Python requirements. Protect local changes before pulling as described at the beginning of this lab.
+**Command breakdown:** fetch/merge receives instructor updates from `upstream`, and the pip command synchronizes the active environment with any updated Python requirements. Protect local changes before pulling as described at the beginning of this lab.
 
 Those messages come from ROS 2 Python packages exposed by `/opt/ros/jazzy/setup.bash`. The updated requirements install the corresponding helpers inside the isolated course environment. Do not use `sudo pip` and do not delete the ROS installation.
 
