@@ -364,6 +364,20 @@ sudo apt install ros-jazzy-nav2-simple-commander
 
 ---
 
+### After building: refresh the terminal environment
+
+The ROBOTIS simulation installation section ends with a build, but the current terminal may still have the environment from **before** the new packages were installed. After a successful build, and in every new Ubuntu/WSL terminal used for TurtleBot3, run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 pkg prefix turtlebot3_gazebo
+```
+
+The last command must print an installation path before you launch Gazebo. Sourcing makes already-built packages discoverable; it does not install them. If `turtlebot3_gazebo` is still missing, confirm that you installed **`turtlebot3_simulations` separately from PC Setup** and that its build succeeded. If `install/setup.bash` is missing, complete the build first. Use your actual workspace path if different. Even if you added sourcing to `~/.bashrc`, rerun it in the current terminal after building new packages.
+
+
 ## Part 6 — Fork and clone the course repository
 
 Create your own copy so you can push your lab edits.
