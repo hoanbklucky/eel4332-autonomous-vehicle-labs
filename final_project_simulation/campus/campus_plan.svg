@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="980" viewBox="0 0 720 980">
+<rect width="720" height="980" fill="#faf8f3"/>
+<text x="36" y="35" font-size="22" font-family="sans-serif">Florida Poly-inspired delivery arena</text>
+<text x="36" y="60" font-size="14">Schematic 24 x 30 m; not a surveyed campus map</text>
+<rect x="60.0" y="95.0" width="5.0" height="750" fill="#786a58"/>
+<rect x="655.0" y="95.0" width="5.0" height="750" fill="#786a58"/>
+<rect x="60.0" y="840.0" width="600" height="5.0" fill="#786a58"/>
+<rect x="60.0" y="95.0" width="600" height="5.0" fill="#786a58"/>
+<rect x="122.5" y="207.5" width="100" height="125" fill="#dddded"/>
+<text x="172.5" y="270" font-size="11" text-anchor="middle">IST</text>
+<rect x="122.5" y="420.0" width="75" height="75" fill="#806aa7"/>
+<text x="160" y="457.5" font-size="11" text-anchor="middle">BARC</text>
+<rect x="485.0" y="220.0" width="100" height="50" fill="#c6b99a"/>
+<text x="535" y="245" font-size="11" text-anchor="middle">Residence I</text>
+<rect x="535.0" y="295.0" width="50" height="100" fill="#c6b99a"/>
+<text x="560" y="345" font-size="11" text-anchor="middle">Residence II</text>
+<rect x="485.0" y="582.5" width="100" height="75" fill="#806aa7"/>
+<text x="535" y="620" font-size="11" text-anchor="middle">Engineering</text>
+<rect x="485.0" y="720.0" width="100" height="50" fill="#8daf6e"/>
+<text x="535" y="745" font-size="11" text-anchor="middle">Recreation</text>
+<rect x="310.0" y="207.5" width="100" height="125" fill="#369aa8"/>
+<text x="360" y="270" font-size="11" text-anchor="middle">lake north</text>
+<rect x="310.0" y="382.5" width="100" height="125" fill="#369aa8"/>
+<text x="360" y="445" font-size="11" text-anchor="middle">lake middle</text>
+<rect x="310.0" y="557.5" width="100" height="125" fill="#369aa8"/>
+<text x="360" y="620" font-size="11" text-anchor="middle">lake south</text>
+<circle cx="160" cy="745" r="8" fill="#ffce22" stroke="#222"/><text x="172" y="750" font-size="12">Home</text>
+<circle cx="260" cy="270" r="8" fill="#ffce22" stroke="#222"/><text x="272" y="275" font-size="12">IST delivery</text>
+<circle cx="510" cy="320" r="8" fill="#ffce22" stroke="#222"/><text x="522" y="325" font-size="12">Residence delivery</text>
+<circle cx="510" cy="695" r="8" fill="#ffce22" stroke="#222"/><text x="522" y="700" font-size="12">Engineering delivery</text>
+<rect x="60" y="538.75" width="200" height="12.5" fill="none" stroke="#b56d00" stroke-dasharray="5 3"/>
+<text x="60" y="885" font-size="14">Dashed orange: obstacle variant only. Blue: solid lake barriers.</text>
+<text x="60" y="910" font-size="14">World axes: +x right, +y up. Yellow: delivery/home pads.</text>
+<text x="60" y="935" font-size="14">Reference map and SDF use the same obstacle geometry.</text>
+</svg>

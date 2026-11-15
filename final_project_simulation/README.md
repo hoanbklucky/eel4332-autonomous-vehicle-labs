@@ -4,7 +4,7 @@
 
 Use TurtleBot in ROS 2 Jazzy and Gazebo Harmonic to visit three delivery locations and return home using your own SLAM map. At each delivery location, stop and wait for 3 seconds of simulation time. No physical robot, object detection, or manipulation is required.
 
-Your Goosebot autonomous lane-following work is the course's hardware achievement. This final assesses map-based autonomy in simulation. Reuse your Lab 4 map and Lab 5 configuration and goals.
+Your Goosebot autonomous lane-following work is the course's hardware achievement. This final assesses map-based autonomy in simulation. Reuse the Lab 4–5 skills and mission code, but create a new map of the supplied campus arena.
 
 ## Learning Objectives
 
@@ -15,9 +15,9 @@ Your Goosebot autonomous lane-following work is the course's hardware achievemen
 
 ## Prerequisites
 
-Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use the same instructor-validated Gazebo world and TurtleBot model. Do not spend project time building a new world.
+Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use the provided campus-inspired world with TurtleBot3 Waffle. Students do not need to design a new world.
 
-The instructor must publish the exact world/model, reset/start pose, baseline configuration, and obstacle placement before the obstacle trial. Use **Waffle in TurtleBot3 World** and the complete simulator/navigation commands in [Lab 5](../lab05_navigation/README.md), with your Lab 4 map. Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and set `TURTLEBOT3_MODEL=waffle` in each terminal. Stop mapping/teleoperation before navigation. Do not use the previous Nav2 minimal simulator.
+Use **Waffle in the supplied campus arena**, following the [campus launch/mapping instructions](campus/README.md). Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and export `TURTLEBOT3_MODEL=waffle` in every terminal. Stop mapping/teleoperation before navigation. The instructor must validate the new world on the course image before release; Lab 5's standard TurtleBot3 World remains a fallback only if the instructor chooses it.
 
 ## Background
 
@@ -25,21 +25,43 @@ The official ROBOTIS Cartographer tutorial creates your map. During the delivery
 
 The final does not require implementing SLAM, A*, Pure Pursuit, Kalman filtering, a custom Nav2 plugin, autonomous exploration, or a synthetic safety monitor.
 
+## Campus Environment
+
+The supplied images inspired a **schematic 24 × 30 m arena**, not an exact geographic reconstruction. Buildings, a central lake chain, crossings, and yellow delivery pads provide the mission setting. Lake regions are solid obstacles in simulation.
+
+<details>
+<summary>Preview — campus layout, delivery stops, and obstacle variant</summary>
+
+![Campus-inspired arena](campus/campus_plan.svg)
+
+Blue blocks represent non-traversable lakes. The dashed orange barrier appears only in the obstacle variant. Dimensions and building placements are approximate teaching geometry.
+
+</details>
+
+**How to create the map:** launch `campus/campus.launch.py`, run Cartographer and teleoperation, explore both sides/crossings, then save `results/campus_map.yaml` and its image. The [campus README](campus/README.md) contains the exact commands, spawn pose, delivery locations, and obstacle launch.
+
+Do not turn the supplied campus photograph directly into a navigation map: a map needs metric coordinates and obstacles matching the simulator. The supplied `campus/reference.yaml` is a geometric instructor reference; students create their own SLAM map. World/reference-map coordinates must not be copied blindly into a different SLAM map.
+
 ## Provided Files
 
 - [Mission scaffold](../lab05_navigation/src/mission_client.py): complete its TODOs.
 - [Odometry recorder](../lab05_navigation/src/record_odometry.py): provided utility.
 - [Goal CSV](../lab05_navigation/config/goals.csv): three delivery poses.
 - [Results template](results_template.md).
-- Your Lab 4 map YAML/image and Lab 5 navigation setup/configuration record. Use the official TurtleBot3 model-specific configuration; preserve a copy of any modified full parameter file.
+- [Campus world, preview, reference map, and launch instructions](campus/README.md).
+- Your newly created campus SLAM map YAML/image and Lab 5 navigation setup/configuration record. Use the official TurtleBot3 model-specific configuration; preserve a copy of any modified full parameter file.
 
 Keep final code and configuration in `final_project_simulation/src/` and `config/`, and evidence in `results/`. Create those directories in your submission. Preserve the supplied algorithms' TODOs unless you elect to complete an optional exercise.
 
 ## Step-by-Step Procedure
 
+### 0. Map the campus arena
+
+Follow the [campus README](campus/README.md) to launch the baseline world, map the required delivery routes with Cartographer, and save `results/campus_map`. Restart cleanly and verify AMCL alignment with this map. Select your delivery/home coordinates in this map frame. The old TurtleBot3 World map does not describe this arena.
+
 ### 1. Freeze the mission
 
-Choose three reachable delivery poses in open mapped space and a home pose. Record all poses in the saved map frame, using metres and radians. Home is the documented starting location. Define goal tolerances, a per-goal timeout (120 simulation seconds is an example), and an overall mission limit before testing.
+Choose three reachable delivery poses in open mapped space and a home pose. Record all poses in the saved map frame, using metres and radians. Home is the documented starting location. Define goal tolerances, a per-goal timeout (300 simulation seconds is an example for this larger arena), and an overall mission limit before testing.
 
 Use the same map, world, robot, starting pose, goals, order, and configuration throughout evaluation. Record package versions and launch commands. Retain the original map even when an obstacle is added.
 
@@ -62,7 +84,7 @@ Add a required `--home X Y YAW` argument to your copied scaffold; its initial CS
 ```bash
 python3 src/mission_client.py --goals config/goals.csv \
   --home X_HOME Y_HOME YAW_HOME --output results/baseline1_goals.csv \
-  --timeout 120 --ros-args -p use_sim_time:=true
+  --timeout 300 --ros-args -p use_sim_time:=true
 ```
 
 Replace the home placeholders with numbers from your map. The command works only after you implement the client and its added home argument. Explain your own sequencing/result-handling code during the demonstration.
@@ -84,7 +106,7 @@ Complete three trials, each from a clean simulator launch and reinitialized loca
 
 Use one instructor-approved static obstacle placement, absent from the saved map, that obstructs a baseline route while leaving a feasible alternative. Start a fresh trial with the obstacle already in place before the mission; keep its pose fixed. Do not spawn it onto or immediately in front of a moving robot.
 
-The instructor should provide a second launchable world variant or exact tested placement/reset instructions, including obstacle size and pose in the Gazebo world frame. Check that it has collision geometry and is detected by the simulated LiDAR. Students must not improvise moving obstacles or modify the map to hide the challenge.
+The provided `campus/campus_blocked.sdf` is the second world variant; its [README](campus/README.md) gives the exact launch, barrier dimensions, and world-frame pose. Check that it has collision geometry and is detected by the simulated LiDAR. Students must not improvise moving obstacles or modify the map to hide the challenge.
 
 Predict the response, then run the same mission once. Capture RViz2 costmap/path evidence and Gazebo motion. Explain whether you observed local avoidance, a changed global path, recovery, stopping, or failure. A detour alone does not prove global replanning. If the mission fails, retain the logs, diagnose it, and document any additional attempt separately.
 
@@ -150,6 +172,6 @@ For an instructor-designated one-week version, the instructor may provide a work
 
 ## Troubleshooting
 
-Use the self-contained launch and localization instructions in Lab 5. Confirm map identity, initial pose, time, TF, and lifecycle states before tuning. Keep teleoperation stopped during autonomous missions.
+Use the campus launch/map commands and Lab 5's scan/map alignment checks. Confirm map identity, initial pose, time, TF, and lifecycle states before tuning. Keep teleoperation stopped during autonomous missions.
 
 **INSTRUCTOR VALIDATION REQUIRED:** test the full mapping-to-delivery sequence, exact obstacle world/placement, and cancellation on the course image before release. This document does not certify an end-to-end run.

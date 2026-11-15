@@ -162,3 +162,12 @@ lab04_slam/images/mapping_revisit.png
 lab04_slam/images/map_saved.png
 lab05_navigation/images/navigation_goal.png
 lab05_navigation/images/navigation_running.png
+final_project_simulation/campus/campus.sdf
+final_project_simulation/campus/reference_goals.csv
+final_project_simulation/campus/reference.yaml
+final_project_simulation/campus/README.md
+final_project_simulation/campus/generate_campus.py
+final_project_simulation/campus/campus_plan.svg
+final_project_simulation/campus/campus.launch.py
+final_project_simulation/campus/campus_blocked.sdf
+final_project_simulation/campus/reference.pgm
