@@ -18,7 +18,7 @@ The laboratory sequence complements lecture, in-class problem solving, homework,
 
 The course uses a simulation-first workflow and ends with a **TurtleBot simulation delivery project**. Autonomous lane following on **Goosebot** provides the course's hardware experience; physical SLAM/Nav2 deployment is optional.
 
-## Official simulation tutorials — start here
+## Course simulation instructions — start here
 
 Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** throughout.
 
@@ -29,7 +29,7 @@ Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 Wor
 | Build/save a map | [SLAM Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy) | [Lab 4](lab04_slam/README.md) |
 | Navigate on that map | [Navigation Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy) | [Lab 5](lab05_navigation/README.md) |
 
-Our READMEs contain WSL notes and submission requirements; ROBOTIS maintains installation/launch procedures. Existing Ubuntu/ROS installations need only the missing TurtleBot3 software. The official workspace is `~/turtlebot3_ws`; the course repository holds assignments and results.
+Our lab READMEs contain the required Jazzy installation and launch commands, including WSL sourcing and per-terminal model settings. ROBOTIS links are references; students do not need to work through additional website sections. Existing Ubuntu/ROS installations need only the missing TurtleBot3 software. The official workspace is `~/turtlebot3_ws`; the course repository holds assignments and results.
 
 This replaces the earlier Nav2-minimal simulator and standalone SLAM Toolbox workflow. Stop old processes before switching; do not combine launch commands or apply the old mesh/TF workarounds. Earlier screenshots retained in the repository depict that previous setup.
 
@@ -178,7 +178,7 @@ Useful official references:
 - F1TENTH open course labs: https://github.com/f1tenth/f1tenth_labs_openrepo
 - Goosebot course/platform repository: https://github.com/hoanbklucky/goose
 
-Use official ROBOTIS Jazzy tutorials for installation and launch commands. This repository defines the course model/world, assignment scope, and submissions.
+Follow the copy-ready commands in the course READMEs. They adapt the official ROBOTIS Jazzy workflow and define the course model/world, scope, and submissions.
 
 ## Instructor note
 

@@ -331,84 +331,66 @@ The same window opens.
 
 ---
 
-## Part 5 — Official TurtleBot3 setup (Jazzy)
+## Part 5 — Install TurtleBot3 software
 
-Use the official ROBOTIS instructions for robot packages and simulation. Select **Jazzy** on every page.
+The commands below include the required ROBOTIS Jazzy setup. PC/core packages and simulation sources are separate downloads; both are included. Hardware SBC/OpenCR setup is not needed.
 
-1. Complete the software/dependency and TurtleBot3 workspace sections of [PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy).
-2. Complete **Install Simulation Package** and test **TurtleBot3 World** in [Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy).
-3. Use **Waffle** (`TURTLEBOT3_MODEL=waffle`) consistently for the course.
+### Install packages (once; skip if the checks already pass)
 
-If Ubuntu 24.04 and ROS 2 Jazzy are already installed, keep them and install only missing dependencies/packages. “Remote PC” means your Ubuntu/WSL computer. SBC, OpenCR, physical-robot bringup, and hardware/network setup are not required for simulation.
-
-Keep the official robot workspace at `~/turtlebot3_ws` and the course repository at `~/courses/eel4332-autonomous-vehicle-labs`; these serve different purposes. Follow the official build/dependency instructions; do not clone duplicate copies of the same packages into one workspace.
-
-In every new Ubuntu terminal after the workspace has been built:
+Use an Ubuntu/WSL terminal, not PowerShell. Keep your existing Ubuntu 24.04, ROS 2 Jazzy, and working modern Gazebo installation. Stop old simulations. Use the system ROS terminal for building; if the course Python environment is active, run `deactivate` first.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
+sudo apt update
+sudo apt install git python3-colcon-common-extensions python3-rosdep ros-jazzy-ros-gz ros-jazzy-xacro ros-jazzy-cartographer ros-jazzy-cartographer-ros ros-jazzy-navigation2 ros-jazzy-nav2-bringup
+mkdir -p ~/turtlebot3_ws/src
+cd ~/turtlebot3_ws/src
 ```
 
-Use VS Code's integrated terminal connected to WSL or a separate Ubuntu terminal. If previously using the course's Nav2 minimal simulator, terminate those processes first. Existing packages can stay installed, but do not mix their launch files, TF bridges, SLAM Toolbox instructions, or mesh workarounds with ROBOTIS commands.
-
-The official mapping tutorial uses **Cartographer**. Nav2 provides saved-map navigation. SLAM Toolbox and robot_localization are optional references, not required installations for this workflow.
-
-For the final's Python mission client, install its additional API if missing:
+Download the official Jazzy sources. These commands preserve existing source directories:
 
 ```bash
-sudo apt update
-sudo apt install ros-jazzy-nav2-simple-commander
+for repository in DynamixelSDK turtlebot3_msgs turtlebot3 turtlebot3_simulations; do
+  if [ ! -d "$repository" ]; then
+    git clone -b jazzy "https://github.com/ROBOTIS-GIT/$repository.git"
+  fi
+  git -C "$repository" branch --show-current
+done
 ```
 
----
+Each branch check should print `jazzy`. If cloning fails or an existing directory is on another branch, stop and ask the instructor; do not delete it or clone duplicate packages elsewhere. `turtlebot3` supplies the core packages; **`turtlebot3_simulations` separately supplies `turtlebot3_gazebo`**.
 
-### After building: refresh the terminal environment
+Install workspace dependencies and build:
 
-The ROBOTIS simulation installation section ends with a build, but the current terminal may still have the environment from **before** the new packages were installed. After a successful build, and in every new Ubuntu/WSL terminal used for TurtleBot3, run:
+```bash
+cd ~/turtlebot3_ws
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
+colcon build --symlink-install
+```
+
+If `rosdep` reports that it is not initialized, run `sudo rosdep init` once, then repeat `rosdep update` and the dependency command. Continue only after dependency installation and the build succeed. Do not use `sudo colcon build`.
+
+Reload the environment **after building**:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export TURTLEBOT3_MODEL=waffle
 ros2 pkg prefix turtlebot3_gazebo
+ros2 pkg prefix turtlebot3_teleop
+ros2 pkg prefix turtlebot3_cartographer
+ros2 pkg prefix turtlebot3_navigation2
 ```
 
-The last command must print an installation path before you launch Gazebo. Sourcing makes already-built packages discoverable; it does not install them. If `turtlebot3_gazebo` is still missing, confirm that you installed **`turtlebot3_simulations` separately from PC Setup** and that its build succeeded. If `install/setup.bash` is missing, complete the build first. Use your actual workspace path if different. Even if you added sourcing to `~/.bashrc`, rerun it in the current terminal after building new packages.
+Every check must print an installation path. Sourcing exposes built packages; it does not install missing ones. Robot software belongs in `~/turtlebot3_ws`; student code/results belong in your course fork.
 
 
-### Choose one world at a time
+Choose only one world at a time. The course uses Waffle in TurtleBot3 World; the complete launch and keyboard commands appear in Lab 2. In each new terminal, repeat the ROS/workspace source commands and `export TURTLEBOT3_MODEL=waffle`. An export in one terminal does not affect another.
 
-The ROBOTIS page lists **alternative launch choices**, not commands to run together:
+References: [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy) and [Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy). You do not need to follow additional website steps for the required course workflow.
 
-| Environment | Launch file |
-|---|---|
-| Empty World | `empty_world.launch.py` |
-| TurtleBot3 World | `turtlebot3_world.launch.py` |
-| TurtleBot3 House | `turtlebot3_house.launch.py` |
-
-For this course, use **Waffle in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Use `TURTLEBOT3_MODEL=waffle` in each terminal to match the course's TurtleBot3 World configuration.
-
-To switch worlds: stop robot motion, stop teleoperation and any SLAM/navigation nodes with **Ctrl+C**, then press **Ctrl+C in the terminal running the current Gazebo launch**. Wait for its processes to exit before running the next world's launch command. Closing only the Gazebo window may leave the simulation server running. Start the required nodes again after the new world loads.
-
-For saved-map navigation, use the same world/model that produced the map. A map from one environment does not describe another.
-
-
-### New terminal for teleoperation
-
-The ROBOTIS “Operate TurtleBot3” section shows only the teleop command. Before running it in a **new Ubuntu/WSL terminal**, run the complete sequence:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-ros2 run turtlebot3_teleop teleop_keyboard
-```
-
-An `export` in the simulator terminal does not configure a separately opened terminal. Repeat the source commands and model setting in **every new terminal** used for teleoperation, SLAM, or navigation. `KeyError: 'TURTLEBOT3_MODEL'` means the model setting is missing in that terminal. Keep keyboard focus in the teleop terminal and use its printed stop key before switching windows.
-
-Use **Waffle** for both the simulator and these nodes. If an existing simulator was launched as Burger, stop its launch and related nodes before relaunching as Waffle; exporting a new value alone does not change an already-running robot. Keep the same model/world for mapping and navigation; recheck any map, goals, and configuration reused from a different model.
+---
 
 ## Part 6 — Fork and clone the course repository
 

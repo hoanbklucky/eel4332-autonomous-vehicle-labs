@@ -1,79 +1,94 @@
 # Lab 4 — Build a Map with SLAM
 
-> **Copying ROBOTIS commands:** A leading `$` is a terminal-prompt symbol, not part of the command. Some copy buttons include it. Copy only the command after `$ `, or paste into the editor first and remove that prefix from each command line. For example, `$ sudo apt update` must be entered as:
->
-> ```bash
-> sudo apt update
-> ```
->
-> If you see `$: command not found`, remove the leading `$ ` and rerun. **Keep dollar signs inside commands**, such as `$HOME`, `$PWD`, `${TURTLEBOT3_MODEL}`, and `$(...)`; those have a different meaning.
-
 ## Mission
 
-Follow the official ROBOTIS tutorial to create and save a map for navigation. The required mapper is **Cartographer**, as used in that tutorial. SLAM Toolbox and the separate Kalman-filter exercise are optional.
+Create and save a map with **Cartographer**, then reuse it in Lab 5. Complete Labs 00–03 first. Earlier Lab 2 installations may use another simulator; check packages below.
 
-## Prerequisites
+Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 
-Complete [Lab 00](../lab00_setup/README.md). Earlier Lab 2 used a different simulator, so completing it does **not** prove that the ROBOTIS packages are installed.
+Commands below are ready to copy: no leading `$` prompt is included. Keep dollar signs *inside* commands, such as `$PWD` and `$(...)`.
 
-### 0. Install/check packages before launching
+Use **Waffle in TurtleBot3 World** throughout. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
 
-Run in Ubuntu/WSL (including VS Code's WSL terminal). Select **Jazzy** on both official setup pages.
 
-1. Follow [ROBOTIS PC Setup — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy), specifically **Install Dependent ROS 2 Packages → Install TurtleBot3 Packages → Environment Configuration**. Keep your existing Ubuntu 24.04, ROS 2 Jazzy, and working Gazebo installation; install only missing dependencies. The PC setup supplies Cartographer, Nav2, and the core TurtleBot3 packages, including `turtlebot3_msgs`.
-2. Follow **Install Simulation Package** in [ROBOTIS Gazebo Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy), then build the workspace. The simulation package is additional to PC Setup; it does not replace it. Use the `jazzy` branch. If a source directory already exists, check it rather than cloning another copy.
-3. Source the built workspace and check packages:
+## 1. Install and verify
+
+If the required packages are already installed, source the workspace and run the checks at the end of this section. Otherwise complete the installation:
+
+### Install packages (once; skip if the checks already pass)
+
+Use an Ubuntu/WSL terminal, not PowerShell. Keep your existing Ubuntu 24.04, ROS 2 Jazzy, and working modern Gazebo installation. Stop old simulations. Use the system ROS terminal for building; if the course Python environment is active, run `deactivate` first.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-ros2 pkg prefix turtlebot3_msgs
-ros2 pkg prefix turtlebot3_description
-ros2 pkg prefix turtlebot3_gazebo
-ros2 pkg prefix turtlebot3_teleop
-ros2 pkg prefix turtlebot3_cartographer
-ros2 pkg prefix cartographer_ros
-ros2 pkg prefix nav2_map_server
+sudo apt update
+sudo apt install git python3-colcon-common-extensions python3-rosdep ros-jazzy-ros-gz ros-jazzy-xacro ros-jazzy-cartographer ros-jazzy-cartographer-ros ros-jazzy-navigation2 ros-jazzy-nav2-bringup
+mkdir -p ~/turtlebot3_ws/src
+cd ~/turtlebot3_ws/src
 ```
 
-Every check must print an installation path. If a package is missing, complete its PC/simulation setup step and source the workspace again before continuing. Do not follow SBC/OpenCR hardware setup for this simulation.
+Download the official Jazzy sources. These commands preserve existing source directories:
 
-Keep `~/turtlebot3_ws` (robot software) separate from your fork of the course repository (lab code/results).
+```bash
+for repository in DynamixelSDK turtlebot3_msgs turtlebot3 turtlebot3_simulations; do
+  if [ ! -d "$repository" ]; then
+    git clone -b jazzy "https://github.com/ROBOTIS-GIT/$repository.git"
+  fi
+  git -C "$repository" branch --show-current
+done
+```
 
-### After building: refresh the terminal environment
+Each branch check should print `jazzy`. If cloning fails or an existing directory is on another branch, stop and ask the instructor; do not delete it or clone duplicate packages elsewhere. `turtlebot3` supplies the core packages; **`turtlebot3_simulations` separately supplies `turtlebot3_gazebo`**.
 
-The ROBOTIS simulation installation section ends with a build, but the current terminal may still have the environment from **before** the new packages were installed. After a successful build, and in every new Ubuntu/WSL terminal used for TurtleBot3, run:
+Install workspace dependencies and build:
+
+```bash
+cd ~/turtlebot3_ws
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
+colcon build --symlink-install
+```
+
+If `rosdep` reports that it is not initialized, run `sudo rosdep init` once, then repeat `rosdep update` and the dependency command. Continue only after dependency installation and the build succeed. Do not use `sudo colcon build`.
+
+Reload the environment **after building**:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export TURTLEBOT3_MODEL=waffle
 ros2 pkg prefix turtlebot3_gazebo
+ros2 pkg prefix turtlebot3_teleop
+ros2 pkg prefix turtlebot3_cartographer
+ros2 pkg prefix turtlebot3_navigation2
 ```
 
-The last command must print an installation path before you launch Gazebo. Sourcing makes already-built packages discoverable; it does not install them. If `turtlebot3_gazebo` is still missing, confirm that you installed **`turtlebot3_simulations` separately from PC Setup** and that its build succeeded. If `install/setup.bash` is missing, complete the build first. Use your actual workspace path if different. Even if you added sourcing to `~/.bashrc`, rerun it in the current terminal after building new packages.
+Every check must print an installation path. Sourcing exposes built packages; it does not install missing ones. Robot software belongs in `~/turtlebot3_ws`; student code/results belong in your course fork.
 
 
-### Choose one world at a time
+## 2. Start the world — Terminal 1
 
-The ROBOTIS page lists **alternative launch choices**, not commands to run together:
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
 
-| Environment | Launch file |
-|---|---|
-| Empty World | `empty_world.launch.py` |
-| TurtleBot3 World | `turtlebot3_world.launch.py` |
-| TurtleBot3 House | `turtlebot3_house.launch.py` |
+Leave running and confirm Gazebo is playing. Do not start Nav2 during mapping.
 
-For this course, use **Waffle in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Use `TURTLEBOT3_MODEL=waffle` in each terminal to match the course's TurtleBot3 World configuration.
+## 3. Start mapping — Terminal 2
 
-To switch worlds: stop robot motion, stop teleoperation and any SLAM/navigation nodes with **Ctrl+C**, then press **Ctrl+C in the terminal running the current Gazebo launch**. Wait for its processes to exit before running the next world's launch command. Closing only the Gazebo window may leave the simulation server running. Start the required nodes again after the new world loads.
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
+```
 
-For saved-map navigation, use the same world/model that produced the map. A map from one environment does not describe another.
+Leave running. RViz2 should open; set Fixed Frame to `map` if needed and check the map, laser scan, and robot. Cartographer supplies the mapper; do not also start SLAM Toolbox.
 
-
-### New terminal for teleoperation
-
-The ROBOTIS “Operate TurtleBot3” section shows only the teleop command. Before running it in a **new Ubuntu/WSL terminal**, run the complete sequence:
+## 4. Explore — Terminal 3
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -82,47 +97,34 @@ export TURTLEBOT3_MODEL=waffle
 ros2 run turtlebot3_teleop teleop_keyboard
 ```
 
-An `export` in the simulator terminal does not configure a separately opened terminal. Repeat the source commands and model setting in **every new terminal** used for teleoperation, SLAM, or navigation. `KeyError: 'TURTLEBOT3_MODEL'` means the model setting is missing in that terminal. Keep keyboard focus in the teleop terminal and use its printed stop key before switching windows.
+Click inside Terminal 3. Use `w/x` to increase/decrease linear velocity, `a/d` to change turning velocity, and `s` or Space to stop. Watch the printed velocities and drive slowly. Every terminal needs its own source/export commands; `KeyError: 'TURTLEBOT3_MODEL'` indicates a missing export.
 
-Use **Waffle** for both the simulator and these nodes. If an existing simulator was launched as Burger, stop its launch and related nodes before relaunching as Waffle; exporting a new value alone does not change an already-running robot. Keep the same model/world for mapping and navigation; recheck any map, goals, and configuration reused from a different model.
+Explore the reachable regions, then revisit an area. Capture comparable RViz2 screenshots before and after the revisit and explain whether a correction is visible. Stop before switching windows.
 
-## Procedure
+## 5. Save your map — Terminal 4
 
-Run commands in **VS Code's integrated terminal connected to WSL** or a separate **Ubuntu/WSL terminal**. Both work; do not use PowerShell. “Remote PC” in the ROBOTIS instructions means your Ubuntu/WSL computer, not a physical robot.
-
-In each new terminal, after completing the official setup:
+Press `s` in Terminal 3 and confirm the robot stops. Keep Gazebo and Cartographer running while saving:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
 export TURTLEBOT3_MODEL=waffle
-```
-
-Use the same model (**Waffle**) and environment (**TurtleBot3 World**) throughout Labs 2, 4, 5, and the final.
-
-1. Stop all previous simulator, mapper, teleoperation, and navigation processes with **Ctrl+C**.
-2. Follow [ROBOTIS SLAM Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy), in order: **Launch Simulation World → Run SLAM Node → Run Teleoperation Node → Save Map**. Keep each long-running node in its own terminal.
-3. Explore slowly and revisit an area. Capture RViz2 screenshots before and after the revisit. Explain whether you actually observe a map correction.
-4. Stop motion using the keyboard node's printed stop key. In a new sourced terminal, save directly into your course results folder:
-
-```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs/lab04_slam
 mkdir -p results
 ros2 run nav2_map_server map_saver_cli -f "$PWD/results/map" --ros-args -p use_sim_time:=true
+realpath results/map.yaml
 ```
 
-Keep both `map.yaml` and its referenced image (normally `map.pgm`). Inspect the image, resolution, origin, and image filename in the YAML. Your path may differ if you cloned elsewhere.
+Use your actual course path if different. Keep `map.yaml` and its referenced image (normally `map.pgm`) together. Inspect the image and YAML's resolution, origin, and image filename. Record the absolute YAML path for Lab 5.
 
-5. Record the map's absolute YAML path with `realpath results/map.yaml`. Use this exact map in Lab 5. Stop motion before ending nodes; close the mapper, teleoperation, and simulator with **Ctrl+C** when finished.
-
-**Use the official TurtleBot3 launch sequence throughout.** Do not combine it with the earlier `nav2_bringup tb3_simulation_launch.py` workflow, standalone SLAM Toolbox, custom TF bridges, or mesh-path workarounds. Old simulator screenshots are not reference output for this workflow.
+After saving, stop teleop, Cartographer, and the simulator with Ctrl+C in their terminals. Restart fresh for a new map; restarting only Gazebo does not clear an existing mapper.
 
 ## What to Submit
 
-- Your map YAML/image pair.
+- Map YAML/image pair.
 - One Gazebo screenshot and two mapping screenshots showing the revisit.
-- A brief `answers.md`: model/world, launch commands, saved-map path, map resolution, observed quality, and one limitation.
-- A short mapping demonstration.
+- Brief `answers.md`: model/world, commands, map path/resolution, observed quality, and one limitation.
+- Short mapping demonstration.
 
 ## Questions
 
@@ -132,10 +134,24 @@ Keep both `map.yaml` and its referenced image (normally `map.pgm`). Inspect the 
 
 ## Optional Background
 
-[SLAM background](OPTIONAL_BACKGROUND.md) and [Kalman-filter extension](ALGORITHM_EXPERIMENT.md) are optional. The background's SLAM Toolbox configuration examples describe a different mapper; they are not required launch instructions.
+[SLAM background](OPTIONAL_BACKGROUND.md) and [Kalman extension](ALGORITHM_EXPERIMENT.md). SLAM Toolbox examples there describe an optional alternative, not the required mapper.
 
 ## Troubleshooting
 
-Confirm **Jazzy**, the sourced TurtleBot3 workspace, `TURTLEBOT3_MODEL=waffle`, and that only one simulator/mapper is running. For an error, record the exact command and full terminal output. The instructor must check the official workflow once on the course WSL image before release.
+- Package not found: confirm installation/build succeeded, then source the workspace in that terminal.
+- No robot motion: click the keyboard terminal, check printed velocities, and confirm Gazebo is playing.
+- No map: inspect Cartographer's full error output and check `ros2 topic echo /scan --once`.
+- Do not combine this workflow with the earlier Nav2-minimal simulator, custom TF bridges, or mesh workarounds.
 
-Continue to [Lab 5 — Navigation](../lab05_navigation/README.md).
+The instructor must test installation, mapping, and map handoff on the course WSL image.
+
+## References
+
+These procedures adapt the official **Jazzy** workflow, with explicit per-terminal environment setup:
+- [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy)
+- [ROBOTIS Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy)
+- [ROBOTIS SLAM Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy)
+- [ROBOTIS Navigation Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy)
+
+
+Continue to [Lab 5](../lab05_navigation/README.md).
