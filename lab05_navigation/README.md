@@ -11,6 +11,19 @@ Commands below are ready to copy: no leading `$` prompt is included. Keep dollar
 Use **Waffle in TurtleBot3 World** throughout. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
 
 
+## What is AMCL?
+
+**AMCL (Adaptive Monte Carlo Localization)** estimates the robot's position and heading **on an existing map**. It combines the saved map, current LiDAR scans, and odometry (estimated motion).
+
+AMCL maintains many candidate poses, called **particles**. As the robot moves and observes its surroundings, candidates whose predicted scans agree with the measured scans become more likely. “Adaptive” means the number of particles changes with localization uncertainty.
+
+| Lab 4 — SLAM | Lab 5 — AMCL |
+|---|---|
+| Builds a map while estimating the robot's pose | Estimates the robot's pose using the saved map |
+| “What does the environment look like, and where am I?” | “Where am I on this map?” |
+
+In RViz2, **2D Pose Estimate** supplies an initial position/heading guess; it does not command the robot to move there. AMCL refines that guess as observations arrive. Check that laser returns align with mapped walls before sending a goal. Nav2 then uses the estimated pose to plan and control motion toward the destination.
+
 ## 1. Install and check packages
 
 Lab 4 must be complete, including the core TurtleBot3 and simulation workspace build. Keep its `map.yaml` and image together. Install navigation and the final-project Python API:
