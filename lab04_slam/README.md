@@ -109,6 +109,15 @@ ros2 run tf2_ros tf2_echo base_link base_scan
 
 Expect repeated translation/rotation output; the tested setup reports approximately `[-0.064, 0.000, 0.122]` m and zero rotation. An initial “frame does not exist” message can appear while the listener receives TF; if transforms follow, the check succeeded. `At time 0.0` is normal for this static sensor mounting transform. Press **Ctrl+C** after confirming output.
 
+<details>
+<summary>Expected output — scan frame and successful TF check</summary>
+
+![Terminal showing base_scan and the successful base_link-to-base_scan transform](images/base_scan_tf_expected.png)
+
+The initial warning is followed by valid transforms. The static mounting transform reports `At time 0.0`.
+
+</details>
+
 This verifies `odom -> base_footprint -> base_link -> base_scan`. If your scan reports another frame, replace only `base_scan` in the command with that exact name. If errors persist without transform output, check the simulator and robot-state publisher before continuing.
 
 **Terminal 3 — standalone mapper:** run the common source/`cd` commands, then leave this running:
