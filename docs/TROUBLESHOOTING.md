@@ -1,6 +1,6 @@
 # Required simulation baseline
 
-For Labs 2, 4, 5, and the final, use the official ROBOTIS Jazzy instructions linked in the lab READMEs. Source `~/turtlebot3_ws/install/setup.bash`, set `TURTLEBOT3_MODEL=burger`, and stop competing simulators/mappers. The older Nav2-minimal mesh errors and custom bridge workarounds do not apply to this baseline. The checks below are general diagnostics, not replacement launch instructions.
+For Labs 2, 4, 5, and the final, use the official ROBOTIS Jazzy instructions linked in the lab READMEs. Source `~/turtlebot3_ws/install/setup.bash`, set `TURTLEBOT3_MODEL=waffle`, and stop competing simulators/mappers. The older Nav2-minimal mesh errors and custom bridge workarounds do not apply to this baseline. The checks below are general diagnostics, not replacement launch instructions.
 
 # Troubleshooting Guide
 

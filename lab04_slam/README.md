@@ -47,7 +47,7 @@ The ROBOTIS simulation installation section ends with a build, but the current t
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=burger
+export TURTLEBOT3_MODEL=waffle
 ros2 pkg prefix turtlebot3_gazebo
 ```
 
@@ -64,12 +64,27 @@ The ROBOTIS page lists **alternative launch choices**, not commands to run toget
 | TurtleBot3 World | `turtlebot3_world.launch.py` |
 | TurtleBot3 House | `turtlebot3_house.launch.py` |
 
-For this course, use **Burger in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Keep `TURTLEBOT3_MODEL=burger` even when a website example shows another model.
+For this course, use **Waffle in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Use `TURTLEBOT3_MODEL=waffle` in each terminal to match the course's TurtleBot3 World configuration.
 
 To switch worlds: stop robot motion, stop teleoperation and any SLAM/navigation nodes with **Ctrl+C**, then press **Ctrl+C in the terminal running the current Gazebo launch**. Wait for its processes to exit before running the next world's launch command. Closing only the Gazebo window may leave the simulation server running. Start the required nodes again after the new world loads.
 
 For saved-map navigation, use the same world/model that produced the map. A map from one environment does not describe another.
 
+
+### New terminal for teleoperation
+
+The ROBOTIS “Operate TurtleBot3” section shows only the teleop command. Before running it in a **new Ubuntu/WSL terminal**, run the complete sequence:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+An `export` in the simulator terminal does not configure a separately opened terminal. Repeat the source commands and model setting in **every new terminal** used for teleoperation, SLAM, or navigation. `KeyError: 'TURTLEBOT3_MODEL'` means the model setting is missing in that terminal. Keep keyboard focus in the teleop terminal and use its printed stop key before switching windows.
+
+Use **Waffle** for both the simulator and these nodes. If an existing simulator was launched as Burger, stop its launch and related nodes before relaunching as Waffle; exporting a new value alone does not change an already-running robot. Keep the same model/world for mapping and navigation; recheck any map, goals, and configuration reused from a different model.
 
 ## Procedure
 
@@ -80,10 +95,10 @@ In each new terminal, after completing the official setup:
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=burger
+export TURTLEBOT3_MODEL=waffle
 ```
 
-Use the same model (**Burger**) and environment (**TurtleBot3 World**) throughout Labs 2, 4, 5, and the final.
+Use the same model (**Waffle**) and environment (**TurtleBot3 World**) throughout Labs 2, 4, 5, and the final.
 
 1. Stop all previous simulator, mapper, teleoperation, and navigation processes with **Ctrl+C**.
 2. Follow [ROBOTIS SLAM Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/slam_simulation/?ros=jazzy), in order: **Launch Simulation World → Run SLAM Node → Run Teleoperation Node → Save Map**. Keep each long-running node in its own terminal.
@@ -121,6 +136,6 @@ Keep both `map.yaml` and its referenced image (normally `map.pgm`). Inspect the 
 
 ## Troubleshooting
 
-Confirm **Jazzy**, the sourced TurtleBot3 workspace, `TURTLEBOT3_MODEL=burger`, and that only one simulator/mapper is running. For an error, record the exact command and full terminal output. The instructor must check the official workflow once on the course WSL image before release.
+Confirm **Jazzy**, the sourced TurtleBot3 workspace, `TURTLEBOT3_MODEL=waffle`, and that only one simulator/mapper is running. For an error, record the exact command and full terminal output. The instructor must check the official workflow once on the course WSL image before release.
 
 Continue to [Lab 5 — Navigation](../lab05_navigation/README.md).

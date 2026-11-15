@@ -20,7 +20,7 @@ The course uses a simulation-first workflow and ends with a **TurtleBot simulati
 
 ## Official simulation tutorials — start here
 
-Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Burger in TurtleBot3 World** throughout.
+Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** throughout.
 
 | Step | Official guide | Course assignment |
 |---|---|---|

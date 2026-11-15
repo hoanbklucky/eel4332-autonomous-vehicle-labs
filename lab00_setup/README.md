@@ -337,7 +337,7 @@ Use the official ROBOTIS instructions for robot packages and simulation. Select 
 
 1. Complete the software/dependency and TurtleBot3 workspace sections of [PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/quick_start_guide/pc_setup/?ros=jazzy).
 2. Complete **Install Simulation Package** and test **TurtleBot3 World** in [Gazebo Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/gazebo_simulation/?ros=jazzy).
-3. Use **Burger** (`TURTLEBOT3_MODEL=burger`) consistently for the course.
+3. Use **Waffle** (`TURTLEBOT3_MODEL=waffle`) consistently for the course.
 
 If Ubuntu 24.04 and ROS 2 Jazzy are already installed, keep them and install only missing dependencies/packages. “Remote PC” means your Ubuntu/WSL computer. SBC, OpenCR, physical-robot bringup, and hardware/network setup are not required for simulation.
 
@@ -348,7 +348,7 @@ In every new Ubuntu terminal after the workspace has been built:
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=burger
+export TURTLEBOT3_MODEL=waffle
 ```
 
 Use VS Code's integrated terminal connected to WSL or a separate Ubuntu terminal. If previously using the course's Nav2 minimal simulator, terminate those processes first. Existing packages can stay installed, but do not mix their launch files, TF bridges, SLAM Toolbox instructions, or mesh workarounds with ROBOTIS commands.
@@ -371,7 +371,7 @@ The ROBOTIS simulation installation section ends with a build, but the current t
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=burger
+export TURTLEBOT3_MODEL=waffle
 ros2 pkg prefix turtlebot3_gazebo
 ```
 
@@ -388,12 +388,27 @@ The ROBOTIS page lists **alternative launch choices**, not commands to run toget
 | TurtleBot3 World | `turtlebot3_world.launch.py` |
 | TurtleBot3 House | `turtlebot3_house.launch.py` |
 
-For this course, use **Burger in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Keep `TURTLEBOT3_MODEL=burger` even when a website example shows another model.
+For this course, use **Waffle in TurtleBot3 World** unless instructed otherwise; Empty World is suitable for an initial installation test. Use `TURTLEBOT3_MODEL=waffle` in each terminal to match the course's TurtleBot3 World configuration.
 
 To switch worlds: stop robot motion, stop teleoperation and any SLAM/navigation nodes with **Ctrl+C**, then press **Ctrl+C in the terminal running the current Gazebo launch**. Wait for its processes to exit before running the next world's launch command. Closing only the Gazebo window may leave the simulation server running. Start the required nodes again after the new world loads.
 
 For saved-map navigation, use the same world/model that produced the map. A map from one environment does not describe another.
 
+
+### New terminal for teleoperation
+
+The ROBOTIS “Operate TurtleBot3” section shows only the teleop command. Before running it in a **new Ubuntu/WSL terminal**, run the complete sequence:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+An `export` in the simulator terminal does not configure a separately opened terminal. Repeat the source commands and model setting in **every new terminal** used for teleoperation, SLAM, or navigation. `KeyError: 'TURTLEBOT3_MODEL'` means the model setting is missing in that terminal. Keep keyboard focus in the teleop terminal and use its printed stop key before switching windows.
+
+Use **Waffle** for both the simulator and these nodes. If an existing simulator was launched as Burger, stop its launch and related nodes before relaunching as Waffle; exporting a new value alone does not change an already-running robot. Keep the same model/world for mapping and navigation; recheck any map, goals, and configuration reused from a different model.
 
 ## Part 6 — Fork and clone the course repository
 

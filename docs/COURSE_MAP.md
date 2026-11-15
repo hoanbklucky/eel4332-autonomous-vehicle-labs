@@ -17,4 +17,4 @@ Labs 4–5 are guided preparation; reuse their maps/configurations in the final.
 
 The [legacy sequence](../optional_legacy/previous_lab_sequence/README.md) remains optional reading. No physical SLAM/Nav2 deployment is required this semester.
 
-The required platform is ROBOTIS TurtleBot3 Burger in TurtleBot3 World, using Jazzy tutorials. Cartographer is the required mapper; SLAM Toolbox examples in optional background are not required procedures.
+The required platform is ROBOTIS TurtleBot3 Waffle in TurtleBot3 World, using Jazzy tutorials. Cartographer is the required mapper; SLAM Toolbox examples in optional background are not required procedures.

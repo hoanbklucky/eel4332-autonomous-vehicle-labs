@@ -33,7 +33,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 
 ## ROS / Gazebo
 
-- Required Labs 2/4/5 and final follow official ROBOTIS Jazzy tutorials: Burger in TurtleBot3 World, Cartographer mapping, TurtleBot3 Nav2 navigation.
+- Required Labs 2/4/5 and final follow official ROBOTIS Jazzy tutorials: Waffle in TurtleBot3 World, Cartographer mapping, TurtleBot3 Nav2 navigation.
 - Link upstream installation/launch instructions; keep course READMEs focused on WSL notes, tasks, and submissions.
 - Do not reintroduce the old nav2_minimal_tb3_sim/standalone SLAM Toolbox launch workflow. Optional background examples are not required procedures.
 

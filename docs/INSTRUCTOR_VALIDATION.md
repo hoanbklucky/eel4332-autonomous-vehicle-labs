@@ -4,7 +4,7 @@ The required baseline follows the official ROBOTIS tutorials linked in Lab 00, L
 
 - [ ] Confirm Ubuntu 24.04, ROS 2 Jazzy, and modern Gazebo.
 - [ ] Complete official PC/software and simulation installation in `~/turtlebot3_ws`.
-- [ ] Record package versions/commits, model (Burger), world (TurtleBot3 World), and start pose.
+- [ ] Record package versions/commits, model (Waffle), world (TurtleBot3 World), and start pose.
 - [ ] Run the updated installation checker after sourcing the workspace.
 - [ ] Complete Lab 2 with official teleoperation and its actual command type.
 - [ ] Run the official Cartographer mapping tutorial; save and inspect the course map pair.

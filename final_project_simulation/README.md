@@ -17,7 +17,7 @@ Your Goosebot autonomous lane-following work is the course's hardware achievemen
 
 Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use the same instructor-validated Gazebo world and TurtleBot model. Do not spend project time building a new world.
 
-The instructor must publish the exact world/model, reset/start pose, baseline configuration, and obstacle placement before the obstacle trial. Use **Burger in TurtleBot3 World** and follow [ROBOTIS Navigation Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy) with your Lab 4 map, as practiced in Lab 5. Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and set `TURTLEBOT3_MODEL=burger` in each terminal. Stop mapping/teleoperation before navigation. Do not use the previous Nav2 minimal simulator.
+The instructor must publish the exact world/model, reset/start pose, baseline configuration, and obstacle placement before the obstacle trial. Use **Waffle in TurtleBot3 World** and follow [ROBOTIS Navigation Simulation — Jazzy](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy) with your Lab 4 map, as practiced in Lab 5. Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and set `TURTLEBOT3_MODEL=waffle` in each terminal. Stop mapping/teleoperation before navigation. Do not use the previous Nav2 minimal simulator.
 
 ## Background
 
