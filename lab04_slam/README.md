@@ -29,45 +29,123 @@ The required work focuses on configuring, building, testing, and evaluating the 
 - `answers.md`: experiment plans and evidence tables.
 - `config/`: your saved SLAM parameter file.
 - `results/`: your maps, measurements, and screenshots.
-- [Simulation runbook](../docs/SIMULATION_WORKFLOW.md): launch, TF bridge, stop, and restart commands.
 
 ## Step-by-Step Procedure
 
-### 1. Prepare your SLAM configuration
+### 1. Open terminals and prepare the configuration
 
-Use WSL/Ubuntu terminals for all commands. From this lab directory:
+Use **VS Code's integrated terminal while connected to WSL** (recommended), or a separate **Ubuntu/WSL terminal**. Both work. In VS Code, confirm **WSL: Ubuntu** at the lower left and choose **Terminal → New Terminal**. Use the **+** button to open additional terminals. Do not use PowerShell.
+
+In **every new terminal**, run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cp "$(ros2 pkg prefix --share slam_toolbox)/config/mapper_params_online_async.yaml" config/slam.yaml
+cd ~/courses/eel4332-autonomous-vehicle-labs/lab04_slam
 ```
 
-`cp` creates your editable copy of the installed SLAM defaults. Inspect `scan_topic`, `odom_frame`, `map_frame`, and `base_frame`; match them to the running robot in the next step. Record their values and the map `resolution` in `answers.md`. Keep the other defaults for the baseline and submit the full configuration.
+Use your actual repository path if different. Save all files before updating. For a clean working tree on course `main`, `git pull --ff-only origin main` gets the latest instructions; preserve any local work before pulling.
 
-### 2. Bring up the robot and verify the inputs
-
-Follow [Mapping mode](../docs/SIMULATION_WORKFLOW.md#mapping-mode). Start the simulator and verify motion-to-base TF before starting the standalone SLAM Toolbox node. Keep AMCL and Nav2 navigation inactive during mapping; do not send navigation goals.
-
-Inspect the actual interfaces:
+In **Terminal 1**, prepare the configuration once:
 
 ```bash
-ros2 topic list -t
+mkdir -p config results
+cp -n "$(ros2 pkg prefix --share slam_toolbox)/config/mapper_params_online_async.yaml" config/slam.yaml
+code config/slam.yaml
+```
+
+`cp -n` preserves an existing configuration. In the YAML, check `scan_topic: /scan`, `odom_frame: odom`, `map_frame: map`, and `base_frame: base_footprint` against the frames checked below. Record these values and `resolution` in `answers.md`. Keep the other defaults.
+
+### 2. Start Gazebo, check TF, and start SLAM
+
+First stop previous simulator, teleoperation, SLAM, and navigation launch processes with **Ctrl+C** in their terminals.
+
+**Terminal 1 — simulator (leave running):**
+
+```bash
+ros2 launch nav2_bringup tb3_simulation_launch.py \
+  headless:=False autostart:=False slam:=False use_sim_time:=True
+```
+
+Gazebo and RViz2 should open. Ensure Gazebo is playing. `autostart:=False` leaves AMCL and Nav2 lifecycle nodes unconfigured rather than starting navigation. `slam:=False` prevents this launch from starting a mapper; you will start one separately. Do not click **Startup**, call the navigation/localization lifecycle managers, or send **Nav2 Goal** commands during mapping.
+
+**Terminal 2 — input checks:** run the common source/`cd` commands from Step 1, then:
+
+```bash
+ros2 lifecycle get /amcl
+ros2 lifecycle get /controller_server
 ros2 topic echo /scan --once
 ros2 topic echo /odom --once
+ros2 run tf2_ros tf2_echo odom base_footprint
+```
+
+AMCL and the controller should report **unconfigured** (neither may be active). Scans and odometry should print messages. The last command checks the robot's odometry-to-base transform: wait for repeated translation/rotation output, then press **Ctrl+C** to stop only this diagnostic.
+
+If `odom -> base_footprint` remains missing after the robot loads, run the course's Gazebo-to-ROS TF bridge in **Terminal 2** and leave it running:
+
+```bash
+ros2 run ros_gz_bridge parameter_bridge \
+  '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
+```
+
+Use another sourced terminal for the remaining checks. Do not add this bridge if TF already works. If it still fails, stop and check the simulator/bridge output before continuing.
+
+Check the remaining transforms, pressing **Ctrl+C** after each prints output:
+
+```bash
+ros2 run tf2_ros tf2_echo base_footprint base_link
+ros2 run tf2_ros tf2_echo base_link SCAN_FRAME
+```
+
+Replace `SCAN_FRAME` with the actual `header.frame_id` printed by `/scan`. This verifies `odom -> base_footprint -> base_link -> sensor`. If your model uses different names, match the YAML to the observed frames rather than inventing a transform.
+
+**Terminal 3 — standalone mapper:** run the common source/`cd` commands, then leave this running:
+
+```bash
+ros2 launch slam_toolbox online_async_launch.py \
+  use_sim_time:=True slam_params_file:="$PWD/config/slam.yaml"
+```
+
+**Terminal 4 — verify mapping:** run the common source/`cd` commands, then:
+
+```bash
+ros2 param get /slam_toolbox use_sim_time
+ros2 topic echo /map --once --qos-durability transient_local
+ros2 run tf2_ros tf2_echo map base_link
+```
+
+Expect `True`, a map message, and repeated transforms. Stop `tf2_echo` with **Ctrl+C**. If the mapper exposes lifecycle states and produces no map, run `ros2 lifecycle get /slam_toolbox`; it should be **active**. If **unconfigured**, run `ros2 lifecycle set /slam_toolbox configure`, then `ros2 lifecycle set /slam_toolbox activate`; if already **inactive**, run only `activate`. Do not start a second mapper.
+
+In RViz2, set **Global Options → Fixed Frame** to `map`. Enable/add **Map** (topic `/map`), **LaserScan** (topic `/scan`), **RobotModel**, and **TF**. The scan should align with nearby mapped walls. Navigation status warnings are expected because navigation is not running.
+
+Before driving, record the scan frame, two advancing scan timestamps, and its rate:
+
+```bash
+ros2 topic echo /scan --once
+ros2 topic echo /scan --once
+ros2 topic info /scan --verbose
 ros2 topic hz /scan
 ```
 
-`list -t` shows names and types; `echo --once` captures one message; `hz` measures arrival rate. Stop `hz` with `Ctrl+C` after at least 10 seconds. Check two scan timestamps while Gazebo is playing and record the sensor frame, rate, and timestamp progression. Check odometry changes during a short drive. Use RViz2's TF display to trace `odom` through the base to the scan frame.
+Stop `hz` after about 10 seconds with **Ctrl+C**. Record the publisher/bridge and a consumer in `answers.md`.
 
-Record the simulated sensor, bridge/publisher, and one observed ROS consumer using `ros2 topic info /scan --verbose`. This is an input check for your map, not a separate architecture report. Resolve missing data or disconnected TF before mapping.
+**Terminal 4 — keyboard driving:** after the checks finish:
+
+```bash
+ros2 topic info /cmd_vel
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+The course expects `geometry_msgs/msg/Twist`. If the topic instead uses `TwistStamped`, run the keyboard node with `--ros-args -p stamped:=true -p use_sim_time:=true` appended, provided your installed keyboard package supports `stamped`; otherwise stop and ask the instructor. Do not mix message types.
+
+Keep keyboard focus in Terminal 4. Use **i** forward, **j/l** turn, **k** stop, and **z** repeatedly to reduce speed. Drive slowly, stop before switching windows, and verify odometry changes during a short drive.
 
 ### 3. Build map A
 
 Plan a route before driving. Define the starting pose, regions to cover, approximate duration, low-speed driving policy, and places you will revisit. Sketch the route in `answers.md` and predict its strengths and weaknesses.
 
-Start SLAM using your configuration as shown in the runbook. In RViz2, set **Fixed Frame** to `map` and display `/map`, the robot, and the laser scan. Use keyboard teleoperation from Lab 2 to explore. Stop at turns when needed, observe map growth, and revisit a distinctive area. Save comparable screenshots before and after revisiting; report whether a correction is actually visible rather than assuming loop closure occurred.
+With the simulator, SLAM, and keyboard nodes from Step 2 running, use keyboard teleoperation to explore. Stop at turns when needed, observe map growth, and revisit a distinctive area. Save comparable screenshots before and after revisiting; report whether a correction is actually visible rather than assuming loop closure occurred.
 
-Stop the robot, then save the map from this lab directory:
+Press **k** in the keyboard terminal to stop the robot. Open **Terminal 5**, run the common source/`cd` commands from Step 1, and save the map:
 
 ```bash
 ros2 run nav2_map_server map_saver_cli -f "$PWD/results/map_a" --ros-args -p use_sim_time:=true
@@ -79,11 +157,23 @@ ros2 run nav2_map_server map_saver_cli -f "$PWD/results/map_a" --ros-args -p use
 
 Plan a second route that changes one exploration factor, such as revisiting a distinctive area versus making a single pass. Keep world, initial pose, SLAM configuration, speed policy, and approximate duration matched. Do not use an aggressive or collision-seeking route.
 
-Stop teleoperation and SLAM, shut down the simulator, and repeat Mapping mode from a fresh launch. This clears both the robot pose and the mapper's previous state. Reuse the same configuration. Execute route B, document deviations, and save `results/map_b` using the same command with a different basename.
+Press **k** to stop motion, then **Ctrl+C** in the keyboard, mapper, optional TF-bridge, and simulator terminals. Repeat Step 2 from a fresh launch at the same starting pose. This clears both the robot pose and the mapper's previous state. Reuse the same configuration. Execute route B, document deviations, and save it in Terminal 5:
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f "$PWD/results/map_b" --ros-args -p use_sim_time:=true
+```
 
 ### 5. Select and hand off a map
 
-Complete the comparison below. Select a map using your evidence. Copy the selected YAML and image together into `results/selected/`; keep the YAML's relative `image` reference valid. Record the selected YAML's absolute WSL path for Lab 5.
+Complete the comparison below. Select a map using your evidence. Copy the selected YAML and image together into `results/selected/`; keep the YAML's relative `image` reference valid. For example, if choosing map A and the generated image is `map_a.pgm`:
+
+```bash
+mkdir -p results/selected
+cp results/map_a.yaml results/map_a.pgm results/selected/
+realpath results/selected/map_a.yaml
+```
+
+Use map B's filenames if selected; use the actual image extension named by the YAML. Record the printed absolute YAML path for Lab 5.
 
 Verify that the image named by the copied YAML exists and opens. The final reuse check is loading this exact YAML in Lab 5 and localizing on it. Do not substitute the simulator's supplied map for your map.
 
@@ -91,7 +181,7 @@ Verify that the image named by the copied YAML exists and opens. The final reuse
 
 Before collecting data, select two identifiable wall segments in the shared region explored by both routes. Obtain reference lengths from the instructor-validated world geometry or another documented independent source; measurements from your SLAM map are not ground truth.
 
-Measure the corresponding wall endpoint coordinates on each map using RViz2's **Publish Point** tool and inspect `/clicked_point`. Record endpoints in metres and compute segment lengths and absolute reference errors. Use the same endpoints and method for both maps. Report map resolution, reference source, and endpoint-selection uncertainty; do not claim accuracy finer than the measurement method supports.
+Measure the corresponding wall endpoint coordinates on each map using RViz2's **Publish Point** tool and inspect `/clicked_point` in Terminal 5 with `ros2 topic echo /clicked_point`. Stop the command with **Ctrl+C** after recording the endpoints. Record endpoints in metres and compute segment lengths and absolute reference errors. Use the same endpoints and method for both maps. Report map resolution, reference source, and endpoint-selection uncertainty; do not claim accuracy finer than the measurement method supports.
 
 If no independent reference is available, report the difference in each wall length between maps as a consistency measure, explicitly labeled **not accuracy**. Also record route duration, visible missing regions, wall duplication, collisions, and whether a revisit visibly changed the map. Choose your map based on these results, not visual attractiveness alone.
 
