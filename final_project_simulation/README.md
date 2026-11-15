@@ -4,7 +4,7 @@
 
 Use TurtleBot in ROS 2 Jazzy and Gazebo Harmonic to visit three delivery locations and return home using your own SLAM map. At each delivery location, stop and wait for 3 seconds of simulation time. No physical robot, object detection, or manipulation is required.
 
-Your Goosebot autonomous lane-following work is the course's hardware achievement. This final assesses map-based autonomy in simulation. Reuse the Lab 4–5 skills and mission code, but create a new map of the supplied campus arena.
+Your Goosebot autonomous lane-following work is the course's hardware achievement. This final assesses map-based autonomy in simulation. Reuse the Lab 4–5 skills and mission code, but create a new SLAM map of your selected final-project world.
 
 ## Learning Objectives
 
@@ -15,9 +15,9 @@ Your Goosebot autonomous lane-following work is the course's hardware achievemen
 
 ## Prerequisites
 
-Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use the provided campus-inspired world with TurtleBot3 Waffle. Students do not need to design a new world.
+Complete [Lab 4](../lab04_slam/README.md) and [Lab 5](../lab05_navigation/README.md). Use TurtleBot3 Waffle and choose one of the environment options below.
 
-Use **Waffle in the supplied campus arena**, following the [campus launch/mapping instructions](campus/README.md). Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and export `TURTLEBOT3_MODEL=waffle` in every terminal. Stop mapping/teleoperation before navigation. The instructor must validate the new world on the course image before release; Lab 5's standard TurtleBot3 World remains a fallback only if the instructor chooses it.
+For the supplied arena, follow the [campus launch/mapping instructions](campus/README.md). For a custom arena, follow the [world-building guide](CREATE_YOUR_OWN_WORLD.md). Source ROS Jazzy and `~/turtlebot3_ws/install/setup.bash` and export `TURTLEBOT3_MODEL=waffle` in every terminal. Stop mapping/teleoperation before navigation. The instructor must validate the new world on the course image before release; Lab 5's standard TurtleBot3 World remains a fallback only if the instructor chooses it.
 
 ## Background
 
@@ -25,7 +25,18 @@ The official ROBOTIS Cartographer tutorial creates your map. During the delivery
 
 The final does not require implementing SLAM, A*, Pure Pursuit, Kalman filtering, a custom Nav2 plugin, autonomous exploration, or a synthetic safety monitor.
 
-## Campus Environment
+## Choose your environment
+
+| Option | Work required |
+|---|---|
+| **A — Supplied campus world (recommended)** | Launch the provided world, build your own SLAM map, and complete the mission. |
+| **B — Your own Gazebo world** | Use the [step-by-step builder guide](CREATE_YOUR_OWN_WORLD.md) to arrange obstacles, define delivery locations, generate/launch the world, then map it with SLAM. |
+
+Both options have the same mission requirements and grading. A custom world is optional; visual complexity earns no extra credit. Either world needs three reachable delivery locations, a home pose, and a reproducible obstacle variant with an alternative route. Keep the chosen world fixed during trials.
+
+The supplied geometric reference map may be used only for instructor-approved checks/fallback. Students normally create their own SLAM map for **either** option.
+
+## Supplied Campus Environment
 
 The supplied images inspired a **schematic 24 × 30 m arena**, not an exact geographic reconstruction. Buildings, a central lake chain, crossings, and yellow delivery pads provide the mission setting. Lake regions are solid obstacles in simulation.
 
@@ -55,9 +66,9 @@ Keep final code and configuration in `final_project_simulation/src/` and `config
 
 ## Step-by-Step Procedure
 
-### 0. Map the campus arena
+### 0. Map your selected arena
 
-Follow the [campus README](campus/README.md) to launch the baseline world, map the required delivery routes with Cartographer, and save `results/campus_map`. Restart cleanly and verify AMCL alignment with this map. Select your delivery/home coordinates in this map frame. The old TurtleBot3 World map does not describe this arena.
+Follow the [campus README](campus/README.md), or the [custom-world guide](CREATE_YOUR_OWN_WORLD.md), to launch your baseline world, map the required routes with Cartographer, and save `results/campus_map` or `results/custom_map`. Restart cleanly and verify AMCL alignment with this map. Select your delivery/home coordinates in this map frame. The old TurtleBot3 World map does not describe this arena.
 
 ### 1. Freeze the mission
 
@@ -106,7 +117,7 @@ Complete three trials, each from a clean simulator launch and reinitialized loca
 
 Use one instructor-approved static obstacle placement, absent from the saved map, that obstructs a baseline route while leaving a feasible alternative. Start a fresh trial with the obstacle already in place before the mission; keep its pose fixed. Do not spawn it onto or immediately in front of a moving robot.
 
-The provided `campus/campus_blocked.sdf` is the second world variant; its [README](campus/README.md) gives the exact launch, barrier dimensions, and world-frame pose. Check that it has collision geometry and is detected by the simulated LiDAR. Students must not improvise moving obstacles or modify the map to hide the challenge.
+For Option A, `campus/campus_blocked.sdf` is the second world variant; its [README](campus/README.md) gives the launch, barrier dimensions, and pose. For Option B, use your generated blocked variant and document its barrier dimensions and pose. Check that it has collision geometry and is detected by the simulated LiDAR. Students must not improvise moving obstacles or modify the map to hide the challenge.
 
 Predict the response, then run the same mission once. Capture RViz2 costmap/path evidence and Gazebo motion. Explain whether you observed local avoidance, a changed global path, recovery, stopping, or failure. A detour alone does not prove global replanning. If the mission fails, retain the logs, diagnose it, and document any additional attempt separately.
 
