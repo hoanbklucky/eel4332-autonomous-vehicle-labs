@@ -30,7 +30,7 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Use the **provided Goosebot model**, add a simulated **2-D LiDAR**, build your own SLAM map, and use **AMCL + Nav2** to reach three delivery locations and return home. Choose the supplied **IST interior** or **Florida Poly campus** world. Physical Goosebot SLAM/Nav2 is not required; your lane-following work is the hardware component.
+Use the **provided Goosebot model with its configured 2-D LiDAR**, build your own SLAM map, and use **AMCL + Nav2** to reach three delivery locations and return home. Choose the supplied **IST interior** or **Florida Poly campus** world. Physical Goosebot SLAM/Nav2 is not required; your lane-following work is the hardware component.
 
 ## Learning objectives
 
@@ -44,11 +44,11 @@ You may use AI tools to help write or modify code, add sensors, configure ROS 2,
 
 Complete Labs 4–5, then the required Goosebot warm-up in Step 1b below. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `$` prompt. **The course instructions use native WSL/Jazzy for both the warm-up and final. Docker is an optional alternative, not an additional requirement.**
 
-The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU, forward ToF, command-derived odometry, and EKF. **The narrow forward ToF is not a 360° mapping LiDAR.** Students add that sensor themselves; no completed LiDAR model is supplied here.
+The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU, forward ToF, command-derived odometry, and EKF. **The narrow forward ToF is not a 360° mapping LiDAR.** The course build helper supplies the 360° LiDAR and bridge automatically. Start with those defaults; inspect/change one LiDAR setting only after completing mapping and saved-map navigation.
 
 The original Goosebot default mode uses a pre-baked map and Gazebo ground-truth localization. **Do not use that mode as your final demonstration.** This project instead uses LiDAR SLAM Toolbox for mapping, then a saved map with AMCL. This differs from the TurtleBot/Cartographer preparation in Lab 4. Stereo RTAB-Map is optional. Do not launch the original `nav2_bringup.launch.py` or `stereo_slam.launch.py` alongside the commands below.
 
-AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's supplied starting configuration uses **NavFn with Dijkstra** for the global path and **DWB** to choose local motion commands. The global costmap follows the full saved map, rather than the original Goosebot's 20 m rolling window. Students must verify/tune the robot footprint and sensor settings.
+AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's supplied starting configuration uses **NavFn with Dijkstra** for the global path and **DWB** to choose local motion commands. The global costmap follows the full saved map, rather than the original Goosebot's 20 m rolling window. Use the supplied footprint and sensor defaults first; tuning comes after baseline mapping/localization/navigation.
 
 ## Provided files and environment choice
 
@@ -90,7 +90,7 @@ sudo apt install -y git python3-colcon-common-extensions python3-rosdep \
   ros-jazzy-ros-gz ros-jazzy-xacro ros-jazzy-robot-state-publisher \
   ros-jazzy-robot-localization ros-jazzy-slam-toolbox \
   ros-jazzy-navigation2 ros-jazzy-nav2-bringup \
-  ros-jazzy-teleop-twist-keyboard ros-jazzy-rtabmap-ros
+  ros-jazzy-teleop-twist-keyboard python3-yaml
 source /opt/ros/jazzy/setup.bash
 ```
 
@@ -122,7 +122,7 @@ ros2 pkg executables goosebot_0
 
 Expected prefix: `$HOME/goosebot_ws/install/goosebot_0`. The helper builds/verifies in its own process; it does not configure the parent terminal. Source this workspace again in every launch terminal. Do not run the install/prefix checks before the build succeeds.
 
-If the source was copied already, skip the clone/copy commands and run the helper from the repository root. It preserves model edits, creates the workspace source link only when absent, and refuses a link/source pointing to another checkout. Inspect and preserve files before changing such a link. The helper does not fetch a missing model; complete the full source-copy step first.
+The helper also supplies the LiDAR link/sensor, `/scan` bridge, and wheel joint-state publisher automatically. If the source was copied already, skip the clone/copy commands and run the helper from the repository root. It preserves model edits, creates the workspace source link only when absent, and refuses a link/source pointing to another checkout. Inspect and preserve files before changing such a link. The helper does not fetch a missing model; complete the full source-copy step first.
 
 
 The executable list must include `cmd_vel_to_odom.py`, `ground_truth_map_odom_bridge.py`, and `stereo_camera_info_fixer.py` before launching. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
@@ -163,7 +163,7 @@ The package's `CMakeLists.txt` must contain `install(PROGRAMS ... DESTINATION li
 
 <a id="goosebot-warm-up"></a>
 
-### 1b. Required Goosebot warm-up — before adding LiDAR
+### 1b. Required Goosebot warm-up — before the main project
 
 Use **native Ubuntu/WSL + ROS 2 Jazzy**, the package built in Step 1, and the **same `~/goosebot_ws` workspace** as your final. No second installation, Docker setup, or robot-model modification is required for this warm-up. If you already completed Step 1, reuse your package/workspace and preserve your edits.
 
@@ -176,7 +176,7 @@ The required warm-up uses a **10 × 8 m open arena with low walls and three obst
 
 </details>
 
-The practice arena's **perfect-map mode** provides both a pre-generated map and Gazebo ground-truth global localization. This checks Goosebot operation and Nav2 integration; **it is not SLAM and does not use AMCL**. This mode is allowed for this warm-up only; the final still requires your added LiDAR, your SLAM map, and AMCL.
+The practice arena's **perfect-map mode** provides both a pre-generated map and Gazebo ground-truth global localization. This checks Goosebot operation and Nav2 integration; **it is not SLAM and does not use AMCL**. This mode is allowed for this warm-up only; the final still requires the supplied LiDAR, your SLAM map, and AMCL.
 
 **Terminal 1 — low-wall practice arena and Goosebot:** stop other simulator/SLAM/navigation launches first.
 
@@ -232,7 +232,7 @@ source ~/goosebot_ws/install/setup.bash
 ros2 launch nav2_bringup rviz_launch.py use_sim_time:=true
 ```
 
-Use Fixed Frame `map`; set the Map display's topic to **`/projected_map`**. Enable RobotModel with `/robot_description` and TF. The forward ToF, if displayed as LaserScan, is **`/tof_front/scan`** and gives only a narrow beam. There is no student-added `/scan` yet. Do not initialize AMCL with 2D Pose Estimate: the ground-truth bridge supplies `map → odom` in this mode.
+Use Fixed Frame `map`; set the Map display's topic to **`/projected_map`**. Enable RobotModel with `/robot_description` and TF. The forward ToF, if displayed as LaserScan, is **`/tof_front/scan`** and gives only a narrow beam. The supplied LiDAR also publishes `/scan`; the warm-up still uses perfect-map localization. Do not initialize AMCL with 2D Pose Estimate: the ground-truth bridge supplies `map → odom` in this mode.
 
 **Terminal 4 — check interfaces, then send one goal:**
 
@@ -288,200 +288,17 @@ Reuse the slow manual-driving command and RViz setup above, but select a reachab
 
 **Docker is optional for both the warm-up and final.** The required course workflow stays native WSL/Jazzy. Students who already use Docker may follow the [upstream Docker setup](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation#2-docker-setup), use the same pinned source revision as Step 1, run ROS commands inside the container, and adapt paths to its filesystem. Keep source/configuration/maps in a persistent host-mounted workspace, retain changes when containers are recreated, and demonstrate the same required outcomes. Do not copy native or old Docker `build/install/log` directories between environments.
 
-**Stereo RTAB-Map is an optional extension**, not a prerequisite. Its [upstream live-stereo mode](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation#32-mode-b--live-stereo-slam) must run separately from perfect-map localization and the final's LiDAR SLAM/AMCL. Running stereo SLAM does not replace the required final LiDAR integration.
+**Stereo RTAB-Map is an optional extension**, not a prerequisite. Its [upstream live-stereo mode](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation#32-mode-b--live-stereo-slam) must run separately from perfect-map localization and the final's LiDAR SLAM/AMCL. Running stereo SLAM does not replace the final mapping/AMCL/Nav2 demonstration.
 
 </details>
 
-### 2. Add your 2-D LiDAR — required student work
+### 2. Use the supplied robot — no sensor editing yet
 
-This walkthrough assumes you have never edited Xacro. You will add a separate LiDAR while keeping the original ToF. You must still inspect your chosen mount, test the scan, and explain your choices.
+The Step 1 build helper automatically configures the copied Goosebot source with a **360° LiDAR on `/scan`**, its ROS bridge, and the wheel joint-state publisher/bridge for RViz. No manual Xacro or bridge editing is required before mapping.
 
-#### 2a. Open the source file and understand the syntax
+**Already completed the old setup?** Save/commit your work, pull the course updates, and run the Step 1 build helper again. It adds missing baseline components, preserves complete existing LiDAR settings, and stops on conflicting/partial edits rather than overwriting them. Then source the workspace and restart the simulator. Do not repeat the upstream clone/copy.
 
-In VS Code's WSL window, open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Edit this source file, not a copy inside `install/`. Save with Ctrl+S. Xacro is XML with reusable values: `<xacro:property name="..." value="..."/>` defines a value, and `${property_name}` uses it. `${base_height/2 + 0.02}` is an expression evaluated when Xacro generates URDF.
-
-| Element | Purpose |
-| --- | --- |
-| `<link>` | A robot part and its coordinate frame. |
-| `<visual>` | Its visible shape. A shape alone does not generate sensor data. |
-| `<collision>` | Its physical collision shape. |
-| `<inertial>` | Its mass and inertia. |
-| `<joint type="fixed">` | Attaches the child link to the parent at a fixed position/orientation. |
-| `<gazebo reference="...">` | Adds simulation settings or a sensor to the named link. |
-| `<sensor type="gpu_lidar">` | Generates simulated range measurements. |
-
-Tags must close: `<link>...</link>`, or use a self-closing tag such as `<mass value="0.05"/>`. XML names are case-sensitive. All new code goes **inside the existing `<robot>...</robot>`**, outside other links/joints/macros. Do not add another `<robot>` element. Paste XML into the editor, not into a terminal.
-
-#### 2b. Create the LiDAR properties, link and joint
-
-**Do not change the original `tof_x_offset` or `tof_z_offset`.** They position the original ToF. In the duplicated LiDAR section shown in the screenshot, rename the properties and every use of them to `lidar_x_offset` and `lidar_z_offset`; also rename the link and joint. Keeping the ToF names in your duplicate creates conflicting definitions or references the wrong part.
-
-Coordinates follow the robot frame: **x forward, y left, z up**, in metres. Joint `xyz` is measured from the parent `base_link` origin (the chassis centre), not from the floor. `rpy` is roll, pitch, yaw in radians. Keep `rpy="0 0 0"` for a level horizontal scan.
-
-For a first trial, use `x=0`, `y=0`, `z=0.18`: centred above the chassis, 18 cm above `base_link`. In the supplied unmodified model, `base_link` is about 3 cm above `base_footprint`, so the scan plane is about 21 cm above that frame. This is a starting mount, not a measured hardware location. Inspect clearance from the camera/bracket and ensure the scan plane is below the walls you want to detect. Change **`lidar_z_offset`**, not the ToF height, when adjusting the LiDAR.
-
-Find the original `tof_front_joint` and its closing `</joint>`. Immediately after it, paste the following. If you already made a duplicate LiDAR link/joint, **replace that duplicate with this example**; keep the original ToF block and add only one LiDAR block.
-
-```xml
-<!-- Separate 2-D LiDAR mount: positions relative to base_link, in metres. -->
-<xacro:property name="lidar_x_offset" value="0.0"/>
-<xacro:property name="lidar_z_offset" value="0.18"/>
-
-<link name="lidar_link">
-  <visual>
-    <geometry><cylinder radius="0.025" length="0.03"/></geometry>
-    <material name="sensor_black"/>
-  </visual>
-  <collision>
-    <geometry><cylinder radius="0.025" length="0.03"/></geometry>
-  </collision>
-  <inertial>
-    <mass value="0.05"/>
-    <inertia ixx="0.0000115625" ixy="0" ixz="0"
-             iyy="0.0000115625" iyz="0" izz="0.000015625"/>
-  </inertial>
-</link>
-
-<joint name="lidar_joint" type="fixed">
-  <parent link="base_link"/>
-  <child link="lidar_link"/>
-  <origin xyz="${lidar_x_offset} 0 ${lidar_z_offset}" rpy="0 0 0"/>
-</joint>
-```
-
-The cylinder is 5 cm wide and 3 cm tall, centred on `lidar_link`. Its inertia values describe this 0.05 kg cylinder. If you change its size/mass, update the inertia consistently. `sensor_black` is an existing material in this model. A fixed joint attaches the sensor without needing a second movable joint or a separate TF broadcaster. The example omits a support mast; any support you add must stay out of the scan plane and be included in the footprint where appropriate.
-
-#### 2c. Add the Gazebo sensor — a separate block later in the file
-
-Search for `<gazebo reference="tof_front_link">`. **Yes, this original ToF already has `type="gpu_lidar"`.** Gazebo simulates its narrow forward beam using two rays only `0.000001` radians apart. Your 360° scanner uses the same sensor type; the angles and sample count change its coverage.
-
-Find the matching closing `</gazebo>` for that ToF block. Immediately after it, paste this **new sibling block**, not inside the original ToF block. If you already copied a sensor block for LiDAR, replace only that copy. Keep the original ToF sensor unchanged.
-
-```xml
-<gazebo reference="lidar_link">
-  <sensor type="gpu_lidar" name="lidar_sensor">
-    <update_rate>10</update_rate>
-    <always_on>true</always_on>
-    <visualize>true</visualize>
-    <topic>scan</topic>
-    <gz_frame_id>lidar_link</gz_frame_id>
-    <lidar>
-      <scan>
-        <horizontal>
-          <samples>720</samples>
-          <resolution>1</resolution>
-          <min_angle>-3.14159</min_angle>
-          <max_angle>3.14159</max_angle>
-        </horizontal>
-        <vertical>
-          <samples>1</samples>
-          <resolution>1</resolution>
-          <min_angle>0</min_angle>
-          <max_angle>0</max_angle>
-        </vertical>
-      </scan>
-      <range>
-        <min>0.12</min>
-        <max>12.0</max>
-        <resolution>0.001</resolution>
-      </range>
-    </lidar>
-  </sensor>
-</gazebo>
-```
-
-| Setting | Meaning |
-| --- | --- |
-| `reference="lidar_link"` and `gz_frame_id=lidar_link` | Attach the simulated sensor to your new mount and label its measurements with that frame. |
-| `name="lidar_sensor"` | Unique sensor name; do not reuse `tof_front_sensor`. |
-| `topic=scan` | Gazebo scan output, bridged to ROS `/scan` below. |
-| Horizontal angles ±3.14159, 720 samples | Approximately 360° coverage with about 0.5° angular spacing. |
-| One vertical sample at angle zero | One horizontal plane, suitable for 2-D SLAM. |
-| Scan `resolution=1` | Keep one output sample per requested scan sample. |
-| Range 0.12–12 m, range resolution 0.001 m | Distance limits and distance resolution; this is different from scan resolution. |
-| Update rate 10 | Target 10 scans per simulated second; wall-clock rate may be lower if simulation runs slowly. |
-
-These examples intentionally keep the original ToF on `tof_front/scan`. Do not globally replace `tof` across the file. Do not copy the old “single-beam ToF” comments into your LiDAR section.
-
-#### 2d. Bridge the new scan to ROS
-
-Open `final_project_simulation/src/goosebot_0/config/ros_gz_bridge.yaml`. If a `/scan` entry is already present from your earlier edits, update that entry rather than adding it again. Otherwise append the following as a new top-level list item, aligned with the existing leading `-` entries. Use spaces, not tabs; do not put it inside another entry or a Markdown code fence in the YAML file. Preserve all existing bridges, including ToF.
-
-```yaml
-- ros_topic_name: /scan
-  gz_topic_name: /scan
-  ros_type_name: sensor_msgs/msg/LaserScan
-  gz_type_name: gz.msgs.LaserScan
-  direction: GZ_TO_ROS
-```
-
-Gazebo's sensor produces measurements, the bridge transfers them into ROS, and TF tells SLAM where the sensor is on the robot. All three are needed. Do not add another EKF or `odom → base_footprint` publisher. The existing odometry is command-derived, not measured wheel-encoder odometry. Check that the robot footprint includes your sensor mount; update **both** costmaps if necessary.
-
-#### 2e. Check syntax before launching
-
-Save both files. Run the following from the course repo root in Ubuntu/WSL. This expands your actual Xacro and checks that the new link/joint and sensor references exist; errors must be fixed before building. It checks the description, not Gazebo runtime behavior.
-
-```bash
-source /opt/ros/jazzy/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 run xacro xacro final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro -o /tmp/goosebot_lidar.urdf
-```
-
-If expansion fails, stop here. Read the line number and check closing tags, quotes, spelling and `${...}` property names. After successful expansion, run:
-
-```bash
-python3 - <<'PY'
-import xml.etree.ElementTree as ET
-r = ET.parse('/tmp/goosebot_lidar.urdf').getroot()
-for tag in ('link', 'joint'):
-    names = [e.get('name') for e in r.findall(tag)]
-    assert len(names) == len(set(names)), f'Duplicate {tag} names'
-assert r.find("link[@name='lidar_link']") is not None, 'Missing lidar_link'
-j = r.find("joint[@name='lidar_joint']")
-assert j is not None and j.get('type') == 'fixed', 'Missing fixed lidar_joint'
-assert j.find('parent').get('link') == 'base_link'
-assert j.find('child').get('link') == 'lidar_link'
-sensors = r.findall("gazebo[@reference='lidar_link']/sensor")
-assert len(sensors) == 1, 'Expected one LiDAR sensor on lidar_link'
-s = sensors[0]
-assert s.get('type') == 'gpu_lidar'
-assert s.findtext('topic') == 'scan'
-assert s.findtext('gz_frame_id') == 'lidar_link'
-print('LiDAR description checks passed; runtime checks are next.')
-PY
-```
-
-#### 2f. Rebuild, relaunch and inspect the scan
-
-Stop the simulator, warm-up perfect-map navigation, and other related launches first. In Ubuntu/WSL:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-cd ~/goosebot_ws
-colcon build --symlink-install --packages-select goosebot_0
-source install/setup.bash
-```
-
-Continue with **Step 3** to spawn the updated robot in IST or campus, then **Step 4** for `/scan`, TF and RViz checks. Existing Gazebo robots do not update when you save the Xacro: you must respawn/relaunch. Even with `--symlink-install`, rebuilding is useful to ensure the installed package/configuration is current.
-
-In RViz, expect the small cylinder above Goosebot and scan returns from surrounding walls on `/scan`, rather than only a narrow forward beam. Expect about 720 range values with this configuration. Rays with no hit within range may have infinite values; you do not need a visible circular outline. If returns hit Goosebot's camera/body, adjust `lidar_x_offset` or `lidar_z_offset`, rebuild, relaunch and repeat. If low walls disappear, the scan may be too high. Verify the mount in a side view as well as from above.
-
-<details>
-<summary>Common first-time Xacro mistakes</summary>
-
-| Symptom | Check |
-| --- | --- |
-| Duplicate link/joint error | Keep only one new `lidar_link` and `lidar_joint`; original ToF names stay unique. |
-| Unknown property | Define `lidar_x_offset` / `lidar_z_offset` before use; use exactly the same spelling in `${...}`. |
-| Visible sensor but no `/scan` | Add the Gazebo sensor as well as the link, preserve the world sensor plugin, and check the new bridge entry. |
-| `/scan` exists but RViz reports a transform error | Check `gz_frame_id`, link/joint names and Step 4 TF commands. |
-| Changes do not appear | Check that you edited the source used by this workspace, then rebuild/source and respawn the robot. |
-| Only a forward beam | Confirm RViz is showing `/scan`, not `/tof_front/scan`; check horizontal angles and samples in the new sensor. |
-
-</details>
-
-Record the mounting position, sensor settings, footprint and what you verified in your own words. Additional sensors are optional; GPS/stereo cameras are not required for this LiDAR workflow.
-
+Use the defaults first: 720 samples, ±π horizontal coverage, one scan plane, 10 Hz, 0.12–12 m range, and a level mount 0.18 m above `base_link`. Finish Steps 3–7 before changing these settings. Your work is to build a map, localize, navigate and evaluate the delivery mission; a short LiDAR experiment comes last in Step 8.
 
 ### 3. Launch your selected world — Terminal 1
 
@@ -578,7 +395,7 @@ for s in r.findall("gazebo/sensor"):
 PY
 ```
 
-Expect your intended workspace prefix, `LiDAR link present: True`, and `lidar_sensor` on `scan`. If absent, the source edit was incomplete or the wrong package is installed/sourced. Finish Step 2, rebuild, source the correct workspace, and restart Terminal 1. A robot already in Gazebo will not acquire a new sensor merely because you saved the file.
+Expect your intended workspace prefix, `LiDAR link present: True`, and `lidar_sensor` on `scan`. If absent, the source edit was incomplete or the wrong package is installed/sourced. Rerun the Step 1 build helper, rebuild, source the correct workspace, and restart Terminal 1. A robot already in Gazebo will not acquire a new sensor merely because you saved the file.
 
 **Then separate Gazebo output from ROS bridging:**
 
@@ -594,14 +411,14 @@ Find the new LiDAR's Gazebo scan topic in the list, distinct from `/tof_front/sc
 | --- | --- |
 | Installed description has no new LiDAR | Fix/source the correct model and respawn. |
 | LiDAR is in the description but no Gazebo scan messages | Check the sensor block is attached to `lidar_link`, `always_on=true`, simulation is playing, and Terminal 1 has no sensor/render errors. Both supplied IST worlds include the Sensors system. |
-| Gazebo scan messages arrive but ROS `/scan` is absent | Check the installed `config/ros_gz_bridge.yaml` has the new top-level bridge entry from Step 2d, with the exact Gazebo topic. Restart the launch to reload it and check Terminal 1 for bridge errors. |
+| Gazebo scan messages arrive but ROS `/scan` is absent | Check the installed `config/ros_gz_bridge.yaml` has the new top-level bridge entry supplied by the Step 1 helper, with the exact Gazebo topic. Restart the launch to reload it and check Terminal 1 for bridge errors. |
 | ROS scan messages arrive but RViz cannot display them | Continue with the TF/frame checks below; this is now a different problem. |
 
 Do not change `gz_frame_id` or add another odometry publisher to fix a missing ROS topic. Share the installed-description check, topic lists and bridge errors if it remains unresolved.
 
 </details>
 
-Expect `lidar_link` and approximately your configured rate while Gazebo is playing. Stop `hz` with Ctrl+C, then run these one at a time (Ctrl+C after each check):
+Expect `lidar_link`. A 10 Hz simulated sensor may measure only about 1.3 Hz in wall-clock time when Gazebo runs at 13% real time. Stop `hz` with Ctrl+C, then run these one at a time (Ctrl+C after each check):
 
 ```bash
 ros2 run tf2_ros tf2_echo base_footprint lidar_link
@@ -755,13 +572,49 @@ Stop all launches and restart Step 3 with `ist/ist_blocked.sdf` (or `campus/camp
 
 For IST the barrier crosses the upper hallway near the central junction at (0.5, 8.2) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
 
+### 8. Explore LiDAR settings — after mapping and localization/navigation
+
+**Do this last**, after you have saved your baseline map and demonstrated AMCL/Nav2. You do not need to build a sensor from scratch.
+
+1. Save/commit your working baseline. Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro` in VS Code.
+2. Find `<sensor type="gpu_lidar" name="lidar_sensor">` and inspect its settings:
+
+   | Setting inside the LiDAR block | Baseline | Meaning |
+   | --- | --- | --- |
+   | `update_rate` | 10 | Scans per simulated second. |
+   | `horizontal/samples` | 720 | Number of directions measured per scan. |
+   | `horizontal/min_angle`, `max_angle` | −3.14159, +3.14159 | Horizontal field of view in radians. |
+   | `vertical/samples` | 1 | A single plane for 2-D SLAM. |
+   | `range/min`, `max` | 0.12, 12.0 | Measurement limits in metres. |
+
+3. Change **one setting only**: for example horizontal samples **720 → 360**, or update rate **10 → 5**. Keep the original ToF and the `scan` topic/`lidar_link` frame unchanged. Do not globally replace values throughout the file.
+4. Save, stop launches with Ctrl+C, rebuild using the Step 1 helper, source your workspace and relaunch Step 3. The helper preserves your complete LiDAR's edited settings.
+5. Inspect `/scan` in RViz and compare with the baseline. Fewer samples give wider angular spacing; a lower update rate gives fewer scans per simulated second. With a slow Gazebo real-time factor, wall-clock `ros2 topic hz /scan` is lower than the sensor's configured rate.
+6. Restore the baseline setting before your final delivery demonstration. Add **two or three sentences** about your change and observation to the existing short explanation; no additional report or video is required.
+
+<details>
+<summary>Optional — how the LiDAR link, joint, sensor and bridge are constructed</summary>
+
+See [the beginner Xacro reference](goosebot/LIDAR_REFERENCE.md) for the complete annotated XML and field-by-field explanation. Building another sensor or changing its mount is optional, not a prerequisite for this project.
+
+</details>
+
 ## What to submit
 
 - **One video, about 3–5 minutes:** show your LiDAR/scan display, mapping and a revisit, saved-map localization, successful navigation to three deliveries and home, and a brief blocked-route attempt. Clips may be joined; do not record the entire setup.
-- **Your fork/code:** modified Goosebot xacro and bridge, full SLAM/Nav2 configuration, saved map YAML/image, and the commands you used. Commit source/configuration; exclude `build/`, `install/`, `log/`, databases, and bags.
+- **Your fork/code:** the configured Goosebot source, SLAM/Nav2 configuration, saved map YAML/image, and the commands you used. Include the single-setting LiDAR experiment or note its restored baseline. Commit source/configuration; exclude `build/`, `install/`, `log/`, databases, and bags.
 - **A short explanation in your own words, about one page:** what you changed; how scans, TF, odometry, SLAM, AMCL, planning and control fit together; one problem/fix; the blocked-route result; and why simulation success does not prove physical Goosebot readiness. List each member's contribution.
 
-No long report, custom planner implementation, or mandatory mission-client implementation is required. Assessment: model/sensor integration 30%, mapping/localization 25%, navigation/obstacle test 25%, explanation/reproducibility 20%. Diagnose and retain failed attempts rather than presenting ground-truth localization as your solution.
+No long report, custom planner implementation, or mandatory mission-client implementation is required. Assessment: mapping/localization 40%, navigation/obstacle test 35%, explanation/reproducibility 20%, end-of-project LiDAR settings observation 5%. Diagnose and retain failed attempts rather than presenting ground-truth localization as your solution.
+
+<details>
+<summary>Optional display troubleshooting — wheels or map rendering</summary>
+
+The course helper supplies wheel joint states for RViz. If only wheel links show transform errors while chassis/LiDAR TF works, first inspect `ros2 topic echo /joint_states --once`; do not add another odometry publisher. Wheel appearance is not a mapping/localization completion requirement.
+
+If RViz reports the shader error `active samplers with a different type refer to the same texture image unit`, save its configuration and stop only RViz. You may try `LIBGL_ALWAYS_SOFTWARE=1 rviz2 --ros-args -p use_sim_time:=true` for that process. This is a rendering diagnostic, may be slower, and is not guaranteed to fix the driver problem. Keep Gazebo/SLAM running and verify map messages independently; do not rebuild the robot to fix a graphics error.
+
+</details>
 
 ## Troubleshooting and references
 
@@ -773,4 +626,4 @@ No long report, custom planner implementation, or mandatory mission-client imple
 
 References: [Goosebot source](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation), [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox), [Nav2 configuration](https://docs.nav2.org/configuration/index.html), [Gazebo sensors](https://gazebosim.org/docs/harmonic/sensors/). All required commands are above.
 
-**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the required maze warm-up, sensor rendering/TF, mapping, saved-map localization, all deliveries, and both blocked variants on the course WSL installation before release. Starting configurations require local verification and may need tuning.
+**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the required open-arena warm-up, sensor rendering/TF, mapping, saved-map localization, all deliveries, and both blocked variants on the course WSL installation before release. Starting configurations require local verification and may need tuning.

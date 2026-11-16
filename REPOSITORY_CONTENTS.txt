@@ -237,3 +237,6 @@ final_project_simulation/warmup/reference.png
 final_project_simulation/warmup/reference.yaml
 final_project_simulation/warmup/warmup.sdf
 final_project_simulation/warmup/warmup_plan.svg
+final_project_simulation/goosebot/configure_goosebot.py
+final_project_simulation/goosebot/provided_lidar.xml
+final_project_simulation/goosebot/LIDAR_REFERENCE.md

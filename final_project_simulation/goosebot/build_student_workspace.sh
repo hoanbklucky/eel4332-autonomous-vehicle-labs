@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a student's Goosebot overlay from this checkout; no Git changes or pushes.
+# Configure and build the supplied Goosebot baseline; no Git commits or pushes.
 set -euo pipefail
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 repo_root="$(cd -- "$script_dir/../.." && pwd -P)"
@@ -53,6 +53,7 @@ source /opt/ros/jazzy/setup.bash
 set -u
 cd "$workspace"
 rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
+python3 "$script_dir/configure_goosebot.py" "$model_source"
 colcon build --symlink-install --packages-select goosebot_0 --cmake-force-configure
 set +u
 source "$workspace/install/setup.bash"

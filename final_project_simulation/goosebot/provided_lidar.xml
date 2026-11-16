@@ -1,0 +1,56 @@
+<!-- Separate 2-D LiDAR mount: positions relative to base_link, in metres. -->
+<xacro:property name="lidar_x_offset" value="0.0"/>
+<xacro:property name="lidar_z_offset" value="0.18"/>
+
+<link name="lidar_link">
+  <visual>
+    <geometry><cylinder radius="0.025" length="0.03"/></geometry>
+    <material name="sensor_black"/>
+  </visual>
+  <collision>
+    <geometry><cylinder radius="0.025" length="0.03"/></geometry>
+  </collision>
+  <inertial>
+    <mass value="0.05"/>
+    <inertia ixx="0.0000115625" ixy="0" ixz="0"
+             iyy="0.0000115625" iyz="0" izz="0.000015625"/>
+  </inertial>
+</link>
+
+<joint name="lidar_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="lidar_link"/>
+  <origin xyz="${lidar_x_offset} 0 ${lidar_z_offset}" rpy="0 0 0"/>
+</joint>
+
+<gazebo reference="lidar_link">
+  <sensor type="gpu_lidar" name="lidar_sensor">
+    <update_rate>10</update_rate>
+    <always_on>true</always_on>
+    <visualize>true</visualize>
+    <topic>scan</topic>
+    <gz_frame_id>lidar_link</gz_frame_id>
+    <lidar>
+      <scan>
+        <horizontal>
+          <samples>720</samples>
+          <resolution>1</resolution>
+          <min_angle>-3.14159</min_angle>
+          <max_angle>3.14159</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>1</samples>
+          <resolution>1</resolution>
+          <min_angle>0</min_angle>
+          <max_angle>0</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.12</min>
+        <max>12.0</max>
+        <resolution>0.001</resolution>
+      </range>
+    </lidar>
+  </sensor>
+</gazebo>
+

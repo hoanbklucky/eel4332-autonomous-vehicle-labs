@@ -1,6 +1,6 @@
 # Simulation workflow index
 
-> **Final-project update:** the required final now uses Goosebot with a student-added LiDAR in IST or campus. Follow [the final README](../final_project_simulation/README.md); TurtleBot commands below apply to Labs 2/4/5. Validate sensor/bridge/TF, LiDAR SLAM, saved-map AMCL/Nav2, and both world variants. The supplied ground-truth mode is used only for the required Goosebot warm-up, not as final SLAM/AMCL evidence.
+> **Final-project update:** the required final now uses Goosebot with a supplied LiDAR in IST or campus. Follow [the final README](../final_project_simulation/README.md); TurtleBot commands below apply to Labs 2/4/5. Validate sensor/bridge/TF, LiDAR SLAM, saved-map AMCL/Nav2, and both world variants. The supplied ground-truth mode is used only for the required Goosebot warm-up, not as final SLAM/AMCL evidence.
 
 Follow the self-contained course READMEs. Required commands are included there; ROBOTIS links are references.
 
