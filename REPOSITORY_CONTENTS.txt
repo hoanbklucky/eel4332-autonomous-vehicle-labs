@@ -240,4 +240,3 @@ final_project_simulation/warmup/warmup_plan.svg
 final_project_simulation/goosebot/configure_goosebot.py
 final_project_simulation/goosebot/provided_lidar.xml
 final_project_simulation/goosebot/LIDAR_REFERENCE.md
-final_project_simulation/goosebot/wait_for_robot.py

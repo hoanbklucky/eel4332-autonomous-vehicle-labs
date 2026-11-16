@@ -37,9 +37,9 @@ After pulling, run final README Step 1b with `warmup/warmup.sdf` and its matchin
 
 ## Sequenced world startup — local pilot required
 
-Offline checks cover named-world verification, server PID detection, helper timeout/mismatch behavior and Python syntax. The new ROS launch sequence itself requires Gazebo testing:
+Offline checks cover explicit-world spawn arguments, server PID detection, create-result callbacks and Python syntax. The previous `gz model` verification gate timed out on the instructor's machine and was removed; it must not block GUI startup. The new ROS launch sequence itself requires Gazebo testing:
 
-- [ ] With no existing server, start IST; confirm server/create/verification precede GUI and `goosebot` is visible in the Entity Tree.
+- [ ] With no existing server, start IST; confirm server/create precede GUI and `goosebot` is visible in the Entity Tree.
 - [ ] Repeat clean start/stop five times; verify no orphan server remains after Ctrl+C and after GUI close.
 - [ ] Try a second launch while the first runs; confirm it refuses with existing PIDs without affecting the first simulation.
 - [ ] Confirm explicit-world spawning and failure shutdown with campus and both blocked variants.

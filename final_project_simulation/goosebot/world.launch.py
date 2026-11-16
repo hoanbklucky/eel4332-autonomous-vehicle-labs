@@ -1,6 +1,5 @@
-"""Start server, spawn in the named world, verify it, then open the GUI."""
+"""Start server, spawn in the named world, then open the GUI on create success."""
 import json
-import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -62,10 +61,6 @@ def start(context):
                             '-z', '0.05', '-Y', str(home.get('yaw', 0))],
                  parameters=[{'robot_description': description_parameter,
                               'use_sim_time': True}])
-    verify = ExecuteProcess(
-        cmd=[sys.executable, str(Path(__file__).with_name('wait_for_robot.py')),
-             '--world', world_name, '--name', 'goosebot', '--timeout', '90'],
-        output='screen')
     state = {'ready': False}
 
     def shutdown(reason):
@@ -74,14 +69,8 @@ def start(context):
     def after_spawn(event, _context):
         if event.returncode != 0:
             return shutdown('Goosebot spawn failed; GUI was not started. See create log above.')
-        return [LogInfo(msg='Spawn accepted. Verifying robot in the requested world before opening GUI...'),
-                verify]
-
-    def after_verify(event, _context):
-        if event.returncode != 0:
-            return shutdown('Robot verification failed; GUI was not started. See verification log above.')
         state['ready'] = True
-        return [LogInfo(msg='GOOSEBOT READY: verified robot; opening Gazebo GUI now.'), gui]
+        return [LogInfo(msg='GOOSEBOT SPAWNED: creation accepted; opening Gazebo GUI now.'), gui]
 
     def startup_timeout(_context):
         if not state['ready']:
@@ -93,7 +82,6 @@ def start(context):
                     f'x={home["xy"][0]} y={home["xy"][1]} z=0.05 yaw={home.get("yaw", 0)}'),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(world.parent)),
         RegisterEventHandler(OnProcessExit(target_action=spawn, on_exit=after_spawn)),
-        RegisterEventHandler(OnProcessExit(target_action=verify, on_exit=after_verify)),
         RegisterEventHandler(OnProcessExit(target_action=server,
             on_exit=lambda _event, _context: shutdown('Gazebo server exited; stopping the course launch.'))),
         RegisterEventHandler(OnProcessExit(target_action=gui,

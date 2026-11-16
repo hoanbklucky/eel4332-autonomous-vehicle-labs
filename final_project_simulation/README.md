@@ -312,7 +312,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/ist/ist.sdf"
 ```
 
-**Expected startup:** Terminal 1 first starts the Gazebo server without a window, spawns **`goosebot` into the explicitly named world**, and verifies its server-side pose. It then prints **`GOOSEBOT READY`** and opens the GUI. A short wait before the window appears is intentional; do not start another launch or `gz sim -g` while waiting. Startup failures/timeouts stop this launch instead of silently opening an empty GUI.
+**Expected startup:** Terminal 1 starts the Gazebo server, spawns **`goosebot` into the explicitly named world**, then prints **`GOOSEBOT SPAWNED`** and opens the GUI after the create service accepts the robot. No `gz model` query is required before the window can open. Do not start another launch or `gz sim -g` while this launch starts. If spawning fails, the launch stops with an error.
 
 If it reports **Gazebo server(s) already running**, stop the old simulation first. The launcher lists the PIDs and refuses to start; it does not kill other processes or spawn into the first world it finds. Use `pgrep -af 'gz sim|gz-sim'` to inspect leftovers. After a normal exit, wait for the launch terminal's prompt before restarting.
 
