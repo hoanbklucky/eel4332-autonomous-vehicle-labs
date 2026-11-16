@@ -337,6 +337,10 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
+![Expected campus launch: Goosebot on the yellow home marker at IST south end, with campus scenery grouped in the Entity Tree](images/campus_ist_south_start.png)
+
+*Expected campus view: Goosebot starts at IST’s south end on the yellow Home marker. The Entity Tree lists `campus`, `sun`, and `goosebot` separately.*
+
 See [the campus guide](campus/README.md) for expected spawn, mapping, and blocked-world instructions. The wrapper reads the home pose from the world's adjacent `mission.json`, adds mesh lookup paths, and starts the server/robot/GUI in order. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
 
 #### Find Goosebot in the large world

@@ -38,6 +38,10 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
 
 Expect one collapsed **campus** scenery group and a separate **goosebot** in Gazebo's Entity Tree, at IST's south end at **(-8.500, 9.500) m**, yaw **1.180 rad** (toward IST). The opening camera is aimed at Goosebot here. Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
 
+![Expected Gazebo campus view with Goosebot at IST south end and a collapsed campus scenery group](../images/campus_ist_south_start.png)
+
+*Expected launch result: Goosebot is visible on the yellow Home marker at IST’s south end. Expand `campus` to inspect scenery; `goosebot` remains a separate Entity Tree entry.*
+
 ### Updating an existing installation
 
 Pull the current course files after saving your local edits. The corrected meshes are committed; no mesh generation or ROS rebuild is required for the mesh repair itself. Re-run the Step 1 build/setup helper once to install the accompanying Python shutdown fix, then source the workspace again.
