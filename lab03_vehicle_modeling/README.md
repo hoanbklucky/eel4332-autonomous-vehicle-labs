@@ -1,5 +1,22 @@
 # Lab 3 — Differential-Drive Odometry and Vehicle Modeling
 
+## Open in VS Code through WSL
+
+After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+code .
+```
+
+Confirm VS Code shows **WSL: Ubuntu** (or your Ubuntu distribution) in the lower-left corner. Open `lab03_vehicle_modeling/README.md` in Explorer. Choose **Terminal → New Terminal**; when working from this lab directory, run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs/lab03_vehicle_modeling
+```
+
+Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
+
 ## Before You Begin — Update Course Files
 
 In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:

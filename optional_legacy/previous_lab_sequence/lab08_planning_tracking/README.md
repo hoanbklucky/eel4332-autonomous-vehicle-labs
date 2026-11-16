@@ -1,5 +1,22 @@
 # Lab 8 — Path Planning and Path Tracking
 
+## Open in VS Code through WSL
+
+After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+code .
+```
+
+Confirm VS Code shows **WSL: Ubuntu** (or your Ubuntu distribution) in the lower-left corner. Open `optional_legacy/previous_lab_sequence/lab08_planning_tracking/README.md` in Explorer. Choose **Terminal → New Terminal**; when working from this lab directory, run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs/optional_legacy/previous_lab_sequence/lab08_planning_tracking
+```
+
+Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
+
 > **Optional legacy exercise.** This is part of the previous six-lab sequence. Its original requirements and numbering apply only if the instructor assigns this archived version. Required algorithm implementations now live in the active Labs 4 and 5. The current required sequence is [Lab 4 - SLAM](../../../lab04_slam/README.md) and [Lab 5 - Nav2 Navigation](../../../lab05_navigation/README.md).
 
 ## Before You Begin — Update Course Files
