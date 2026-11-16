@@ -142,7 +142,7 @@ ls -l "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py"
 test -x "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py" && echo "Executable is ready"
 ```
 
-Expect all three executable names listed above and **Executable is ready**. Retry the maze launch only after a successful build/check. The package prefix must belong to **~/goosebot_ws**; if it names another workspace, open a fresh terminal and source the correct one.
+Expect all three executable names listed above and **Executable is ready**. Retry the warm-up launch only after a successful build/check. The package prefix must belong to **~/goosebot_ws**; if it names another workspace, open a fresh terminal and source the correct one.
 
 If the first `ls` reports no such file, the source copy is incomplete. Repeat Step 1's **whole-package recursive copy from the pinned source** into `final_project_simulation/src/`, preserving your existing edits. Do not copy old build/install/log directories or place Python files manually inside `install/`.
 
@@ -156,15 +156,25 @@ The package's `CMakeLists.txt` must contain `install(PROGRAMS ... DESTINATION li
 
 Use **native Ubuntu/WSL + ROS 2 Jazzy**, the package built in Step 1, and the **same `~/goosebot_ws` workspace** as your final. No second installation, Docker setup, or robot-model modification is required for this warm-up. If you already completed Step 1, reuse your package/workspace and preserve your edits.
 
-The supplied maze's **perfect-map mode** provides both a pre-generated map and Gazebo ground-truth global localization. This checks Goosebot operation and Nav2 integration; **it is not SLAM and does not use AMCL**. This mode is allowed for this warm-up only; the final still requires your added LiDAR, your SLAM map, and AMCL.
+The required warm-up uses a **10 × 8 m open arena with low walls and three obstacles**, so Goosebot remains visible and there is room to steer. The original tall-wall maze is optional below. Pull the latest course repo to obtain these assets; rebuilding Goosebot is unnecessary for a world/map change.
 
-**Terminal 1 — supplied maze and Goosebot:** stop other simulator/SLAM/navigation launches first.
+<details>
+<summary>Preview — simple practice arena</summary>
+
+![Low-wall arena, spawn and example goal](warmup/warmup_plan.svg)
+
+</details>
+
+The practice arena's **perfect-map mode** provides both a pre-generated map and Gazebo ground-truth global localization. This checks Goosebot operation and Nav2 integration; **it is not SLAM and does not use AMCL**. This mode is allowed for this warm-up only; the final still requires your added LiDAR, your SLAM map, and AMCL.
+
+**Terminal 1 — low-wall practice arena and Goosebot:** stop other simulator/SLAM/navigation launches first.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch goosebot_0 spawn_robot.launch.py \
-  world:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/worlds/maze.world" x:=-0.5
+  world:="$PWD/final_project_simulation/warmup/warmup.sdf" x:=-3.5 y:=-2.5 yaw:=0.0
 ```
 
 **Terminal 2 — manual driving:**
@@ -172,19 +182,34 @@ ros2 launch goosebot_0 spawn_robot.launch.py \
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
+  --ros-args -p speed:=0.1 -p turn:=0.5
 ```
 
-Focus Terminal 2, follow its printed keys, and drive a short distance. Stop the robot and quit teleop with Ctrl+C. For a repeatable navigation check, stop Terminal 1 too and relaunch the maze at the original spawn pose.
+Click inside Terminal 2 and use **lowercase keys**, with Shift and Caps Lock off. Goosebot uses different keys from TurtleBot teleop:
+
+| Key | Effect |
+| --- | --- |
+| `i` | Drive forward |
+| `,` | Drive backward |
+| `j` / `l` | Turn left / right |
+| `k` | Stop |
+| `w` / `x` | Increase / decrease the linear speed setting |
+| `q` / `z` | Increase / decrease both speed settings |
+
+**A changed “speed/turn” number only changes the settings; it does not command movement.** Press `i` to move. Start at 0.1 m/s; restarting the command above resets these settings. Keep Gazebo playing and stop Nav2 while driving manually. Drive a short distance, then press `k`. Stop the robot and quit teleop with Ctrl+C. For a repeatable navigation check, stop Terminal 1 too and relaunch the practice arena at the original spawn pose.
 
 **Terminal 2 — supplied perfect-map Nav2:** run this after teleop has stopped. Keep its original model-specific configuration; the final's LiDAR configuration is used later.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch goosebot_0 nav2_bringup.launch.py slam:=false use_sim_time:=true \
-  map:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/maps/maze.yaml"
+  map:="$PWD/final_project_simulation/warmup/reference.yaml"
 ```
+
+Use this arena's `reference.yaml` with `warmup.sdf`; **do not use the maze map with the practice arena**. The supplied map is generated from obstacle geometry and is not a student SLAM result.
 
 **Terminal 3 — RViz:**
 
@@ -204,14 +229,46 @@ source ~/goosebot_ws/install/setup.bash
 ros2 topic echo /odometry/filtered --once
 ros2 topic echo /tof_front/scan --once --field header.frame_id
 ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
-  "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 2.0, y: -4.5}, orientation: {w: 1.0}}}}" --feedback
+  "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 3.0, y: -2.5}, orientation: {w: 1.0}}}}" --feedback
 ```
 
 Expect odometry/sensor messages, robot movement in Gazebo, and a **SUCCEEDED** action result. You may instead select one reachable free-space Nav2 Goal in RViz. If TF is missing, inspect `ros2 run tf2_ros tf2_echo odom base_footprint` in a sourced terminal; stop the check with Ctrl+C. Resolve warm-up startup/motion problems before modifying the model.
 
 **Evidence:** one screenshot showing successful navigation and **two sentences in your own words** explaining where the map and localization come from, and why this does not demonstrate SLAM/AMCL. An instructor-observed in-class demonstration can replace the submission. No separate video or long report is needed.
 
-**Finish:** stop Nav2, RViz and the maze with Ctrl+C. Continue with Step 2 in this same source/workspace. Keep the warm-up's perfect-map/ground-truth launches stopped while running final-project SLAM or AMCL; each mode must have only one `map → odom` publisher.
+**Finish:** stop Nav2, RViz and the practice arena with Ctrl+C. Continue with Step 2 in this same source/workspace. Keep the warm-up's perfect-map/ground-truth launches stopped while running final-project SLAM or AMCL; each mode must have only one `map → odom` publisher.
+
+<details>
+<summary>Troubleshooting — keyboard input but no motion</summary>
+
+Check terminal focus, lowercase movement keys, and that Gazebo is playing. Stop other teleop/Nav2 processes that may also publish velocity commands. In a separate sourced terminal, run `ros2 topic echo /cmd_vel`, then press `i` in teleop: expect nonzero `linear.x`. A bridge message saying it passed a Twist confirms receipt, not physical movement. If nonzero commands arrive but Goosebot stays still, save the full simulator/bridge log for troubleshooting. Press `k` to stop and Ctrl+C to end the topic check.
+
+</details>
+
+<details>
+<summary>Optional challenge — original tall-wall maze</summary>
+
+The original maze has narrow passages and tall textured walls that obstruct the camera. It is not required for warm-up credit. Stop all practice-arena launches first. In Terminal 1 use:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 launch goosebot_0 spawn_robot.launch.py \
+  world:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/worlds/maze.world" x:=-0.5
+```
+
+For perfect-map navigation, Terminal 2 must use its matching map:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 launch goosebot_0 nav2_bringup.launch.py slam:=false use_sim_time:=true \
+  map:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/maps/maze.yaml"
+```
+
+Reuse the slow manual-driving command and RViz setup above, but select a reachable free-space goal on the maze map instead of using the arena's example coordinates.
+
+</details>
 
 <details>
 <summary>Optional alternatives — Docker and stereo SLAM</summary>

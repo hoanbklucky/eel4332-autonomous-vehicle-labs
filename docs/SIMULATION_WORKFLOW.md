@@ -10,7 +10,7 @@ Follow the self-contained course READMEs. Required commands are included there; 
 | Launch and drive | [Lab 2](../lab02_turtlebot_playground/README.md) |
 | Cartographer mapping and map saving | [Lab 4](../lab04_slam/README.md) |
 | Saved-map Nav2 navigation | [Lab 5](../lab05_navigation/README.md) |
-| Required Goosebot maze warm-up | [Final README, Step 1b](../final_project_simulation/README.md#goosebot-warm-up) |
+| Required Goosebot open-arena warm-up | [Final README, Step 1b](../final_project_simulation/README.md#goosebot-warm-up) |
 | Delivery mission and evaluation | [Final](../final_project_simulation/README.md) |
 
 Lab 2 and the first environment in Labs 4–5 use Waffle/World; Labs 4–5 also use Waffle Pi/House. The final uses its own Goosebot/LiDAR SLAM Toolbox + AMCL/Nav2 procedure in IST or campus. Keep these launch workflows separate.

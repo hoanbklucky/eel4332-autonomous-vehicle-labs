@@ -70,7 +70,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
 | [04 - SLAM](lab04_slam/README.md) | Map World and House | Map both environments with Cartographer; retain separate maps and reuse both in Lab 5 |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate in World and House | Use each matching map/model; reach one World goal and two House goals in different rooms |
-| [Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) | Verify the supplied Goosebot in its maze | Drive manually, reach one goal with the perfect-map setup; screenshot + two sentences or in-class demo |
+| [Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) | Verify the supplied Goosebot in the low-wall practice arena | Drive manually, reach one goal with the perfect-map setup; screenshot + two sentences or in-class demo |
 | [Final](final_project_simulation/README.md) | Goosebot delivery in IST or campus simulation | Add/bridge LiDAR, create a map, localize, navigate to three deliveries/home, test a blocked route |
 
 ## How these labs map to the course

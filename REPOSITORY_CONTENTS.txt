@@ -231,3 +231,9 @@ optional_legacy/previous_lab_sequence/lab09_integration_safety/answers.md
 optional_legacy/previous_lab_sequence/lab09_integration_safety/results/.gitkeep
 optional_legacy/previous_lab_sequence/lab09_integration_safety/src/safety_monitor.py
 requirements.txt
+
+final_project_simulation/warmup/generate_warmup.py
+final_project_simulation/warmup/reference.png
+final_project_simulation/warmup/reference.yaml
+final_project_simulation/warmup/warmup.sdf
+final_project_simulation/warmup/warmup_plan.svg

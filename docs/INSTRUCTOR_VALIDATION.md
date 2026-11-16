@@ -25,3 +25,8 @@ Use [the final README](../final_project_simulation/README.md). Its required sens
 - [ ] Verify students can follow the self-contained instructions and meet the simplified video/source/short-explanation submission.
 
 Physical Goosebot SLAM/Nav2, stereo RTAB-Map, mission-client programming, and separate algorithm implementations remain optional.
+
+
+## Goosebot open-arena warm-up pilot
+
+After pulling, run final README Step 1b with `warmup/warmup.sdf` and its matching `reference.yaml`. Check low walls and visible robot, lowercase `i/j/l/k` motion at 0.1 m/s, `/cmd_vel`, odometry/TF, `/projected_map`, and the (3.0, -2.5) Nav2 goal. Stop teleop before Nav2. Generated geometry/map consistency and inflated-grid connectivity are offline checks only; Gazebo/Goosebot/Nav2 require a local runtime pilot. Keep the original maze optional and do not use perfect localization for final SLAM/AMCL evidence.

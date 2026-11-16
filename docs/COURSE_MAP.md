@@ -22,4 +22,4 @@ Lab 2 and the first environment in Labs 4–5 use Waffle/World; Labs 4–5 also 
 
 The warm-up and final use the same native Ubuntu/WSL Jazzy workspace. Docker is an optional alternative. Warm-up evidence is one screenshot plus two sentences (or an observed in-class demonstration); supplied perfect-map localization does not count as SLAM/AMCL.
 
-Lab 4 uses Waffle for World and Waffle Pi for House. Submit two videos, one per environment, each showing exploration and revisit. Lab 5 uses both maps: one World goal and two House goals in different rooms, with one joined video and a short explanation. Goosebot source scripts require executable permission and a successful package install check before the maze warm-up.
+Lab 4 uses Waffle for World and Waffle Pi for House. Submit two videos, one per environment, each showing exploration and revisit. Lab 5 uses both maps: one World goal and two House goals in different rooms, with one joined video and a short explanation. Goosebot source scripts require executable permission and a successful package install check before the open-arena warm-up.
