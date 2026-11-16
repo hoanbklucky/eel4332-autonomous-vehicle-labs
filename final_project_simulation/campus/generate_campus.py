@@ -157,6 +157,59 @@ def validate():
     print('All delivery stops reachable in baseline and blocked geometry (0.4 m grid clearance).')
 
 
+
+def organize_campus(world):
+    """Separate overlapping ground visuals; nest static scenery at identity."""
+    surfaces=[]
+    for model in world.findall('model'):
+        name=model.get('name')
+        if not (name=='ground' or name.startswith('delivery_pad_')
+                or name in {v['id'] for key in ('parking','sports') for v in DATA[key]}
+                or any(name.startswith(v['id']+'_') for v in DATA['paths'])):
+            continue
+        if model.find('.//collision') is not None or name.startswith('delivery_pad_'):
+            continue
+        pose=model.find('pose')
+        xyzrpy=list(map(float,pose.text.split())) if pose is not None else [0.0]*6
+        size=model.find('.//visual/geometry/box/size')
+        if size is not None:
+            w,d,h=map(float,size.text.split());x,y,z,_,_,yaw=xyzrpy
+            ca,sa=math.cos(yaw),math.sin(yaw)
+            pts=[(x+ca*u-sa*v,y+sa*u+ca*v) for u,v in
+                 [(-w/2,-d/2),(w/2,-d/2),(w/2,d/2),(-w/2,d/2)]]
+            top=z+h/2
+        else:
+            uri=model.findtext('.//visual/geometry/mesh/uri')
+            vertices=[list(map(float,line.split()[1:])) for line in
+                      (ROOT/uri).read_text().splitlines() if line.startswith('v ')]
+            pts=[v[:2] for v in vertices];top=max(v[2] for v in vertices)
+        bounds=(min(p[0] for p in pts),min(p[1] for p in pts),
+                max(p[0] for p in pts),max(p[1] for p in pts))
+        # Conservative AABB overlap includes crossings and adjacent segment joins.
+        used={layer for other,layer in surfaces
+              if bounds[0]<=other[2] and other[0]<=bounds[2]
+              and bounds[1]<=other[3] and other[1]<=bounds[3]}
+        layer=0
+        while layer in used:layer+=1
+        surfaces.append((bounds,layer))
+        xyzrpy[2]+=.006+.003*layer-top
+        if pose is None:pose=ET.SubElement(model,'pose')
+        pose.text=' '.join(f'{v:.9f}' for v in xyzrpy)
+    highest=.006+.003*max((layer for _,layer in surfaces),default=0)
+    for model in world.findall('model'):
+        if model.get('name').startswith('delivery_pad_'):
+            pose=model.find('pose');v=list(map(float,pose.text.split()))
+            v[2]=highest+.01+.025/2;pose.text=' '.join(map(str,v))
+    campus=ET.SubElement(world,'model',name='campus')
+    ET.SubElement(campus,'static').text='true'
+    ET.SubElement(campus,'pose').text='0 0 0 0 0 0'
+    for model in list(world.findall('model')):
+        if model is not campus:
+            world.remove(model);campus.append(model)
+    print(f'Campus scenery grouped; {len(surfaces)} ground visuals in '
+          f'{1+max((layer for _,layer in surfaces),default=0)} separated layers.')
+
+
 def write_world(blocked):
     root=ET.Element('sdf',version='1.8');world=ET.SubElement(root,'world',name='default')
     p=ET.SubElement(world,'physics',name='physics',type='ignored')
@@ -193,6 +246,7 @@ def write_world(blocked):
     for i,v in enumerate(DATA['stops']):box(world,'delivery_pad_'+str(i),*v['xy'],.7,.7,.025,'#ffda39')
     if blocked:
         b=DATA['barrier'];box(world,'causeway_barrier',b['x'],b['y'],b['width'],b['depth'],b['height'],'#f3a42d',yaw=b['yaw'],collision=True)
+    organize_campus(world)
     ET.indent(root)
     (ROOT/('campus_blocked.sdf' if blocked else 'campus.sdf')).write_text(ET.tostring(root,encoding='unicode')+'\n')
 

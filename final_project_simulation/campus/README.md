@@ -36,7 +36,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
-Expect **goosebot** in Gazebo's Entity Tree, near IST at **(-15.025, 17.888) m**, yaw 0 (east). Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
+Expect one collapsed **campus** scenery group and a separate **goosebot** in Gazebo's Entity Tree, near IST at **(-15.025, 17.888) m**, yaw 0 (east). Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
 
 ### Updating an existing installation
 
@@ -91,3 +91,8 @@ Generated OBJ files include a unit normal for every triangle corner, including c
 - Map data **© OpenStreetMap contributors**, [ODbL 1.0](https://www.openstreetmap.org/copyright); the derivative footprint database is provided in `layout.json` under ODbL. Source way IDs, projection origin, and snapshot date are recorded there. No online map fetch is needed to run the world.
 - User-supplied `2026_Printable_Campus_Map_JJ_digital.pdf`: building names and approximate additions checked against its legend. PDF-derived additions are identified individually in layout.json.
 - The Google Maps short link could not be retrieved during authoring; no Google imagery or geometry is embedded. This model uses the geographic OSM outlines plus the supplied PDF, not a reproduction of Google's 3-D buildings.
+
+
+### Flashing road/path surfaces
+
+Overlapping decorative road segments previously shared the same height, causing z-fighting (flickering as the camera moves). The generator now assigns overlapping ground decorations distinct heights in 3 mm increments and lifts delivery markers above them. This changes visual surfaces only; ground/obstacle collisions, the reference map and mission poses are unchanged. Both world variants group scenery under the identity-pose static `campus` model; expand its arrow to inspect individual items. Goosebot and the sun remain separate. After pulling, stop the simulation with Ctrl+C and relaunch; no ROS rebuild is needed for these world changes. Rendering still requires a pilot check on the course WSL installation.
