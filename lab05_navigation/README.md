@@ -1,5 +1,34 @@
 # Lab 5 — Navigate on Your Map
 
+## Before you start — use the current course files
+
+**Expected branch: `main`.** This is the current `main` assignment. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+
+In Ubuntu/WSL, save all editor files and check:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git remote -v
+git branch --show-current
+git status --short
+```
+
+`origin` must be your GitHub fork; `upstream` must be `hoanbklucky/eel4332-autonomous-vehicle-labs`. The branch must match the expected name. **If the branch differs or status lists changes, stop here:** [save/commit your work and follow the branch/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before proceeding. Do not discard edits, especially robot Xacro/configuration changes or maps.
+
+Once on the correct branch with a clean working tree:
+
+```bash
+git fetch upstream &&
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
+git log -1 --oneline
+```
+
+Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
+
+**Lab 5 version check:** use **both maps from current Lab 4**: one World goal and two House goals in different rooms. Keep the matching model/map pair; do not follow an archived navigation handout.
+
 > [!IMPORTANT]
 > **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
 >
