@@ -2,7 +2,7 @@
 
 All required commands and the end-of-project LiDAR settings activity are in the [main final-project README](../README.md).
 
-- `world.launch.py` reuses the provided Goosebot spawn launch and reads the chosen world's `mission.json`. It does not launch any global localizer.
+- `world.launch.py` owns a separate server/GUI startup sequence, reads the chosen world's `mission.json`, explicitly selects the spawn world, and verifies the robot with `wait_for_robot.py` before opening the GUI. It rejects existing Gazebo servers and shuts down its owned processes together. It does not launch any global localizer.
 - `slam_goosebot.yaml` is a starting LiDAR SLAM Toolbox configuration.
 - `nav2_goosebot.yaml` is a full starting saved-map AMCL/Nav2 configuration: `/scan`, `base_footprint`, `/odometry/filtered`, full-map global costmap, NavFn/Dijkstra and DWB. Verify/tune it locally.
 

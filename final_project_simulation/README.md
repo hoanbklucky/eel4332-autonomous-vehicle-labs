@@ -312,7 +312,13 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/ist/ist.sdf"
 ```
 
-For campus, replace the final path with `final_project_simulation/campus/campus.sdf`. The wrapper reads the home pose from the world's adjacent `mission.json` and adds mesh lookup paths. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
+**Expected startup:** Terminal 1 first starts the Gazebo server without a window, spawns **`goosebot` into the explicitly named world**, and verifies its server-side pose. It then prints **`GOOSEBOT READY`** and opens the GUI. A short wait before the window appears is intentional; do not start another launch or `gz sim -g` while waiting. Startup failures/timeouts stop this launch instead of silently opening an empty GUI.
+
+If it reports **Gazebo server(s) already running**, stop the old simulation first. The launcher lists the PIDs and refuses to start; it does not kill other processes or spawn into the first world it finds. Use `pgrep -af 'gz sim|gz-sim'` to inspect leftovers. After a normal exit, wait for the launch terminal's prompt before restarting.
+
+The GUI and server are owned by this one course launch: closing the GUI requests shutdown of its other processes too. **Ctrl+C in Terminal 1 remains the standard way to stop everything.** If the server fails, the launch shuts down its GUI/ROS nodes. This is different from manually starting a GUI-only process.
+
+For campus, replace the final path with `final_project_simulation/campus/campus.sdf`. The wrapper reads the home pose from the world's adjacent `mission.json`, adds mesh lookup paths, and starts the server/robot/GUI in order. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
 
 #### Find Goosebot in the large world
 

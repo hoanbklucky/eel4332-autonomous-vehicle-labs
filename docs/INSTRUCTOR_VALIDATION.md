@@ -33,3 +33,15 @@ After pulling, run final README Step 1b with `warmup/warmup.sdf` and its matchin
 
 - [ ] Run the baseline helper twice: confirm no duplicates, preserve complete customized LiDAR settings, and refuse partial/conflicting edits.
 - [ ] Pilot wheel joint-state visualization and the final single-setting LiDAR observation; it must not gate baseline mapping/localization/navigation.
+
+
+## Sequenced world startup — local pilot required
+
+Offline checks cover named-world verification, server PID detection, helper timeout/mismatch behavior and Python syntax. The new ROS launch sequence itself requires Gazebo testing:
+
+- [ ] With no existing server, start IST; confirm server/create/verification precede GUI and `goosebot` is visible in the Entity Tree.
+- [ ] Repeat clean start/stop five times; verify no orphan server remains after Ctrl+C and after GUI close.
+- [ ] Try a second launch while the first runs; confirm it refuses with existing PIDs without affecting the first simulation.
+- [ ] Confirm explicit-world spawning and failure shutdown with campus and both blocked variants.
+- [ ] Confirm camera configuration, /clock, /scan, /joint_states, EKF TF and RViz after delayed GUI startup.
+
