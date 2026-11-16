@@ -36,7 +36,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
-Expect one collapsed **campus** scenery group and a separate **goosebot** in Gazebo's Entity Tree, near IST at **(-15.025, 17.888) m**, yaw 0 (east). Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
+Expect one collapsed **campus** scenery group and a separate **goosebot** in Gazebo's Entity Tree, at IST's south end at **(-8.500, 9.500) m**, yaw **1.180 rad** (toward IST). The opening camera is aimed at Goosebot here. Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
 
 ### Updating an existing installation
 
@@ -67,12 +67,12 @@ These are **world/reference-map** coordinates. Your SLAM map can have a differen
 
 | Yellow pad | x (m) | y (m) |
 |---|---:|---:|
-| Home near IST | -15.025 | 17.888 |
+| Home at IST south end | -8.500 | 9.500 |
 | IST delivery | -5.756 | 11.983 |
 | Residence delivery | -0.043 | 12.883 |
 | GCW delivery | -9.587 | 1.621 |
 
-All example yaws are 0. The supplied `reference.yaml` is a geometric instructor reference, not a student SLAM result.
+The home yaw is **1.180 rad**; delivery-pose example yaws remain 0. The supplied `reference.yaml` is a geometric instructor reference, not a student SLAM result.
 
 ## Regenerate and customize
 
@@ -96,3 +96,5 @@ Generated OBJ files include a unit normal for every triangle corner, including c
 ### Flashing road/path surfaces
 
 Overlapping decorative road segments previously shared the same height, causing z-fighting (flickering as the camera moves). The generator now assigns overlapping ground decorations distinct heights in 3 mm increments and lifts delivery markers above them. This changes visual surfaces only; ground/obstacle collisions, the reference map and mission poses are unchanged. Both world variants group scenery under the identity-pose static `campus` model; expand its arrow to inspect individual items. Goosebot and the sun remain separate. After pulling, stop the simulation with Ctrl+C and relaunch; no ROS rebuild is needed for these world changes. Rendering still requires a pilot check on the course WSL installation.
+
+The yellow rectangle under Goosebot marks **Home (pad 0)**. It is visual-only, with no collision surface; the robot drives on the ground. Delivery pads use the same yellow style. Home and its marker now sit at IST's south end in both campus variants. These changes need a full Ctrl+C/relaunch after pulling, not Gazebo Reset; no ROS rebuild is needed. Existing campus obstacle maps still apply, but record the new home pose in your SLAM map's frame.
