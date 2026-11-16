@@ -11,6 +11,15 @@
       <render_engine>ogre2</render_engine>
     </plugin>
     <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu" />
+    <plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat" />
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>28.1485</latitude_deg>
+      <longitude_deg>-81.8495</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
     <light name="sun" type="directional">
       <pose>0 0 40 0 0 0</pose>
       <diffuse>.9 .9 .9 1</diffuse>

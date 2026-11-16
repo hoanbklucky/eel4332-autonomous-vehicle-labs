@@ -57,11 +57,38 @@ Follow **Steps 4–6 in [the final-project guide](../README.md)** using this cam
 - Terminal 3: RViz.
 - Terminal 4: manual driving while mapping.
 
-Open RViz and configure the displays before driving. Map the delivery routes and alternative crossings; every remote corner is unnecessary. Save your campus map before stopping SLAM. Use a map made in **this campus world**, not an IST or warmup map. Preserve earlier maps under separate names. If following the guide's `final_map.yaml` command, ensure that file is your campus map.
+Open RViz and configure the displays before driving. Map the delivery routes and alternative crossings; every remote corner is unnecessary. Save your campus map before stopping SLAM. Use a map made in **this campus world**, not an IST or warmup map. Preserve earlier maps under separate names. Save this part as `results/campus_map.yaml` with its image; keep the IST map separately as `results/ist_map.yaml`. Navigate to two safe points near IST and return home; remote pads and full-campus exploration are optional.
 
 For localization, stop SLAM and relaunch the baseline campus. Start AMCL/Nav2 with your campus map, open RViz, then use **2D Pose Estimate** and check scan alignment before sending a nearby goal. RViz does not publish the missing map-to-odom transform; AMCL needs an initial pose. Brief transform warnings before initialization can occur.
 
-## Blocked-causeway trial
+### Campus map commands
+
+While SLAM and Gazebo are running, stop motion and save from a sourced terminal:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
+mkdir -p results
+ros2 run nav2_map_server map_saver_cli -f "$PWD/results/campus_map" \
+  --ros-args -p use_sim_time:=true
+```
+
+After stopping all launches with Ctrl+C, relaunch the baseline campus in Terminal 1. Start AMCL/Nav2 in **Terminal 2**:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
+  use_composition:=False autostart:=True \
+  map:="$PWD/final_project_simulation/results/campus_map.yaml" \
+  params_file:="$PWD/final_project_simulation/goosebot/nav2_goosebot.yaml"
+```
+
+Open RViz in Terminal 3 and initialize AMCL as in main Step 6. After campus navigation, complete [the guided GPS activity](../goosebot/CAMPUS_GPS.md), not another LiDAR settings experiment. GPS messages supplement this experiment; the required AMCL/Nav2 run remains LiDAR-based.
+
+## Optional blocked-causeway trial
 
 Stop all baseline launches with Ctrl+C. Use the same launch command above, replacing `campus.sdf` with `campus_blocked.sdf`. Keep the **baseline campus map** and goals; do not remap the orange barrier. Other crossings remain open. Check live scan/costmap detection and record the response; a detour alone does not prove global replanning.
 

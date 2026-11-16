@@ -15,7 +15,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Required final: `final_project_simulation/README.md`; Goosebot lane following is the completed hardware component.
 - Physical Goosebot SLAM/Nav2 is optional.
 - Separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional extensions. Preserve their TODOs.
-- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, followed by a short LiDAR settings activity. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
+- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, with an indoor LiDAR comparison, outdoor GPS inspection, and an assessed system explanation. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
 
 ## Student code
 
@@ -42,7 +42,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 
 ## ROS / Gazebo
 
-- Lab 2 and the first environment in Labs 4–5 use ROBOTIS Jazzy Waffle/World; Labs 4–5 also use House with Waffle Pi. Cartographer is used for Lab 4 mapping. The final uses the provided Goosebot model with a supplied 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.
+- Lab 2 and the first environment in Labs 4–5 use ROBOTIS Jazzy Waffle/World; Labs 4–5 also use House with Waffle Pi. Cartographer is used for Lab 4 mapping. The final uses the provided Goosebot model with a supplied 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in both IST interior and the campus world (custom world optional). These new integrations require instructor simulation validation.
 - Keep required course READMEs self-contained with the necessary official Jazzy commands, explicit sourcing/model exports, and terminal assignments. ROBOTIS links are references, not additional required procedures.
 - Do not reintroduce nav2_minimal_tb3_sim or the obsolete TurtleBot SLAM Toolbox workflow into Labs 2/4/5. The final's documented Goosebot LiDAR SLAM Toolbox workflow is explicitly authorized. The Goosebot ground-truth localizer is allowed only for the required warm-up; it must not be used as final-project SLAM/AMCL evidence.
 
@@ -79,4 +79,4 @@ Preserve this order where practical:
 10. What to Submit
 11. Troubleshooting
 
-- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. Place the short inspect/change-one-LiDAR-setting activity after the mapping, AMCL/Nav2 and blocked-route workflow. Preserve mission-client and unrelated algorithm TODOs.
+- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. On this branch, require both worlds; put the IST LiDAR comparison after indoor baseline navigation, restore defaults before campus, and use guided campus GPS inspection instead of a second LiDAR experiment. GPS fusion is optional; never claim the baseline EKF consumes GPS. Keep system understanding at 30%. Preserve mission-client and unrelated algorithm TODOs.

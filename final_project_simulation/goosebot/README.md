@@ -1,6 +1,6 @@
 # Goosebot final-project integration
 
-All required commands and the end-of-project LiDAR settings activity are in the [main final-project README](../README.md).
+All required commands, the indoor LiDAR comparison and the outdoor GPS activity are in the [main final-project README](../README.md).
 
 - `world.launch.py` owns a separate server/GUI startup sequence, reads the chosen world's `mission.json`, explicitly selects the spawn world, and opens the GUI after the create service accepts the robot. A separate `gz model` query is not a startup requirement. It rejects existing Gazebo servers and shuts down its owned processes together. It does not launch any global localizer.
 - `slam_goosebot.yaml` is a starting LiDAR SLAM Toolbox configuration.
@@ -8,4 +8,7 @@ All required commands and the end-of-project LiDAR settings activity are in the 
 
 Model/config provenance: [hoanbklucky/goose](https://github.com/hoanbklucky/goose/tree/bffaf3cdf2b38f3b5a53a977064e0c787e046ff7/11_simulation), revision `bffaf3cdf2b38f3b5a53a977064e0c787e046ff7`; the upstream package declares Apache-2.0. The model is fetched rather than duplicating the full robot/assets here. Preserve upstream attribution in student copies.
 
-The original perfect-map bridge and stereo SLAM launch are separate modes, not this project's assessed AMCL workflow. Do not run them together. The build helper applies `provided_lidar.xml` and a wheel joint-state publisher with `configure_goosebot.py`, preserving complete custom settings. Students use the baseline for mapping/AMCL/Nav2, then do the final LiDAR settings activity. Mission-client TODOs remain optional.
+The original perfect-map bridge and stereo SLAM launch are separate modes, not this project's assessed AMCL workflow. Do not run them together. The build helper applies `provided_lidar.xml` and a wheel joint-state publisher with `configure_goosebot.py`, preserving complete custom settings. Students use the baseline for mapping/AMCL/Nav2, then do the IST LiDAR comparison, restore its defaults, and complete campus mapping/AMCL/Nav2 and GPS inspection. Mission-client TODOs remain optional.
+
+
+On `final-project-indoor-outdoor`, **both** IST and campus are required. See [CAMPUS_GPS.md](CAMPUS_GPS.md) for the supplied NavSat world plugin, existing GPS sensor/bridge, and measurements. The local EKF and AMCL configuration are unchanged; GPS is not fused into the required navigation baseline. Complete the [system explanation](../SYSTEM_EXPLANATION.md) from actual runtime/configuration evidence.

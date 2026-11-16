@@ -214,9 +214,15 @@ def write_world(blocked):
     root=ET.Element('sdf',version='1.8');world=ET.SubElement(root,'world',name='default')
     p=ET.SubElement(world,'physics',name='physics',type='ignored')
     ET.SubElement(p,'max_step_size').text='.001';ET.SubElement(p,'real_time_factor').text='1'
-    for file,name in [('physics','Physics'),('user-commands','UserCommands'),('scene-broadcaster','SceneBroadcaster'),('sensors','Sensors'),('imu','Imu')]:
+    for file,name in [('physics','Physics'),('user-commands','UserCommands'),('scene-broadcaster','SceneBroadcaster'),('sensors','Sensors'),('imu','Imu'),('navsat','NavSat')]:
         p=ET.SubElement(world,'plugin',filename=f'gz-sim-{file}-system',name=f'gz::sim::systems::{name}')
         if name=='Sensors':ET.SubElement(p,'render_engine').text='ogre2'
+    # ENU datum anchors synthetic GPS readings; geometry remains at teaching scale.
+    lon,lat=DATA['origin_lon_lat']
+    spherical=ET.SubElement(world,'spherical_coordinates')
+    for tag,value in [('surface_model','EARTH_WGS84'),('world_frame_orientation','ENU'),
+                      ('latitude_deg',lat),('longitude_deg',lon),('elevation',0),('heading_deg',0)]:
+        ET.SubElement(spherical,tag).text=str(value)
     l=ET.SubElement(world,'light',name='sun',type='directional');ET.SubElement(l,'pose').text='0 0 40 0 0 0'
     ET.SubElement(l,'diffuse').text='.9 .9 .9 1';ET.SubElement(l,'direction').text='-.5 .1 -1'
     x0,y0,x1,y1=DATA['bounds']
