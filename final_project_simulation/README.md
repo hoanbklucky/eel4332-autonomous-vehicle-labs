@@ -118,7 +118,12 @@ The executable list must include `cmd_vel_to_odom.py`, `ground_truth_map_odom_br
 
 The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone already exists, reuse/check it instead of cloning again; the helper checks an existing workspace source link. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
 
-### 1a. Repair “executable cmd_vel_to_odom.py not found”
+### 1a. Troubleshooting — only if an executable is not found
+
+**If the build and executable checks in Step 1 pass, skip this section and continue to Step 1b.**
+
+<details>
+<summary>Only if you see “executable cmd_vel_to_odom.py not found” — expand repair steps</summary>
 
 This message can mean a missing installed script **or a script without executable permission**. The supplied source revision stores its Python scripts as non-executable files, while the launch expects installed executables. With a symlink install, executable permission on the source matters.
 
@@ -142,6 +147,8 @@ Expect all three executable names listed above and **Executable is ready**. Retr
 If the first `ls` reports no such file, the source copy is incomplete. Repeat Step 1's **whole-package recursive copy from the pinned source** into `final_project_simulation/src/`, preserving your existing edits. Do not copy old build/install/log directories or place Python files manually inside `install/`.
 
 The package's `CMakeLists.txt` must contain `install(PROGRAMS ... DESTINATION lib/${PROJECT_NAME})` for the three launch scripts. The provided revision already does. If your local copy differs, compare/restore that install declaration and rebuild; preserve your modified model/configuration.
+
+</details>
 
 <a id="goosebot-warm-up"></a>
 
