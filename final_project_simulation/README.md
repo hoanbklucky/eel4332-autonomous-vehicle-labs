@@ -486,6 +486,22 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
 
 For campus, replace the final path with `final_project_simulation/campus/campus.sdf`. The wrapper reads the home pose from the world's adjacent `mission.json` and adds mesh lookup paths. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
 
+#### Find Goosebot in the large world
+
+The IST building is grouped under **`ist_building`** in Gazebo's Entity Tree. Collapse that group to hide its walls/floor pieces; the spawned robot is a separate top-level model named **`goosebot`** when using this course wrapper. Expand the world node if necessary. The URDF name `custom_bot` can appear in conversion warnings; it does not by itself tell you the spawned entity name.
+
+The launch prints the requested world, robot name and spawn coordinates. IST home is the north entrance lobby at approximately **x=-22.9, y=0**, facing +y. A successful creation message confirms creation was accepted, but does not prove the robot remained at its initial pose. To check the actual model without scrolling, keep Terminal 1 running and use another Ubuntu/WSL terminal:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+gz model --list
+gz model -m goosebot --pose
+```
+
+Use the exact robot name reported by the list if your local launch differs (for example `custom_bot`). See [Gazebo's model-command reference](https://gazebosim.org/api/sim/8/model_command.html). Locate that name in the short top-level tree and use the model's **Move To** camera action if offered. Check its reported XYZ: near the home XY with a small positive Z is plausible; a large negative Z suggests falling through the floor, and a different XY suggests movement or the wrong spawn pose. If no robot is listed, check the full create log and ensure only the intended Gazebo server is running. Do not repeatedly spawn extra robots to solve a camera problem.
+
+The displayed `gz_frame_id ... not defined in SDF. Copying ...` warning alone is not a spawn failure; retain the field and verify the ROS scan frame in Step 4. If creation succeeded but the robot remains missing, share `gz model --list`, its pose, and the launch's printed spawn line to distinguish wrong-world, wrong-pose and visibility issues.
+
 ### 4. Check the sensor and TF — Terminal 2
 
 ```bash

@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 from launch import LaunchDescription
-from launch.actions import AppendEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import AppendEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from ament_index_python.packages import get_package_share_directory
@@ -13,7 +13,8 @@ def start(context):
     mission=json.loads((world.parent/'mission.json').read_text())
     home=mission['stops'][0]
     package=get_package_share_directory('goosebot_0')
-    return [AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',str(world.parent)),
+    return [LogInfo(msg=f"Course spawn: entity=goosebot world={world} x={home['xy'][0]} y={home['xy'][1]} z=0.05 yaw={home.get('yaw',0)}"),
+            AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',str(world.parent)),
             IncludeLaunchDescription(PythonLaunchDescriptionSource(str(Path(package)/'launch/spawn_robot.launch.py')),
               launch_arguments={'world':str(world),'x':str(home['xy'][0]),'y':str(home['xy'][1]),
                                 'yaw':str(home.get('yaw',0)),'use_sim_time':'true','entity_name':'goosebot'}.items())]

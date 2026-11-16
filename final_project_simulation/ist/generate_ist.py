@@ -39,8 +39,11 @@ for route in D['corridors']:
   strips.append(box(dict(name=route['name']+'_floor_'+str(i),x=(a[0]+b[0])/2,y=(a[1]+b[1])/2,w=math.dist(a,b)+.01,d=route['width']*S,h=.008,yaw=math.atan2(b[1]-a[1],b[0]-a[0])),True,'.90 .80 .35 1'))
 for blocked in [False,True]:
  models=''.join(box(w) for w in WALLS)+''.join(strips)
+ # Identity parent keeps all building geometry in one collapsible tree entry.
+ models='<model name="ist_building"><static>true</static>'+floor+models+'</model>'
+ # Keep the trial barrier separate so existing removal tools can address it.
  if blocked:models+=box(BARRIER,color='.95 .35 .08 1')
- (R/('ist_blocked.sdf' if blocked else 'ist.sdf')).write_text('<?xml version="1.0"?><sdf version="1.9"><world name="ist">'+plugins+floor+light+models+'</world></sdf>\n')
+ (R/('ist_blocked.sdf' if blocked else 'ist.sdf')).write_text('<?xml version="1.0"?><sdf version="1.9"><world name="ist">'+plugins+light+models+'</world></sdf>\n')
 def inside(x,y,poly):
  hit=False
  for (a,b),(c,d) in edges(poly):
