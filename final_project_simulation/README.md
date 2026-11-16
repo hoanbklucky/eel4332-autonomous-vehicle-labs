@@ -488,9 +488,18 @@ For campus, replace the final path with `final_project_simulation/campus/campus.
 
 #### Find Goosebot in the large world
 
-**At whole-building zoom, Goosebot is only a few pixels wide. Select `goosebot` in the Entity Tree, then focus/zoom the camera on it.** Collapse `ist_building` to keep the tree short. Use the model's **Move To** camera action if offered; selecting the building focuses the entire building instead of the robot.
+The supplied IST opening camera looks inward from **+x (south)**, so the south entrance is in the foreground. Restart the simulator after pulling camera/world changes; an explicit custom `--gui-config` can override the world's GUI settings. Orbiting the camera changes which entrance is nearest.
 
-IST starts Goosebot at **(24.85, 0)** in the centre of the **south entrance passage**, facing inward toward −x (yaw π). In the illustrated entrance-facing view, south is the near/foreground entrance and north is at the far end. Camera orbiting can change which end is closest to you.
+**To inspect Goosebot:**
+
+1. Collapse `ist_building` in the Entity Tree.
+2. Right-click the separate **`goosebot`** entry.
+3. Click **Move To**, the first item at the top of the menu. This moves the **camera**, not the robot; it is not inside the `View >` submenu.
+4. Put the pointer in the 3-D scene and scroll the mouse wheel upward to zoom closer. Scroll downward to zoom out.
+
+At whole-building zoom, the roughly 20 cm Goosebot can be only a few pixels wide. Selecting a tree entry highlights it but does not by itself move the camera.
+
+IST starts Goosebot at **(24.85, 0)** in the centre of the **south entrance passage**, facing inward toward −x (yaw π).
 
 <details>
 <summary>Troubleshooting — robot missing, too small, or absent from the Entity Tree</summary>
@@ -535,6 +544,51 @@ source ~/goosebot_ws/install/setup.bash
 ros2 topic echo /scan --once --field header.frame_id
 ros2 topic hz /scan
 ```
+
+
+<details>
+<summary>Troubleshooting — /scan does not appear to be published yet</summary>
+
+This warning means ROS has not discovered a publisher/type for `/scan`; it is different from a TF warning. Press Ctrl+C to stop a waiting echo/hz command before running another check. Keep Gazebo playing and allow sensor/bridge startup time.
+
+**First check which installed model you are using:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 pkg prefix goosebot_0
+ros2 run xacro xacro "$(ros2 pkg prefix goosebot_0)/share/goosebot_0/urdf/robot.urdf.xacro" -o /tmp/goosebot_loaded.urdf
+python3 - <<'PY'
+import xml.etree.ElementTree as ET
+r = ET.parse('/tmp/goosebot_loaded.urdf').getroot()
+print('LiDAR link present:', r.find("link[@name='lidar_link']") is not None)
+for s in r.findall("gazebo/sensor"):
+    print('sensor:', s.get('name'), 'topic:', s.findtext('topic'))
+PY
+```
+
+Expect your intended workspace prefix, `LiDAR link present: True`, and `lidar_sensor` on `scan`. If absent, the source edit was incomplete or the wrong package is installed/sourced. Finish Step 2, rebuild, source the correct workspace, and restart Terminal 1. A robot already in Gazebo will not acquire a new sensor merely because you saved the file.
+
+**Then separate Gazebo output from ROS bridging:**
+
+```bash
+gz topic -l
+ros2 topic list -t
+ros2 topic info /scan --verbose
+```
+
+Find the new LiDAR's Gazebo scan topic in the list, distinct from `/tof_front/scan`. If it is `/scan`, inspect it with `gz topic -i -t /scan` and `gz topic -e -t /scan` (Ctrl+C after messages arrive). If Gazebo lists a different fully qualified scan topic, use that exact name when inspecting it and in the bridge's `gz_topic_name`; the ROS topic should remain `/scan`.
+
+| Result | Next step |
+| --- | --- |
+| Installed description has no new LiDAR | Fix/source the correct model and respawn. |
+| LiDAR is in the description but no Gazebo scan messages | Check the sensor block is attached to `lidar_link`, `always_on=true`, simulation is playing, and Terminal 1 has no sensor/render errors. Both supplied IST worlds include the Sensors system. |
+| Gazebo scan messages arrive but ROS `/scan` is absent | Check the installed `config/ros_gz_bridge.yaml` has the new top-level bridge entry from Step 2d, with the exact Gazebo topic. Restart the launch to reload it and check Terminal 1 for bridge errors. |
+| ROS scan messages arrive but RViz cannot display them | Continue with the TF/frame checks below; this is now a different problem. |
+
+Do not change `gz_frame_id` or add another odometry publisher to fix a missing ROS topic. Share the installed-description check, topic lists and bridge errors if it remains unresolved.
+
+</details>
 
 Expect `lidar_link` and approximately your configured rate while Gazebo is playing. Stop `hz` with Ctrl+C, then run these one at a time (Ctrl+C after each check):
 
