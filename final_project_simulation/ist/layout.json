@@ -13220,9 +13220,9 @@
   ],
   "stops": [
     {
-      "name": "Home / south entrance lobby",
+      "name": "Home / south entrance lobby centre",
       "pixel": [
-        629,
+        648.5,
         325
       ],
       "yaw": 3.141592653589793
