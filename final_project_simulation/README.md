@@ -292,6 +292,15 @@ Reuse the slow manual-driving command and RViz setup above, but select a reachab
 
 </details>
 
+<details>
+<summary>Example — warm-up navigation reached a goal</summary>
+
+![Warm-up arena with Nav2 feedback reached](images/warmup_navigation.png)
+
+The warm-up arena has low boundary walls and three blocks. RViz shows **Feedback: reached**. Localization may show inactive here because this mode uses perfect localization, not AMCL. Use the supplied warm-up map; this is not your final SLAM map.
+
+</details>
+
 ### 2. Use the supplied robot — no sensor editing yet
 
 The Step 1 build helper automatically configures the copied Goosebot source with a **360° LiDAR on `/scan`**, its ROS bridge, and the wheel joint-state publisher/bridge for RViz. No manual Xacro or bridge editing is required before mapping.
@@ -330,6 +339,15 @@ The supplied IST opening camera looks inward from **+x (south)**, so the south e
 2. Right-click the separate **`goosebot`** entry.
 3. Click **Move To**, the first item at the top of the menu. This moves the **camera**, not the robot; it is not inside the `View >` submenu.
 4. Put the pointer in the 3-D scene and scroll the mouse wheel upward to zoom closer. Scroll downward to zoom out.
+
+<details>
+<summary>Example — where to find Move To in Gazebo</summary>
+
+![Gazebo right-click menu for Goosebot showing Move To](images/gazebo_move_to.png)
+
+Right-click **goosebot** in the Entity Tree, then click **Move To**, the first menu item. It moves the camera, not the robot. Menu appearance can vary slightly by Gazebo version.
+
+</details>
 
 At whole-building zoom, the roughly 20 cm Goosebot can be only a few pixels wide. Selecting a tree entry highlights it but does not by itself move the camera.
 
@@ -434,6 +452,19 @@ ros2 topic echo /odometry/filtered --once
 
 Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration. For a sensor-only RViz check, open `rviz2 --ros-args -p use_sim_time:=true` in a separate sourced terminal, use Fixed Frame `odom`, and add LaserScan `/scan` and RobotModel `/robot_description` using the click-by-click RViz setup in Step 5 below. Leave Map disabled until SLAM starts. Verify walls appear in the correct direction as you drive.
 
+<details>
+<summary>Examples — successful LiDAR scan and TF checks</summary>
+
+![LiDAR frame and scan rate output](images/lidar_scan_check.png)
+
+Expect **lidar_link**. The example's approximately 1.4 Hz is wall-clock delivery during slow simulation, not the configured simulated scan frequency.
+
+![LiDAR transform from base footprint](images/lidar_transform_check.png)
+
+For the supplied mount, **base_footprint → lidar_link** has translation **(0, 0, 0.21) m** and zero rotation. Initial discovery warnings resolved once numerical output appeared; persistent warnings still need attention.
+
+</details>
+
 ### 5. Build and save your map
 
 **Terminal 2 — mapping** (after the checks):
@@ -533,6 +564,15 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 Click inside Terminal 4 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
 
+<details>
+<summary>Example — IST mapping in progress</summary>
+
+![Goosebot at IST entrance with growing RViz map](images/ist_mapping.png)
+
+Early exploration produces a partial map around the entrance. Grey/white explored space, dark wall edges and red scan points should align. Unvisited space remains unknown. RobotModel and TF show **Status: Ok**. Continue exploring the mission routes before saving; you do not need to reproduce the exact pixels or view.
+
+</details>
+
 Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
 
 ```bash
@@ -548,7 +588,16 @@ Keep the YAML and image together. To view the image, use an Ubuntu image viewer,
 
 ### 6. Restart and navigate on your saved map
 
-Stop teleop, SLAM, RViz, and simulator. Relaunch your baseline world using Step 3. **Do not restart SLAM.** In Terminal 2:
+Switch from the mapping session to a fresh localization/navigation session:
+
+1. Save the map in Step 5, then stop teleop, SLAM, RViz and the simulator with Ctrl+C.
+2. **Terminal 1:** relaunch the same baseline world using Step 3. **Do not restart SLAM.**
+3. **Terminal 2:** start the AMCL/Nav2 command below and leave it running.
+4. **Terminal 3:** reopen RViz using the command below while Nav2 starts; confirm the saved map and set **2D Pose Estimate**. Keep Terminal 4's teleop stopped.
+
+**Opening RViz before Nav2 is allowed but does not prevent missing-map/TF warnings.** RViz only displays data and sends the initial-pose estimate. Brief `map frame does not exist` warnings can occur before AMCL receives its map, scans and initial pose. Do not wait for every navigation node to become active before opening RViz and initializing localization. Persistent **no map received** warnings require checking map loading, not merely changing startup order.
+
+**Terminal 2 — AMCL/Nav2:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -562,7 +611,7 @@ ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
 
 **Use the capitalized launch values exactly as shown.** Jazzy's standard Nav2 bringup evaluates `slam` and `use_composition` in Python expressions; lowercase `false` can cause **`name 'false' is not defined`** before nodes start. These command-line values differ from lowercase `true/false` in YAML configuration files. If you see this error, rerun the corrected command; no robot rebuild or remapping is needed. See the [Jazzy bringup launch source](https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_bringup/launch/bringup_launch.py).
 
-Leave Terminal 2 running after successful startup. Nav2 prints logs there and opens no window; expect **Managed nodes are active**. Check that you saved `results/final_map.yaml` and its image in Step 5 and restarted the same world before continuing.
+Leave Terminal 2 running; it prints logs and opens no window. Continue to RViz and set the initial pose even if costmaps are waiting for `map` TF. Once localization and navigation finish activating, expect **Managed nodes are active**. Confirm `results/final_map.yaml` and its image exist and match the selected world.
 
 In Terminal 3, use the standard Nav2 RViz layout:
 
@@ -572,11 +621,44 @@ source ~/goosebot_ws/install/setup.bash
 ros2 launch nav2_bringup rviz_launch.py use_sim_time:=true
 ```
 
+<details>
+<summary>Troubleshooting — no saved map or map frame in Step 6</summary>
+
+In another sourced terminal, check:
+
+```bash
+ros2 lifecycle get /map_server
+ros2 lifecycle get /amcl
+ros2 param get /map_server yaml_filename
+```
+
+Both lifecycle nodes should report **active**. A blank `yaml_filename` means no initial map file was configured; opening RViz first will not fix that. If the active map server has no map, load your saved map explicitly:
+
+```bash
+ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap \
+  "{map_url: '$HOME/courses/eel4332-autonomous-vehicle-labs/final_project_simulation/results/final_map.yaml'}"
+```
+
+Expect **result: 0**. A nonzero result needs investigation of the YAML path and its referenced image. This service loads the map for the current run; it does not change the startup parameter or save a new map. If either lifecycle node is not active, inspect its startup log first.
+
+After the saved map appears on RViz's **Map → Topic `/map`**, use **2D Pose Estimate** at the robot's actual location on that map. AMCL then supplies `map → odom`. Do not use the warm-up's `/projected_map`, restart SLAM, or add a static `map → odom` publisher to hide the warning. No rebuild or remapping is needed merely to load an existing valid map.
+
+</details>
+
 Use **2D Pose Estimate** at the starting position, dragging in its heading direction. Enable Map and LaserScan `/scan`. **Alignment means live scan points overlap the saved map's wall edges** around several sides of the robot; they should not form a shifted/rotated outline. Costmap inflation colors are clearance margins, not the physical wall. If alignment is poor, correct the initial pose before sending goals. AMCL now owns `map → odom`; the EKF still owns `odom → base_footprint`.
 
 Send a nearby **Nav2 Goal** first, then visit three chosen delivery locations and return home. Wait 3 seconds at each delivery. Clicking goals in RViz is sufficient; autonomous mission sequencing using the existing client scaffold is optional. Keep keyboard teleop stopped during navigation.
 
 Select destinations and home on **your SLAM map**. The `mission.json` coordinates describe Gazebo/the geometric reference map, and may differ from your SLAM frame. Do not blindly copy them. IST example destinations are in the hallway near 1044, 1003, and 1066.
+
+<details>
+<summary>Example — saved-map localization and navigation in progress</summary>
+
+![IST saved map with AMCL localization and Nav2 active](images/ist_navigation.png)
+
+Expect **Navigation: active**, **Localization: active**, and an evolving path/costmap around the mapped walls. This screenshot shows **Feedback: active**—navigation is in progress, not yet proof that the goal was reached. For completion, wait for reached/succeeded feedback and verify Goosebot stopped at the destination. The current partial map is an example, not a substitute for exploring your mission routes.
+
+</details>
 
 ### 7. Test one blocked route
 
