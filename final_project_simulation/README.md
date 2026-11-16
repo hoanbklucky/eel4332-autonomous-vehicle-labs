@@ -609,7 +609,7 @@ ros2 run tf2_ros tf2_echo odom base_footprint
 ros2 topic echo /odometry/filtered --once
 ```
 
-Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration. In RViz2, use Fixed Frame `odom`, add LaserScan `/scan`, and verify walls appear in the correct direction as you drive.
+Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration. For a sensor-only RViz check, open `rviz2 --ros-args -p use_sim_time:=true` in a separate sourced terminal, use Fixed Frame `odom`, and add LaserScan `/scan` and RobotModel `/robot_description` using the click-by-click RViz setup in Step 5 below. Leave Map disabled until SLAM starts. Verify walls appear in the correct direction as you drive.
 
 ### 5. Build and save your map
 
@@ -641,7 +641,72 @@ source ~/goosebot_ws/install/setup.bash
 rviz2 --ros-args -p use_sim_time:=true
 ```
 
-Set Fixed Frame `map`; add Map `/map`, LaserScan `/scan`, TF, and RobotModel `/robot_description`. The hallway outline should fill in as you explore. Confirm scans follow mapped walls, not a displaced/rotated duplicate.
+#### RViz setup — add displays and select their topics
+
+If RViz is already open with `use_sim_time:=true`, reuse it. Otherwise run the Terminal 4 command above. Keep Gazebo and the Step 5 SLAM launch running.
+
+**1. Show the Displays panel and choose the fixed frame.**
+
+- If the left panel is missing, select **Panels → Displays**.
+- Expand **Global Options** at the top. Click the value beside **Fixed Frame**, type `map`, and press Enter.
+- Use `map` during SLAM and saved-map navigation. For the earlier Step 4 sensor-only check, use `odom` and leave Map disabled: no map is being built yet.
+- RViz displays ROS messages, not the Gazebo building automatically. A blank grid does not mean the Gazebo world is missing.
+
+**2. Add Map and set its Topic.**
+
+1. Click **Add** at the bottom of the Displays panel.
+2. Select the **By display type** tab, expand **rviz_default_plugins** if needed, choose **Map**, and click **OK**.
+3. In the Displays panel, expand the new **Map** row with its small triangle.
+4. Find the editable **Topic** property below Status. Click the blank value cell to its right, select/type **`/map`**, and press Enter. Adding a display by type does **not** necessarily choose its topic.
+5. Keep its checkbox enabled. Once SLAM publishes, expect **Status: Ok** and a grey/white/black occupancy map that grows as you drive.
+
+**“Error subscribing: Empty topic name” means the Topic cell is blank.** Set the editable Topic property; the red `Status → Topic` line reports an error and is not the field to edit. “No map received” after setting `/map` means no map message has arrived yet; check that Step 5 SLAM is running and `ros2 topic list -t` contains `/map`. Changing RViz settings alone does not create a map.
+
+For saved-map navigation, use `/map` as well. The earlier perfect-map warm-up uses **`/projected_map`** instead; do not carry that warm-up topic into final-project SLAM. If a running map publisher exists but no map arrives, inspect the Map Topic's QoS settings; the supplied map workflows use **Reliable / Transient Local**. Allow startup time and check the display's expanded Status.
+
+**3. Add LaserScan and select the LiDAR topic.**
+
+1. Click **Add → By display type → rviz_default_plugins → LaserScan → OK**.
+2. Expand **LaserScan**, click its editable **Topic** value, choose/type **`/scan`**, and press Enter.
+3. Keep its checkbox enabled. Expand Topic if needed to see QoS settings; **Best Effort** reliability is suitable for receiving sensor scans, including a Reliable publisher.
+4. If points are too small, set **Style** to **Points** and increase **Size (Pixels)**, for example to `3`, if those properties are shown.
+5. Expect points outlining nearby walls, not an image of the building. Do not choose `/tof_front/scan`, which is only the original narrow forward beam.
+
+**4. Add RobotModel — it is a display type, not a topic name.**
+
+1. Click **Add**, then select **By display type** (not **By topic**).
+2. Under **rviz_default_plugins**, scroll to **RobotModel**: it is written as one word. Select it and click **OK**. If a filter/search box is shown, clear it or type `RobotModel`.
+3. Expand the new **RobotModel** row in Displays.
+4. Set **Description Source → Topic**.
+5. Set **Description Topic → `/robot_description`**, then press Enter. This uses the expanded robot description published by `robot_state_publisher`; do not enter the Xacro filename here.
+6. Keep the display enabled and **Visual Enabled** checked. If Description Topic exposes QoS settings, use **Reliable / Transient Local** to receive the retained description.
+7. Expect Goosebot's chassis, wheels and added sensor, with Status Ok once its transforms are available. This does not add another robot to Gazebo.
+
+If RobotModel is absent from the By topic tab, that is not evidence the robot description is missing: use **By display type** as above. If the display reports a transform error, return to Step 4; a valid description still needs TF to position every link.
+
+**5. Add TF and choose an easy view.**
+
+- Use **Add → By display type → rviz_default_plugins → TF → OK** to show coordinate frames. Toggle TF off if its axes/text clutter the map.
+- In the **Views** panel, select **TopDownOrtho** for a flat overhead map, or keep Orbit. Use **Panels → Views** if the panel is hidden.
+- Zoom with the mouse wheel over the 3-D view. Goosebot can be very small compared with IST; during sensor inspection you can set the view's **Target Frame** to `base_footprint` to keep the robot centred.
+- Confirm scan points follow the mapped wall edges rather than forming a shifted/rotated duplicate. Save your RViz configuration with **File → Save Config As…** if you want to reuse it.
+
+<details>
+<summary>RViz quick check — blank map, missing robot, or red display status</summary>
+
+| Symptom | Check |
+| --- | --- |
+| Map: Empty topic name | Edit Map's Topic property to `/map`, not the Status error row. |
+| Map: No map received | Start SLAM in Step 5, or the saved-map navigation launch in Step 6; confirm `/map` is published. |
+| Fixed Frame `map` does not exist | Before SLAM use `odom`; during SLAM check the SLAM node and its `map → odom` transform. |
+| Cannot find RobotModel | Add → **By display type**, expand rviz_default_plugins, select **RobotModel**. |
+| RobotModel has no description | Set Description Source Topic and Description Topic `/robot_description`; verify robot_state_publisher remains running. |
+| Scan exists but is not visible | Select `/scan`, check TF/status and reliability, then increase point size or zoom closer. |
+| RobotModel/scan transform errors | Use simulation time in RViz and complete Step 4 TF checks; adding displays does not repair missing transforms. |
+
+</details>
+
+
 
 Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
 
