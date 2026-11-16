@@ -8,6 +8,10 @@
 >
 > If you see `$: command not found`, remove the leading `$ ` and rerun. **Keep dollar signs inside commands**, such as `$HOME`, `$PWD`, `${TURTLEBOT3_MODEL}`, and `$(...)`; those have a different meaning.
 
+## Goosebot preparation before the final
+
+Complete the [required Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) after Labs 4–5 and the final's package setup. Use native Ubuntu/WSL + Jazzy and the same workspace as the final. Docker and stereo RTAB-Map are optional alternatives/extensions. The warm-up uses a supplied map and perfect localization; the final requires student-added LiDAR, a new SLAM map and AMCL.
+
 ## ROS 2 + Gazebo + Goosebot Laboratory Repository
 
 This repository contains the hands-on laboratory sequence for **EEL 4332 — Introduction to Autonomous Vehicles**.
@@ -66,6 +70,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
 | [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Follow official Cartographer tutorial and save a map |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Load your map, localize, visit goals, and practice cancellation |
+| [Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) | Verify the supplied Goosebot in its maze | Drive manually, reach one goal with the perfect-map setup; screenshot + two sentences or in-class demo |
 | [Final](final_project_simulation/README.md) | Goosebot delivery in IST or campus simulation | Add/bridge LiDAR, create a map, localize, navigate to three deliveries/home, test a blocked route |
 
 ## How these labs map to the course
