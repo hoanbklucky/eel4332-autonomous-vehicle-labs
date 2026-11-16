@@ -4,32 +4,13 @@ Use this world or the campus for the same Goosebot final project. All setup, LiD
 
 ![Clean IST layout without evacuation routes](ist_plan.png)
 
-## How the two references are used — version 4
+## Layout and scope — version 4
 
-- **First image: classroom locations and labels.** Use the numbered rooms and underlying black partitions. **Ignore all red, green and blue evacuation arrows/zone boundaries.** They do not define walls, corridors, indentations, or extra exits.
-- **Second image: hallway architecture.** The model has a continuous oval hallway, a curved cross-passage near each end, a straight central passage continuing through both sides, and north/south entrance lobbies.
+- The generated teaching layout uses approximate classroom placements and an architectural hallway network: a continuous oval, two curved end cross-passages, a central through-passage, and north/south entrance lobbies. Original building-reference images are not distributed in this repository.
 - The north entrance is at the **left**, between 1045 and 1048. The south entrance is at the **right**, between 1002 and 1068.
 - Outer classroom bands are continuous. The earlier gaps at evacuation-color boundaries and route-shaped central-room jogs have been removed. The clean plan above has no evacuation-route overlay; yellow denotes actual hallway floor only.
 
-There are 42 labeled room locations. Their order and relative placement come from the first image; footprints are fitted to the hallway architecture in the second. The images are not measured architectural drawings, so dimensions, precise footprint corners, and doors remain approximate. Some internal/service-room doors are omitted; delivery goals belong in the hallway. White areas are protected non-circulation/atrium/service spaces, not additional shortcuts. This is a one-level teaching model, not a surveyed floor plan or evacuation model.
-
-<details>
-<summary>Reference 1 — classroom labels (evacuation colors are ignored)</summary>
-
-![Original classroom-location reference](images/ist_evacuation_reference.png)
-
-This original photo is preserved as a reference. Its colored route/zone overlays are excluded from the model geometry.
-
-</details>
-
-<details>
-<summary>Reference 2 — hallway network</summary>
-
-![Architectural hallway reference with instructor annotations](images/ist_hallway_corrections.png)
-
-Use the oval, both end cross-passages, central through-passage, and end lobbies shown here to interpret the clean plan.
-
-</details>
+There are 42 labeled room locations. Their order and relative placement were derived from instructor-provided references; footprints and hallways are simplified for simulation. The images are not measured architectural drawings, so dimensions, precise footprint corners, and doors remain approximate. Some internal/service-room doors are omitted; delivery goals belong in the hallway. White areas are protected non-circulation/atrium/service spaces, not additional shortcuts. This is a one-level teaching model, not a surveyed floor plan or evacuation model.
 
 ## Files and use
 

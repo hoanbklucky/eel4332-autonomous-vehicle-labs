@@ -73,9 +73,6 @@ final_project_simulation/goosebot/slam_goosebot.yaml
 final_project_simulation/goosebot/world.launch.py
 final_project_simulation/ist/README.md
 final_project_simulation/ist/generate_ist.py
-final_project_simulation/ist/images/ist_evacuation_reference.png
-final_project_simulation/ist/images/ist_hallway_corrections.png
-final_project_simulation/ist/images/ist_hallway_reference.png
 final_project_simulation/ist/ist.sdf
 final_project_simulation/ist/ist_blocked.sdf
 final_project_simulation/ist/ist_plan.png
@@ -183,6 +180,7 @@ lab04_slam/OPTIONAL_BACKGROUND.md
 lab04_slam/README.md
 lab04_slam/answers.md
 lab04_slam/config/.gitkeep
+lab04_slam/images/base_scan_tf_expected.png
 lab04_slam/images/map_saved.png
 lab04_slam/images/mapping_first_visit.png
 lab04_slam/images/mapping_revisit.png

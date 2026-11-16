@@ -31,6 +31,10 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Use Python 3 and NumPy unless a lab specifies ROS 2 nodes or another tool.
 - Use SI units.
 
+## Original building-reference images
+
+- Do not commit or embed the original IST evacuation/floor-plan reference images. Keep only the generated teaching-world preview and derived simulation assets.
+
 ## ROS / Gazebo
 
 - Labs 2/4/5 follow ROBOTIS Jazzy tutorials: Waffle, Cartographer and TurtleBot3 Nav2 in TurtleBot3 World. The final uses the provided Goosebot model with a REQUIRED student-added 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.

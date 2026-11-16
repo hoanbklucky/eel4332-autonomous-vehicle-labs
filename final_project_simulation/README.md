@@ -65,16 +65,6 @@ Classroom identities and relative positions come from the first image's labels/b
 </details>
 
 <details>
-<summary>Preview — supplied IST reference images</summary>
-
-![Provided evacuation-plan photograph](ist/images/ist_evacuation_reference.png)
-![Provided oval-hallway illustration](ist/images/ist_hallway_reference.png)
-
-These references guide the teaching layout; colored evacuation routes are not walls or navigation maps. North is at the left in the photograph.
-
-</details>
-
-<details>
 <summary>Preview — campus layout</summary>
 
 ![Geographic campus layout](campus/campus_plan.png)

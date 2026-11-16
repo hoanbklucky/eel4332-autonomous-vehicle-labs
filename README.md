@@ -47,8 +47,8 @@ The intended course environment is:
 - **Gazebo Harmonic / modern Gazebo**
 - **RViz2**
 - **Nav2**
-- **Cartographer** through the official TurtleBot3 SLAM tutorial; SLAM Toolbox is optional
-- **robot_localization** (optional reference)
+- **Cartographer** for TurtleBot Lab 4; **SLAM Toolbox** for the Goosebot final
+- **robot_localization** for Goosebot's provided EKF
 - **Python 3 + NumPy + Matplotlib**
 - **Git** for version control and course updates
 - **Visual Studio Code + WSL extension** as the supported editor workflow
