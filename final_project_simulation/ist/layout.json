@@ -13220,12 +13220,12 @@
   ],
   "stops": [
     {
-      "name": "Home / north entrance lobby",
+      "name": "Home / south entrance lobby",
       "pixel": [
-        171,
+        629,
         325
       ],
-      "yaw": 1.5707963267948966
+      "yaw": 3.141592653589793
     },
     {
       "name": "Near 1044",

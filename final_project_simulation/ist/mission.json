@@ -2,12 +2,12 @@
   "version": 4,
   "stops": [
     {
-      "name": "Home / north entrance lobby",
+      "name": "Home / south entrance lobby",
       "xy": [
-        -22.900000000000002,
-        0.0
+        22.9,
+        0
       ],
-      "yaw": 1.5707963267948966
+      "yaw": 3.141592653589793
     },
     {
       "name": "Near 1044",
@@ -20,7 +20,7 @@
     {
       "name": "Near 1003",
       "xy": [
-        19.0,
+        19,
         3.1
       ],
       "yaw": 0
@@ -40,7 +40,7 @@
     "y": 8.200000000000001,
     "w": 2.2,
     "d": 0.35,
-    "h": 1.0,
+    "h": 1,
     "yaw": 1.5707963267948966
   },
   "orientation": "north at left; south at right; x right, y up",

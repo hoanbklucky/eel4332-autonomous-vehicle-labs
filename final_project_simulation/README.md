@@ -490,7 +490,7 @@ For campus, replace the final path with `final_project_simulation/campus/campus.
 
 The IST building is grouped under **`ist_building`** in Gazebo's Entity Tree. Collapse that group to hide its walls/floor pieces; the spawned robot is a separate top-level model named **`goosebot`** when using this course wrapper. Expand the world node if necessary. The URDF name `custom_bot` can appear in conversion warnings; it does not by itself tell you the spawned entity name.
 
-The launch prints the requested world, robot name and spawn coordinates. IST home is the north entrance lobby at approximately **x=-22.9, y=0**, facing +y. A successful creation message confirms creation was accepted, but does not prove the robot remained at its initial pose. To check the actual model without scrolling, keep Terminal 1 running and use another Ubuntu/WSL terminal:
+The launch prints the requested world, robot name and spawn coordinates. IST home is the south entrance lobby at approximately **x=22.9, y=0**, facing inward toward −x (yaw π radians). A successful creation message confirms creation was accepted, but does not prove the robot remained at its initial pose. To check the actual model without scrolling, keep Terminal 1 running and use another Ubuntu/WSL terminal:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
