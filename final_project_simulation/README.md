@@ -211,6 +211,8 @@ ros2 launch goosebot_0 nav2_bringup.launch.py slam:=false use_sim_time:=true \
 
 Use this arena's `reference.yaml` with `warmup.sdf`; **do not use the maze map with the practice arena**. The supplied map is generated from obstacle geometry and is not a student SLAM result.
 
+**Expected behavior:** Nav2 runs its navigation nodes in Terminal 2 and prints log messages; **no new window opens**. When the log says **`Managed nodes are active`**, the navigation nodes are ready. Leave Terminal 2 running and continue to Terminal 3, which opens RViz. Do not press Ctrl+C in Terminal 2 until you want to stop Nav2.
+
 **Terminal 3 — RViz:**
 
 ```bash
