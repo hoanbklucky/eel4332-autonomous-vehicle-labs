@@ -305,6 +305,8 @@ Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Use its ex
 
 **Keep the original ToF sensor. Edit only your new copy.** There are two separate parts in this file: the URDF link/joint defines the mount and TF; the later `<gazebo reference="tof_front_link">…</gazebo>` block creates the simulated measurements. Copy **both parts**. Copying only the link/joint shown in the screenshot creates a visible mount, not a working LiDAR.
 
+**Why does the ToF already say `gpu_lidar`?** Gazebo uses this sensor type to simulate range measurements. The existing ToF approximates one forward beam using two rays only `0.000001` radians apart. Your new 2-D LiDAR uses the **same `gpu_lidar` type**, but 720 horizontal samples spanning `-3.14159` to `3.14159` radians produce a 360° scan. The scan angles and sample count determine the coverage; changing the sensor's name or visual shape alone does not change it. Copy the entire `<gazebo reference="tof_front_link">…</gazebo>` block, including its `<lidar>` scan/range settings, and edit only the copy as listed below.
+
 Use the following checklist to edit your copy; these are XML fields, not terminal commands.
 
 | Location in your new copy | Change |
