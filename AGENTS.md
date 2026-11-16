@@ -37,13 +37,13 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 
 ## ROS / Gazebo
 
-- Labs 2/5 and Lab 4's first environment use ROBOTIS Jazzy Waffle/World; Lab 4 also maps House with Waffle Pi. Cartographer is used for Lab 4 mapping. The final uses the provided Goosebot model with a REQUIRED student-added 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.
+- Lab 2 and the first environment in Labs 4–5 use ROBOTIS Jazzy Waffle/World; Labs 4–5 also use House with Waffle Pi. Cartographer is used for Lab 4 mapping. The final uses the provided Goosebot model with a REQUIRED student-added 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.
 - Keep required course READMEs self-contained with the necessary official Jazzy commands, explicit sourcing/model exports, and terminal assignments. ROBOTIS links are references, not additional required procedures.
 - Do not reintroduce nav2_minimal_tb3_sim or the obsolete TurtleBot SLAM Toolbox workflow into Labs 2/4/5. The final's documented Goosebot LiDAR SLAM Toolbox workflow is explicitly authorized. The Goosebot ground-truth localizer is allowed only for the required warm-up; it must not be used as final-project SLAM/AMCL evidence.
 
 
 - Required Goosebot warm-up: native WSL/Jazzy in the final's workspace, supplied maze, manual driving and one perfect-map Nav2 goal. Docker and stereo RTAB-Map are optional. Perfect localization is permitted only for this warm-up, never as the final SLAM/AMCL result.
-- Lab 4 maps both TurtleBot3 World (waffle) and House (waffle_pi), in separate Cartographer sessions/maps. Keep two videos, one per environment, each showing exploration and revisit. Lab 5 still uses Waffle + World and its World map.
+- Lab 4 maps both TurtleBot3 World (waffle) and House (waffle_pi), in separate Cartographer sessions/maps. Keep two videos, one per environment, each showing exploration and revisit. Lab 5 navigates in both: one World goal with waffle/map.yaml and two House goals in different rooms with waffle_pi/house_map.yaml. Keep one joined video plus a short Nav2 explanation; tuning is optional.
 - Goosebot source Python scripts need executable permission before --symlink-install; verify installed libexec names after building. Copy the complete source package and preserve model edits.
 - Target ROS 2 Jazzy and modern Gazebo.
 - Avoid Gazebo Classic instructions.

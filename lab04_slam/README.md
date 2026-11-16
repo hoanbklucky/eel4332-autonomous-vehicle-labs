@@ -19,7 +19,7 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Create and save **two maps with Cartographer**: TurtleBot3 World first, then TurtleBot3 House. Reuse the **World map** in Lab 5; House gives additional practice with rooms, doorways, and revisits. Complete Labs 00–03 first. Earlier Lab 2 installations may use another simulator; check packages below.
+Create and save **two maps with Cartographer**: TurtleBot3 World first, then TurtleBot3 House. Reuse **both maps in Lab 5**; House adds practice with rooms, doorways, and revisits. Complete Labs 00–03 first. Earlier Lab 2 installations may use another simulator; check packages below.
 
 Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 
@@ -225,7 +225,7 @@ ros2 run nav2_map_server map_saver_cli -f "$PWD/results/house_map" --ros-args -p
 realpath results/house_map.yaml
 ```
 
-Keep `house_map.yaml` and its image together; do not overwrite the World `map.yaml`/image pair. View House using the same PGM-to-PNG procedure, substituting `house_map.pgm` and `house_map_preview.png`. Stop all House launches after saving. **For Lab 5, return to Waffle + TurtleBot3 World and use `results/map.yaml`; the House map describes a different environment.**
+Keep `house_map.yaml` and its image together; do not overwrite the World `map.yaml`/image pair. View House using the same PGM-to-PNG procedure, substituting `house_map.pgm` and `house_map_preview.png`. Stop all House launches after saving. **Lab 5 uses both saved maps:** Waffle + World with `results/map.yaml`, then Waffle Pi + House with `results/house_map.yaml`. Stop all launches before switching; keep each YAML with its matching image.
 
 ## What to Submit
 
@@ -236,7 +236,7 @@ Submit **only two screen-recording videos**:
 
 Within each video, the first visit and revisit must use the same mapping session. Briefly explain any visible change, or say no clear correction was visible. Short joined clips are fine; no full-session recording is needed.
 
-No separate report, `answers.md`, screenshots, or map upload is required. Save and retain **both** YAML/image pairs locally. Lab 5 uses the World map.
+No separate report, `answers.md`, screenshots, or map upload is required. Save and retain **both** YAML/image pairs locally. Lab 5 uses both maps with their matching worlds/models.
 
 ## Discussion Questions (not a separate submission)
 
@@ -289,7 +289,7 @@ Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation
 - No map: inspect Cartographer's full error output and check `ros2 topic echo /scan --once`.
 - Do not combine this workflow with the earlier Nav2-minimal simulator, custom TF bridges, or mesh workarounds.
 
-The instructor must pilot World and House mapping, model selection, and the World-map handoff to Lab 5 on the course WSL image.
+The instructor must pilot World and House mapping, model selection, and both map handoffs to Lab 5 on the course WSL image.
 
 ## References
 

@@ -7,7 +7,7 @@
 | Vehicle modeling and odometry | Lab 03: assigned models and experiments | Car-like tracking comparisons |
 | Sensors, TF, timing | Lab 04: verify mapper inputs | Sensor statistics |
 | Mapping and SLAM | Lab 04: map TurtleBot3 World and House in separate Cartographer sessions; save both maps | Separate Kalman-filter implementation |
-| Localization and navigation | Lab 05: official saved-map Nav2 tutorial and three goals | A*, Pure Pursuit, safety-monitor exercises; parameter comparison |
+| Localization and navigation | Lab 05: AMCL/Nav2 on both saved maps; one World goal and two House goals in different rooms | A*, Pure Pursuit, safety-monitor exercises; parameter comparison |
 | Goosebot preparation | [Required warm-up](../final_project_simulation/README.md#goosebot-warm-up): manual driving and one perfect-map Nav2 goal | Docker and stereo RTAB-Map |
 | Mission integration and evaluation | [Simulation final](../final_project_simulation/README.md): Goosebot + student-added LiDAR, new SLAM map, three deliveries/home, blocked-route test | Extra tuning experiments |
 | Physical autonomy | Goosebot autonomous lane following, already completed | [Hardware SLAM/Nav2 transfer](../final_project_goosebot/README.md) |
@@ -18,8 +18,8 @@ Labs 4–5 are guided TurtleBot preparation. The final requires Goosebot LiDAR/m
 
 The [legacy sequence](../optional_legacy/previous_lab_sequence/README.md) remains optional reading. No physical SLAM/Nav2 deployment is required this semester.
 
-Labs 2/5 and Lab 4's first environment use ROBOTIS TurtleBot3 Waffle/World; Lab 4 also maps House with Waffle Pi using Cartographer. The final instead uses the supplied Goosebot model, a student-added 2-D LiDAR, SLAM Toolbox, and AMCL/Nav2. Use the final README's complete procedure; do not combine it with the original Goosebot ground-truth mode.
+Lab 2 and the first environment in Labs 4–5 use Waffle/World; Labs 4–5 also use House/Waffle Pi. Lab 4 maps with Cartographer; Lab 5 localizes/navigates with AMCL/Nav2. The final instead uses the supplied Goosebot model, a student-added 2-D LiDAR, SLAM Toolbox, and AMCL/Nav2. Use the final README's complete procedure; do not combine it with the original Goosebot ground-truth mode.
 
 The warm-up and final use the same native Ubuntu/WSL Jazzy workspace. Docker is an optional alternative. Warm-up evidence is one screenshot plus two sentences (or an observed in-class demonstration); supplied perfect-map localization does not count as SLAM/AMCL.
 
-Lab 4 uses Waffle for World and Waffle Pi for House. Submit two videos, one per environment, each showing exploration and revisit. Lab 5 uses only the World map. Goosebot source scripts require executable permission and a successful package install check before the maze warm-up.
+Lab 4 uses Waffle for World and Waffle Pi for House. Submit two videos, one per environment, each showing exploration and revisit. Lab 5 uses both maps: one World goal and two House goals in different rooms, with one joined video and a short explanation. Goosebot source scripts require executable permission and a successful package install check before the maze warm-up.

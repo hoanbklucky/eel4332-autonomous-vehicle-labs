@@ -5,7 +5,9 @@ Validate on the course WSL installation; upstream tutorials and offline geometry
 ## Labs 2/4/5 — TurtleBot preparation
 
 - [ ] Verify Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic, and the installed ROBOTIS Jazzy sources.
-- [ ] Run Waffle in TurtleBot3 World, teleoperate, map with Cartographer, save the map, initialize AMCL, and navigate to three goals.
+- [ ] Map World with Waffle and House with Waffle Pi in separate Cartographer sessions, saving distinct map pairs.
+- [ ] Initialize AMCL on each matching map/model; reach one World goal and two House goals in different rooms, including doorway traversal.
+- [ ] Verify the one-video/short-explanation submission can show both environments clearly.
 - [ ] Check meshes, scans, clock, TF, cancellation, and actual stopping.
 
 ## Final — Goosebot with student-added LiDAR

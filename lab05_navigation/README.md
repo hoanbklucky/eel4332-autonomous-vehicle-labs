@@ -19,13 +19,13 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Load the **TurtleBot3 World map** saved in Lab 4 (`results/map.yaml` + image), localize **Waffle** with AMCL, and complete a successful navigation to a chosen destination with Nav2. Lab 4's House map is additional practice and must not be loaded into TurtleBot3 World.
+Navigate on **both maps saved in Lab 4**: reach **one destination in TurtleBot3 World**, then **two destinations in different rooms of TurtleBot3 House**. Initialize AMCL and confirm scan/map alignment in each environment. Use the matching model/map; a World map cannot be used in House or vice versa.
 
 Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 
 Commands below are ready to copy: no leading `$` prompt is included. Keep dollar signs *inside* commands, such as `$PWD` and `$(...)`.
 
-Use **Waffle in TurtleBot3 World** throughout. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
+Start with **Waffle in TurtleBot3 World**, then switch to **Waffle Pi in TurtleBot3 House**. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
 
 
 ## What is AMCL?
@@ -43,7 +43,7 @@ In RViz2, **2D Pose Estimate** supplies an initial position/heading guess; it do
 
 ## How does Nav2 work?
 
-For the official TurtleBot3 Jazzy Waffle configuration, the **NavFn global planner uses Dijkstra's expansion** (`use_astar: false`), and **DWB** supplies local control. Nav2 is configurable; other parameter files can select different algorithms.
+For the official TurtleBot3 Jazzy Waffle and Waffle Pi configurations, the **NavFn global planner uses Dijkstra's expansion** (`use_astar: false`), and **DWB** supplies local control. Nav2 is configurable; other parameter files can select different algorithms.
 
 | Component | Role |
 |---|---|
@@ -75,7 +75,7 @@ The course configuration is expected to report `nav2_navfn_planner::NavfnPlanner
 
 ## 1. Install and check packages
 
-Lab 4 must be complete, including the core TurtleBot3 and simulation workspace build. Keep its `map.yaml` and image together. Install navigation and the final-project Python API:
+Lab 4 must be complete, including the core TurtleBot3 and simulation workspace build. Keep both `map.yaml` and `house_map.yaml` with their respective images. Install navigation and the final-project Python API:
 
 ```bash
 sudo apt update
@@ -112,7 +112,7 @@ Continue only after the recovery check prints an installation path. Ubuntu/ROS d
 
 If another package check fails, resolve that package before continuing; the recovery above specifically addresses `turtlebot3_navigation2`.
 
-## 2. Start a fresh world — Terminal 1
+## 2. TurtleBot3 World — start fresh in Terminal 1
 
 Stop all previous simulator, Cartographer, and teleoperation processes with Ctrl+C.
 
@@ -125,7 +125,7 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 
 Use the same world and model used to build the map. Leave this terminal running.
 
-## 3. Start navigation — Terminal 2
+## 3. World navigation — Terminal 2
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -162,13 +162,13 @@ Click that terminal before driving slowly. Press `s` to stop, then **Ctrl+C to t
 
 **Run the source and export commands in each new terminal.** Each separately opened terminal has its own environment: setting `TURTLEBOT3_MODEL=waffle` in Terminal 1 does not set it in Terminal 3. The complete command block above includes everything Terminal 3 needs.
 
-## 5. Send a goal and navigate
+## 5. Reach one destination in World
 
 Click **Navigation2 Goal / Nav2 Goal** in RViz2, click a reachable location, and drag toward the desired final heading. Wait for completion before sending the next goal.
 
 Choose an open-space destination and record the robot navigating to it. Show Gazebo and RViz2 clearly, including the planned path and the robot reaching/stopping at the destination. Show the reported successful goal result in RViz2 or the navigation terminal; an active goal or a visible path alone is not completion evidence.
 
-You may practice additional destinations, but only **one successful navigation video** is required. Keep your map and useful destination/home poses for the final; no goal CSV or experiment table is required for this lab.
+Complete **one successful World goal** before switching to House. Capture this as the World portion of your single submission video. Keep both maps and navigation notes; no goal CSV or experiment table is required. The final reuses these skills with Goosebot and a new map, not this TurtleBot map.
 
 <details>
 <summary>Expected output — selecting a navigation goal</summary>
@@ -192,18 +192,61 @@ To stop early, use RViz2's navigation cancellation control if available and conf
 
 After finishing, stop navigation (Terminal 2), then simulation (Terminal 1) with Ctrl+C.
 
+## 6. Navigate in TurtleBot3 House — two destinations
+
+Stop any localization teleop, then **Ctrl+C navigation and the World simulator**. Wait for the processes to exit. Launch House in a fresh session; keep SLAM/Cartographer stopped.
+
+| Environment | Model in every terminal | Saved map from Lab 4 | Required successful goals |
+|---|---|---|---:|
+| TurtleBot3 World | `waffle` | `lab04_slam/results/map.yaml` | 1 |
+| TurtleBot3 House | `waffle_pi` | `lab04_slam/results/house_map.yaml` | 2, in different rooms |
+
+**Terminal 1 — House:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 launch turtlebot3_gazebo turtlebot3_house.launch.py
+```
+
+**Terminal 2 — saved House map and Waffle Pi navigation:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True \
+  map:="$HOME/courses/eel4332-autonomous-vehicle-labs/lab04_slam/results/house_map.yaml"
+```
+
+Use **2D Pose Estimate** to initialize the robot's current House pose. Compare the **live scan with several saved wall edges**, as in Step 4, before sending a goal. Do not reuse the World pose estimate or its map. The environment, saved map, and model must all match.
+
+If a small motion is needed to improve localization, use **Terminal 3**:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+Stop with `s`, then Ctrl+C teleop before autonomous navigation. In RViz2, send **two goals sequentially in different rooms** so the robot travels through a doorway. Choose open floor space away from walls/furniture; wait for successful completion before sending the next goal. Show the path, movement and successful arrival/stopping for **both House goals** in your video.
+
+Parameter tuning is optional. If a goal fails, first check map identity/coverage, localization alignment and whether the destination has enough clearance. Keep the original saved map; do not remap during navigation. After finishing, stop teleop if used, then navigation and Gazebo.
+
 ## What to Submit
 
 Submit only:
 
-1. **One screen-recording video** showing a successful navigation to a chosen goal, with Gazebo and RViz2 visible.
-2. **One short paragraph in your own words** explaining how AMCL, the costmap, the global planner, and the local controller work together to move the robot to that goal.
+1. **One short screen-recording video** with clearly labeled clips showing **one successful World goal and two successful House goals in different rooms**, with Gazebo and RViz2 visible. Include a brief view of scan/map alignment in each environment; clips may be joined.
+2. **One short paragraph in your own words** explaining how AMCL, the costmap, the global planner, and the local controller work together to move the robot to its goals.
 
-No separate screenshots, report, `answers.md`, goal CSV, or results table is required. Keep your saved map and working setup for the final project.
+No separate screenshots, report, `answers.md`, goal CSV, or results table is required. Keep both saved maps and working setups for reference. The final requires a new map of your chosen Goosebot environment.
 
 ## Final Handoff and Optional Background
 
-Reuse the map, goals, and launch sequence in the [delivery final](../final_project_simulation/README.md). Its mission-client scaffold and recorder are in `src/`. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
+Reuse the localization/navigation workflow in the [Goosebot delivery final](../final_project_simulation/README.md), which requires your added LiDAR and a **new IST/campus map**. Its optional mission-client scaffold and recorder are in `src/`. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
 
 ## Troubleshooting
 
@@ -243,7 +286,7 @@ Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation
 
 Package errors: check the build and sourcing. Misaligned scans: check map, initial pose, and world/model. Conflicting motion: stop all teleoperation publishers. Record the exact command and full error when requesting help.
 
-The instructor must test saved-map navigation and cancellation on the course WSL image.
+The instructor must pilot saved-map localization, World navigation, both House goals, model-specific configuration, and cancellation on the course WSL image.
 
 ## References
 
@@ -255,4 +298,4 @@ These procedures adapt the official **Jazzy** workflow, with explicit per-termin
 - [ROBOTIS Navigation Simulation](https://docs.robotis.com/docs/systems/turtlebot3/simulation/navigation_simulation/?ros=jazzy)
 
 
-Algorithm references: [TurtleBot3 Jazzy Waffle parameters](https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_navigation2/param/waffle.yaml), [NavFn planner](https://docs.nav2.org/jazzy/configuration_and_development/configuration_guide/planners_plugins/configuring_navfn/), and [DWB controller](https://docs.nav2.org/jazzy/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/).
+Algorithm references: [TurtleBot3 Jazzy Waffle Pi parameters](https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_navigation2/param/waffle_pi.yaml), [TurtleBot3 Jazzy Waffle parameters](https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_navigation2/param/waffle.yaml), [NavFn planner](https://docs.nav2.org/jazzy/configuration_and_development/configuration_guide/planners_plugins/configuring_navfn/), and [DWB controller](https://docs.nav2.org/jazzy/configuration_and_development/first_time_robot_setup_guide/navigation_plugins/setup_navigation_plugins/).
