@@ -5,6 +5,7 @@ Adds only missing LiDAR/joint-state blocks and bridges. Existing complete LiDAR
 settings are retained; incomplete/conflicting edits stop before either write.
 """
 import argparse
+import ast
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -81,11 +82,18 @@ def prepare(package):
             raise ValueError('Expected one final closing robot tag')
     ET.fromstring(text)
     yaml.safe_load(bridge_text)
+    # Ctrl+C may already have shut down rclpy through its signal handler.
+    odom = package / 'scripts/cmd_vel_to_odom.py'
+    odom_text = odom.read_text()
+    odom_text = odom_text.replace('rclpy.shutdown()', 'rclpy.try_shutdown()')
+    ast.parse(odom_text)
     # All validation precedes writes; retain the original formatting/comments.
     if text != model.read_text():
         model.write_text(text)
     if bridge_text != bridge.read_text():
         bridge.write_text(bridge_text)
+    if odom_text != odom.read_text():
+        odom.write_text(odom_text)
     print('Course baseline ready: LiDAR /scan and wheel joint-state publisher/bridge.')
 
 

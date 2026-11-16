@@ -51,12 +51,27 @@ def triangles(poly):
 
 def mesh(poly,h,path):
     p,faces=triangles(poly);n=len(p)
-    text=['# Extruded static campus footprint']
-    text += [f'v {x:.5f} {y:.5f} {z:.5f}' for z in (0,h) for x,y in p]
-    for a,b,c in faces:text += [f'f {a+n+1} {b+n+1} {c+n+1}',f'f {c+1} {b+1} {a+1}']
+    vertices=[(round(x,5),round(y,5),round(z,5)) for z in (0,h) for x,y in p]
+    indexed=[]
+    for a,b,c in faces:indexed += [(a+n,b+n,c+n),(c,b,a)]
     for i in range(n):
         j=(i+1)%n
-        text += [f'f {i+1} {j+1} {j+n+1}',f'f {i+1} {j+n+1} {i+n+1}']
+        indexed += [(i,j,j+n),(i,j+n,i+n)]
+    # Flat-shaded triangles: explicit position/normal pairs for every corner.
+    # DART rejects imported collision submeshes with missing vertex normals.
+    points=[];normals=[]
+    for face in indexed:
+        a,b,c=[vertices[i] for i in face]
+        u=[b[k]-a[k] for k in range(3)];v=[c[k]-a[k] for k in range(3)]
+        normal=(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0])
+        length=math.sqrt(sum(x*x for x in normal))
+        if length<1e-12:raise ValueError(f'Degenerate triangle in {path}')
+        normal=tuple(x/length for x in normal)
+        points.extend((a,b,c));normals.extend((normal,normal,normal))
+    text=['# Extruded static campus footprint; explicit flat vertex normals','s off']
+    text += [f'v {x:.5f} {y:.5f} {z:.5f}' for x,y,z in points]
+    text += [f'vn {x:.9f} {y:.9f} {z:.9f}' for x,y,z in normals]
+    text += [f'f {i+1}//{i+1} {i+2}//{i+2} {i+3}//{i+3}' for i in range(0,len(points),3)]
     path.write_text('\n'.join(text)+'\n')
     return p
 

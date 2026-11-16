@@ -1,6 +1,4 @@
-# Florida Polytechnic campus world — geographic layout, version 2
-
-> **For the current Goosebot final:** use the complete commands in [the final-project README](../README.md). The TurtleBot launch/mapping instructions below are retained as an optional reference and do not add the required Goosebot LiDAR.
+# Florida Polytechnic campus world
 
 This replaces the earlier arbitrary 24 × 30 m block layout. It uses **OpenStreetMap building, lake, road, parking, and path outlines**, checked against the supplied **2026 printable campus map**. The IST footprint is elongated/curved; BARC and the residence cluster retain their real shapes and relative positions; the lake chain and multiple causeways are preserved.
 
@@ -11,7 +9,7 @@ This replaces the earlier arbitrary 24 × 30 m block layout. It uses **OpenStree
 - Horizontal geometry uses a **uniform 0.06 scale** (about 1:16.7), retaining geographic proportions/angles. The teaching arena is 73 × 80 m. It is not a full-scale or surveyed digital twin.
 - World +x is east; +y is north. The printable PDF is a perspective illustration, so its viewpoint differs from this north-up plan.
 - Most footprints are OSM geometry. Purple buildings on the plan are approximate additions inferred from the 2026 PDF: Residence Hall III, Campus Store, The Phoenix, and administration buildings. Their shapes/positions are less certain. Heights and roof details are illustrative.
-- Water is rendered as low, solid blue geometry to prevent robot traversal and provide LiDAR returns. This is a simulation safety abstraction, not water physics. Causeways are widened to 1.9 m for Waffle clearance.
+- Water is rendered as low, solid blue geometry to prevent robot traversal and provide LiDAR returns. This is a simulation safety abstraction, not water physics. Causeways are widened to 1.9 m for robot clearance.
 - Roads/paths/parking are included visually. Grass remains traversable: this world does not enforce sidewalk-only navigation or traffic rules. FIPR is off campus in Bartow and is not placed inside this campus.
 
 ## Files
@@ -21,98 +19,60 @@ This replaces the earlier arbitrary 24 × 30 m block layout. It uses **OpenStree
 | `layout.json` | Source footprints, path network, named locations, scale, provenance, and source IDs |
 | `campus.sdf`, `campus_blocked.sdf` | Baseline/blocked worlds using matching visual and collision meshes |
 | `meshes/` | Generated building/water/parking geometry; keep this directory beside the worlds |
-| `campus.launch.py` | Uses installed ROBOTIS Waffle spawning, bridges, and robot-state publisher |
+| `campus.launch.py` | Legacy TurtleBot launcher; use the Goosebot wrapper below for this final |
 | `reference.yaml`, `reference.png` | Geometric reference occupancy map; **not a student SLAM result** |
 | `mission.json`, `reference_goals.csv` | World/reference-frame home and delivery poses; the launch reads home from mission.json |
 | `generate_campus.py` | Recreates assets from layout.json using Python's standard library |
 
-Install Lab 4 dependencies first. Use a WSL/Ubuntu terminal. Stop existing Gazebo, SLAM, teleop, and Nav2 processes before switching worlds. After updating an earlier campus version, rebuild your SLAM map; its old map/goals do not match this layout.
+## Launch campus — Terminal 1
 
-## 1. Launch — Terminal 1
+Complete the Goosebot setup in [the final-project guide](../README.md) first. Stop previous simulator, SLAM, teleop, RViz, and navigation launches with **Ctrl+C in their launching terminals**. Closing the Gazebo window alone can leave a server running. Check `pgrep -af 'gz sim|gz-sim'` before switching worlds; inspect and stop any leftover simulator server.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
+source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/campus/campus.launch.py"
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
-The robot spawns near IST at **(-15.025, 17.888) m**, yaw 0 (east), in world coordinates. Check `waffle` in the Entity Tree. The launch adds the campus resource directory for mesh lookup; do not copy the SDF alone into another folder.
+Expect **goosebot** in Gazebo's Entity Tree, near IST at **(-15.025, 17.888) m**, yaw 0 (east). Right-click its entry and choose **Move To** to focus the camera. Keep the entire campus folder together: the world needs its adjacent `meshes/` and `mission.json`. No `TURTLEBOT3_MODEL` setting is needed.
 
-## 2. Map with SLAM — Terminal 2
+### Updating an existing installation
 
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
-```
+Pull the current course files after saving your local edits. The corrected meshes are committed; no mesh generation or ROS rebuild is required for the mesh repair itself. Re-run the Step 1 build/setup helper once to install the accompanying Python shutdown fix, then source the workspace again.
 
-Drive from **Terminal 3**, mapping the delivery routes, both sides of the lake, and the alternative causeways:
+The earlier DART error, **“normal count [0] … does not match its vertex count”**, meant collision submeshes were being ignored. The supplied meshes now include explicit surface normals. Do not ignore that error if it persists with custom meshes. The later `rcl_shutdown already called` traceback is a separate cleanup issue; the setup helper now makes that cleanup idempotent.
 
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-ros2 run turtlebot3_teleop teleop_keyboard
-```
+## Map and localize
 
-Keep keyboard focus in Terminal 3. `w/x` changes forward speed, `a/d` changes turn rate, and `s` or Space stops. You need enough mapped coverage for the delivery mission and its alternative route; mapping every remote corner is unnecessary.
+Follow **Steps 4–6 in [the final-project guide](../README.md)** using this campus launch as Step 3:
 
-Stop motion, then save from **Terminal 4** while mapping/simulation remain running:
+- Terminal 1: campus simulation.
+- Terminal 2: SLAM while mapping; AMCL/Nav2 after mapping.
+- Terminal 3: RViz.
+- Terminal 4: manual driving while mapping.
 
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
-mkdir -p results
-ros2 run nav2_map_server map_saver_cli -f "$PWD/results/campus_map" --ros-args -p use_sim_time:=true
-```
+Open RViz and configure the displays before driving. Map the delivery routes and alternative crossings; every remote corner is unnecessary. Save your campus map before stopping SLAM. Use a map made in **this campus world**, not an IST or warmup map. Preserve earlier maps under separate names. If following the guide's `final_map.yaml` command, ensure that file is your campus map.
 
-Keep `campus_map.yaml` and its image together. Then stop keyboard, Cartographer, and simulator with Ctrl+C.
+For localization, stop SLAM and relaunch the baseline campus. Start AMCL/Nav2 with your campus map, open RViz, then use **2D Pose Estimate** and check scan alignment before sending a nearby goal. RViz does not publish the missing map-to-odom transform; AMCL needs an initial pose. Brief transform warnings before initialization can occur.
 
-## 3. Navigate
+## Blocked-causeway trial
 
-Restart the baseline campus in Terminal 1. In another terminal:
+Stop all baseline launches with Ctrl+C. Use the same launch command above, replacing `campus.sdf` with `campus_blocked.sdf`. Keep the **baseline campus map** and goals; do not remap the orange barrier. Other crossings remain open. Check live scan/costmap detection and record the response; a detour alone does not prove global replanning.
 
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:="$PWD/final_project_simulation/results/campus_map.yaml"
-```
+## Campus poses
 
-Use **2D Pose Estimate** at home in your map and check scan alignment as in Lab 5. Stop localization teleop before navigation. Test a nearby goal first.
+These are **world/reference-map** coordinates. Your SLAM map can have a different origin and heading; select poses in RViz on your own map.
 
-| Yellow pad | World / reference-map x (m) | y (m) |
+| Yellow pad | x (m) | y (m) |
 |---|---:|---:|
-| 0 Home near IST | -15.025 | 17.888 |
-| 1 IST delivery | -5.756 | 11.983 |
-| 2 Residence delivery | -0.043 | 12.883 |
-| 3 GCW delivery | -9.587 | 1.621 |
+| Home near IST | -15.025 | 17.888 |
+| IST delivery | -5.756 | 11.983 |
+| Residence delivery | -0.043 | 12.883 |
+| GCW delivery | -9.587 | 1.621 |
 
-All example yaws are 0. **Your SLAM map may have a different origin/heading.** Select the yellow pads/home in RViz2 on your own saved map and record those map-frame coordinates. Use the table/CSV directly only with the supplied reference map.
-
-For an instructor reference-map check, substitute `final_project_simulation/campus/reference.yaml` in the navigation command and initialize at the world/reference home pose above. The PNG map is accepted by Nav2. This map is generated from geometry and must not be presented as student SLAM output.
-
-This world is larger than Lab 5's arena. Choose fixed mission/time limits based on a successful pilot run; a per-goal limit around **600 simulation seconds** is a starting example, not a guarantee.
-
-## 4. Blocked-causeway trial
-
-Stop all baseline processes. Restart with:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/turtlebot3_ws/install/setup.bash
-export TURTLEBOT3_MODEL=waffle
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/campus/campus.launch.py" world_file:=campus_blocked.sdf
-```
-
-Use the **same baseline map**, goals, and configuration. Do not remap the added orange barrier. It blocks a mapped causeway at world **(-6.8685, 11.3297) m**, yaw **2.3159 rad**, dimensions **4.0 × 0.35 × 0.8 m**. Other crossings remain open. Verify live scan/costmap detection and record actual response; a detour alone does not prove global replanning.
+All example yaws are 0. The supplied `reference.yaml` is a geometric instructor reference, not a student SLAM result.
 
 ## Regenerate and customize
 
@@ -122,7 +82,9 @@ python3 final_project_simulation/campus/generate_campus.py
 
 The script overwrites generated worlds, meshes, reference map, plan, and mission files. Edit `layout.json` to change this geographic model. For a simpler beginner box-based world, use `create_simple_world.py` in a copied folder as described in [Create your own world](../CREATE_YOUR_OWN_WORLD.md); do not run that alternative in this campus directory.
 
-**Checked offline:** polygon triangulation, closed mesh topology, map/world footprint agreement, XML/Python syntax, and baseline/blocked connectivity with 0.4 m grid clearance. **Not tested here:** Gazebo rendering/mesh loading, Waffle spawning/sensors/TF, AMCL, or Nav2 execution. The instructor must pilot both world variants on the course WSL installation. Geometry connectivity is not proof of successful navigation.
+Generated OBJ files include a unit normal for every triangle corner, including collision meshes. Regeneration preserves this fix.
+
+**Checked offline:** polygon triangulation, closed mesh topology, map/world footprint agreement, XML/Python syntax, and baseline/blocked connectivity with 0.4 m grid clearance. **Not tested here:** Gazebo rendering/mesh loading, Goosebot spawning/sensors/TF, AMCL, or Nav2 execution. The instructor must pilot both world variants on the course WSL installation. Geometry connectivity is not proof of successful navigation.
 
 ## Sources and attribution
 

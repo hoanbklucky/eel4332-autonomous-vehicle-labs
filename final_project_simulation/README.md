@@ -327,7 +327,17 @@ If it reports **Gazebo server(s) already running**, stop the old simulation firs
 
 The GUI and server are owned by this one course launch: closing the GUI requests shutdown of its other processes too. **Ctrl+C in Terminal 1 remains the standard way to stop everything.** If the server fails, the launch shuts down its GUI/ROS nodes. This is different from manually starting a GUI-only process.
 
-For campus, replace the final path with `final_project_simulation/campus/campus.sdf`. The wrapper reads the home pose from the world's adjacent `mission.json`, adds mesh lookup paths, and starts the server/robot/GUI in order. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
+**Campus — alternative Terminal 1 command:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \\
+  world:="$PWD/final_project_simulation/campus/campus.sdf"
+```
+
+See [the campus guide](campus/README.md) for expected spawn, mapping, and blocked-world instructions. The wrapper reads the home pose from the world's adjacent `mission.json`, adds mesh lookup paths, and starts the server/robot/GUI in order. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
 
 #### Find Goosebot in the large world
 

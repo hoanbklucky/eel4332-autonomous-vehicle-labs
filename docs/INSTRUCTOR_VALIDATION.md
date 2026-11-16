@@ -45,3 +45,8 @@ Offline checks cover explicit-world spawn arguments, server PID detection, creat
 - [ ] Confirm explicit-world spawning and failure shutdown with campus and both blocked variants.
 - [ ] Confirm camera configuration, /clock, /scan, /joint_states, EKF TF and RViz after delayed GUI startup.
 
+
+
+## Campus mesh normals and shutdown repair
+
+The campus OBJ generator now supplies explicit unit normals per triangle corner. All 37 regenerated meshes retain their original triangle coordinates/winding; vertex and normal counts agree. Generated baseline/blocked SDF, reference image, and mission files are unchanged. The baseline configuration helper replaces the odometry script's unconditional rclpy.shutdown() with idempotent rclpy.try_shutdown(); syntax and repeat-setup checks passed. Pilot campus rendering, collisions, scans, spawning, and Nav2 on WSL; no Gazebo runtime was available for this repair. An EKF context error during coordinated shutdown may be an independent upstream shutdown race; inspect the first error before the shutdown tail.
