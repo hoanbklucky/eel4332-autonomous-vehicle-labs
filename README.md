@@ -1,5 +1,16 @@
 # EEL 4332 — Introduction to Autonomous Vehicles
 
+> [!IMPORTANT]
+> **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
+>
+> **Before relaunching, switching worlds, or finishing:**
+> 1. Stop robot motion; save any map/results you need.
+> 2. Press **Ctrl+C** in each teleop, SLAM and Nav2 terminal that is running.
+> 3. Press **Ctrl+C in the simulator launch terminal** (usually Terminal 1).
+> 4. Wait for shutdown messages to finish and the shell prompt to return before launching again.
+>
+> If you already closed the window, return to its launch terminal and press Ctrl+C there. If shutdown seems incomplete, check `pgrep -af 'gz sim|gz-sim'` and identify leftover simulation processes before restarting.
+
 > **Copying ROBOTIS commands:** A leading `$` is a terminal-prompt symbol, not part of the command. Some copy buttons include it. Copy only the command after `$ `, or paste into the editor first and remove that prefix from each command line. For example, `$ sudo apt update` must be entered as:
 >
 > ```bash
