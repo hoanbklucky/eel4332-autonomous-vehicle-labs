@@ -68,6 +68,7 @@ final_project_simulation/campus/reference.yaml
 final_project_simulation/campus/reference_goals.csv
 final_project_simulation/config/.gitkeep
 final_project_simulation/goosebot/README.md
+final_project_simulation/goosebot/build_student_workspace.sh
 final_project_simulation/goosebot/nav2_goosebot.yaml
 final_project_simulation/goosebot/slam_goosebot.yaml
 final_project_simulation/goosebot/world.launch.py

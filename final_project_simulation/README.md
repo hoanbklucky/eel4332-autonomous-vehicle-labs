@@ -25,6 +25,10 @@ Use the **provided Goosebot model**, add a simulated **2-D LiDAR**, build your o
 
 Connect a robot model, sensors, bridges, TF, odometry, SLAM, localization, and navigation. Explain your own changes and diagnose problems rather than only repeating TurtleBot commands.
 
+## AI assistance is allowed
+
+You may use AI tools to help write or modify code, add sensors, configure ROS 2, and debug errors for this **final project**. You are responsible for testing the resulting code/configuration and must be able to explain your submitted changes and how the system works. Write the short final explanation in your own words. AI assistance does not replace the required simulation demonstration or your understanding.
+
 ## Prerequisites and background
 
 Complete Labs 4–5, then the required Goosebot warm-up in Step 1b below. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `$` prompt. **The course instructions use native WSL/Jazzy for both the warm-up and final. Docker is an optional alternative, not an additional requirement.**
@@ -65,7 +69,7 @@ Other supplied files: `goosebot/world.launch.py` (world/spawn wrapper), `goosebo
 
 ## Step-by-step procedure
 
-### 1. Install missing dependencies and copy the supplied Goosebot source
+### 1. Install dependencies, copy Goosebot source, and build
 
 Run once in Ubuntu/WSL. This supplements your existing installation; no Ubuntu/ROS reinstall or Docker is needed.
 
@@ -92,21 +96,27 @@ git -C /tmp/eel4332-goose-source checkout bffaf3cdf2b38f3b5a53a977064e0c787e046f
 cp -r --update=none /tmp/eel4332-goose-source/11_simulation/ros2_ws/src/goosebot_0 final_project_simulation/src/
 # Omit the redundant packaged snapshot; the extracted source is already copied.
 rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
-# Required for Python launch executables with --symlink-install.
-chmod +x final_project_simulation/src/goosebot_0/scripts/*.py
-mkdir -p ~/goosebot_ws/src
-ln -s "$PWD/final_project_simulation/src/goosebot_0" ~/goosebot_ws/src/goosebot_0
-cd ~/goosebot_ws
-rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
-colcon build --symlink-install
-source install/setup.bash
+# Link, fix script permissions, install dependencies, and build this source copy.
+bash final_project_simulation/goosebot/build_student_workspace.sh
+```
+
+**After the helper reports a successful build**, configure this terminal and check the installed package:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
 ros2 pkg prefix goosebot_0
 ros2 pkg executables goosebot_0
 ```
 
+Expected prefix: `$HOME/goosebot_ws/install/goosebot_0`. The helper builds/verifies in its own process; it does not configure the parent terminal. Source this workspace again in every launch terminal. Do not run the install/prefix checks before the build succeeds.
+
+If the source was copied already, skip the clone/copy commands and run the helper from the repository root. It preserves model edits, creates the workspace source link only when absent, and refuses a link/source pointing to another checkout. Inspect and preserve files before changing such a link. The helper does not fetch a missing model; complete the full source-copy step first.
+
+
 The executable list must include `cmd_vel_to_odom.py`, `ground_truth_map_odom_bridge.py`, and `stereo_camera_info_fixer.py` before launching. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
 
-The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone or symlink already exists, reuse/check it instead of repeating those commands. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
+The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone already exists, reuse/check it instead of cloning again; the helper checks an existing workspace source link. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
 
 ### 1a. Repair “executable cmd_vel_to_odom.py not found”
 

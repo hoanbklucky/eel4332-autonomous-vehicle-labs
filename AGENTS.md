@@ -35,6 +35,11 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 
 - Do not commit or embed the original IST evacuation/floor-plan reference images. Keep only the generated teaching-world preview and derived simulation assets.
 
+## Final-project AI assistance
+
+- Students may use AI to help with final-project coding, model/sensor changes, configuration and debugging. They must test their work and explain it in their own words.
+- This permission does not authorize publishing completed instructor solutions in the public starter repository. Preserve student-required TODOs when maintaining the public repository.
+
 ## ROS / Gazebo
 
 - Lab 2 and the first environment in Labs 4–5 use ROBOTIS Jazzy Waffle/World; Labs 4–5 also use House with Waffle Pi. Cartographer is used for Lab 4 mapping. The final uses the provided Goosebot model with a REQUIRED student-added 2-D LiDAR, LiDAR SLAM Toolbox, and saved-map AMCL/Nav2 in IST interior or the campus world (custom world optional). These new integrations require instructor simulation validation.
