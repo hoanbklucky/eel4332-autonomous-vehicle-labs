@@ -440,9 +440,9 @@ ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
   slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
 ```
 
-**Set up visualization before driving:** open Terminal 4 and configure RViz first, then use Terminal 3 to drive while watching the map grow. Terminal numbers identify their roles; they do not require starting driving before RViz.
+**Start these terminals in order:** Terminal 2 runs SLAM, Terminal 3 shows RViz, and Terminal 4 provides manual driving. Configure RViz before moving the robot so you can watch the map grow.
 
-**Terminal 4 — visualization:**
+**Terminal 3 — visualization:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -452,7 +452,7 @@ rviz2 --ros-args -p use_sim_time:=true
 
 #### RViz setup — add displays and select their topics
 
-If RViz is already open with `use_sim_time:=true`, reuse it. Otherwise run the Terminal 4 command above. Keep Gazebo and the Step 5 SLAM launch running.
+If RViz is already open with `use_sim_time:=true`, reuse it. Otherwise run the Terminal 3 command above. Keep Gazebo and the Step 5 SLAM launch running.
 
 **1. Show the Displays panel and choose the fixed frame.**
 
@@ -517,7 +517,7 @@ If RobotModel is absent from the By topic tab, that is not evidence the robot de
 
 
 
-**Terminal 3 — driving:**
+**Terminal 4 — driving:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -525,7 +525,7 @@ source ~/goosebot_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+Click inside Terminal 4 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
 
 Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
 
@@ -558,7 +558,7 @@ ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
 
 Leave Terminal 2 running after successful startup. Nav2 prints logs there and opens no window; expect **Managed nodes are active**. Check that you saved `results/final_map.yaml` and its image in Step 5 and restarted the same world before continuing.
 
-In Terminal 4, use the standard Nav2 RViz layout:
+In Terminal 3, use the standard Nav2 RViz layout:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
