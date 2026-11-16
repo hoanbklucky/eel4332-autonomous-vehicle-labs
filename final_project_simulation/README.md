@@ -440,15 +440,7 @@ ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
   slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
 ```
 
-**Terminal 3 — driving:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-```
-
-Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+**Set up visualization before driving:** open Terminal 4 and configure RViz first, then use Terminal 3 to drive while watching the map grow. Terminal numbers identify their roles; they do not require starting driving before RViz.
 
 **Terminal 4 — visualization:**
 
@@ -525,6 +517,16 @@ If RobotModel is absent from the By topic tab, that is not evidence the robot de
 
 
 
+**Terminal 3 — driving:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+Click inside Terminal 3 and follow **its printed key layout** (different from TurtleBot teleop). Start slowly. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+
 Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
 
 ```bash
@@ -546,11 +548,15 @@ Stop teleop, SLAM, RViz, and simulator. Relaunch your baseline world using Step 
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch nav2_bringup bringup_launch.py slam:=false use_sim_time:=true \
-  use_composition:=false autostart:=true \
+ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
+  use_composition:=False autostart:=True \
   map:="$PWD/final_project_simulation/results/final_map.yaml" \
   params_file:="$PWD/final_project_simulation/goosebot/nav2_goosebot.yaml"
 ```
+
+**Use the capitalized launch values exactly as shown.** Jazzy's standard Nav2 bringup evaluates `slam` and `use_composition` in Python expressions; lowercase `false` can cause **`name 'false' is not defined`** before nodes start. These command-line values differ from lowercase `true/false` in YAML configuration files. If you see this error, rerun the corrected command; no robot rebuild or remapping is needed. See the [Jazzy bringup launch source](https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_bringup/launch/bringup_launch.py).
+
+Leave Terminal 2 running after successful startup. Nav2 prints logs there and opens no window; expect **Managed nodes are active**. Check that you saved `results/final_map.yaml` and its image in Step 5 and restarted the same world before continuing.
 
 In Terminal 4, use the standard Nav2 RViz layout:
 
