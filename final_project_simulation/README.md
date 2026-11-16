@@ -300,6 +300,43 @@ Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Use its ex
 4. Retain the existing EKF and its `odom → base_footprint` transform. Do not add a second odometry TF publisher. Inspect the model/configuration to understand its command-derived odometry: it is not measured wheel-encoder odometry.
 5. Verify the supplied footprint contains the complete robot and your sensor mount; update **both** costmaps if necessary. Record the sensor values, mounting position, and footprint in your short explanation.
 
+
+#### What to change when copying the ToF sensor
+
+**Keep the original ToF sensor. Edit only your new copy.** There are two separate parts in this file: the URDF link/joint defines the mount and TF; the later `<gazebo reference="tof_front_link">…</gazebo>` block creates the simulated measurements. Copy **both parts**. Copying only the link/joint shown in the screenshot creates a visible mount, not a working LiDAR.
+
+Use the following checklist to edit your copy; these are XML fields, not terminal commands.
+
+| Location in your new copy | Change |
+| --- | --- |
+| Xacro properties | Rename `tof_x_offset` / `tof_z_offset` to unique LiDAR property names, such as `lidar_x_offset` / `lidar_z_offset`. Update their uses in the new joint. Do not redefine the original ToF properties. |
+| `<link name="…">` | `tof_front_link` → `lidar_link`. |
+| Link visual/inertial | Choose a visible sensor shape and sensible mass/inertia for your mount. The visual shape does not set the scan coverage. |
+| `<joint name="…">` | `tof_front_joint` → `lidar_joint`; retain `type="fixed"` and parent `base_link`; change child to `lidar_link`. |
+| Joint `<origin xyz="…" rpy="…">` | Choose a clear mounting position. Values are relative to `base_link`, not the ground. Start with a level sensor, `rpy="0 0 0"`; choose height after inspecting the chassis, camera and nearby obstacles. The scan plane must avoid the robot itself and intersect walls. |
+| `<gazebo reference="…">` | `tof_front_link` → `lidar_link`. This must match your new link name. |
+| `<sensor type="…" name="…">` | Keep `type="gpu_lidar"`; rename `tof_front_sensor` to a unique name such as `lidar_sensor`. |
+| `<topic>` and `<gz_frame_id>` | Set to `scan` and `lidar_link`, respectively. Keep the original ToF on `tof_front/scan`. |
+| `<update_rate>` / `<always_on>` | Set to `10` / `true`. Keep `<visualize>true</visualize>` while debugging. |
+| `<lidar><scan><horizontal>` | `samples=720`, `resolution=1`, `min_angle=-3.14159`, `max_angle=3.14159`. The ToF's two nearly identical rays must be replaced with a full horizontal sweep. |
+| `<lidar><scan><vertical>` | `samples=1`, `resolution=1`, `min_angle=0`, `max_angle=0`. This keeps the scan in one plane. |
+| `<lidar><range>` | Set `min=0.12`, `max=12.0`; retain `resolution=0.001` as a starting value. Range resolution is in metres; it is different from scan resolution above. |
+| Copied comments | Replace “single-beam ToF” comments with a description of your 360° LiDAR. |
+| `config/ros_gz_bridge.yaml` | Add the separate `/scan` entry shown above; preserve the existing ToF bridge. |
+
+Do not globally replace `tof` throughout the file: that would also change the original sensor. Ensure all link, joint and sensor names are unique, and put the new blocks inside the existing `<robot>…</robot>` element.
+
+**Reload after editing:** stop the simulator and related launches first. In Ubuntu/WSL, rebuild and source your existing workspace:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+cd ~/goosebot_ws
+colcon build --symlink-install --packages-select goosebot_0
+source install/setup.bash
+```
+
+Continue with Step 3 to launch the edited model, then Step 4 to check the sensor and TF. `/scan` should contain about 720 ranges, its frame should be `lidar_link`, and TF must connect the robot to that frame. In RViz, add a LaserScan display on `/scan`: expect returns around the robot from surrounding walls, rather than just the original narrow forward ToF beam. A full circle of visible returns is not guaranteed where rays see no obstacle within range. If returns hit Goosebot's own body, adjust the mount before mapping.
+
 Adding other sensors is optional: add a link/joint and Gazebo sensor, bridge its correct message type, and configure a consumer. A visible sensor shape alone does not produce measurements. GPS and stereo cameras are not required by this LiDAR workflow.
 
 ### 3. Launch your selected world — Terminal 1
