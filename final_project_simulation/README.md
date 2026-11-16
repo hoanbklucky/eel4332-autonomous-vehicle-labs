@@ -488,9 +488,14 @@ For campus, replace the final path with `final_project_simulation/campus/campus.
 
 #### Find Goosebot in the large world
 
-The IST building is grouped under **`ist_building`** in Gazebo's Entity Tree. Collapse that group to hide its walls/floor pieces; the spawned robot is a separate top-level model named **`goosebot`** when using this course wrapper. Expand the world node if necessary. The URDF name `custom_bot` can appear in conversion warnings; it does not by itself tell you the spawned entity name.
+**At whole-building zoom, Goosebot is only a few pixels wide. Select `goosebot` in the Entity Tree, then focus/zoom the camera on it.** Collapse `ist_building` to keep the tree short. Use the model's **Move To** camera action if offered; selecting the building focuses the entire building instead of the robot.
 
-The launch prints the requested world, robot name and spawn coordinates. IST home is the centre of the south entrance passage at approximately **x=24.85, y=0**, facing inward toward −x (yaw π radians). A successful creation message confirms creation was accepted, but does not prove the robot remained at its initial pose. To check the actual model without scrolling, keep Terminal 1 running and use another Ubuntu/WSL terminal:
+IST starts Goosebot at **(24.85, 0)** in the centre of the **south entrance passage**, facing inward toward −x (yaw π). In the illustrated entrance-facing view, south is the near/foreground entrance and north is at the far end. Camera orbiting can change which end is closest to you.
+
+<details>
+<summary>Troubleshooting — robot missing, too small, or absent from the Entity Tree</summary>
+
+**1. Check the model and actual pose.** Keep Terminal 1 running and open another Ubuntu/WSL terminal:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -498,9 +503,29 @@ gz model --list
 gz model -m goosebot --pose
 ```
 
-Use the exact robot name reported by the list if your local launch differs (for example `custom_bot`). See [Gazebo's model-command reference](https://gazebosim.org/api/sim/8/model_command.html). At whole-building zoom, the roughly 20 cm Goosebot may occupy only a few pixels. Select `goosebot` rather than `ist_building` before zooming/focusing the camera. Locate that name in the short top-level tree and use the model's **Move To** camera action if offered. Check its reported XYZ: near the home XY with a small positive Z is plausible; a large negative Z suggests falling through the floor, and a different XY suggests movement or the wrong spawn pose. If no robot is listed, check the full create log and ensure only the intended Gazebo server is running. Do not repeatedly spawn extra robots to solve a camera problem.
+Use the exact name printed by the list if your local launch differs, such as `custom_bot`. The course wrapper requests the entity name `goosebot`; `custom_bot` can still appear as the URDF model name in conversion warnings. See [Gazebo's model-command reference](https://gazebosim.org/api/sim/8/model_command.html).
 
-The displayed `gz_frame_id ... not defined in SDF. Copying ...` warning alone is not a spawn failure; retain the field and verify the ROS scan frame in Step 4. If creation succeeded but the robot remains missing, share `gz model --list`, its pose, and the launch's printed spawn line to distinguish wrong-world, wrong-pose and visibility issues.
+| Observation | What to check next |
+| --- | --- |
+| `goosebot` is listed at approximately (24.85, 0) with a small positive Z | It exists near home. Collapse `ist_building`, select the separate `goosebot` entry, and focus/zoom on the robot. |
+| Pose has a large negative Z | It may have fallen through the floor. Save the pose and simulator log for troubleshooting. |
+| Pose has different XY | Compare with the launch's printed spawn line; the robot may have moved, or a different launch/mission file is in use. |
+| Terminal lists the robot but the GUI does not | Check whether the GUI is stale or connected to another running server; use the clean restart below. A GUI label such as `default` alone does not establish which server it displays. |
+| No robot is listed | Inspect the full `[create-...]` log for creation errors/timeouts and check that only the intended server is running. |
+
+**2. Restart cleanly if the GUI and terminal disagree.** Stop all old simulator launches, including the maze/warm-up, with Ctrl+C in their launch terminals. Close all Gazebo windows. Check for remaining processes:
+
+```bash
+pgrep -af 'gz sim|gz-sim'
+```
+
+No output means this check found no matching processes. If it lists processes, identify and stop the leftover course simulation before relaunching; ask the instructor if unsure. Closing a window alone may leave its server running. Then launch Step 3 **once**. Do not repeatedly spawn extra robots to solve a camera problem.
+
+**3. Read the messages correctly.** `Entity creation successful` confirms creation was accepted, not that the robot stayed at its initial pose or is visible at the current zoom. The `gz_frame_id ... not defined in SDF. Copying ...` warning alone is not a spawn failure; retain that field and verify the ROS scan frame in Step 4.
+
+If the problem remains, share the launch's printed spawn line, full create log, model list, robot pose, and remaining-process output. These distinguish visibility, wrong-pose, and multiple-server problems.
+
+</details>
 
 ### 4. Check the sensor and TF — Terminal 2
 
