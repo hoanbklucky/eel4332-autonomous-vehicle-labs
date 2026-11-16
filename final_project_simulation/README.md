@@ -333,7 +333,7 @@ The GUI and server are owned by this one course launch: closing the GUI requests
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \\
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
