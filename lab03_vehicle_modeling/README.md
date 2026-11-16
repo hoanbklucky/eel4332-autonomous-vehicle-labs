@@ -1,5 +1,32 @@
 # Lab 3 — Differential-Drive Odometry and Vehicle Modeling
 
+## Before you start — use the current course files
+
+**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+
+In Ubuntu/WSL, save all editor files and check:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git remote -v
+git branch --show-current
+git status --short
+```
+
+`origin` must be your GitHub fork; `upstream` must be `hoanbklucky/eel4332-autonomous-vehicle-labs`. The branch must match the expected name. **If the branch differs or status lists changes, stop here:** [save/commit your work and follow the branch/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before proceeding. Do not discard edits, especially robot Xacro/configuration changes or maps.
+
+Once on the correct branch with a clean working tree:
+
+```bash
+git fetch upstream &&
+git merge --no-edit upstream/final-project-indoor-outdoor &&
+git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
+echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git log -1 --oneline
+```
+
+Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
+
 ## Open in VS Code through WSL
 
 After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
@@ -17,18 +44,6 @@ cd ~/courses/eel4332-autonomous-vehicle-labs/lab03_vehicle_modeling
 
 Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
 
-## Before You Begin — Update Course Files
-
-In a **WSL/Ubuntu Terminal**, go to your local course repository and check for changes:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git status --short
-```
-
-**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
-
-Use [Updating the Course Repository](../docs/UPDATING_COURSE_REPOSITORY.md) to configure your fork (`origin`) and instructor remote (`upstream`). Save/commit your work, then run `git fetch upstream` and `git merge --no-edit upstream/main` on `main`; resolve conflicts before pushing to your fork. Use your actual repository path if you cloned it elsewhere.
 
 ## Mission
 

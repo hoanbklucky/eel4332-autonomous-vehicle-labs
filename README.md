@@ -1,5 +1,7 @@
 # EEL 4332 — Introduction to Autonomous Vehicles
 
+> **Before each lab:** use branch **`final-project-indoor-outdoor`**, fetch instructor updates, and verify your local copy includes them. Start with [Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository) and the [fork/clone/update guide](docs/UPDATING_COURSE_REPOSITORY.md). A fork or ZIP created earlier does not update itself. Labs 4–5 and the final include explicit version checks.
+
 > [!IMPORTANT]
 > **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
 >
@@ -103,30 +105,19 @@ See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation
 
 ## Fork, open, and sync
 
-First **Fork** this repository on GitHub, then clone **your fork**. Replace `YOUR_USERNAME`:
+New students: [fork and clone through Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository), selecting `final-project-indoor-outdoor`. Existing students: save work, verify your fork/instructor remotes and branch, and follow [the update guide](docs/UPDATING_COURSE_REPOSITORY.md). Do this before every lab, especially Labs 4–5 and the final.
+
+With saved work and a clean working tree on `final-project-indoor-outdoor`:
 
 ```bash
-mkdir -p ~/courses
-cd ~/courses
-git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
-cd eel4332-autonomous-vehicle-labs
-git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
-code .
+git fetch upstream &&
+git merge --no-edit upstream/final-project-indoor-outdoor &&
+git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
+echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git log -1 --oneline
 ```
 
-Use VS Code's **WSL: Ubuntu** workspace. `origin` is your fork (push your work); `upstream` is the instructor repository (receive updates).
-
-After saving and committing your work on `main`, update with:
-
-```bash
-git fetch upstream
-git merge --no-edit upstream/main
-git push -u origin main
-```
-
-Resolve conflicts before pushing. VS Code **Sync Changes** synchronizes your tracked fork branch; it does not fetch instructor updates. Existing direct clones can be converted without deleting files—see [forking, migration, commits, and update instructions](docs/UPDATING_COURSE_REPOSITORY.md).
-
-**Before Lab 4:** complete the official **PC Setup** and **Install Simulation Package** steps listed at the start of its README. Earlier Lab 2 installations may not include these ROBOTIS packages. Lab 5 begins with its own navigation-package installation/check.
+After success, `git push -u origin final-project-indoor-outdoor` backs up your combined work. VS Code Sync synchronizes the tracked fork, not instructor updates. Preserve both maps for Labs 4–5; use each lab's current model/map commands.
 
 ## Repository structure
 

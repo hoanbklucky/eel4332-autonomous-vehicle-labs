@@ -1,5 +1,9 @@
 # EEL 4332 Software Setup
 
+## Before you start — obtain the current repository
+
+**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. **New students:** install Git in Part 2, then complete [Part 6 — Fork and clone](#part-6--fork-and-clone-the-course-repository) before running repository-dependent commands. Until then, read setup on GitHub; `code .` opens existing files but does not download them. **Already have a copy?** Save your edits, then use [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before continuing. Fetch the instructor updates for this branch; a clean status or up-to-date fork alone is insufficient.
+
 ## Open in VS Code through WSL
 
 After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
@@ -25,18 +29,6 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 >
 > If you see `$: command not found`, remove the leading `$ ` and rerun. **Keep dollar signs inside commands**, such as `$HOME`, `$PWD`, `${TURTLEBOT3_MODEL}`, and `$(...)`; those have a different meaning.
 
-## Before You Begin — Update Course Files
-
-If this is your first setup, skip this update check; Part 2 installs Git and Part 6 forks/clones the repository. If you already have a local copy, open a **WSL/Ubuntu Terminal** and run:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git status --short
-```
-
-**Command breakdown:** `cd` changes to the repository directory; `~` means your Ubuntu home directory. `git status --short` gives a compact list of local changes and prints nothing when the working tree is clean.
-
-Use the [fork/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) to configure `origin`/`upstream`, commit your work, and merge instructor updates. A clean working tree alone does not mean your fork is current. Use your actual repository path if you cloned it elsewhere.
 
 ## Goal
 
@@ -411,26 +403,30 @@ References: [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/
 
 ## Part 6 — Fork and clone the course repository
 
-Create your own copy so you can push your lab edits.
+**Required before repository-dependent commands:** use your own fork so you can save work and receive instructor corrections. **Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch.
 
-1. Sign in to GitHub, open [the instructor repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and select **Fork → Create fork**.
-2. Replace `YOUR_USERNAME` below with your GitHub username, then run in Ubuntu/WSL:
+Open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs) on GitHub, click **Fork → Create fork**, and keep its name. For the indoor/outdoor branch, uncheck **Copy the main branch only** if shown; the fetch command below also works for an existing main-only fork.
+
+Replace `YOUR_USERNAME` and run once for a new local copy in **Ubuntu/WSL**:
 
 ```bash
 mkdir -p ~/courses
 cd ~/courses
-git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+git clone --branch main https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
 cd eel4332-autonomous-vehicle-labs
 git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
+git fetch upstream
+git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
+git merge --no-edit upstream/final-project-indoor-outdoor
+git push -u origin final-project-indoor-outdoor
 git remote -v
+git branch --show-current
 code .
 ```
 
-`origin` must point to **your fork**; `upstream` must point to **the instructor repository**. Confirm **WSL: Ubuntu** in VS Code. Wait for any VS Code Server update; opening `code .` does not update course files.
+Stop on errors. Expect **your fork as origin**, **the instructor repository as upstream**, branch **final-project-indoor-outdoor**, and **WSL: Ubuntu** in VS Code. Download ZIP, reopening VS Code, or updating VS Code Server does not keep course files synchronized.
 
-Already cloned the instructor repository? Keep your files. Follow the [existing-clone migration steps](../docs/UPDATING_COURSE_REPOSITORY.md#2-already-cloned-the-instructor-repository) to redirect `origin` to your fork and retain the instructor remote as `upstream`.
-
-Save and commit your work, then receive course updates with `git fetch upstream` and `git merge --no-edit upstream/main`. Push your combined work to your fork with `git push -u origin main`. These commands assume you are on `main`; see the [Git guide](../docs/UPDATING_COURSE_REPOSITORY.md) for commits, conflicts, authentication, and other branches. VS Code **Sync Changes** synchronizes your fork, not instructor updates.
+**Already have a clone? Do not clone over it or repeat remote creation.** Save local work and use [existing-clone migration](../docs/UPDATING_COURSE_REPOSITORY.md#2-already-cloned-the-instructor-repository) and the guide's branch-selection/update steps. Before each lab, fetch/merge `upstream/final-project-indoor-outdoor` and verify inclusion using that guide. VS Code Sync/pulling your fork alone does not fetch instructor changes. Preserve robot Xacro/settings and maps when resolving conflicts.
 
 ---
 
@@ -491,7 +487,7 @@ If an older copy of this repository reports that ROS packages such as `generate-
 
 ```bash
 git fetch upstream
-git merge --no-edit upstream/main
+git merge --no-edit upstream/final-project-indoor-outdoor
 python -m pip install -r requirements.txt
 ```
 
@@ -552,7 +548,7 @@ If there is no missing, the output should look like below
 
 ## Part 10 — Goosebot
 
-Goosebot autonomous lane following is the course's hardware component. The required [final project](../final_project_simulation/README.md) uses TurtleBot3 simulation. Physical Goosebot SLAM/Nav2 deployment is optional and requires separately validated interfaces.
+Goosebot autonomous lane following is the course's hardware component. The required [final project](../final_project_simulation/README.md) uses the supplied Goosebot model in Gazebo; follow this branch's current final instructions. Physical Goosebot SLAM/Nav2 deployment is optional and requires separately validated interfaces.
 
 ---
 
@@ -580,7 +576,7 @@ Before Lab 01, you should be able to:
 - [ ] launch Gazebo through `ros_gz_sim`
 - [ ] open RViz2
 - [ ] import NumPy and Matplotlib
-- [ ] clone and edit this repository
+- [ ] fork/clone (or open the private instructor copy), verify branch `final-project-indoor-outdoor`, and confirm it includes the latest fetched instructor commits
 - [ ] verify `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` are available
 
 After every item passes, continue to [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).
