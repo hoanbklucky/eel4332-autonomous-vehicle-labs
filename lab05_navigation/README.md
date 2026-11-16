@@ -280,13 +280,19 @@ Parameter tuning is optional. If a goal fails, first check map identity/coverage
 Submit only:
 
 1. **One short screen-recording video** with clearly labeled clips showing **one successful World goal and two successful House goals in different rooms**, with Gazebo and RViz2 visible. Include a brief view of scan/map alignment in each environment; clips may be joined.
-2. **One short paragraph in your own words** explaining how AMCL, the costmap, the global planner, and the local controller work together to move the robot to its goals.
+2. **Short written answers to all three Discussion Questions below**, in your own words. Use about 2–4 sentences per question and refer to your World/House runs where relevant. Submit one document or text entry alongside the video.
 
-No separate screenshots, report, `answers.md`, goal CSV, or results table is required. Keep both saved maps and working setups for reference. The final requires a new map of your chosen Goosebot environment.
+The discussion answers are the only written submission; no additional report, screenshots, `answers.md`, goal CSV, or results table is required. Keep both saved maps and working setups for reference. The final requires a new map of your chosen Goosebot environment.
+
+## Discussion Questions — required written answers
+
+1. How do **AMCL, the costmaps, the global planner, and the local controller** work together to move the robot from its estimated pose to a goal? Distinguish localization, path planning, and velocity commands.
+2. Why must you set an initial pose and check **laser-scan/map alignment** before sending goals? Describe what poor alignment would look like and what you would check or correct.
+3. Compare navigation in **TurtleBot3 World and House** using your runs. Which features made a route easier or harder (for example, doorways, narrow passages, or turns)? Explain how map quality and costmap inflation could affect the robot's ability to reach a goal; distinguish what you observed from what you would expect.
 
 ## Final Handoff and Optional Background
 
-Reuse the localization/navigation workflow in the [Goosebot delivery final](../final_project_simulation/README.md), which requires your added LiDAR and a **new IST/campus map**. Its optional mission-client scaffold and recorder are in `src/`. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
+Reuse the localization/navigation workflow in the [Goosebot delivery final](../final_project_simulation/README.md), which uses the supplied LiDAR and requires a **new map of your chosen IST/campus world**. Its optional mission-client scaffold and recorder are in `src/`. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
 
 ## Troubleshooting
 

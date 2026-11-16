@@ -269,16 +269,17 @@ Keep `house_map.yaml` and its image together; do not overwrite the World `map.ya
 
 ## What to Submit
 
-Submit **only two screen-recording videos**:
+Submit **two screen-recording videos and short written answers**:
 
 1. **TurtleBot3 World:** first exploration and a later revisit, with Gazebo and the evolving RViz2 map visible.
 2. **TurtleBot3 House:** first exploration and a later revisit, with Gazebo and the evolving RViz2 map visible.
+3. **Short written answers to all three Discussion Questions below**, in your own words. Use about 2–4 sentences per question and refer to your World/House observations where relevant. Submit one document or text entry alongside the two videos.
 
 Within each video, the first visit and revisit must use the same mapping session. Briefly explain any visible change, or say no clear correction was visible. Short joined clips are fine; no full-session recording is needed.
 
-No separate report, `answers.md`, screenshots, or map upload is required. Save and retain **both** YAML/image pairs locally. Lab 5 uses both maps with their matching worlds/models.
+The written answers are the only written submission; no additional report, `answers.md`, screenshots, or map upload is required. Save and retain **both** YAML/image pairs locally. Lab 5 uses both maps with their matching worlds/models.
 
-## Discussion Questions (not a separate submission)
+## Discussion Questions — required written answers
 
 1. Why does mapping need robot motion information as well as laser scans?
 2. How might revisiting an area improve a map?
