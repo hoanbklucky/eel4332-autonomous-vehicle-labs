@@ -13,6 +13,8 @@ Follow the self-contained course READMEs. Required commands are included there; 
 | Required Goosebot maze warm-up | [Final README, Step 1b](../final_project_simulation/README.md#goosebot-warm-up) |
 | Delivery mission and evaluation | [Final](../final_project_simulation/README.md) |
 
-Labs 2/4/5 use Waffle in TurtleBot3 World. The final uses its own Goosebot/LiDAR SLAM Toolbox + AMCL/Nav2 procedure in IST or campus. Keep these launch workflows separate.
+Labs 2/5 and Lab 4's first environment use Waffle in TurtleBot3 World; Lab 4's second environment uses Waffle Pi in House. The final uses its own Goosebot/LiDAR SLAM Toolbox + AMCL/Nav2 procedure in IST or campus. Keep these launch workflows separate.
 
 Use native WSL/Jazzy and the final's workspace for the warm-up and final. Docker and stereo SLAM are optional; complete perfect-map warm-up and final SLAM/AMCL in separate runs.
+
+Lab 4 now maps two environments: World with Waffle, then House with Waffle Pi. Restart cleanly and save separate maps. Lab 5 retains World/Waffle. For Goosebot libexec errors, follow final README Step 1a: check the complete source package, chmod source scripts, rebuild/re-source, and verify `ros2 pkg executables goosebot_0`.

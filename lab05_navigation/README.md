@@ -19,7 +19,7 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Load your Lab 4 map, localize Waffle with AMCL, and complete a successful navigation to a chosen destination with Nav2.
+Load the **TurtleBot3 World map** saved in Lab 4 (`results/map.yaml` + image), localize **Waffle** with AMCL, and complete a successful navigation to a chosen destination with Nav2. Lab 4's House map is additional practice and must not be loaded into TurtleBot3 World.
 
 Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 

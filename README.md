@@ -24,7 +24,7 @@ The course uses a simulation-first workflow and ends with a **Goosebot simulatio
 
 ## Course simulation instructions — start here
 
-Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** for Labs 2/4/5. The final uses the provided **Goosebot model + student-added 2-D LiDAR** in IST or the campus world.
+Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** for Labs 2/5 and the first part of Lab 4. Lab 4 also maps **TurtleBot3 House with Waffle Pi**. The final uses the provided **Goosebot model + student-added 2-D LiDAR** in IST or the campus world.
 
 | Step | Official guide | Course assignment |
 |---|---|---|
@@ -68,7 +68,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [01](lab01_ros2_gazebo_fundamentals/README.md) | Learn ROS 2 and Gazebo | Build nodes, inspect interfaces, and bridge simulation data |
 | [02](lab02_turtlebot_playground/README.md) | Drive TurtleBot | Complete manual-driving challenges and practice stopping/resetting |
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
-| [04 - SLAM](lab04_slam/README.md) | Build a reusable map | Follow official Cartographer tutorial and save a map |
+| [04 - SLAM](lab04_slam/README.md) | Map World and House | Map both environments with Cartographer; retain separate maps and reuse World in Lab 5 |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate on your map | Load your map, localize, visit goals, and practice cancellation |
 | [Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) | Verify the supplied Goosebot in its maze | Drive manually, reach one goal with the perfect-map setup; screenshot + two sentences or in-class demo |
 | [Final](final_project_simulation/README.md) | Goosebot delivery in IST or campus simulation | Add/bridge LiDAR, create a map, localize, navigate to three deliveries/home, test a blocked route |

@@ -19,13 +19,13 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Create and save a map with **Cartographer**, then reuse it in Lab 5. Complete Labs 00–03 first. Earlier Lab 2 installations may use another simulator; check packages below.
+Create and save **two maps with Cartographer**: TurtleBot3 World first, then TurtleBot3 House. Reuse the **World map** in Lab 5; House gives additional practice with rooms, doorways, and revisits. Complete Labs 00–03 first. Earlier Lab 2 installations may use another simulator; check packages below.
 
 Use **VS Code's integrated terminal with the WSL: Ubuntu indicator**, or a separate **Ubuntu/WSL terminal**. Both work. Open additional VS Code terminals with **Terminal → New Terminal** or **+**. Run each long-running node in its own terminal.
 
 Commands below are ready to copy: no leading `$` prompt is included. Keep dollar signs *inside* commands, such as `$PWD` and `$(...)`.
 
-Use **Waffle in TurtleBot3 World** throughout. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
+Use **Waffle in TurtleBot3 World**, then **Waffle Pi in TurtleBot3 House**. Set the matching model in every terminal. Before switching worlds, stop motion, stop teleoperation/SLAM/navigation, and press **Ctrl+C in the simulator launch terminal**. Wait for the processes to exit; closing the Gazebo window alone may leave the server running.
 
 
 ## 1. Install and verify
@@ -116,9 +116,9 @@ ros2 run turtlebot3_teleop teleop_keyboard
 
 Click inside Terminal 3. Use `w/x` to increase/decrease linear velocity, `a/d` to change turning velocity, and `s` or Space to stop. Watch the printed velocities and drive slowly. Every terminal needs its own source/export commands; `KeyError: 'TURTLEBOT3_MODEL'` indicates a missing export.
 
-Record **Video 1 — first visit** while exploring previously unseen regions, then **Video 2 — revisit** while returning through an area already mapped. Keep the same simulator and Cartographer session running between recordings so the mapper retains its history. Show both Gazebo and RViz2's map clearly; the terminal does not need to fill the screen. Stop motion before switching windows.
+Record **Video 1 — TurtleBot3 World**, showing both first exploration and a later revisit in this same simulator/Cartographer session. You may join short clips; do not restart mapping between the first-visit and revisit portions. Show Gazebo and RViz2's map clearly. Stop motion before switching windows. Briefly point out any visible map change, or say no clear correction is visible; revisiting does not guarantee a visible loop-closure correction.
 
-In the revisit video, briefly point out any visible change or state that no clear correction is visible. A revisit does not guarantee a visible loop-closure correction.
+After saving this World map, repeat the procedure in House below for **Video 2**. Keep each environment's first visit and revisit in its own continuous mapping session.
 
 <details>
 <summary>Expected output — first exploration</summary>
@@ -180,14 +180,63 @@ Run these in a normal Ubuntu/WSL terminal (outside a Python virtual environment)
 
 After saving, stop teleop, Cartographer, and the simulator with Ctrl+C in their terminals. Restart fresh for a new map; restarting only Gazebo does not clear an existing mapper.
 
+## 6. Map TurtleBot3 House — required second environment
+
+Save the World map first as `results/map.yaml` + image. Stop motion and **Ctrl+C teleop, Cartographer and the simulator**. Start a fresh mapping session for House; never run two Gazebo worlds or reuse the World mapper state in House.
+
+**Terminal 1 — House:** the ROBOTIS House example uses **`waffle_pi`**.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 launch turtlebot3_gazebo turtlebot3_house.launch.py
+```
+
+**Terminal 2 — Cartographer:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
+```
+
+**Terminal 3 — driving:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+Drive slowly through connected rooms and doorways, turn to observe walls, then revisit an earlier room/corridor. Avoid collisions and getting trapped by furniture. Record **Video 2 — TurtleBot3 House**, showing first exploration and a later revisit in this same mapping session.
+
+Stop the robot and save while Gazebo/Cartographer remain running. **Terminal 4:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/turtlebot3_ws/install/setup.bash
+export TURTLEBOT3_MODEL=waffle_pi
+cd ~/courses/eel4332-autonomous-vehicle-labs/lab04_slam
+mkdir -p results
+ros2 run nav2_map_server map_saver_cli -f "$PWD/results/house_map" --ros-args -p use_sim_time:=true
+realpath results/house_map.yaml
+```
+
+Keep `house_map.yaml` and its image together; do not overwrite the World `map.yaml`/image pair. View House using the same PGM-to-PNG procedure, substituting `house_map.pgm` and `house_map_preview.png`. Stop all House launches after saving. **For Lab 5, return to Waffle + TurtleBot3 World and use `results/map.yaml`; the House map describes a different environment.**
+
 ## What to Submit
 
 Submit **only two screen-recording videos**:
 
-1. **First visit:** show the robot exploring new areas in Gazebo and the map forming in RViz2.
-2. **Revisit:** show the robot returning through previously mapped areas in the **same mapping session**, with the map visible. Briefly describe any observed change, or say that no clear correction was visible.
+1. **TurtleBot3 World:** first exploration and a later revisit, with Gazebo and the evolving RViz2 map visible.
+2. **TurtleBot3 House:** first exploration and a later revisit, with Gazebo and the evolving RViz2 map visible.
 
-Keep each recording focused on the relevant motion/map behavior. No separate report, `answers.md`, screenshots, or map upload is required for Lab 4. Still save and retain your map YAML/image pair for Lab 5.
+Within each video, the first visit and revisit must use the same mapping session. Briefly explain any visible change, or say no clear correction was visible. Short joined clips are fine; no full-session recording is needed.
+
+No separate report, `answers.md`, screenshots, or map upload is required. Save and retain **both** YAML/image pairs locally. Lab 5 uses the World map.
 
 ## Discussion Questions (not a separate submission)
 
@@ -240,7 +289,7 @@ Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation
 - No map: inspect Cartographer's full error output and check `ros2 topic echo /scan --once`.
 - Do not combine this workflow with the earlier Nav2-minimal simulator, custom TF bridges, or mesh workarounds.
 
-The instructor must test installation, mapping, and map handoff on the course WSL image.
+The instructor must pilot World and House mapping, model selection, and the World-map handoff to Lab 5 on the course WSL image.
 
 ## References
 

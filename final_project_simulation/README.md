@@ -104,6 +104,8 @@ git -C /tmp/eel4332-goose-source checkout bffaf3cdf2b38f3b5a53a977064e0c787e046f
 cp -r -n /tmp/eel4332-goose-source/11_simulation/ros2_ws/src/goosebot_0 final_project_simulation/src/
 # Omit the redundant packaged snapshot; the extracted source is already copied.
 rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
+# Required for Python launch executables with --symlink-install.
+chmod +x final_project_simulation/src/goosebot_0/scripts/*.py
 mkdir -p ~/goosebot_ws/src
 ln -s "$PWD/final_project_simulation/src/goosebot_0" ~/goosebot_ws/src/goosebot_0
 cd ~/goosebot_ws
@@ -111,9 +113,37 @@ rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
 colcon build --symlink-install
 source install/setup.bash
 ros2 pkg prefix goosebot_0
+ros2 pkg executables goosebot_0
 ```
 
+The executable list must include `cmd_vel_to_odom.py`, `ground_truth_map_odom_bridge.py`, and `stereo_camera_info_fixer.py` before launching. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
+
 The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone or symlink already exists, reuse/check it instead of repeating those commands. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
+
+### 1a. Repair “executable cmd_vel_to_odom.py not found”
+
+This message can mean a missing installed script **or a script without executable permission**. The supplied source revision stores its Python scripts as non-executable files, while the launch expects installed executables. With a symlink install, executable permission on the source matters.
+
+Stop the failed launch. In Ubuntu/WSL, repair permissions, reconfigure/build the existing package, then source it again:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+cd ~/goosebot_ws
+ls src/goosebot_0/scripts/cmd_vel_to_odom.py
+chmod +x src/goosebot_0/scripts/*.py
+colcon build --symlink-install --packages-select goosebot_0 --cmake-force-configure
+source install/setup.bash
+ros2 pkg prefix goosebot_0
+ros2 pkg executables goosebot_0
+ls -l "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py"
+test -x "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py" && echo "Executable is ready"
+```
+
+Expect all three executable names listed above and **Executable is ready**. Retry the maze launch only after a successful build/check. The package prefix must belong to **~/goosebot_ws**; if it names another workspace, open a fresh terminal and source the correct one.
+
+If the first `ls` reports no such file, the source copy is incomplete. Repeat Step 1's **whole-package recursive copy from the pinned source** into `final_project_simulation/src/`, preserving your existing edits. Do not copy old build/install/log directories or place Python files manually inside `install/`.
+
+The package's `CMakeLists.txt` must contain `install(PROGRAMS ... DESTINATION lib/${PROJECT_NAME})` for the three launch scripts. The provided revision already does. If your local copy differs, compare/restore that install declaration and rebuild; preserve your modified model/configuration.
 
 <a id="goosebot-warm-up"></a>
 
