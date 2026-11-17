@@ -579,7 +579,22 @@ If RobotModel is absent from the By topic tab, that is not evidence the robot de
 - Use **Add → By display type → rviz_default_plugins → TF → OK** to show coordinate frames. Toggle TF off if its axes/text clutter the map.
 - In the **Views** panel, select **TopDownOrtho** for a flat overhead map, or keep Orbit. Use **Panels → Views** if the panel is hidden.
 - Zoom with the mouse wheel over the 3-D view. Goosebot can be very small compared with IST; during sensor inspection you can set the view's **Target Frame** to `base_footprint` to keep the robot centred.
-- Confirm scan points follow the mapped wall edges rather than forming a shifted/rotated duplicate. Save your RViz configuration with **File → Save Config As…** if you want to reuse it.
+- Confirm scan points follow the mapped wall edges rather than forming a shifted/rotated duplicate.
+
+**6. Save your mapping layout and reuse it next time.**
+
+On your first run, add and configure the displays above yourself so you learn the process. Once they work:
+
+1. In a terminal, run `mkdir -p ~/rviz_configs`.
+2. In RViz, choose **File → Save Config As…** and save as `~/rviz_configs/goosebot_mapping.rviz` (use your home directory in the file chooser).
+3. On later mapping sessions, replace the generic RViz command with:
+
+```bash
+rviz2 -d ~/rviz_configs/goosebot_mapping.rviz \
+  --ros-args -p use_sim_time:=true
+```
+
+Keep the simulator and SLAM commands unchanged. You can skip adding the displays again when this file loads. Use **File → Save Config** (Ctrl+S) after later layout changes. A custom file is not automatically selected by every launch; explicitly use `-d` or **File → Open Config**. The configuration saves display/topic/QoS settings, tools and the view—not the SLAM map or running nodes. Save the map separately below.
 
 <details>
 <summary>RViz quick check — blank map, missing robot, or red display status</summary>
@@ -614,6 +629,15 @@ Click inside Terminal 4 and follow **its printed key layout** (different from Tu
 ![Goosebot at IST entrance with growing RViz map](images/ist_mapping.png)
 
 Early exploration produces a partial map around the entrance. Grey/white explored space, dark wall edges and red scan points should align. Unvisited space remains unknown. RobotModel and TF show **Status: Ok**. Continue exploring the mission routes before saving; you do not need to reproduce the exact pixels or view.
+
+</details>
+
+<details>
+<summary>Example — campus mapping in progress</summary>
+
+![Campus mapping: growing RViz occupancy map beside Goosebot in Gazebo](images/campus_mapping.png)
+
+RViz on the left shows the partial occupancy map around the campus buildings; Gazebo on the right shows the same simulated environment. Map boundaries should follow the nearby building outlines, with RobotModel and TF reporting **Status: Ok**. Unexplored space remains unknown. Continue driving the delivery routes and alternative crossings before saving; your map and view need not match this screenshot exactly. The generic **2D Goal Pose** tool visible here is for this mapping layout; use the **Nav2 Goal** layout in Step 6 for navigation.
 
 </details>
 
@@ -667,6 +691,15 @@ rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_v
 ```
 
 **Expected RViz tools:** **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel. A generic `rviz2 --ros-args ...` window is useful for Step 5 mapping but may only show **2D Goal Pose**. Use the explicit `-d` command above for navigation. If the Nav2 tool/panel is missing, inspect RViz's terminal for plugin-loading errors rather than sending goals from a leftover mapping window.
+
+**Save a separate navigation layout:** after confirming **Nav2 Goal**, **2D Pose Estimate**, the **Navigation 2** panel, Map `/map`, and LaserScan `/scan`, use **File → Save Config As…** to save `~/rviz_configs/goosebot_navigation.rviz`. Adjust/add any displays you need yourself on this first run. Do not overwrite the mapping layout or the system Nav2 configuration. On later navigation sessions, replace the standard-layout RViz command above with:
+
+```bash
+rviz2 -d ~/rviz_configs/goosebot_navigation.rviz \
+  --ros-args -p use_sim_time:=true
+```
+
+Start Gazebo and AMCL/Nav2 as usual and set **2D Pose Estimate** for the new session. Loading an RViz configuration does not start navigation, load the map server, or restore AMCL localization. Keep the warm-up's `/projected_map` layout separate from these final-project `/map` layouts.
 
 <details>
 <summary>Troubleshooting — saved map or map frame still missing in Step 6</summary>
