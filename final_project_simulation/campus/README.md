@@ -80,10 +80,8 @@ After stopping all launches with Ctrl+C, relaunch the baseline campus in Termina
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
-  use_composition:=False autostart:=True \
-  map:="$PWD/final_project_simulation/results/campus_map.yaml" \
-  params_file:="$PWD/final_project_simulation/goosebot/nav2_goosebot.yaml"
+ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
+  map:="$PWD/final_project_simulation/results/campus_map.yaml"
 ```
 
 Open RViz in Terminal 3 and initialize AMCL as in main Step 6. After campus navigation, complete [the guided GPS activity](../goosebot/CAMPUS_GPS.md), not another LiDAR settings experiment. GPS messages supplement this experiment; the required AMCL/Nav2 run remains LiDAR-based.

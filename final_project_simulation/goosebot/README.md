@@ -12,3 +12,6 @@ The original perfect-map bridge and stereo SLAM launch are separate modes, not t
 
 
 On `final-project-indoor-outdoor`, **both** IST and campus are required. See [CAMPUS_GPS.md](CAMPUS_GPS.md) for the supplied NavSat world plugin, existing GPS sensor/bridge, and measurements. The local EKF and AMCL configuration are unchanged; GPS is not fused into the required navigation baseline. Complete the [system explanation](../SYSTEM_EXPLANATION.md) from actual runtime/configuration evidence.
+
+
+Saved-map startup uses `navigation.launch.py map:=/absolute/path/to/map.yaml`. It checks the YAML/image pair and prepares an explicit map-server `yaml_filename` while preserving the source Nav2 YAML. It runs standard AMCL/Nav2; no manual load-map service is required. In the separate RViz terminal, use the main guide's explicit `rviz2 -d .../nav2_default_view.rviz` command to obtain Nav2 Goal and the Navigation 2 panel. Offline regression checks: `python3 -m unittest discover -s final_project_simulation/goosebot/tests -p 'test_navigation_launch.py' -v`. Pilot startup/map delivery and RViz plugins on the course WSL installation.

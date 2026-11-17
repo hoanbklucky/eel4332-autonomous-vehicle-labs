@@ -274,7 +274,8 @@ Use this arena's `reference.yaml` with `warmup.sdf`; **do not use the maze map w
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 launch nav2_bringup rviz_launch.py use_sim_time:=true
+rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz" \
+  --ros-args -p use_sim_time:=true
 ```
 
 Use Fixed Frame `map`; set the Map display's topic to **`/projected_map`**. Enable RobotModel with `/robot_description` and TF. The forward ToF, if displayed as LaserScan, is **`/tof_front/scan`** and gives only a narrow beam. The supplied LiDAR also publishes `/scan`; the warm-up still uses perfect-map localization. Do not initialize AMCL with 2D Pose Estimate: the ground-truth bridge supplies `map → odom` in this mode.
@@ -665,26 +666,29 @@ The command below loads the IST map. **For Part B, replace `results/ist_map.yaml
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch nav2_bringup bringup_launch.py slam:=False use_sim_time:=True \
-  use_composition:=False autostart:=True \
-  map:="$PWD/final_project_simulation/results/ist_map.yaml" \
-  params_file:="$PWD/final_project_simulation/goosebot/nav2_goosebot.yaml"
+ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
+  map:="$PWD/final_project_simulation/results/ist_map.yaml"
 ```
 
-**Use the capitalized launch values exactly as shown.** Jazzy's standard Nav2 bringup evaluates `slam` and `use_composition` in Python expressions; lowercase `false` can cause **`name 'false' is not defined`** before nodes start. These command-line values differ from lowercase `true/false` in YAML configuration files. If you see this error, rerun the corrected command; no robot rebuild or remapping is needed. See the [Jazzy bringup launch source](https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_bringup/launch/bringup_launch.py).
+The course wrapper validates the saved YAML and its referenced image, then supplies the absolute map path both as Nav2's `map` argument and explicitly in a temporary `map_server.ros__parameters.yaml_filename`. Your original configuration is preserved. Expect **Course navigation map: ...; image: ...** with the selected files. Missing files stop startup with an explanation. The wrapper sets `slam=False`, simulation time, autostart and non-composed AMCL/Nav2; do not start a second Nav2 launch alongside it. It does not start RViz or Gazebo.
+
+After pulling this course update, no ROS rebuild is needed for this local-file launcher. Stop the previous AMCL/Nav2 launch with Ctrl+C before using it; keep the correct simulator running. If your existing saved map has a different name, point `map:=` to that actual YAML (do not rename just the YAML without checking its image reference).
 
 Leave Terminal 2 running; it prints logs and opens no window. Continue to RViz and set the initial pose even if costmaps are waiting for `map` TF. Once localization and navigation finish activating, expect **Managed nodes are active**. Confirm `results/ist_map.yaml` and its image exist and match the selected world.
 
-In Terminal 3, use the standard Nav2 RViz layout:
+In **Terminal 3**, close old mapping RViz windows and explicitly load the standard **Nav2** RViz layout:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 launch nav2_bringup rviz_launch.py use_sim_time:=true
+rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz" \
+  --ros-args -p use_sim_time:=true
 ```
 
+**Expected RViz tools:** **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel. A generic `rviz2 --ros-args ...` window is useful for Step 5 mapping but may only show **2D Goal Pose**. Use the explicit `-d` command above for navigation. If the Nav2 tool/panel is missing, inspect RViz's terminal for plugin-loading errors rather than sending goals from a leftover mapping window.
+
 <details>
-<summary>Troubleshooting — no saved map or map frame in Step 6</summary>
+<summary>Troubleshooting — saved map or map frame still missing in Step 6</summary>
 
 In another sourced terminal, check:
 
@@ -692,18 +696,12 @@ In another sourced terminal, check:
 ros2 lifecycle get /map_server
 ros2 lifecycle get /amcl
 ros2 param get /map_server yaml_filename
+ros2 topic info /map --verbose
 ```
 
-Both lifecycle nodes should report **active**. A blank `yaml_filename` means no initial map file was configured; opening RViz first will not fix that. If the active map server has no map, load your saved map explicitly:
+The map server should become **active**, with `yaml_filename` equal to the absolute YAML printed by the course launcher. Map loading is automatic; **do not make a manual load-map service call part of the normal procedure**. If the path is blank or different, stop the old AMCL/Nav2 process and confirm only one map server is running before relaunching the updated wrapper. Check `ros2 node list` for duplicate-node warnings. If startup fails, inspect the first map-server error, the YAML image path, and file permissions. A valid YAML alone is insufficient if its image is missing or unreadable.
 
-```bash
-ros2 service call /map_server/load_map nav2_msgs/srv/LoadMap \
-  "{map_url: '$HOME/courses/eel4332-autonomous-vehicle-labs/final_project_simulation/results/ist_map.yaml'}"
-```
-
-Expect **result: 0**. A nonzero result needs investigation of the YAML path and its referenced image. This service loads the map for the current run; it does not change the startup parameter or save a new map. If either lifecycle node is not active, inspect its startup log first.
-
-After the saved map appears on RViz's **Map → Topic `/map`**, use **2D Pose Estimate** at the robot's actual location on that map. AMCL then supplies `map → odom`. Do not use the warm-up's `/projected_map`, restart SLAM, or add a static `map → odom` publisher to hide the warning. No rebuild or remapping is needed merely to load an existing valid map.
+In RViz, **Map → Topic** must be `/map`, with Reliable / Transient Local QoS if a retained map is not displayed. Do not use the warm-up's `/projected_map`. AMCL still needs scans, TF and **2D Pose Estimate** to supply `map → odom`; loading a map or opening RViz does not initialize the pose. Do not restart SLAM or add a static `map → odom` publisher to hide a missing transform. Brief transform warnings before initialization can occur.
 
 </details>
 
