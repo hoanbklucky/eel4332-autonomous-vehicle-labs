@@ -23,7 +23,7 @@
 
 ## Goosebot preparation before the final
 
-Complete the [required Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) after Labs 4–5 and the final's package setup. Use native Ubuntu/WSL + Jazzy and the same workspace as the final. Docker and stereo RTAB-Map are optional alternatives/extensions. The warm-up uses a supplied map and perfect localization; the final requires supplied LiDAR, a new SLAM map and AMCL.
+After Labs 4–5 and the final's package setup, complete the [short Goosebot readiness check](final_project_simulation/README.md#goosebot-readiness-check) in IST and again when switching to campus: drive briefly and verify `/scan`, RobotModel and TF. Then proceed directly to SLAM mapping. The separate practice arena and perfect-map Nav2 goal are [optional troubleshooting exercises](final_project_simulation/README.md#goosebot-warm-up), with no separate submission. Use native Ubuntu/WSL + Jazzy and the final's workspace; Docker and stereo RTAB-Map remain optional.
 
 ## ROS 2 + Gazebo + Goosebot Laboratory Repository
 
@@ -83,7 +83,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [03](lab03_vehicle_modeling/README.md) | Predict vehicle motion | Implement and test assigned motion models and odometry |
 | [04 - SLAM](lab04_slam/README.md) | Map World and House | Map both environments with Cartographer; retain separate maps and reuse both in Lab 5 |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate in World and House | Use each matching map/model; reach one World goal and two House goals in different rooms |
-| [Goosebot warm-up](final_project_simulation/README.md#goosebot-warm-up) | Verify the supplied Goosebot in the low-wall practice arena | Drive manually, reach one goal with the perfect-map setup; screenshot + two sentences or in-class demo |
+| [Goosebot readiness check](final_project_simulation/README.md#goosebot-readiness-check) | Verify Goosebot in each IST/campus world before mapping | Brief manual driving; check `/scan`, RobotModel and TF; no separate submission |
 | [Final](final_project_simulation/README.md) | Goosebot delivery in IST or campus simulation | Use the supplied LiDAR, create a map, localize, navigate to three deliveries/home, test a blocked route |
 
 ## How these labs map to the course

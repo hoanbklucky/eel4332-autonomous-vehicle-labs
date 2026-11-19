@@ -1,6 +1,6 @@
 # Optional legacy lab sequence
 
-The former Labs 4–9 are archived here for optional reference. The current required sequence is **Labs 00–05 → Goosebot warm-up → simulation final**. Use [Lab 4 — SLAM](../../lab04_slam/README.md), [Lab 5 — Nav2](../../lab05_navigation/README.md), and [the final project](../../final_project_simulation/README.md) for the active requirements.
+The former Labs 4–9 are archived here for optional reference. The current required sequence is **Labs 00–05 → simulation final (short readiness check, then mapping/navigation)**. Use [Lab 4 — SLAM](../../lab04_slam/README.md), [Lab 5 — Nav2](../../lab05_navigation/README.md), and [the final project](../../final_project_simulation/README.md) for the active requirements.
 
 | Former lab | Archived folder |
 |---|---|
