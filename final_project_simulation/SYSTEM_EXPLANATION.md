@@ -35,30 +35,30 @@ Repeat `ros2 node info` using the actual SLAM, AMCL and navigation node names yo
 
 Draw your **actual** data flow from Gazebo sensors through bridges and ROS nodes to mapping, localization, costmaps, planning/control, `/cmd_vel` and robot motion. Label important arrows with topic names. Show the mapping phase and the saved-map navigation phase separately (or label mutually exclusive nodes).
 
-Identify who supplies each transform in `map → odom → base_footprint → base_link → sensor frames`, and explain how TF lets a scan be placed on a map. Which transform changes when you initialize AMCL? Why must SLAM, AMCL and a ground-truth localizer not all publish the same global transform?
+Identify who supplies each transform in `map → odom → base_footprint → base_link → sensor frames`, and explain how TF lets a scan be placed on a map. Which transform changes when you initialize AMCL indoors, and which node owns it during live GPS navigation outdoors? Why must SLAM, AMCL and a ground-truth localizer not all publish the same global transform?
 
 ## 3. What is actually fused?
 
 Inspect the **installed** `config/ekf.yaml` in your selected workspace and the running EKF node. Identify its input topics and **enabled state components** in each configuration mask, not just sensor names. Explain how the estimate is produced from these inputs. Does the baseline use absolute IMU heading, yaw rate, linear acceleration, wheel encoder odometry, or command-derived dead reckoning? Support your answer from the configuration/script, rather than assumptions about a typical robot.
 
-Does the running baseline EKF consume LiDAR, images or GPS in your run? Distinguish it from Step 9's separate supplied offline position filter, which does consume GPS. If not, where are those measurements used, if anywhere? Distinguish EKF state fusion from SLAM scan matching and AMCL scan-to-map localization. Explain why camera or GPS messages appearing in `ros2 topic list` do not establish fusion.
+Does the running baseline EKF consume LiDAR, images or GPS in your run? Distinguish it from Step 9's separate supplied offline position filter, which does consume GPS. If not, where are those measurements used, if anywhere? Distinguish EKF state fusion from SLAM scan matching and AMCL scan-to-map localization. Explain why camera or GPS messages appearing in `ros2 topic list` do not establish fusion. In the live outdoor mode, identify `/gps_nav/odometry` and the supplied global x/y/yaw filter separately from the local EKF and offline position filters.
 
 ## 4. Mapping versus localization
 
 What measurements and transforms does SLAM Toolbox use to estimate a map/trajectory? What does an occupancy-grid cell represent? Show a revisit and explain the result you observed; do not claim loop closure from a screenshot alone.
 
-After saving the map, what changes when SLAM stops and AMCL starts? Explain AMCL's use of the saved map, laser measurements and motion information, and why a reasonable initial pose and scan alignment matter. Identify the roles of `map`, `odom` and robot frames. Explain how your own saved-map origin can differ from Gazebo world coordinates.
+For IST, after saving the map, what changes when SLAM stops and AMCL starts? Explain AMCL's use of the saved map, laser measurements and motion information, and why a reasonable initial pose and scan alignment matter. Identify the roles of `map`, `odom` and robot frames. Explain how your own saved-map origin can differ from Gazebo world coordinates.
 
 ## 5. From goal to motion
 
-Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
+Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`; for GPS mode also inspect `gps_navigation_core.py`'s rolling-costmap and command-routing overrides. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
 
-Show evidence that two goals and return home succeeded **in each world**. For the IST barrier, describe what actually happened: detection, path change, local avoidance, recovery, stop or failure. What evidence supports your explanation? A changed robot trajectory alone does not identify which algorithm replanned.
+Show evidence that two goals and return home succeeded **in each world**, using AMCL indoors and the live GPS mode outdoors. For the IST barrier, describe what actually happened: detection, path change, local avoidance, recovery, stop or failure. What evidence supports your explanation? A changed robot trajectory alone does not identify which algorithm replanned.
 
 ## 6. Indoor/outdoor observations and limits
 
 - **IST LiDAR:** baseline/changed setting, controlled conditions, two screenshots, measured/visible difference, and any limitation. Did you inspect scans only or also retest mapping/navigation? State this explicitly.
-- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gps-fusion-comparison). Identify A (existing odometry/IMU) and B (supplied offline 2-D GPS position fusion); discuss both unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Give a reason for GPS helping or hurting in your recorded run.
+- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gps-fusion-comparison). Identify A (existing odometry/IMU), B (+ ordinary GPS) and C (+ RTK-like GPS); discuss unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Separately show live GPS-aided campus navigation and identify the GPS global localizer, local EKF and LiDAR costmap roles. Give a reason for GPS helping or hurting in your recorded run.
 - **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
 - **Reality gap:** explain at least two limits, including the simulated GPS/teaching scale or command-derived odometry, and what would require validation on physical Goosebot.
 - **Reproducibility:** identify your branch/revision, maps, chosen goals/home, changed settings and one diagnosed problem/fix. List each member's contribution and briefly state how AI assistance was verified if used.

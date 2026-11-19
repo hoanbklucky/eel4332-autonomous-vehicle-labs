@@ -22,11 +22,37 @@ Keep the robot at Home until READY. Start a fresh world for a fresh record. Sour
 
 “Different EKF baseline” means runtime inputs/masks differ from the provided velocity + yaw-rate configuration; inspect them rather than silently comparing different estimators. Missing TF, moving before READY, clock reset, noncentered GPS, non-ENU datum, duplicate timestamps, odometry gaps or insufficient truth overlap require a fresh/repaired experiment. A synthetic test pass does not substitute for a WSL/Gazebo pilot.
 
-### Optional GPS-aided navigation — a later step
-
-After recording is validated, a live global localization layer can be designed using GPS conversion plus an estimator, leaving local odometry continuous and assigning only one owner of map → odom. For that experiment, replace AMCL's global-localization role rather than adding a conflicting TF publisher. Heading must be earth-referenced and uncertainty meaningful. LiDAR still supplies obstacle data. Neither launch nor a validated Nav2 configuration for that extension is supplied here.
-
+### Live GPS-aided navigation\n\nNow supplied separately in Step 9; see the GPS / RTK navigation method below.\n
 References: [Nav2 GPS navigation](https://docs.nav2.org/jazzy/tutorials/general_tutorials/navigation2_with_gps/navigation2_with_gps/), [robot_localization GPS integration](https://github.com/cra-ros-pkg/robot_localization/blob/jazzy/doc/integrating_gps.rst), [Gazebo NavSat](https://gazebosim.org/api/sim/8/classgz_1_1sim_1_1systems_1_1NavSat.html).
+
+
+## GPS / RTK navigation method
+
+Step 9's current commands supersede older GPS-only instructions in this reference. Ordinary and RTK-like sensors are both simulated at 5 Hz in the **same drive** with independent noise. The latter is only a ~2 cm fixed-quality noise model: no corrections link, ambiguity resolution, satellite blockage or changing fix state is modeled.
+
+### Runtime profiles
+
+`world.launch.py gps_profile:=comparison` modifies the expanded robot description **in memory**, leaving the source Xacro untouched. The primary sensor publishes ordinary `/gps/fix`; a second centered sensor plus bridge publishes `/gps/rtk_fix`. `gps_profile:=ordinary` and `gps_profile:=rtk` select the primary sensor for live navigation. Default `model` preserves the installed model settings for existing launches. `gps_profiles.py` supplies Gaussian horizontal stddev 0.000015 / 0.0000002 degrees and vertical stddev 3.0 / 0.03 m.
+
+The recorder validates both sensor declarations and captures both streams. Its two-state offline filters produce A/B/C estimates from identical local-EKF increments. A declared +15% increment scale is applied equally to all three only in the controlled panel. Known Home initialization and evaluation-only truth remain separate. Schema-1 legacy recordings still plot A/B; record schema 2 for the new A/B/C deliverable.
+
+### Live GPS navigation
+
+`gps_navigation.launch.py` runs `gps_localizer.py`, waits for its complete readiness sentinel, then includes **navigation_launch.py only** from nav2_bringup. No AMCL, map server or saved-map localization is started. Temporary parameters remove static layers, enable rolling costmaps, retain LiDAR obstacle/inflation layers and disallow planning through unknown cells. Goals should be short and inside observed free space.
+
+The live planar state is [x,y,yaw]. Initial position and global heading come from the **known commanded Home spawn**, not Gazebo truth or perfect IMU orientation. Body displacement and yaw increments come from the existing local odometry/IMU EKF. GPS positions update x/y; cross covariance can correct heading after motion. The supplied covariance model is illustrative, not hardware-calibrated. Physical GPS navigation needs appropriate global heading initialization/observability.
+
+At each local-odometry time, the global filter publishes `map -> odom = global_pose × inverse(local_pose)`, and `/gps_nav/odometry`. It never changes the local EKF's continuous odom -> base_footprint transform. GPS and map goals use world ENU meters anchored to the SDF datum, so a saved SLAM map must not be loaded without explicitly aligning that map's origin/heading. `gps_goal.py` converts actual latitude/longitude inputs to the same ENU frame; `--home` uses the known Home configuration.
+
+GPS fixes with up to 0.25 simulated seconds latency receive a small estimated-motion compensation. Large odometry gaps/resets, mismatched profiles, noncentered GPS or competing global localizers stop the mode. GPS uncertainty-type 0 uses a nonzero profile-dependent covariance. Rejected fixes do not refresh GPS health.
+
+Nav2's collision monitor outputs `/gps_nav/cmd_vel_request`; the global localizer forwards it to `/cmd_vel` only while pose sources and LiDAR are fresh. A steady-clock watchdog also sends zero commands when unhealthy. Loss of accepted GPS for 2 simulated seconds, local odometry for 2 wall seconds, GPS for 20 wall seconds or scans for 5 wall seconds stops the localizer and its Nav2 launch. Request freshness is 0.5 simulated seconds with a 5-wall-second upper limit, allowing slow simulation. Normal Ctrl+C closes the gate and sends zero commands before shutting down. Keep teleop stopped, since a separate teleop publisher would bypass this command path.
+
+RTK-like mode uses 0.2 m goal tolerance; optional ordinary-GPS mode uses 1.5 m. Those settings deliberately reflect different precision and are not equal-accuracy benchmarks. Nav2's AMCL localization indicator may be inactive in GPS mode; use the GPS-ready message and TF, and distinguish lifecycle activity from action SUCCEEDED.
+
+### Pilot before student release
+
+Run the comparison with both actual Gazebo sensors, inspect synchronized A/B/C metrics, then test RTK-like live initialization, short Nav2 goals, Home return, obstacle detection, command/TF ownership and shutdown. Also test GPS/scan interruption. Offline tests and synthetic CSV plots are not end-to-end ROS/Gazebo validation. These launchers are simulation teaching tools, not validated physical-robot navigation software.
 
 
 ## Archived expanded instructions

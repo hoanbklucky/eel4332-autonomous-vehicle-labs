@@ -37,7 +37,7 @@ The course uses a simulation-first workflow and ends with a **Goosebot simulatio
 
 ## Course simulation instructions — start here
 
-Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** for Lab 2 and the first parts of Labs 4–5. Labs 4–5 also use **TurtleBot3 House with Waffle Pi**. The final uses the provided **Goosebot model + supplied 2-D LiDAR** in IST or the campus world.
+Select **Jazzy** on each ROBOTIS page. Use **TurtleBot3 Waffle in TurtleBot3 World** for Lab 2 and the first parts of Labs 4–5. Labs 4–5 also use **TurtleBot3 House with Waffle Pi**. The final uses the provided **Goosebot model + supplied 2-D LiDAR** in both IST and the campus world.
 
 | Step | Official guide | Course assignment |
 |---|---|---|
@@ -84,13 +84,13 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 | [04 - SLAM](lab04_slam/README.md) | Map World and House | Map both environments with Cartographer; retain separate maps and reuse both in Lab 5 |
 | [05 - Nav2](lab05_navigation/README.md) | Navigate in World and House | Use each matching map/model; reach one World goal and two House goals in different rooms |
 | [Goosebot readiness check](final_project_simulation/README.md#goosebot-readiness-check) | Verify Goosebot in each IST/campus world before mapping | Brief manual driving; check `/scan`, RobotModel and TF; no separate submission |
-| [Final](final_project_simulation/README.md) | Goosebot delivery in IST or campus simulation | Use the supplied LiDAR, create a map, localize, navigate to three deliveries/home, test a blocked route |
+| [Final](final_project_simulation/README.md) | Indoor/outdoor Goosebot navigation | Map both worlds; AMCL indoors, GPS fusion outdoors; two destinations/Home each; LiDAR and ordinary-GPS/RTK-like comparisons; IST blocked route |
 
 ## How these labs map to the course
 
-Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 introduces saved-map localization and guided navigation. The final transfers these skills to the supplied Goosebot model: students use the supplied 2-D LiDAR and build a new map in IST or the campus world, then navigate with AMCL/Nav2 and test a blocked route.
+Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 introduces saved-map localization and guided navigation. The final transfers these skills to the supplied Goosebot model: students map both IST and campus with the supplied LiDAR, compare ordinary GPS with RTK-like localization, navigate using AMCL indoors and live GPS fusion outdoors, and test an IST blocked route.
 
-The former Labs 04-09 are condensed into Labs 04 and 05. Detailed theory is in each lab's **OPTIONAL_BACKGROUND.md**. Separate Kalman-filter, A*, Pure Pursuit, and safety-monitor implementations are optional extensions. Nav2 supplies the live planner/controller. The final's required integration task is mapping/localization/navigation, followed by a short LiDAR settings observation. A mission client is optional. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) remains an optional reference.
+The former Labs 04-09 are condensed into Labs 04 and 05. Detailed theory is in each lab's **OPTIONAL_BACKGROUND.md**. Separate Kalman-filter, A*, Pure Pursuit, and safety-monitor implementations are optional extensions. Nav2 supplies the live planner/controller. The final's required integration task is mapping/localization/navigation, with an indoor LiDAR comparison and a supplied outdoor GPS/RTK-like experiment. A mission client is optional. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) remains an optional reference.
 
 See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation runbook](docs/SIMULATION_WORKFLOW.md) for the shared launch workflow.
 

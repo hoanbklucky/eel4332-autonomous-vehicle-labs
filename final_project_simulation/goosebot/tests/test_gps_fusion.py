@@ -14,6 +14,7 @@ HERE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(HERE))
 import gps_compare as demo
 import gps_fusion_core as core
+from gps_profiles import PROFILES
 
 
 class FusionTests(unittest.TestCase):
@@ -151,6 +152,21 @@ class FusionTests(unittest.TestCase):
             after = demo.estimate_recording(directory)[2]
             for label in before:
                 np.testing.assert_array_equal(before[label]['fused'], after[label]['fused'])
+
+            # Schema 2 records an independent second sensor on the same timestamps.
+            extra = [dict(row, kind='rtk') for row in rows if row['kind'] == 'gps']
+            with (directory / 'sensors.csv').open('w', newline='') as handle:
+                writer = csv.DictWriter(handle, fieldnames=demo.SENSOR_FIELDS)
+                writer.writeheader()
+                writer.writerows(rows + extra)
+            (directory / 'metadata.json').write_text(json.dumps({
+                'schema': 2, 'complete': True, 'world': self.world,
+                'settings': self.settings, 'profiles': PROFILES}))
+            cases = demo.estimate_recording(directory)[2]
+            for label, case in cases.items():
+                self.assertIn('rtk', case)
+                self.assertGreaterEqual(case['rtk_accepted'], 5)
+                np.testing.assert_array_equal(case['baseline'], before[label]['baseline'])
 
 
 if __name__ == '__main__':

@@ -20,6 +20,7 @@ from gps_fusion_core import (
     align_odometry, fuse_positions, gps_covariance, gps_to_enu,
     read_settings, read_world, score, timeseries,
 )
+from gps_profiles import PROFILES, validate_profile
 
 HERE = Path(__file__).resolve().parent
 SENSOR_FIELDS = ['kind', 't', 'x', 'y', 'yaw', 'latitude', 'longitude',
@@ -32,22 +33,7 @@ def yaw_of(q):
                       1 - 2 * (q.y * q.y + q.z * q.z))
 
 
-def record(args):
-    # Lazy imports let plotting and mathematical tests run without ROS.
-    import rclpy
-    from rclpy.node import Node
-    from rclpy.parameter import Parameter
-    from rclpy.qos import QoSProfile, ReliabilityPolicy
-    from rclpy.executors import ExternalShutdownException
-    from nav_msgs.msg import Odometry
-    from sensor_msgs.msg import NavSatFix
-    from tf2_ros import Buffer, TransformListener
-
-    world = read_world(args.world)
-    output = Path(args.output).expanduser().resolve()
-    if output.exists() and any(output.iterdir()):
-        raise ValueError(f'Recording directory is not empty: {output}. Use a new directory.')
-    output.mkdir(parents=True, exist_ok=True)
+def inspect_baseline():
     # Inspect running baseline inputs, rather than assuming messages imply fusion.
     dumped = subprocess.run(['ros2', 'param', 'dump', '/ekf_filter_node'],
                             capture_output=True, text=True, timeout=15, check=True)
@@ -64,7 +50,7 @@ def record(args):
             or str(params.get('imu0', '')).strip('/') != 'imu/data'
             or params.get('world_frame') != 'odom'):
         raise ValueError('Running EKF differs from the supplied velocity + IMU-yaw-rate baseline. '
-                         'Inspect its parameters before using this comparison.')
+                         'Inspect its parameters before using this GPS mode.')
     for family in ('odom', 'pose', 'twist', 'imu'):
         allowed = {'odom0', 'imu0'}
         for name, value in params.items():
@@ -72,10 +58,35 @@ def record(args):
                 if name not in allowed and value:
                     raise ValueError(f'Additional baseline input {name}={value}; comparison stopped.')
 
+    return params
+
+
+def record(args):
+    # Lazy imports let plotting and mathematical tests run without ROS.
+    import rclpy
+    from rclpy.node import Node
+    from rclpy.parameter import Parameter
+    from rclpy.qos import QoSProfile, ReliabilityPolicy
+    from rclpy.executors import ExternalShutdownException
+    from nav_msgs.msg import Odometry
+    from sensor_msgs.msg import NavSatFix
+    from std_msgs.msg import String
+    from rclpy.qos import DurabilityPolicy
+    from tf2_ros import Buffer, TransformListener
+
+    world = read_world(args.world)
+    output = Path(args.output).expanduser().resolve()
+    if output.exists() and any(output.iterdir()):
+        raise ValueError(f'Recording directory is not empty: {output}. Use a new directory.')
+    output.mkdir(parents=True, exist_ok=True)
+    params = inspect_baseline()
+
     metadata = {
-        'schema': 1, 'complete': False, 'world': world,
+        'schema': 2, 'complete': False, 'world': world,
+        'profiles': PROFILES,
         'baseline': '/odometry/filtered: command-derived vx/vy + IMU yaw rate',
         'topics': {'odometry': '/odometry/filtered', 'gps': '/gps/fix',
+                   'rtk': '/gps/rtk_fix',
                    'evaluation_only': '/ground_truth/pose'},
         'runtime_ekf_parameters': params,
         'settings': read_settings(args.settings),
@@ -95,12 +106,13 @@ def record(args):
         def __init__(self):
             super().__init__('course_gps_comparison_recorder',
                              parameter_overrides=[Parameter('use_sim_time', value=True)])
-            self.counts = {'odom': 0, 'gps': 0, 'truth': 0}
+            self.counts = {'odom': 0, 'gps': 0, 'rtk': 0, 'truth': 0}
             self.last_stamp = {}
             self.stationary_since = None
             self.ready = False
             self.error = None
             self.mount = None
+            self.profile_checked = False
             self.first_stamp = None
             self.last_received = time.monotonic()
             self.buffer = Buffer()
@@ -108,7 +120,19 @@ def record(args):
             qos = QoSProfile(depth=200, reliability=ReliabilityPolicy.BEST_EFFORT)
             self.create_subscription(Odometry, '/odometry/filtered', self.odom, qos)
             self.create_subscription(NavSatFix, '/gps/fix', self.gps, qos)
+            self.create_subscription(NavSatFix, '/gps/rtk_fix',
+                                     lambda msg: self.gps(msg, 'rtk'), qos)
             self.create_subscription(Odometry, '/ground_truth/pose', self.truth, qos)
+            self.create_subscription(String, '/robot_description', self.description,
+                QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL))
+
+        def description(self, msg):
+            try:
+                validate_profile(msg.data, 'ordinary')
+                validate_profile(msg.data, 'rtk', 'rtk_sensor')
+                self.profile_checked = True
+            except (ValueError, TypeError) as exc:
+                self.error = str(exc) + '; launch campus with gps_profile:=comparison.'
 
         def stamp(self, msg, kind):
             t = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
@@ -142,16 +166,17 @@ def record(args):
                 if self.stationary_since is None:
                     self.stationary_since = t
                 if (t - self.stationary_since >= 3 and self.counts['gps'] >= 10
+                        and self.counts['rtk'] >= 10 and self.profile_checked
                         and self.counts['truth'] >= 10 and self.mount is not None):
                     self.ready = True
                     self.get_logger().info('READY: drive a safe 10–20 m loop, stop at Home, '
                                            'wait 3 simulated seconds, then Ctrl+C HERE to save.')
 
-        def gps(self, msg):
+        def gps(self, msg, kind='gps'):
             if msg.header.frame_id != 'gps_link':
                 self.error = 'Expected GPS frame gps_link; custom frames require review.'
                 return
-            t = self.stamp(msg, 'gps')
+            t = self.stamp(msg, kind)
             if t is None or msg.status.status < 0:
                 return
             values = [msg.latitude, msg.longitude, msg.altitude]
@@ -164,11 +189,11 @@ def record(args):
                 self.error += '(0.000015 degrees), source and restart before recording.'
                 return
             cov = msg.position_covariance
-            sensor_writer.writerow(dict(kind='gps', t=t, latitude=msg.latitude,
+            sensor_writer.writerow(dict(kind=kind, t=t, latitude=msg.latitude,
                 longitude=msg.longitude, altitude=msg.altitude, status=msg.status.status,
                 covariance_type=msg.position_covariance_type,
                 r00=cov[0], r01=(cov[1] + cov[3]) / 2, r11=cov[4]))
-            self.counts['gps'] += 1
+            self.counts[kind] += 1
 
         def truth(self, msg):
             # Raw Gazebo model world pose; never call estimator code here.
@@ -236,7 +261,7 @@ def estimate_recording(directory):
     """Read ONLY metadata and sensor CSV; truth cannot influence estimates."""
     directory = Path(directory)
     meta = json.loads((directory / 'metadata.json').read_text())
-    if meta.get('schema') != 1 or not meta.get('complete'):
+    if meta.get('schema') not in (1, 2) or not meta.get('complete'):
         raise ValueError('Recording incomplete; restart at Home and wait for READY.')
     rows = read_csv(directory / 'sensors.csv')
     odom = sorted((r for r in rows if r['kind'] == 'odom'), key=lambda r: float(r['t']))
@@ -265,6 +290,27 @@ def estimate_recording(directory):
     for label, scale in [('unmodified', 1.0),
                          ('controlled_scale_error', meta['settings']['controlled_prediction_scale'])]:
         cases[label] = fuse_positions(t, base, g_t, g_xy, g_cov, meta['settings'], scale)
+    # A second independent simulated sensor measures the SAME drive, not
+    # truth-derived "improved" fixes. Legacy schema-1 records still plot A/B.
+    if meta.get('schema') == 2:
+        rtk = sorted((r for r in rows if r['kind'] == 'rtk'), key=lambda r: float(r['t']))
+        rt, rx, rc = [], [], []
+        for row in rtk:
+            if int(row['status']) < 0:
+                continue
+            point = gps_to_enu(float(row['latitude']), float(row['longitude']),
+                              float(row['altitude']), meta['world']['datum'])[:2]
+            if np.linalg.norm(point) > meta['settings']['max_world_radius_m']:
+                raise ValueError('RTK-like fix outside campus; check world datum')
+            rt.append(float(row['t']))
+            rx.append(point)
+            rc.append(gps_covariance(row, meta['world']['datum'][0],
+                                    meta['profiles']['rtk']['horizontal_std_deg']))
+        for label, scale in [('unmodified', 1.0),
+                ('controlled_scale_error', meta['settings']['controlled_prediction_scale'])]:
+            precise = fuse_positions(t, base, rt, rx, rc, meta['settings'], scale)
+            cases[label].update(rtk=precise['fused'], rtk_accepted=precise['accepted'],
+                                rtk_rejected=precise['rejected'])
     return meta, t, cases, np.asarray(g_t), np.asarray(g_xy)
 
 
@@ -295,18 +341,23 @@ def report(args):
     (directory / 'metrics.json').write_text(json.dumps(summary, indent=2))
     with (directory / 'estimates.csv').open('w', newline='') as handle:
         writer = csv.writer(handle)
-        writer.writerow(['t', 'case', 'baseline_x', 'baseline_y', 'fused_x', 'fused_y'])
+        writer.writerow(['t', 'case', 'baseline_x', 'baseline_y', 'fused_x', 'fused_y',
+                         'rtk_x', 'rtk_y'])
         for label, case in cases.items():
-            for stamp, a, b in zip(t, case['baseline'], case['fused']):
-                writer.writerow([stamp, label, *a, *b])
+            precise = case.get('rtk', np.full_like(case['fused'], np.nan))
+            for stamp, a, b, c in zip(t, case['baseline'], case['fused'], precise):
+                writer.writerow([stamp, label, *a, *b, *c])
     fig, axes = plt.subplots(2, 2, figsize=(12, 9))
     for col, (label, case) in enumerate(cases.items()):
         ax, error_ax = axes[0, col], axes[1, col]
         ax.plot(truth[valid, 0], truth[valid, 1], 'k-', label='Gazebo truth (scoring only)')
         shown = (gps_t >= t[0]) & (gps_t <= t[-1])
         ax.scatter(gps_xy[shown, 0], gps_xy[shown, 1], s=4, color='gray', alpha=0.3, label='GPS fixes')
-        for variant, color, title in [('baseline', 'tab:orange', 'A: odometry + IMU'),
-                                     ('fused', 'tab:blue', 'B: A + GPS position updates')]:
+        variants = [('baseline', 'tab:orange', 'A: odometry + IMU'),
+                    ('fused', 'tab:blue', 'B: A + ordinary GPS')]
+        if 'rtk' in case:
+            variants.append(('rtk', 'tab:green', 'C: A + RTK-like GPS'))
+        for variant, color, title in variants:
             est = case[variant]
             ax.plot(est[:, 0], est[:, 1], color=color, label=title)
             error = np.linalg.norm(est[valid] - truth[valid], axis=1)
@@ -324,14 +375,14 @@ def report(args):
         error_ax.legend(fontsize=8)
         for axis in (ax, error_ax):
             axis.grid(alpha=0.25)
-    fig.suptitle('GPS localization comparison — same drive, offline replay; no navigation changes')
+    fig.suptitle('Ordinary GPS / RTK-like localization — same drive, offline replay')
     fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(directory / 'comparison.png', dpi=160)
     plt.close(fig)
     print('Horizontal RMSE / final error (meters):')
     for label, result in metrics.items():
         print(label)
-        for variant in ('baseline', 'fused'):
+        for variant in ('baseline', 'fused', 'rtk') if 'rtk' in cases[label] else ('baseline', 'fused'):
             m = result[variant]
             print(f"  {variant}: {m['rmse_m']:.3f} / {m['final_error_m']:.3f}")
     print(f'Open {directory / "comparison.png"}; metrics.json has numeric results.')

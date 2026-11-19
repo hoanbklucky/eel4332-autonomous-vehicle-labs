@@ -1,6 +1,6 @@
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
-Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. In each world: build your own SLAM map, restart with AMCL/Nav2, reach **two destinations and return Home**. Also complete one IST blocked-route attempt, one indoor LiDAR comparison, and the supplied campus GPS-fusion comparison below. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
+Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion outdoors**, reaching **two destinations and Home** in each. Also complete one IST blocked-route attempt, one indoor LiDAR comparison, and the ordinary-GPS/RTK-like localization experiment below. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
 ## Before you start
 
@@ -194,7 +194,7 @@ ros2 run nav2_map_server map_saver_cli -f "$PWD/results/$MAP_NAME" \
 
 **Command breakdown:** `MAP_NAME` chooses `ist_map` or `campus_map`; `-f` sets the output basename. The saver writes YAML plus an image. Keep both together and save each world separately.
 
-## 6. Restart and navigate
+## 6. IST — restart and navigate
 
 Stop all launches as described above. Relaunch **the same world** in Terminal 1; leave SLAM stopped.
 
@@ -208,7 +208,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
   map:="$PWD/final_project_simulation/results/ist_map.yaml"
 ```
 
-**Command breakdown:** the wrapper loads your map automatically and starts AMCL/Nav2. For campus use `results/campus_map.yaml`. Do not manually call a load-map service during normal startup.
+**Command breakdown:** this IST wrapper loads your map automatically and starts AMCL/Nav2. Do not manually call a load-map service during normal startup. For campus, save your map in Step 5, then use Step 9's experiment and GPS-aided navigation instead of this AMCL launch.
 
 **Terminal 3 — navigation RViz:**
 
@@ -239,74 +239,126 @@ After IST baseline navigation, open `final_project_simulation/src/goosebot_0/urd
 Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans under similar conditions. Save **one baseline and one changed screenshot**, plus two sentences describing the observed effect. Restore the baseline and rebuild before campus.
 
 <a id="9-part-b--inspect-gps-outdoors"></a>
+<a id="9-part-b--gps-fusion-comparison"></a>
 
-### 9. Part B — GPS fusion comparison
+### 9. Part B — GPS/RTK localization and outdoor navigation
 
-**Question:** does adding GPS reduce position error compared with odometry + IMU? The supplied tool evaluates **A: the existing odometry/IMU estimate** and **B: that prediction plus GPS position updates** on the **same recorded drive**. It is offline position fusion, not a new Nav2 localizer; no TF or velocity commands are published.
+#### A. Compare localization on one drive
 
-**Prepare:** finish campus navigation, then stop all launches. Start a **fresh campus world at Home** using Step 3 (`campus/campus.sdf`). Keep SLAM/Nav2 stopped and the robot stationary. GPS sensor/bridge/world settings are already supplied; add no XML. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib`.
+**Question:** how does GPS precision affect localization? Two independent simulated sensors measure the same drive:
 
-**Terminal 2 — record:**
+| Estimate | Input | Horizontal noise standard deviation |
+|---|---|---|
+| A | Existing odometry + IMU | No GPS |
+| B | A + ordinary GPS | About 1.5–1.7 m per axis |
+| C | A + RTK-like GPS | About 2 cm per axis |
+
+The profiles model **measurement noise only**—not real RTK correction links, multipath or loss of RTK fix. Add no XML and do not edit Xacro. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib`.
+
+**Terminal 1:** stop old launches and start fresh at campus Home:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=comparison
+```
+
+**Terminal 2 — record, then report:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch "$PWD/final_project_simulation/goosebot/gps_compare.launch.py" \
-  output:="$PWD/final_project_simulation/results/gps_comparison"
+  output:="$PWD/final_project_simulation/results/gps_rtk_comparison"
 ```
 
-Wait for **READY** (at least three simulated seconds, longer in slow simulation). Then use Step 4's teleop in **Terminal 4** to drive a safe **10–20 m loop with turns**. Stop near Home with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2** to save. Use a new output directory for another recording; existing data are not overwritten. The launch reports missing topics, wrong baseline/mount, clock reset or the old GPS noise setting.
-
-**Terminal 2 — generate the comparison:**
+Keep still until **READY**. Use Terminal 4's Step 4 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2**. Generate the report:
 
 ```bash
 python3 final_project_simulation/goosebot/gps_compare.py report \
-  --input final_project_simulation/results/gps_comparison
+  --input final_project_simulation/results/gps_rtk_comparison
 ```
 
-**Command breakdown:** the recording launch saves GPS and the running odometry/IMU EKF output to `sensors.csv`, with Gazebo truth in a separate evaluation-only `truth.csv`. `report` converts GPS degrees to local ENU meters, replays a supplied 2-D Kalman position filter, and creates **`comparison.png`** and **`metrics.json`** in that directory. Both estimators use the known commanded Home spawn pose/heading; **neither receives ground truth**. No ROS rebuild is needed just for these new tool files.
+**Command breakdown:** `gps_profile:=comparison` supplies ordinary `/gps/fix` and RTK-like `/gps/rtk_fix` simultaneously. The recorder saves raw sensor data and separate evaluation-only truth. `report` replays supplied position filters and writes **`comparison.png`** and **`metrics.json`**. Use a new output directory for another run; files are not overwritten.
 
-The plot has two columns:
+The **left column** shows unmodified predictions; the **right** applies an artificial +15% prediction scale error equally to A/B/C to illustrate correction under a known error. Do not report that column as unmodified robot performance. Ground truth scores horizontal position error only; it never enters a filter. Both filters use the known commanded Home pose/heading as their starting reference.
 
-| Column | What it tests |
-|---|---|
-| Unmodified recording | A versus B on your actual recorded prediction and GPS. GPS may help or hurt when odometry is already accurate. |
-| Controlled scale-error test | The same recording, with a declared **15% prediction scale error applied equally to A and B**. GPS is unchanged. This illustrates correction under a known odometry error; it is not an unmodified simulation result. |
+**Submit:** the plot and this table from the unmodified case, plus two sentences explaining the measured differences. Briefly state whether the controlled case changes your conclusion.
 
-**Submit the plot, this table filled from `metrics.json`, and three sentences:**
+| Estimate | Horizontal RMSE (m) | Final position error (m) |
+|---|---|---|
+| A — odometry + IMU | Fill | Fill |
+| B — A + ordinary GPS | Fill | Fill |
+| C — A + RTK-like GPS | Fill | Fill |
 
-| Case | A: horizontal RMSE (m) | B: horizontal RMSE (m) | A / B final error (m) |
-|---|---|---|---|
-| Unmodified | Fill | Fill | Fill / Fill |
-| Controlled +15% scale | Fill | Fill | Fill / Fill |
+RMSE is root mean square distance to Gazebo truth at matching timestamps. GPS need not improve an already accurate estimate. This experiment evaluates localization, not navigation success.
 
-Say (1) whether GPS helped in each case, (2) why noisy GPS can help a drifting estimate but hurt an accurate one, and (3) why this plot demonstrates position fusion, **not better mapping/navigation**. RMSE means root mean square distance to Gazebo truth at matched timestamps; ground truth is used only for scoring. Report the measured result rather than assuming improvement.
+<a id="gps-aided-outdoor-navigation"></a>
+
+#### B. Navigate using live GPS fusion
+
+Stop all launches. Restart **Terminal 1's campus command above with `gps_profile:=rtk`**. Stay at fresh Home; keep SLAM, AMCL and teleop stopped. This is a separate live mode, not replay.
+
+**Terminal 2 — GPS localization and Nav2:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/gps_navigation.launch.py" profile:=rtk
+```
+
+Wait for **GPS_LOCALIZATION_READY**, then **Managed nodes are active**. The supplied live x/y/yaw EKF uses GPS positions and local odometry/IMU motion; it owns `map → odom`. The local EKF keeps `odom → base_footprint`. Initial global heading comes from the known Home spawn command, not a perfect IMU orientation or ground truth.
+
+**Terminal 3 — GPS navigation view:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+rviz2 -d "$PWD/final_project_simulation/goosebot/gps_navigation.rviz" \
+  --ros-args -p use_sim_time:=true
+```
+
+1. Confirm RobotModel, LiDAR, the rolling global costmap and **Nav2 Goal** appear. No saved map or **2D Pose Estimate** is needed; AMCL is not running. Use Terminal 2's GPS-ready message, not the panel's AMCL localization indicator.
+2. Send a nearby **Nav2 Goal**, then reach **two safe destinations and Home**. Choose short goals within about 6 m in already observed free space, on paved routes. LiDAR still marks obstacles; unknown space is not planned through.
+3. To return to the known Home, run in a sourced **Terminal 4** from the repository root:
+
+```bash
+python3 final_project_simulation/goosebot/gps_goal.py --home
+```
+
+The helper sends a GPS-aligned ENU goal and reports **SUCCEEDED**. It also accepts `--latitude`, `--longitude`, and `--yaw-deg` using actual waypoint readings. RViz goals are GPS-aligned **meters**, not geographic degrees.
+
+**Command breakdown:** `gps_profile:=rtk` changes runtime sensor noise without editing source; `profile:=rtk` selects matching live-filter uncertainty. The launch starts navigation-only Nav2 after initialization, with rolling LiDAR costmaps and no AMCL/map server. **Do not load `campus_map.yaml` in this mode**: a SLAM map's coordinates need not match the GPS datum. Your campus SLAM map remains a mapping deliverable.
+
+**Submit:** the campus video showing GPS readiness, two reached destinations and Home; explain GPS's localization role versus LiDAR's obstacle role. Meter-noise navigation is an optional open-area trial: restart the world with `gps_profile:=ordinary` and navigation with `profile:=ordinary`. Its goal tolerance is 1.5 m versus 0.2 m for RTK-like mode, so do not compare reached-goal counts as equal-precision tests.
 
 <details>
-<summary>Checks, limitations, and optional next extension</summary>
+<summary>Checks and limitations</summary>
 
-GPS should remain near 28.1485°, −81.8495° with meter-scale scatter. If it jumps by degrees, update this branch, rerun the Step 1 build helper, source and respawn: horizontal `gps_sensor` noise must be **0.000015 degrees**, vertical noise **3.0 m**. `position_covariance_type: 0` means unknown uncertainty; the tool uses a nonzero configured fallback rather than trusting the zero array.
+The profiles are idealized simulations, not hardware RTK. Matching profile settings, a centered antenna and fresh stationary Home start are required. In a physical robot, global heading needs an appropriate initialization/sensor solution. The navigation motion gate stops requests on stale GPS/odometry/scan data; a failed localizer shuts down its Nav2 launch. Do not run another global TF publisher or teleop alongside it.
 
-The comparison assumes the supplied centered GPS antenna, ENU campus datum and a stationary start at the commanded Home pose. It corrects horizontal position only; heading remains from the odometry/IMU baseline. Filter settings are supplied in `goosebot/gps_fusion_settings.json`. [Method and diagnostics](COMMAND_REFERENCE.md#gps-fusion-comparison-method) are optional reading.
-
-**Optional follow-on: GPS-aided outdoor navigation.** After the comparison is piloted, a separate global GPS localizer can replace AMCL for a Nav2 experiment while LiDAR remains for obstacle detection. It needs validated heading/datum, uncertainty and exclusive ownership of `map → odom`; do not run competing global TF publishers. This navigation extension is **not implemented or required** in this revision.
+GPS should stay near 28.1485°, −81.8495°. For degree-scale jumps, update the branch, rerun the Step 1 helper, source and respawn. No ROS rebuild is needed solely for the new local-file launchers. See [method/diagnostics](COMMAND_REFERENCE.md#gps-rtk-navigation-method) for filter and TF details.
 
 </details>
 
 ### 10. Explain the system
 
-Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your LiDAR/GPS observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Live GPS-aided Nav2 is optional future work.
+Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your LiDAR/GPS observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
 
 ## What to submit
 
-- **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, AMCL alignment, two reached destinations and Home. Include the IST blocked attempt and brief sensor evidence.
-- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, two LiDAR screenshots, GPS comparison plot and error table. Exclude build/install/log, databases and bags.
+- **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home. Include the IST blocked attempt and brief sensor evidence.
+- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, two LiDAR screenshots, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
 - **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
 
 | Assessment | Weight |
 |---|---:|
-| Mapping and AMCL in both worlds | 25% |
+| Mapping in both worlds, indoor AMCL and outdoor GPS localization | 25% |
 | Navigation in both worlds and IST blocked-route evidence | 25% |
 | Indoor LiDAR comparison and outdoor GPS activity | 15% |
 | System understanding and evidence-based explanation | 30% |
@@ -316,6 +368,6 @@ Submit one shared **2–3 page explanation plus a topic table/diagram**, using [
 
 ## Optional reference
 
-The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. The supplied GPS comparison is evaluated separately from the baseline EKF and Nav2; optional GPS-aided navigation requires a separate validated global-localization setup.
+The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. Step 9 separates the offline localization comparison from the live GPS navigation mode. Indoor AMCL remains unchanged.
 
-**Instructor validation:** the fusion math, data separation, scoring and plotting have offline tests, including synthetic recordings. The ROS/Gazebo recording/launch still requires a course-machine pilot before student release. No live navigation improvement has been demonstrated.
+**INSTRUCTOR VALIDATION REQUIRED:** profile generation, fusion math, TF composition, gating, scoring, plotting and Nav2 parameters have offline tests and synthetic-data checks. The dual-sensor bridge and live GPS/Nav2 launch still require a course-machine pilot; no end-to-end Gazebo navigation result is claimed.

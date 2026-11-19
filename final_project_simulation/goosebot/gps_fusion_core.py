@@ -214,13 +214,16 @@ def score(estimate_t, cases, truth_t, truth_xy, max_gap):
     result = {}
     for name, case in cases.items():
         result[name] = {}
-        for variant in ('baseline', 'fused'):
+        for variant in ('baseline', 'fused', 'rtk') if 'rtk' in case else ('baseline', 'fused'):
             error = np.linalg.norm(case[variant][valid] - truth[valid], axis=1)
             result[name][variant] = {
                 'rmse_m': float(np.sqrt(np.mean(error ** 2))),
                 'final_error_m': float(error[-1]), 'max_error_m': float(error.max())}
         result[name]['gps_updates_accepted'] = case['accepted']
         result[name]['gps_updates_rejected'] = case['rejected']
+        if 'rtk' in case:
+            result[name]['rtk_updates_accepted'] = case['rtk_accepted']
+            result[name]['rtk_updates_rejected'] = case['rtk_rejected']
         result[name]['scored_samples'] = int(valid.sum())
         result[name]['scored_fraction'] = float(valid.mean())
     return result, truth, valid
