@@ -58,7 +58,7 @@ Show evidence that two goals and return home succeeded **in each world**. For th
 ## 6. Indoor/outdoor observations and limits
 
 - **IST LiDAR:** baseline/changed setting, controlled conditions, two screenshots, measured/visible difference, and any limitation. Did you inspect scans only or also retest mapping/navigation? State this explicitly.
-- **Campus GPS:** three-location table from [the GPS activity](goosebot/CAMPUS_GPS.md), variability while stationary, coordinate units/frames, and whether the baseline actually fuses it. Why does GPS not replace LiDAR obstacle detection?
+- **Campus GPS:** A/B/C table from [Step 9](README.md#9-part-b--inspect-gps-outdoors): Home → landmark → Home. Compare mean GPS displacement with local odometry's return displacement, report noise and any visible drift, and answer Step 9's three sentences. Explain why this independent position check does not establish improved mapping/navigation or GPS fusion; LiDAR still detects obstacles.
 - **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
 - **Reality gap:** explain at least two limits, including the simulated GPS/teaching scale or command-derived odometry, and what would require validation on physical Goosebot.
 - **Reproducibility:** identify your branch/revision, maps, chosen goals/home, changed settings and one diagnosed problem/fix. List each member's contribution and briefly state how AI assistance was verified if used.

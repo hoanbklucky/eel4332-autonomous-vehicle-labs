@@ -80,3 +80,5 @@ Preserve this order where practical:
 11. Troubleshooting
 
 - Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. On this branch, require both worlds; put the IST LiDAR comparison after indoor baseline navigation, restore defaults before campus, and use guided campus GPS inspection instead of a second LiDAR experiment. GPS fusion is optional; never claim the baseline EKF consumes GPS. Keep system understanding at 30%. Preserve mission-client and unrelated algorithm TODOs.
+
+- Keep the final README concise: required runnable steps and short command explanations stay inline; extended diagnostics live in optional COMMAND_REFERENCE.md. Campus GPS activity is Home → landmark → Home in one run, comparing stationary GPS means with local odometry return displacement. It is an independent position-reference exercise, not GPS fusion or evidence of improved SLAM/Nav2. Preserve the 30% system explanation and both-world requirements.
