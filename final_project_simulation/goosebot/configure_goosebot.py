@@ -12,10 +12,47 @@ from pathlib import Path
 import yaml
 
 
+def fix_gps_noise_units(text):
+    """Migrate only the pinned GPS horizontal default for Gazebo Sensors 8.
+
+    That implementation applies horizontal noise to latitude/longitude in
+    degrees, despite the SDF specification describing meters. Keep vertical
+    noise (meters), custom values, comments and unrelated sensors unchanged.
+    """
+    root = ET.fromstring(text)
+    sensors = root.findall(".//sensor[@name='gps_sensor']")
+    if not sensors:
+        return text
+    if len(sensors) != 1:
+        raise ValueError('Expected at most one gps_sensor')
+    sensor = sensors[0]
+    value = sensor.find('navsat/position_sensing/horizontal/noise/stddev')
+    if value is None or value.text is None:
+        return text
+    try:
+        legacy = float(value.text) == 1.5
+    except ValueError:
+        legacy = False
+    if not legacy:
+        return text
+    pattern = (r'(<sensor\b[^>]*\bname="gps_sensor"[^>]*>'
+               r'(?:(?!</sensor>).)*?<position_sensing>\s*<horizontal>\s*'
+               r'<noise\b[^>]*>\s*<mean>[^<]*</mean>\s*<stddev>)'
+               r'1\.5(?:0*)?(</stddev>)')
+    updated, count = re.subn(pattern, lambda m: m[1] + '0.000015' + m[2],
+                             text, flags=re.DOTALL)
+    if count != 1:
+        raise ValueError('Legacy GPS noise found with custom XML formatting; '
+                         'set only gps_sensor horizontal stddev to 0.000015 degrees')
+    print('Corrected GPS horizontal noise: 1.5 degrees -> 0.000015 degrees '
+          '(roughly 1.5 meters per horizontal axis at campus latitude).')
+    return updated
+
+
 def prepare(package):
     model = package / 'urdf/robot.urdf.xacro'
     bridge = package / 'config/ros_gz_bridge.yaml'
-    text = model.read_text()
+    text = fix_gps_noise_units(model.read_text())
     root = ET.fromstring(text)
     if root.tag != 'robot':
         raise ValueError('Expected a robot root element')
