@@ -87,96 +87,7 @@ You may use AI tools to help write or modify code, add sensors, configure ROS 2,
 
 ## Prerequisites and background
 
-Complete Labs 4–5, then follow Steps 1–4 below to build Goosebot and check it in IST before mapping; repeat the readiness check when switching to campus. The separate practice-arena warm-up is optional. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `# Final Project — Indoor and Outdoor Goosebot Navigation
-
-## Before you start — use the current course files
-
-**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
-
-In Ubuntu/WSL, save all editor files and check:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git remote -v
-git branch --show-current
-git status --short
-```
-
-`origin` must be your GitHub fork; `upstream` must be `hoanbklucky/eel4332-autonomous-vehicle-labs`. The branch must match the expected name. **If the branch differs or status lists changes, stop here:** [save/commit your work and follow the branch/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before proceeding. Do not discard edits, especially robot Xacro/configuration changes or maps.
-
-Once on the correct branch with a clean working tree:
-
-```bash
-git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
-git log -1 --oneline
-```
-
-Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
-
-**Final version check:** this branch requires **both IST and campus**, an indoor LiDAR comparison, outdoor GPS inspection, and a system explanation. If your local final still says to choose one world, it has not received this revision.
-
-> [!IMPORTANT]
-> **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
->
-> **Before relaunching, switching worlds, or finishing:**
-> 1. Stop robot motion; save any map/results you need.
-> 2. Press **Ctrl+C** in each teleop, SLAM and Nav2 terminal that is running.
-> 3. Press **Ctrl+C in the simulator launch terminal** (usually Terminal 1).
-> 4. Wait for shutdown messages to finish and the shell prompt to return before launching again.
->
-> If you already closed the window, return to its launch terminal and press Ctrl+C there. If shutdown seems incomplete, check `pgrep -af 'gz sim|gz-sim'` and identify leftover simulation processes before restarting.
-
-## Open in VS Code through WSL
-
-After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-code .
-```
-
-Confirm VS Code shows **WSL: Ubuntu** (or your Ubuntu distribution) in the lower-left corner. Open `final_project_simulation/README.md` in Explorer. Choose **Terminal → New Terminal**; when working from this lab directory, run:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
-```
-
-Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
-
-> **Branch preview:** this indoor/outdoor revision is on `final-project-indoor-outdoor`. Complete both required worlds below; `main` retains the earlier assignment until this revision is released.
-
-## Mission
-
-Use the **provided Goosebot model with its configured 2-D LiDAR** in **both IST (indoor) and campus (outdoor)**. In each world, build a short-route SLAM map, save it, restart with AMCL, navigate to **two destinations**, and return home. Complete one indoor LiDAR comparison and a guided outdoor GPS activity. Explain the measured data flow and algorithms in your own words. Physical Goosebot SLAM/Nav2 is not required; lane following remains the hardware component.
-
-## Learning objectives
-
-- Build and use separate indoor/outdoor occupancy maps with SLAM Toolbox and AMCL/Nav2.
-- Identify sensor topics, message types and frames; distinguish measurements, estimates and commands.
-- Explain which inputs the EKF, SLAM, AMCL and navigation components actually use.
-- Compare one LiDAR setting indoors and inspect simulated GPS outdoors, including its noise and coordinate system.
-- Support explanations with runtime evidence and reproducible configuration.
-
-## Required project route
-
-| Part | Required work | Saved map |
-|---|---|---|
-| A — IST indoors | Steps 3–6: short mapped route, two destinations and home; Step 7 blocked route; Step 8 one LiDAR setting comparison | `results/ist_map.yaml` and its image |
-| B — campus outdoors | Repeat Steps 3–6 on a short campus route, two destinations and home; Step 9 guided GPS activity | `results/campus_map.yaml` and its image |
-| C — system understanding | Complete [the system explanation](SYSTEM_EXPLANATION.md) using your actual topics, configuration and observations | One shared explanation covering both environments |
-
-Complete IST first. Map enough space for your two destinations, a revisit and an alternative route; **do not map every room or the entire campus**. For campus, a route near IST and the neighboring crossings is sufficient; distant delivery pads are optional. The blocked-route test is required in IST; repeating it on campus is optional. Custom worlds and mission-client programming are optional extensions, not substitutes for either required world.
-
-## AI assistance is allowed
-
-You may use AI tools to help write or modify code, add sensors, configure ROS 2, and debug errors for this **final project**. You are responsible for testing the resulting code/configuration and must be able to explain your submitted changes and how the system works. Write the short final explanation in your own words. AI assistance does not replace the required simulation demonstration or your understanding.
-
-## Prerequisites and background
-
- prompt. **The course instructions use native WSL/Jazzy for both the warm-up and final. Docker is an optional alternative, not an additional requirement.**
+Complete Labs 4–5, then follow Steps 1–4 below to build Goosebot and check it in IST before mapping; repeat the readiness check when switching to campus. The separate practice-arena warm-up is optional. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands omit the shell prompt. **The course workflow uses native WSL/Jazzy; Docker is an optional alternative.**
 
 The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU, forward ToF, command-derived odometry, and EKF. **The narrow forward ToF is not a 360° mapping LiDAR.** The course build helper supplies the 360° LiDAR and bridge automatically. Start with those defaults; inspect/change one LiDAR setting only after completing IST mapping and saved-map navigation. Restore its baseline before starting campus.
 
@@ -495,7 +406,7 @@ rviz2 --ros-args -p use_sim_time:=true
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard \\
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -p speed:=0.1 -p turn:=0.5
 ```
 
@@ -765,11 +676,113 @@ See [the beginner Xacro reference](goosebot/LIDAR_REFERENCE.md) for the complete
 
 </details>
 
-### 9. Part B — add and inspect GPS outdoors
+### 9. Part B — inspect GPS outdoors
 
-Keep LiDAR at its restored baseline. Follow [the guided campus GPS activity](goosebot/CAMPUS_GPS.md): inspect the existing robot sensor and bridge, use the supplied NavSat-enabled campus world, and record GPS at three stationary locations. No duplicate sensor or second bridge is needed when using the supplied model.
+**What you must do:** inspect the supplied GPS configuration, run the message checks below, collect fixes at three stationary campus locations, and explain the observations in your shared system explanation.
 
-GPS is **an additional position measurement**, not a replacement for LiDAR mapping or obstacle detection. The required campus navigation still uses your LiDAR map and AMCL. GPS fusion into navigation is an optional extension requiring supplied/validated coordinate conversion and filter configuration; displaying `/gps/fix` does not demonstrate fusion.
+**No GPS code needs to be added for the supplied project.** Keep the existing Xacro, bridge and campus world settings. This is an inspection and measurement activity. Complete campus mapping and AMCL/Nav2 first, and keep the baseline LiDAR settings. This activity adds **GPS observations** to the outdoor experiment; the required navigation remains LiDAR/AMCL-based. GPS fusion is optional.
+
+#### 9.1. Understand the three pieces
+
+The pinned Goosebot already contains a `gps_link`, a `navsat` sensor named `gps_sensor`, and a `/gps/fix` bridge. Do not add a second GPS sensor or bridge. A sensor declaration alone is insufficient: the **world** must also run the NavSat system.
+
+| Piece | Location | What to inspect |
+|---|---|---|
+| Robot sensor | `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro` | `gps_link`, `gps_sensor`, topic `gps/fix`, frame `gps_link`, update rate and noise |
+| ROS bridge | `final_project_simulation/src/goosebot_0/config/ros_gz_bridge.yaml` | `gps/fix`, `sensor_msgs/msg/NavSatFix`, `gz.msgs.NavSat`, `GZ_TO_ROS` |
+| World support | `final_project_simulation/campus/campus.sdf` and `campus_blocked.sdf` | NavSat system and WGS84 spherical coordinates |
+
+In VS Code search the Xacro for `gps_sensor`, then the bridge YAML for `gps/fix`. Record what your files actually contain. The supplied sensor uses **5 Hz in simulation**, horizontal Gaussian noise standard deviation **1.5 m**, and vertical standard deviation **3 m**. Existing custom models may differ; report your values.
+
+**Inspect the campus world file, not the Xacro:** open `final_project_simulation/campus/campus.sdf` in VS Code and search for `gz-sim-navsat-system` and `spherical_coordinates`. Both are already present directly under `<world>`. The Xacro defines the robot-mounted sensor; the world file supplies the geographic reference and the Gazebo NavSat system.
+
+<details>
+<summary>Reference only — XML already present in the campus .sdf world file; do not paste it into Xacro</summary>
+
+The existing world-level settings are:
+
+```xml
+<plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat"/>
+<spherical_coordinates>
+  <surface_model>EARTH_WGS84</surface_model>
+  <world_frame_orientation>ENU</world_frame_orientation>
+  <latitude_deg>28.1485</latitude_deg>
+  <longitude_deg>-81.8495</longitude_deg>
+  <elevation>0</elevation>
+  <heading_deg>0</heading_deg>
+</spherical_coordinates>
+```
+
+**Do not copy this XML into `robot.urdf.xacro` or paste another copy into the world.** For the supplied files, no edit or rebuild is needed for this inspection. If a block is missing from an older checkout, first update `final-project-indoor-outdoor` using the instructions at the top of this README and restart Gazebo. Custom-world modifications are optional and outside this required activity.
+
+</details>
+
+This example follows [Gazebo Harmonic's spherical-coordinate/NavSat world](https://github.com/gazebosim/gz-sim/blob/gz-sim8/examples/worlds/spherical_coordinates.sdf). The model/bridge come from [the pinned Goosebot source](https://github.com/hoanbklucky/goose/tree/bffaf3cdf2b38f3b5a53a977064e0c787e046ff7/11_simulation/ros2_ws/src/goosebot_0).
+
+#### 9.2. Launch and inspect messages
+
+Stop SLAM/Nav2/teleop and the simulator with Ctrl+C in their launch terminals after completing campus navigation. Start a fresh **measurement-only campus session** with the same baseline world in **Terminal 1**:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf"
+```
+
+Keep Terminal 1 running. Use Step 4's slow keyboard-driving command in **Terminal 4** when moving between measurement locations; press `k` to stop before sampling. Keep SLAM/Nav2 stopped during these measurements. In **Terminal 2**, source the same workspace:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 topic info /gps/fix --verbose
+ros2 topic echo /gps/fix --once
+ros2 topic hz /gps/fix
+```
+
+Stop `hz` with Ctrl+C before the next command. Expect `sensor_msgs/msg/NavSatFix` messages containing timestamp, frame, status, latitude/longitude in **degrees**, altitude in **meters**, and covariance/type fields. Inspect `status` and `position_covariance_type`; do not assume the bridge reports known uncertainty. Record the actual frame (expected `gps_link`).
+
+```bash
+ros2 run tf2_ros tf2_echo base_footprint gps_link
+```
+
+Stop after numerical TF appears. With a slow real-time factor, measured wall-clock Hz is lower than the 5 Hz simulated rate. The sensor frame is mounted on the robot; it is not the ROS `map` frame.
+
+#### 9.3. Record three stationary locations
+
+1. At Home, stop motion and collect at least five consecutive fixes. Record latitude, longitude, altitude, stamp, status and covariance type. Run `ros2 topic echo /gps/fix` in Terminal 2, let at least five messages arrive while stationary, then press Ctrl+C. A short text excerpt is sufficient.
+2. Drive safely to a second visible landmark, preferably several simulation meters away, stop, and repeat.
+3. Repeat at a third location. Save a screenshot or description identifying each location. Note approximate displacement and direction using your map; compare **relative movement**, not raw map coordinates against latitude/longitude.
+
+| Location | Landmark / approximate map XY | Latitude samples (deg) | Longitude samples (deg) | Altitude (m) | Status / covariance type |
+|---|---|---|---|---|---|
+| A | Home | Fill from messages | Fill | Fill | Fill |
+| B | Your landmark | Fill | Fill | Fill | Fill |
+| C | Your landmark | Fill | Fill | Fill | Fill |
+
+Explain why readings vary while stationary and whether the differences between locations are clear compared with that variation. The simulation does not model realistic satellite visibility, building blockage or multipath merely because buildings are drawn. Do not claim real-world GPS accuracy from these trials.
+
+#### 9.4. Explain coordinates and actual fusion
+
+World +x is east and +y is north (ENU). The datum anchors the simulation at the approximate campus origin, but the arena uses **0.06-scaled geography**. GPS follows distances in the simulation; it will not reproduce the real building coordinates from OSM. Noise remains in simulation meters and can be large relative to this teaching arena. Do not use these synthetic fixes for real campus navigation.
+
+Your SLAM `map` has its own origin/heading. Latitude/longitude cannot be sent directly as a Nav2 `map`-frame XY goal or copied into an EKF's Cartesian odometry input. GPS requires geographic-to-local conversion, frame/heading alignment and covariance handling before fusion.
+
+Inspect the installed `config/ekf.yaml`: does it subscribe to GPS at all? In the supplied baseline it does not; adding a bridge does not change filter inputs. Keep one owner of `map → odom` (AMCL during saved-map navigation) and one owner of `odom → base_footprint` (the local EKF). Do not add another TF publisher to make GPS appear connected.
+
+**Required conclusion:** explain what GPS adds, what LiDAR still provides, why the required system does or does not fuse GPS, and what extra components would be needed. A working `/gps/fix` display is GPS integration/inspection evidence, not evidence of GPS-aided localization.
+
+**Optional extension:** an instructor-validated `navsat_transform_node`/filter configuration may convert and fuse GPS. It needs consistent heading/datum, uncertainty and TF ownership; do not run a competing global filter alongside AMCL by copying an unrelated launch. See [robot_localization GPS integration](https://docs.ros.org/en/jazzy/p/robot_localization/doc/integrating_gps.html).
+
+#### GPS troubleshooting
+
+- Confirm campus is playing and uses the updated world. Inspect Terminal 1 for NavSat loading errors.
+- Run `gz topic -l`; if `/gps/fix` exists, inspect `gz topic -i -t /gps/fix` and `gz topic -e -t /gps/fix` (Ctrl+C after receiving samples). Use the actual discovered name if different.
+- No Gazebo messages: check sensor declaration, NavSat world plugin and spherical coordinates. A ROS topic publisher alone does not prove sensor samples exist.
+- Gazebo messages but no ROS messages: check the installed bridge's type/direction/exact topic, correct sourced workspace, and bridge logs. Restart after configuration changes; avoid a duplicate bridge.
+
+**INSTRUCTOR VALIDATION REQUIRED:** XML, bridge types and baseline sensor configuration were checked against source. Pilot message publication, TF, simulated rate and stationary/moving readings on course WSL before release. No Gazebo runtime test was available during authoring.
 
 ### 10. Explain and compare the complete system
 
