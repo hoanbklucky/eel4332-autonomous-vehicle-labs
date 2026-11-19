@@ -741,11 +741,38 @@ ros2 topic echo /gps/fix --once
 ros2 topic hz /gps/fix
 ```
 
+**Expected output — check each command separately:**
+
+| Command / field | Expected result | Meaning |
+|---|---|---|
+| `ros2 topic info /gps/fix --verbose` | Type `sensor_msgs/msg/NavSatFix`; normally one publisher, `ros_gz_bridge` | The Gazebo-to-ROS GPS bridge is advertised. Confirm actual samples with `echo`. |
+| `Subscription count: 0` before starting echo | Allowed in this measurement-only session | No ROS consumer was subscribed at that instant; this is not a GPS failure and does not establish fusion. |
+| `ros2 topic echo /gps/fix --once` | One message, then the command exits; expected `frame_id: gps_link` | A GPS sample reached ROS. The timestamp is simulation time with the supplied launch. |
+| `status.status: 0` | Message reports `STATUS_FIX` | Zero here means a fix, not an error. In simulation it does not prove realistic satellite reception. |
+| `status.service: 0` | May appear in bridged output | No constellation bit is set; do not interpret this as proof of a particular satellite service. |
+| Latitude / longitude | Near **28.1485° / −81.8495°**, with offsets for robot position and noise | These are geographic degrees, not SLAM-map meters. Exact decimals should differ between samples. |
+| Altitude | May be slightly negative | It is geographic altitude, not the GPS sensor's height above the robot. The world datum and simulated vertical noise affect it. |
+| `position_covariance_type: 0`, if present | Uncertainty is unknown in the message | Even an all-zero covariance array does not establish perfect accuracy. Record the actual type. |
+| `ros2 topic hz /gps/fix` | Repeated `average rate` lines until Ctrl+C | About 5 Hz only near real-time simulation; at 20% real time, roughly 1 Hz wall-clock is plausible. Do not infer the rate from the topic-info output. |
+
+The course sensor has meter-scale noise. A longitude such as **−82.31558°** is roughly **46 km** from the documented campus origin, far beyond normal arena motion or the supplied noise. Such output shows message delivery, but **the geographic datum is not yet validated**. Check that the active launch printed the intended `campus/campus.sdf` path, update the current branch, inspect that file's `spherical_coordinates`, and restart the simulator with Ctrl+C in the old launch terminal first. A saved file change does not update an already running world. If the mismatch persists, retain the launch log, world settings and several fixes for diagnosis; do not add duplicate GPS XML to Xacro.
+
 Stop `hz` with Ctrl+C before the next command. Expect `sensor_msgs/msg/NavSatFix` messages containing timestamp, frame, status, latitude/longitude in **degrees**, altitude in **meters**, and covariance/type fields. Inspect `status` and `position_covariance_type`; do not assume the bridge reports known uncertainty. Record the actual frame (expected `gps_link`).
 
 ```bash
 ros2 run tf2_ros tf2_echo base_footprint gps_link
 ```
+
+**Expected TF output for the supplied robot:**
+
+```text
+At time 0.0
+- Translation: [0.000, 0.000, 0.080]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.000, 1.000]
+- Rotation: in RPY (radian) [0.000, 0.000, 0.000]
+```
+
+This means `gps_link` is mounted **8 cm above `base_footprint`**, with aligned axes. It describes the fixed sensor mount, not the robot's geographic position or GPS accuracy. Small display differences such as `-0.000` are harmless. `At time 0.0` is normal for this static transform; it does not imply simulation is frozen. A brief initial **frame does not exist / waiting for transform** warning can occur during discovery. If numerical transforms then repeat, as in the instructor example, the warning resolved. If only warnings continue, check `robot_state_publisher`, the loaded robot description and the frame names. Edited mounts may have different values; compare against the actual fixed joints.
 
 Stop after numerical TF appears. With a slow real-time factor, measured wall-clock Hz is lower than the 5 Hz simulated rate. The sensor frame is mounted on the robot; it is not the ROS `map` frame.
 
