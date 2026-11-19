@@ -25,6 +25,16 @@ echo "Current checkout includes the latest fetched final-project-indoor-outdoor 
 git log -1 --oneline
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `git fetch upstream` (students) / `git fetch origin` (instructor) | Downloads course-branch updates without changing your working files yet. |
+| `git merge --no-edit .../final-project-indoor-outdoor` | Integrates that remote branch into your current branch. Save your work first and resolve any reported conflicts. |
+| `git merge-base --is-ancestor ... HEAD` | Checks that your current history contains the fetched course commit; success is exit status zero. |
+| `git log -1 --oneline` | Displays the current commit so you can identify your version. |
+
+
 Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
 
 **Final version check:** this branch requires **both IST and campus**, an indoor LiDAR comparison, outdoor GPS inspection, and a system explanation. If your local final still says to choose one world, it has not received this revision.
@@ -125,6 +135,25 @@ Other supplied files: `goosebot/world.launch.py` (world/spawn wrapper), `goosebo
 
 ## Step-by-step procedure
 
+#### How to read the terminal commands
+
+Run commands in the named Ubuntu/WSL terminal. These patterns recur throughout the project:
+
+| Syntax | Meaning |
+|---|---|
+| `source /opt/ros/jazzy/setup.bash` | Makes the installed ROS 2 Jazzy commands and packages available in this terminal. |
+| `source ~/goosebot_ws/install/setup.bash` | Adds your built Goosebot workspace. Source it after ROS, in every new ROS terminal. It does not rebuild files or restart a robot. |
+| `ros2 run PACKAGE EXECUTABLE` | Starts one installed program, such as teleop or the map saver. |
+| `ros2 launch PACKAGE FILE` | Runs a launch description, often starting several nodes. This project also launches local files by absolute path. |
+| `name:=value` after a launch file | Sets a launch argument, such as `world:=...` or `map:=...`. |
+| `--ros-args -p name:=value` | Sets a ROS parameter on the program being run. Here `use_sim_time:=true` uses Gazebo's simulation clock. |
+| `~`, `$PWD`, and `$(...)` | Your home directory, the current terminal directory, and the output of the command inside parentheses. Double quotes preserve a path as one argument. |
+| A backslash at the end of a line | Continues the same command on the next line; it must be the last character. Copy the whole command. |
+| `&&` between commands | Runs the next command only if the preceding command succeeds. |
+| Ctrl+C | Stops the foreground program. Stop each long-running launch in its own terminal. |
+
+The breakdowns below explain the runnable blocks; do not type table entries as additional commands.
+
 ### 1. Install dependencies, copy Goosebot source, and build
 
 Run once in Ubuntu/WSL. This supplements your existing installation; no Ubuntu/ROS reinstall or Docker is needed.
@@ -155,6 +184,18 @@ rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
 # Link, fix script permissions, install dependencies, and build this source copy.
 bash final_project_simulation/goosebot/build_student_workspace.sh
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `git clone --filter=blob:none --sparse ...` | Creates a temporary upstream checkout, limiting initially downloaded file contents. |
+| `sparse-checkout set .../goosebot_0` | Selects the complete Goosebot source package. |
+| `checkout bffaf3c...` | Uses the pinned source revision so everyone starts with the same upstream model. |
+| `cp -r --update=none ...` | Copies the package recursively while leaving existing destination files in place. |
+| `rm -f .../goosebot-simulation.zip` | Removes only the redundant packaged snapshot after the extracted source is copied. |
+| `bash .../build_student_workspace.sh` | Runs the course setup/build helper: configures the supplied sensors/bridges, applies the legacy GPS-noise correction, prepares the workspace and builds the package. Rerun it after course/model changes; then source and relaunch. |
+
 
 **After the helper reports a successful build**, configure this terminal and check the installed package:
 
@@ -226,6 +267,15 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/ist/ist.sdf"
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `ros2 launch "$PWD/.../world.launch.py"` | Starts the course world wrapper, which launches Gazebo, spawns Goosebot and starts its ROS interfaces. |
+| `world:=.../ist/ist.sdf` | Selects the indoor world. For Part B use the campus command below; for the blocked test use the matching blocked world. |
+| `$PWD` | Must refer to the repository root here because the path begins with `final_project_simulation/`. |
+
 
 **Expected startup:** Terminal 1 starts the Gazebo server, spawns **`goosebot` into the explicitly named world**, then prints **`GOOSEBOT SPAWNED`** and opens the GUI after the create service accepts the robot. No `gz model` query is required before the window can open. Do not start another launch or `gz sim -g` while this launch starts. If spawning fails, the launch stops with an error.
 
@@ -323,6 +373,16 @@ ros2 topic echo /scan --once --field header.frame_id
 ros2 topic hz /scan
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `ros2 topic echo /scan` | Subscribes to the LiDAR topic and prints received message contents. |
+| `--once` | Prints one received message and exits; it may wait if no sample arrives. |
+| `--field header.frame_id` | Prints only the scan's frame name, rather than the full range array. |
+| `ros2 topic hz /scan` | Estimates message arrival rate in wall-clock time. Keep it running for several samples, then Ctrl+C. |
+
+
 
 <details>
 <summary>Troubleshooting — /scan does not appear to be published yet</summary>
@@ -376,6 +436,16 @@ ros2 run tf2_ros tf2_echo odom base_footprint
 ros2 topic echo /odometry/filtered --once
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `tf2_ros tf2_echo` | Runs the TF inspection program. |
+| `base_footprint lidar_link` | Reports the LiDAR frame's pose relative to the robot footprint; checks the sensor mount. |
+| `odom base_footprint` | Reports the robot footprint's pose relative to odometry; checks the moving robot transform. |
+| `ros2 topic echo /odometry/filtered --once` | Shows one local EKF odometry estimate. TF and odometry checks do not start SLAM. |
+
+
 Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration. For a sensor-only RViz check, open `rviz2 --ros-args -p use_sim_time:=true` in a separate sourced terminal, use Fixed Frame `odom`, and add LaserScan `/scan` and RobotModel `/robot_description` using the click-by-click RViz setup in Step 5 below. Leave Map disabled until SLAM starts. Verify walls appear in the correct direction as you drive.
 
 <details>
@@ -410,6 +480,15 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -p speed:=0.1 -p turn:=0.5
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `teleop_twist_keyboard teleop_twist_keyboard` | Runs keyboard control; focus this terminal before pressing movement keys. |
+| `speed:=0.1` / `turn:=0.5` | Sets the starting linear speed to 0.1 m/s and turn speed to 0.5 rad/s. |
+| `i`, `j` / `l`, `k` | Move forward, turn left/right, and stop, respectively. Changing a speed setting alone does not move the robot. |
+
+
 3. Focus Terminal 4. With Shift/Caps Lock off, press lowercase `i` to drive forward briefly, `j` / `l` to turn, and `k` to stop. Check nearby free space first. The keys `w/x` and `q/z` change speed settings; they do not command movement. Confirm Goosebot moves in Gazebo, scan points outline nearby structures, and RobotModel/TF have no persistent transform errors.
 4. Press `k`, then Ctrl+C to stop teleop. Keep Gazebo and RViz running. Continue directly to Step 5: start SLAM in Terminal 2, enable Map on `/map`, and change RViz's fixed frame to `map` once SLAM supplies that frame. Reuse Terminal 4 for mapping teleop. Do not start the perfect-map/ground-truth navigation launch.
 
@@ -426,6 +505,15 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
   slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `slam_toolbox online_async_launch.py` | Starts online asynchronous LiDAR SLAM; it builds a map while estimating the robot's pose. |
+| `use_sim_time:=true` | Makes the mapper use the simulation clock. |
+| `slam_params_file:=.../slam_goosebot.yaml` | Loads the course SLAM settings, including frame/sensor configuration. This is a parameter file, not a saved map. |
+
 
 **Start these terminals in order:** Terminal 2 runs SLAM, Terminal 3 shows RViz, and Terminal 4 provides manual driving. Configure RViz before moving the robot so you can watch the map grow.
 
@@ -500,6 +588,15 @@ rviz2 -d ~/rviz_configs/goosebot_mapping.rviz \
   --ros-args -p use_sim_time:=true
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `rviz2` | Opens the visualization program. |
+| `-d .../goosebot_mapping.rviz` | Loads your saved mapping displays, topic choices and layout. Use the separate navigation configuration during Step 6. |
+| `--ros-args -p use_sim_time:=true` | Uses simulation time for visualizing timestamped sensor and TF data. Loading a layout does not start SLAM or save its map. |
+
+
 Keep the simulator and SLAM commands unchanged. You can skip adding the displays again when this file loads. Use **File → Save Config** (Ctrl+S) after later layout changes. A custom file is not automatically selected by every launch; explicitly use `-d` or **File → Open Config**. The configuration saves display/topic/QoS settings, tools and the view—not the SLAM map or running nodes. Save the map separately below.
 
 <details>
@@ -559,6 +656,17 @@ ros2 run nav2_map_server map_saver_cli -f "$PWD/results/$MAP_NAME" \
   --ros-args -p use_sim_time:=true
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `mkdir -p results` | Creates the output directory if it does not exist. |
+| `MAP_NAME=ist_map` | Sets a shell variable; use `campus_map` for Part B. Keep the assignment and save command in the same terminal. |
+| `nav2_map_server map_saver_cli` | Runs a one-time map-saving program while SLAM is publishing `/map`. |
+| `-f "$PWD/results/$MAP_NAME"` | Sets the output basename. The saver writes a map YAML and its image; keep them together. |
+| `--ros-args -p use_sim_time:=true` | Sets simulation time on the map-saving program. |
+
+
 Use `ist_map` for Part A and `campus_map` for Part B so neither map overwrites the other. Keep each YAML and its image together. For the viewing command below, substitute `campus_map` in Part B. To view the image, use an Ubuntu image viewer, or `python3 -c "from PIL import Image; Image.open('results/ist_map.pgm').save('results/ist_map.png')"` from this directory and open the PNG in VS Code (install `python3-pil` if needed). The PNG is a viewing copy; keep the original map files.
 
 ### 6. Restart and navigate on your saved map
@@ -584,6 +692,15 @@ ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
   map:="$PWD/final_project_simulation/results/ist_map.yaml"
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `.../goosebot/navigation.launch.py` | Starts the course saved-map AMCL/Nav2 wrapper; keep this terminal running. |
+| `map:=.../results/ist_map.yaml` | Selects your saved indoor map. Use `campus_map.yaml` for Part B; the YAML points to its map image. |
+| Automatic map loading | The wrapper supplies the map to the map server. RViz and Gazebo are started separately; a manual load-map call is not a normal step. |
+
+
 The course wrapper validates the saved YAML and its referenced image, then supplies the absolute map path both as Nav2's `map` argument and explicitly in a temporary `map_server.ros__parameters.yaml_filename`. Your original configuration is preserved. Expect **Course navigation map: ...; image: ...** with the selected files. Missing files stop startup with an explanation. The wrapper sets `slam=False`, simulation time, autostart and non-composed AMCL/Nav2; do not start a second Nav2 launch alongside it. It does not start RViz or Gazebo.
 
 After pulling this course update, no ROS rebuild is needed for this local-file launcher. Stop the previous AMCL/Nav2 launch with Ctrl+C before using it; keep the correct simulator running. If your existing saved map has a different name, point `map:=` to that actual YAML (do not rename just the YAML without checking its image reference).
@@ -598,6 +715,15 @@ source ~/goosebot_ws/install/setup.bash
 rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz" \
   --ros-args -p use_sim_time:=true
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `$(ros2 pkg prefix nav2_bringup)` | Finds where the installed Nav2 bringup package lives. |
+| `-d .../nav2_default_view.rviz` | Loads Nav2's supplied RViz layout, including Nav2 Goal and the Navigation 2 panel. |
+| `2D Pose Estimate` in RViz | Provides AMCL with an initial pose for this session; the saved layout does not restore localization. |
+
 
 **Expected RViz tools:** **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel. A generic `rviz2 --ros-args ...` window is useful for Step 5 mapping but may only show **2D Goal Pose**. Use the explicit `-d` command above for navigation. If the Nav2 tool/panel is missing, inspect RViz's terminal for plugin-loading errors rather than sending goals from a leftover mapping window.
 
@@ -621,6 +747,15 @@ ros2 lifecycle get /amcl
 ros2 param get /map_server yaml_filename
 ros2 topic info /map --verbose
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `ros2 lifecycle get /map_server` / `/amcl` | Reports each managed node's lifecycle state; expect `active` after successful initialization. |
+| `ros2 param get /map_server yaml_filename` | Prints the actual map YAML configured on the running map server. |
+| `ros2 topic info /map --verbose` | Shows the map topic type, publisher/subscriber endpoints and QoS; it does not print map pixels. |
+
 
 The map server should become **active**, with `yaml_filename` equal to the absolute YAML printed by the course launcher. Map loading is automatic; **do not make a manual load-map service call part of the normal procedure**. If the path is blank or different, stop the old AMCL/Nav2 process and confirm only one map server is running before relaunching the updated wrapper. Check `ros2 node list` for duplicate-node warnings. If startup fails, inspect the first map-server error, the YAML image path, and file permissions. A valid YAML alone is insufficient if its image is missing or unreadable.
 
@@ -741,6 +876,15 @@ ros2 topic echo /gps/fix --once
 ros2 topic hz /gps/fix
 ```
 
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `ros2 topic info /gps/fix --verbose` | Inspects the GPS topic's message type, publisher/subscriber counts and QoS. A listed publisher alone does not prove samples are arriving. |
+| `ros2 topic echo /gps/fix --once` | Receives and prints one GPS fix, including geographic coordinates and status. |
+| `ros2 topic hz /gps/fix` | Measures sample arrival rate until Ctrl+C. Run it after the one-message echo has exited. |
+
+
 **Expected output — check each command separately:**
 
 | Command / field | Expected result | Meaning |
@@ -764,6 +908,14 @@ Stop `hz` with Ctrl+C before the next command. Expect `sensor_msgs/msg/NavSatFix
 ```bash
 ros2 run tf2_ros tf2_echo base_footprint gps_link
 ```
+
+**Command breakdown**
+
+| Command / part | What it does |
+|---|---|
+| `base_footprint gps_link` | Reports the GPS sensor mount relative to the robot footprint. It does not report latitude/longitude. |
+| Ctrl+C after numerical output | Ends this inspection so the terminal is available for collecting GPS samples. |
+
 
 **Expected TF output for the supplied robot:**
 
