@@ -1,5 +1,7 @@
 # Lab 5 — Navigate on Your Map
 
+**Lab 05 environments:** TurtleBot3 World (Waffle) and TurtleBot3 House (Waffle Pi), using your saved Lab 04 maps. **IST and campus are used only in the separate final project.**
+
 ## Before you start — use the current course files
 
 **Expected branch: `main`.** This is the current `main` assignment. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
@@ -282,7 +284,7 @@ Submit only:
 1. **One short screen-recording video** with clearly labeled clips showing **one successful World goal and two successful House goals in different rooms**, with Gazebo and RViz2 visible. Include a brief view of scan/map alignment in each environment; clips may be joined.
 2. **Short written answers to all three Discussion Questions below**, in your own words. Use about 2–4 sentences per question and refer to your World/House runs where relevant. Submit one document or text entry alongside the video.
 
-The discussion answers are the only written submission; no additional report, screenshots, `answers.md`, goal CSV, or results table is required. Keep both saved maps and working setups for reference. The final requires a new map of your chosen Goosebot environment.
+The discussion answers are the only written submission; no additional report, screenshots, `answers.md`, goal CSV, or results table is required. Keep both saved maps and working setups for reference.
 
 ## Discussion Questions — required written answers
 
@@ -292,7 +294,7 @@ The discussion answers are the only written submission; no additional report, sc
 
 ## Final Handoff and Optional Background
 
-Reuse the localization/navigation workflow in the [Goosebot delivery final](../final_project_simulation/README.md), which uses the supplied LiDAR and requires a **new map of your chosen IST/campus world**. Its optional mission-client scaffold and recorder are in `src/`. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
+The [final project](../final_project_simulation/README.md) is a separate assignment with its own robot, environments, procedures and deliverables. Follow this Lab 05 README for TurtleBot3 World and House only. [Navigation background](OPTIONAL_BACKGROUND.md) and [algorithm exercises](ALGORITHM_EXPERIMENTS.md) are optional.
 
 ## Troubleshooting
 
