@@ -15,7 +15,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Required final: `final_project_simulation/README.md`; Goosebot lane following is the completed hardware component.
 - Physical Goosebot SLAM/Nav2 is optional.
 - Separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional extensions. Preserve their TODOs.
-- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, with an indoor LiDAR comparison, outdoor GPS inspection, and an assessed system explanation. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
+- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, with an indoor LiDAR comparison, supplied outdoor GPS fusion comparison, and an assessed system explanation. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
 
 ## Student code
 
@@ -79,6 +79,6 @@ Preserve this order where practical:
 10. What to Submit
 11. Troubleshooting
 
-- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. On this branch, require both worlds; put the IST LiDAR comparison after indoor baseline navigation, restore defaults before campus, and use guided campus GPS inspection instead of a second LiDAR experiment. GPS fusion is optional; never claim the baseline EKF consumes GPS. Keep system understanding at 30%. Preserve mission-client and unrelated algorithm TODOs.
+- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. On this branch, require both worlds; put the IST LiDAR comparison after indoor baseline navigation, restore defaults before campus, and use a supplied offline campus GPS position-fusion comparison instead of a second LiDAR experiment. The baseline running EKF and AMCL/Nav2 stay unchanged; do not claim they consume GPS. Live GPS-aided Nav2 is an optional unimplemented follow-on. Keep system understanding at 30%. Preserve mission-client and unrelated algorithm TODOs.
 
-- Keep the final README concise: required runnable steps and short command explanations stay inline; extended diagnostics live in optional COMMAND_REFERENCE.md. Campus GPS activity is Home → landmark → Home in one run, comparing stationary GPS means with local odometry return displacement. It is an independent position-reference exercise, not GPS fusion or evidence of improved SLAM/Nav2. Preserve the 30% system explanation and both-world requirements.
+- Keep the final README concise: required runnable steps and short command explanations stay inline; extended diagnostics live in optional COMMAND_REFERENCE.md. Campus GPS activity records one stationary-start loop and compares existing odometry/IMU with a supplied offline two-state Kalman GPS position filter on identical data. Known Home initialization comes from mission.json, never truth. Ground truth must be separate and used only for scoring. Report unmodified and explicitly artificial +15% prediction-scale cases separately; improvement is not guaranteed. This is not a replacement Nav2 localizer. Preserve the 30% system explanation and both-world requirements.

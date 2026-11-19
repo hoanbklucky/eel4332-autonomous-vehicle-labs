@@ -41,7 +41,7 @@ Identify who supplies each transform in `map → odom → base_footprint → bas
 
 Inspect the **installed** `config/ekf.yaml` in your selected workspace and the running EKF node. Identify its input topics and **enabled state components** in each configuration mask, not just sensor names. Explain how the estimate is produced from these inputs. Does the baseline use absolute IMU heading, yaw rate, linear acceleration, wheel encoder odometry, or command-derived dead reckoning? Support your answer from the configuration/script, rather than assumptions about a typical robot.
 
-Does the EKF consume LiDAR, images or GPS in your run? If not, where are those measurements used, if anywhere? Distinguish EKF state fusion from SLAM scan matching and AMCL scan-to-map localization. Explain why camera or GPS messages appearing in `ros2 topic list` do not establish fusion.
+Does the running baseline EKF consume LiDAR, images or GPS in your run? Distinguish it from Step 9's separate supplied offline position filter, which does consume GPS. If not, where are those measurements used, if anywhere? Distinguish EKF state fusion from SLAM scan matching and AMCL scan-to-map localization. Explain why camera or GPS messages appearing in `ros2 topic list` do not establish fusion.
 
 ## 4. Mapping versus localization
 
@@ -58,7 +58,7 @@ Show evidence that two goals and return home succeeded **in each world**. For th
 ## 6. Indoor/outdoor observations and limits
 
 - **IST LiDAR:** baseline/changed setting, controlled conditions, two screenshots, measured/visible difference, and any limitation. Did you inspect scans only or also retest mapping/navigation? State this explicitly.
-- **Campus GPS:** A/B/C table from [Step 9](README.md#9-part-b--inspect-gps-outdoors): Home → landmark → Home. Compare mean GPS displacement with local odometry's return displacement, report noise and any visible drift, and answer Step 9's three sentences. Explain why this independent position check does not establish improved mapping/navigation or GPS fusion; LiDAR still detects obstacles.
+- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gps-fusion-comparison). Identify A (existing odometry/IMU) and B (supplied offline 2-D GPS position fusion); discuss both unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Give a reason for GPS helping or hurting in your recorded run.
 - **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
 - **Reality gap:** explain at least two limits, including the simulated GPS/teaching scale or command-derived odometry, and what would require validation on physical Goosebot.
 - **Reproducibility:** identify your branch/revision, maps, chosen goals/home, changed settings and one diagnosed problem/fix. List each member's contribution and briefly state how AI assistance was verified if used.

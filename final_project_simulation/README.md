@@ -1,6 +1,6 @@
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
-Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. In each world: build your own SLAM map, restart with AMCL/Nav2, reach **two destinations and return Home**. Also complete one IST blocked-route attempt, one indoor LiDAR comparison, and the campus GPS position check below. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
+Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. In each world: build your own SLAM map, restart with AMCL/Nav2, reach **two destinations and return Home**. Also complete one IST blocked-route attempt, one indoor LiDAR comparison, and the supplied campus GPS-fusion comparison below. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
 ## Before you start
 
@@ -238,60 +238,70 @@ After IST baseline navigation, open `final_project_simulation/src/goosebot_0/urd
 
 Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans under similar conditions. Save **one baseline and one changed screenshot**, plus two sentences describing the observed effect. Restore the baseline and rebuild before campus.
 
-### 9. Part B — inspect GPS outdoors
+<a id="9-part-b--inspect-gps-outdoors"></a>
 
-**Purpose:** use GPS as an independent geographic position reference and compare its stationary noise with the apparent drift of local odometry after a loop. GPS already exists; add no XML. **This activity does not fuse GPS into SLAM or AMCL/Nav2.**
+### 9. Part B — GPS fusion comparison
 
-After campus mapping/navigation, stop all launches. Start a fresh campus world using Step 3 with `campus/campus.sdf`. Leave SLAM/Nav2 stopped; use Terminal 4 teleop for this short measurement run.
+**Question:** does adding GPS reduce position error compared with odometry + IMU? The supplied tool evaluates **A: the existing odometry/IMU estimate** and **B: that prediction plus GPS position updates** on the **same recorded drive**. It is offline position fusion, not a new Nav2 localizer; no TF or velocity commands are published.
 
-**Terminal 2 — GPS and odometry readings:**
+**Prepare:** finish campus navigation, then stop all launches. Start a **fresh campus world at Home** using Step 3 (`campus/campus.sdf`). Keep SLAM/Nav2 stopped and the robot stationary. GPS sensor/bridge/world settings are already supplied; add no XML. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib`.
+
+**Terminal 2 — record:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 topic echo /gps/fix --once
-ros2 topic echo /odometry/filtered --once
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/gps_compare.launch.py" \
+  output:="$PWD/final_project_simulation/results/gps_comparison"
 ```
 
-**Command breakdown:** the first prints one geographic fix; the second prints the local odometry estimate. For odometry record **pose.pose.position.x/y**, not twist/velocity. To collect several GPS messages, omit `--once` and Ctrl+C after at least five.
+Wait for **READY** (at least three simulated seconds, longer in slow simulation). Then use Step 4's teleop in **Terminal 4** to drive a safe **10–20 m loop with turns**. Stop near Home with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2** to save. Use a new output directory for another recording; existing data are not overwritten. The launch reports missing topics, wrong baseline/mount, clock reset or the old GPS noise setting.
 
-**Do these three stops in the same uninterrupted run:**
+**Terminal 2 — generate the comparison:**
 
-| Stop | What to do | What to record |
-|---|---|---|
-| A — Home | Stop on a clearly identifiable Home marker; note robot heading | At least 5 GPS fixes; mean latitude/longitude; one odometry x/y |
-| B — nearby landmark | Drive a short safe route, stop several meters away | Same readings; a screenshot identifying the landmark |
-| C — Home again | Complete a loop and return as closely as possible to A's position and heading using the visible Gazebo marker | Same readings; a screenshot showing the return |
+```bash
+python3 final_project_simulation/goosebot/gps_compare.py report \
+  --input final_project_simulation/results/gps_comparison
+```
 
-Use the means to estimate displacement from A near this campus latitude:
+**Command breakdown:** the recording launch saves GPS and the running odometry/IMU EKF output to `sensors.csv`, with Gazebo truth in a separate evaluation-only `truth.csv`. `report` converts GPS degrees to local ENU meters, replays a supplied 2-D Kalman position filter, and creates **`comparison.png`** and **`metrics.json`** in that directory. Both estimators use the known commanded Home spawn pose/heading; **neither receives ground truth**. No ROS rebuild is needed just for these new tool files.
 
-- **North (m) ≈ 111,000 × (latitude − latitude at A)**.
-- **East (m) ≈ 98,000 × (longitude − longitude at A)**.
-- **Odometry change:** subtract A's odometry x/y from B or C's odometry x/y. Compare the **distance** `sqrt(dx² + dy²)`; odometry axes need not align with geographic north/east.
+The plot has two columns:
 
-**Submit one small A/B/C table and three sentences:**
+| Column | What it tests |
+|---|---|
+| Unmodified recording | A versus B on your actual recorded prediction and GPS. GPS may help or hurt when odometry is already accurate. |
+| Controlled scale-error test | The same recording, with a declared **15% prediction scale error applied equally to A and B**. GPS is unchanged. This illustrates correction under a known odometry error; it is not an unmodified simulation result. |
 
-1. How much did GPS vary while stationary, and was A → B movement distinguishable from that noise?
-2. At the return to Home, what were the GPS and odometry distances from their starting readings? Describe visible residual drift or the absence of a clear difference. The physical return and GPS mean are approximate; neither is an exact error measurement.
-3. How could an independent global position reference help an outdoor robot when local odometry drifts or LiDAR has few landmarks? GPS fusion could constrain position, while LiDAR still detects obstacles. **Do not claim that GPS improved this run's map or navigation: it was measured, not fused.**
+**Submit the plot, this table filled from `metrics.json`, and three sentences:**
 
-Expected readings stay near **28.1485°, −81.8495°**, with meter-scale variation. `status: 0` means a fix; `position_covariance_type: 0` means unknown uncertainty, not perfect accuracy. Noisy altitude may be negative. The arena is scaled; these are synthetic coordinates, not real campus navigation data.
+| Case | A: horizontal RMSE (m) | B: horizontal RMSE (m) | A / B final error (m) |
+|---|---|---|---|
+| Unmodified | Fill | Fill | Fill / Fill |
+| Controlled +15% scale | Fill | Fill | Fill / Fill |
+
+Say (1) whether GPS helped in each case, (2) why noisy GPS can help a drifting estimate but hurt an accurate one, and (3) why this plot demonstrates position fusion, **not better mapping/navigation**. RMSE means root mean square distance to Gazebo truth at matched timestamps; ground truth is used only for scoring. Report the measured result rather than assuming improvement.
 
 <details>
-<summary>If GPS jumps by degrees, or no messages arrive</summary>
+<summary>Checks, limitations, and optional next extension</summary>
 
-Horizontal GPS noise must be **0.000015 degrees** in `gps_sensor → navsat → position_sensing → horizontal → noise → stddev`; vertical noise stays **3.0 m**. Gazebo Sensors 8 applies horizontal noise in degrees. Update this branch, stop launches, rerun the Step 1 helper, source and respawn the robot. Existing readings from the old `1.5` setting must be recollected. Check `ros2 topic info /gps/fix --verbose` for the bridge and `ros2 topic hz /gps/fix` for arrivals; 5 Hz simulated becomes lower wall-clock Hz in slow simulation. World NavSat settings already reside in `campus/campus.sdf`, not Xacro.
+GPS should remain near 28.1485°, −81.8495° with meter-scale scatter. If it jumps by degrees, update this branch, rerun the Step 1 build helper, source and respawn: horizontal `gps_sensor` noise must be **0.000015 degrees**, vertical noise **3.0 m**. `position_covariance_type: 0` means unknown uncertainty; the tool uses a nonzero configured fallback rather than trusting the zero array.
+
+The comparison assumes the supplied centered GPS antenna, ENU campus datum and a stationary start at the commanded Home pose. It corrects horizontal position only; heading remains from the odometry/IMU baseline. Filter settings are supplied in `goosebot/gps_fusion_settings.json`. [Method and diagnostics](COMMAND_REFERENCE.md#gps-fusion-comparison-method) are optional reading.
+
+**Optional follow-on: GPS-aided outdoor navigation.** After the comparison is piloted, a separate global GPS localizer can replace AMCL for a Nav2 experiment while LiDAR remains for obstacle detection. It needs validated heading/datum, uncertainty and exclusive ownership of `map → odom`; do not run competing global TF publishers. This navigation extension is **not implemented or required** in this revision.
 
 </details>
 
 ### 10. Explain the system
 
-Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your LiDAR/GPS observations and indoor/outdoor comparison. GPS fusion is not a required implementation.
+Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your LiDAR/GPS observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Live GPS-aided Nav2 is optional future work.
 
 ## What to submit
 
 - **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, AMCL alignment, two reached destinations and Home. Include the IST blocked attempt and brief sensor evidence.
-- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, two LiDAR screenshots, GPS A/B/C table and return-to-Home evidence. Exclude build/install/log, databases and bags.
+- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, two LiDAR screenshots, GPS comparison plot and error table. Exclude build/install/log, databases and bags.
 - **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
 
 | Assessment | Weight |
@@ -306,6 +316,6 @@ Submit one shared **2–3 page explanation plus a topic table/diagram**, using [
 
 ## Optional reference
 
-The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. A live demonstration of **improved mapping/navigation from GPS fusion** would require a separately configured and tested comparison; this baseline does not consume GPS.
+The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. The supplied GPS comparison is evaluated separately from the baseline EKF and Nav2; optional GPS-aided navigation requires a separate validated global-localization setup.
 
-**Instructor validation:** the GPS noise fix has source-level checks and instructor-observed reasonable samples. The new return-to-Home comparison still needs a course-machine pilot. No improvement in mapping/navigation from GPS fusion has been demonstrated by this assignment.
+**Instructor validation:** the fusion math, data separation, scoring and plotting have offline tests, including synthetic recordings. The ROS/Gazebo recording/launch still requires a course-machine pilot before student release. No live navigation improvement has been demonstrated.

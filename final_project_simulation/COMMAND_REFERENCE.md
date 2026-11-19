@@ -2,6 +2,37 @@
 
 All required instructions are in [the concise final README](README.md). The GPS activity there supersedes this reference's earlier three-location inspection exercise. Use this file only for extra command explanations, output examples and troubleshooting.
 
+## GPS fusion comparison method
+
+The runnable student procedure and deliverables are in [Step 9](README.md#9-part-b--gps-fusion-comparison). This supplied teaching utility does not complete any existing student algorithm TODO.
+
+- **Inputs:** `/odometry/filtered` from the existing local EKF (command-derived vx/vy plus IMU yaw rate), `/gps/fix`, and raw `/ground_truth/pose` in a **separate scoring file**. The recorder checks running EKF parameters, centered GPS mount, message frames, stationary start and clock monotonicity.
+- **Initialization:** read the same campus SDF datum and adjacent mission.json Home pose used by world.launch.py. Rotate/translate local odometry into world ENU using this known initial pose and first odometry yaw. Both variants receive the same prior. There is no truth-based trajectory alignment or GPS-based heading estimate.
+- **Conversion:** WGS84 latitude/longitude/altitude → ECEF → local ENU at the supplied world datum. This comparison supports ENU and heading_deg=0 only. It uses simulation meters, without undoing the teaching arena's geographic scaling. The centered GPS mount has zero horizontal lever arm; customized noncentered mounts are rejected.
+- **Prediction:** the existing odometry/IMU trajectory supplies horizontal increments. A is their sum. B predicts with the same increments, then applies independent GPS position updates. This is a **two-state x/y Kalman filter**, not a full-state EKF or `navsat_transform_node` deployment. Neither heading nor the running ROS navigation estimate is corrected.
+- **Update:** `P ← P + Q`; `K = P(P + R)⁻¹`; `x ← x + K(z − x)`. The implementation uses the Joseph covariance update and rejects large Mahalanobis innovations. All tuning is explicitly recorded in metadata; it is illustrative, not a calibrated hardware uncertainty model.
+- **Unknown GPS covariance:** bridge covariance-type 0/invalid matrices use WGS84 conversion of the configured angular standard deviation into a nonzero per-axis meter covariance. At campus latitude, 0.000015 degrees is approximately 1.47 m East / 1.66 m North. No zero-variance GPS updates are accepted.
+- **Timing:** raw samples retain simulation timestamps. Offline replay interpolates bracketing odometry to GPS times, then compares estimates and interpolated ground truth on the same odometry times. There is no extrapolation; large gaps, resets and insufficient overlap fail clearly. This offline interpolation is not a claim of online low-latency performance.
+- **Controlled case:** scale every prediction increment by 1.15 for BOTH A/B, keeping the same GPS and scoring data. Plot it separately from the unmodified case. It is an artificial calibration-error demonstration, not a measured defect in the robot. Smaller error is not assumed or manufactured by changing truth.
+- **Outputs:** raw sensors.csv; separate truth.csv; metadata.json with datum, known initialization, running baseline parameters and settings; estimates.csv; metrics.json (RMSE, final/max error, accepted/rejected updates and scored fraction); comparison.png. The report completes estimates before loading truth. It publishes no ROS topics/TF or motion commands.
+
+### If recording or reporting stops
+
+Keep the robot at Home until READY. Start a fresh world for a fresh record. Source the correct workspace and stop SLAM/Nav2. Use a new output directory, keep the corrected GPS noise, and ensure the ordinary world launch publishes GPS, filtered odometry and raw ground truth. The raw truth bridge is already supplied; do **not** start ground_truth_map_odom_bridge.py. A publisher count alone is not proof of arriving data.
+
+“Different EKF baseline” means runtime inputs/masks differ from the provided velocity + yaw-rate configuration; inspect them rather than silently comparing different estimators. Missing TF, moving before READY, clock reset, noncentered GPS, non-ENU datum, duplicate timestamps, odometry gaps or insufficient truth overlap require a fresh/repaired experiment. A synthetic test pass does not substitute for a WSL/Gazebo pilot.
+
+### Optional GPS-aided navigation — a later step
+
+After recording is validated, a live global localization layer can be designed using GPS conversion plus an estimator, leaving local odometry continuous and assigning only one owner of map → odom. For that experiment, replace AMCL's global-localization role rather than adding a conflicting TF publisher. Heading must be earth-referenced and uncertainty meaningful. LiDAR still supplies obstacle data. Neither launch nor a validated Nav2 configuration for that extension is supplied here.
+
+References: [Nav2 GPS navigation](https://docs.nav2.org/jazzy/tutorials/general_tutorials/navigation2_with_gps/navigation2_with_gps/), [robot_localization GPS integration](https://github.com/cra-ros-pkg/robot_localization/blob/jazzy/doc/integrating_gps.rst), [Gazebo NavSat](https://gazebosim.org/api/sim/8/classgz_1_1sim_1_1systems_1_1NavSat.html).
+
+
+## Archived expanded instructions
+
+The following older instructions are retained for troubleshooting only. GPS procedure/deliverables are superseded by the current Step 9 above; no old three-location exercise or additional submission is required.
+
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
 ## Before you start — use the current course files

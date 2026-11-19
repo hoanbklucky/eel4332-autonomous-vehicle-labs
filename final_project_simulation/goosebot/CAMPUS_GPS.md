@@ -1,5 +1,3 @@
-# Campus GPS activity
+# Campus GPS fusion comparison
 
-The complete required procedure is now included in [Final project — Step 9: inspect GPS outdoors](../README.md#9-part-b--inspect-gps-outdoors).
-
-Use that section for configuration inspection, launch commands, GPS measurements and troubleshooting. The supplied GPS sensor, bridge and campus world settings are already configured; no GPS XML needs to be pasted into Xacro.
+Use [Final project — Step 9](../README.md#9-part-b--gps-fusion-comparison) for the required recording/report commands and plot/error-table deliverables. The supplied comparison fuses GPS positions offline with the existing odometry/IMU prediction on the same recorded drive. It does not change AMCL/Nav2. GPS sensor/bridge/world settings are already supplied; add no GPS XML.
