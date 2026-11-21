@@ -15,7 +15,7 @@ This is a student-facing university laboratory repository for **EEL 4332 — Int
 - Required final: `final_project_simulation/README.md`; Goosebot lane following is the completed hardware component.
 - Physical Goosebot SLAM/Nav2 is optional.
 - Separate Kalman, A*, Pure Pursuit, and synthetic safety-monitor implementations are optional extensions. Preserve their TODOs.
-- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, followed by a short LiDAR settings activity. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
+- Labs 4–5 provide guided mapping/navigation preparation. Final student work is mapping, localization, navigation and explanation, with blocked-route testing and LiDAR tuning optional and ungraded. The baseline LiDAR/bridge/wheel visualization is supplied. The mission-client scaffold is an optional extension; preserve its TODOs.
 
 ## Student code
 
@@ -79,4 +79,4 @@ Preserve this order where practical:
 10. What to Submit
 11. Troubleshooting
 
-- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. Place the short inspect/change-one-LiDAR-setting activity after the mapping, AMCL/Nav2 and blocked-route workflow. Preserve mission-client and unrelated algorithm TODOs.
+- Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. Keep blocked-route testing and LiDAR tuning optional, with no required screenshots, discussion or grading. Required work is mapping, AMCL/Nav2 and explanation. Preserve mission-client and unrelated algorithm TODOs.
