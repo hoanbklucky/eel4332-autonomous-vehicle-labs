@@ -53,11 +53,10 @@ For IST, after saving the map, what changes when SLAM stops and AMCL starts? Exp
 
 Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`; for GPS mode also inspect `gps_navigation_core.py`'s rolling-costmap and command-routing overrides. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
 
-Show evidence that two goals and return home succeeded **in each world**, using AMCL indoors and the live GPS mode outdoors. For the IST barrier, describe what actually happened: detection, path change, local avoidance, recovery, stop or failure. What evidence supports your explanation? A changed robot trajectory alone does not identify which algorithm replanned.
+Show evidence that two goals and return home succeeded **in each world**, using AMCL indoors and the live GPS mode outdoors. Explain how live LiDAR scans and costmaps support obstacle avoidance along your normal routes.
 
 ## 6. Indoor/outdoor observations and limits
 
-- **IST LiDAR:** baseline/changed setting, controlled conditions, two screenshots, measured/visible difference, and any limitation. Did you inspect scans only or also retest mapping/navigation? State this explicitly.
 - **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gps-fusion-comparison). Identify A (existing odometry/IMU), B (+ ordinary GPS) and C (+ RTK-like GPS); discuss unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Separately show live GPS-aided campus navigation and identify the GPS global localizer, local EKF and LiDAR costmap roles. Give a reason for GPS helping or hurting in your recorded run.
 - **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
 - **Reality gap:** explain at least two limits, including the simulated GPS/teaching scale or command-derived odometry, and what would require validation on physical Goosebot.
@@ -69,7 +68,7 @@ Show evidence that two goals and return home succeeded **in each world**, using 
 |---|---:|
 | Accurate sensors/topics/frames and evidence-backed data-flow diagram | 8 |
 | Correct EKF inputs, TF ownership, mapping/localization distinction | 10 |
-| Correct goal-to-motion explanation and blocked-route interpretation | 6 |
-| Thoughtful sensor comparisons, indoor/outdoor observations and limits | 6 |
+| Correct goal-to-motion explanation and LiDAR obstacle-avoidance role | 6 |
+| Thoughtful GPS comparison, indoor/outdoor observations and limits | 6 |
 
 Specific, correct statements about your tested configuration earn credit. Unsupported claims that all sensors are fused together, GPS replaced the map, or simulation proves hardware readiness do not.
