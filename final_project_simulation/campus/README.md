@@ -48,43 +48,13 @@ Pull the current course files after saving your local edits. The corrected meshe
 
 The earlier DART error, **“normal count [0] … does not match its vertex count”**, meant collision submeshes were being ignored. The supplied meshes now include explicit surface normals. Do not ignore that error if it persists with custom meshes. The later `rcl_shutdown already called` traceback is a separate cleanup issue; the setup helper now makes that cleanup idempotent.
 
-## Map and localize
+## Mapping and GPS navigation
 
-Follow **Steps 4–6 in [the final-project guide](../README.md)** using this campus launch as Step 3:
+Use the current [final-project guide](../README.md): campus SLAM mapping is a separate activity; outdoor navigation uses the supplied GPS localizer instead of AMCL. Keep IST and campus maps under different names. During GPS navigation, SLAM/AMCL stay stopped and the known Home start replaces manual 2D Pose Estimate initialization.
 
-- Terminal 1: campus simulation.
-- Terminal 2: SLAM while mapping; AMCL/Nav2 after mapping.
-- Terminal 3: RViz.
-- Terminal 4: manual driving while mapping.
+For short-range navigation, use Step 9's rolling LiDAR-costmap mode. For longer routes, the [optional reference-map guide](../goosebot/GPS_MAP_EXTENSION.md) gives full commands to load the supplied `reference.yaml` using `reference_map:=`. No extra mapping or manual alignment is needed: reference geometry and GPS already use the same scaled east/north frame. GPS still supplies localization; the prior map supplies obstacles and live LiDAR detects new ones. A supplied map is not a student-built SLAM result.
 
-Open RViz and configure the displays before driving. Map the delivery routes and alternative crossings; every remote corner is unnecessary. Save your campus map before stopping SLAM. Use a map made in **this campus world**, not an IST or warmup map. Preserve earlier maps under separate names. Save this part as `results/campus_map.yaml` with its image; keep the IST map separately as `results/ist_map.yaml`. Navigate to two safe points near IST and return home; remote pads and full-campus exploration are optional.
-
-For localization, stop SLAM and relaunch the baseline campus. Start AMCL/Nav2 with your campus map, open RViz, then use **2D Pose Estimate** and check scan alignment before sending a nearby goal. RViz does not publish the missing map-to-odom transform; AMCL needs an initial pose. Brief transform warnings before initialization can occur.
-
-### Campus map commands
-
-While SLAM and Gazebo are running, stop motion and save from a sourced terminal:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
-mkdir -p results
-ros2 run nav2_map_server map_saver_cli -f "$PWD/results/campus_map" \
-  --ros-args -p use_sim_time:=true
-```
-
-After stopping all launches with Ctrl+C, relaunch the baseline campus in Terminal 1. Start AMCL/Nav2 in **Terminal 2**:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
-  map:="$PWD/final_project_simulation/results/campus_map.yaml"
-```
-
-Open RViz in Terminal 3 and initialize AMCL as in main Step 6. After campus navigation, complete [the guided GPS activity](../goosebot/CAMPUS_GPS.md), not another LiDAR settings experiment. GPS messages supplement this experiment; the required AMCL/Nav2 run remains LiDAR-based.
+The reference grid includes buildings, water barriers and boundaries. In the optional GPS reference-map mode, a derived road/path mask forbids grass in both costmaps. The underlying world still permits physical driving on grass; the navigation mask adds the route restriction. This is not traffic-rule enforcement.
 
 ## Optional blocked-causeway trial
 
@@ -92,16 +62,16 @@ Stop all baseline launches with Ctrl+C. Use the same launch command above, repla
 
 ## Campus poses
 
-These are **world/reference-map** coordinates. Your SLAM map can have a different origin and heading; select poses in RViz on your own map.
+These are **world/reference-map and GPS-ENU** coordinates for this teaching world. They can be used in the optional GPS reference-map mode. A student SLAM map may have a different origin/heading; do not copy these coordinates into an unaligned SLAM-map navigation session.
 
 | Yellow pad | x (m) | y (m) |
 |---|---:|---:|
 | Home at IST south end | -8.500 | 9.500 |
 | IST delivery | -5.756 | 11.983 |
-| Residence delivery | -0.043 | 12.883 |
+| Residence delivery — on road | 1.3612 | 13.7061 |
 | GCW delivery | -9.587 | 1.621 |
 
-The home yaw is **1.180 rad**; delivery-pose example yaws remain 0. The supplied `reference.yaml` is a geometric instructor reference, not a student SLAM result.
+The home yaw is **1.180 rad**; delivery-pose example yaws remain 0. The supplied `reference.yaml` is a geometric instructor reference, not a student SLAM result. The Residence pad was moved onto its connected paved access road; restart the world after pulling to see the new position.
 
 ## Regenerate and customize
 
@@ -127,3 +97,4 @@ Generated OBJ files include a unit normal for every triangle corner, including c
 Overlapping decorative road segments previously shared the same height, causing z-fighting (flickering as the camera moves). The generator now assigns overlapping ground decorations distinct heights in 3 mm increments and lifts delivery markers above them. This changes visual surfaces only; ground/obstacle collisions, the reference map and mission poses are unchanged. Both world variants group scenery under the identity-pose static `campus` model; expand its arrow to inspect individual items. Goosebot and the sun remain separate. After pulling, stop the simulation with Ctrl+C and relaunch; no ROS rebuild is needed for these world changes. Rendering still requires a pilot check on the course WSL installation.
 
 The yellow rectangle under Goosebot marks **Home (pad 0)**. It is visual-only, with no collision surface; the robot drives on the ground. Delivery pads use the same yellow style. Home and its marker now sit at IST's south end in both campus variants. These changes need a full Ctrl+C/relaunch after pulling, not Gazebo Reset; no ROS rebuild is needed. Existing campus obstacle maps still apply, but record the new home pose in your SLAM map's frame.
+

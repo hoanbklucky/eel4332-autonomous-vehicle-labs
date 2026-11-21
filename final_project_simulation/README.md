@@ -434,7 +434,7 @@ python3 final_project_simulation/goosebot/gps_goal.py --home
 
 The helper sends a GPS-aligned ENU goal and reports **SUCCEEDED**. It also accepts `--latitude`, `--longitude`, and `--yaw-deg` using actual waypoint readings. RViz goals are GPS-aligned **meters**, not geographic degrees.
 
-**Command breakdown:** `gps_profile:=rtk` changes runtime sensor noise without editing source; `profile:=rtk` selects matching live-filter uncertainty. The launch starts navigation-only Nav2 after initialization, with rolling LiDAR costmaps and no AMCL/map server. **Do not load `campus_map.yaml` in this mode**: a SLAM map's coordinates need not match the GPS datum. Your campus SLAM map remains a mapping deliverable.
+**Command breakdown:** `gps_profile:=rtk` changes runtime sensor noise without editing source; `profile:=rtk` selects matching live-filter uncertainty. The launch starts navigation-only Nav2 after initialization, with rolling LiDAR costmaps and no AMCL/map server. **Do not load an unaligned `campus_map.yaml` in this default mode**: a SLAM map's coordinates need not match the GPS datum. The optional reference-map extension below uses the supplied world-aligned campus map. Your campus SLAM map remains a mapping deliverable.
 
 **Submit:** the campus video showing GPS readiness, two reached destinations and Home; explain GPS's localization role versus LiDAR's obstacle role. Meter-noise navigation is an optional open-area trial: restart the world with `gps_profile:=ordinary` and navigation with `profile:=ordinary`. Its goal tolerance is 1.5 m versus 0.2 m for RTK-like mode, so do not compare reached-goal counts as equal-precision tests.
 
@@ -446,6 +446,12 @@ The profiles are idealized simulations, not hardware RTK. Matching profile setti
 GPS should stay near 28.1485°, −81.8495°. For degree-scale jumps, update the branch, rerun the Step 1 helper, source and respawn. No ROS rebuild is needed solely for the new local-file launchers. See [method/diagnostics](COMMAND_REFERENCE.md#gps-rtk-navigation-method) for filter and TF details.
 
 </details>
+
+#### C. Optional — longer routes using the supplied campus map
+
+Use the [optional campus-map navigation guide](goosebot/GPS_MAP_EXTENSION.md) for complete commands. `reference_map:=` loads `campus/reference.yaml`, which already shares the GPS east/north frame because it was generated from the same world geometry. **No additional mapping or manual alignment is needed for this mode.** GPS provides localization; the prior map provides global obstacle knowledge; live LiDAR detects new obstacles. No AMCL or 2D Pose Estimate is used.
+
+The extension derives a road/path-only mask from the layout and applies it in both costmaps, forbidding grass shortcuts. The Residence delivery pad is on a connected road at (1.3612, 13.7061) m. This is an ungraded supplied-map extension, not student SLAM evidence; an instructor Gazebo pilot is still required.
 
 ### 10. Explain the system
 
@@ -472,3 +478,4 @@ Submit one shared **2–3 page explanation plus a topic table/diagram**, using [
 The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. Step 9 separates the offline localization comparison from the live GPS navigation mode. Indoor AMCL remains unchanged.
 
 **INSTRUCTOR VALIDATION REQUIRED:** profile generation, fusion math, TF composition, gating, scoring, plotting and Nav2 parameters have offline tests and synthetic-data checks. The dual-sensor bridge and live GPS/Nav2 launch still require a course-machine pilot; no end-to-end Gazebo navigation result is claimed.
+

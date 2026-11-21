@@ -24,6 +24,7 @@ def generate_launch_description():
     from launch.events import Shutdown
     from launch.launch_description_sources import PythonLaunchDescriptionSource
     from launch.substitutions import LaunchConfiguration
+    from launch_ros.actions import Node
 
     here = Path(__file__).resolve().parent
 
@@ -35,7 +36,19 @@ def generate_launch_description():
         temp = tempfile.TemporaryDirectory(prefix='course-gps-nav-')
         _TEMP_DIRS.append(temp)
         params = Path(temp.name) / 'nav2_gps.yaml'
-        prepare_parameters(here / 'nav2_goosebot.yaml', params, profile)
+        reference_map = LaunchConfiguration('reference_map').perform(context).strip()
+        prepare_parameters(here / 'nav2_goosebot.yaml', params, profile,
+                           reference_map=reference_map or None, world=world)
+        map_actions = []
+        if reference_map:
+            map_actions = [
+                Node(package='nav2_map_server', executable='map_server', name='map_server',
+                     output='screen', parameters=[str(params)]),
+                Node(package='nav2_lifecycle_manager', executable='lifecycle_manager',
+                     name='lifecycle_manager_gps_map', output='screen', parameters=[{
+                         'use_sim_time': True, 'autostart': True,
+                         'node_names': ['map_server']}]),
+            ]
         localizer = ExecuteProcess(cmd=[sys.executable, '-u', str(here / 'gps_localizer.py'),
                 '--world', str(world), '--profile', profile], output='screen',
                 sigterm_timeout='10', sigkill_timeout='5')
@@ -49,7 +62,10 @@ def generate_launch_description():
             state['text'], ready = ready_actions(state['text'], event.text)
             if ready and not state['started']:
                 state['started'] = True
-                return [LogInfo(msg='GPS pose ready; starting navigation-only Nav2 (no AMCL/map server).'), nav2]
+                mode = ('road-only campus reference map + live LiDAR' if reference_map
+                        else 'rolling live-LiDAR costmaps; no saved map')
+                return [LogInfo(msg=f'GPS pose ready; starting Nav2 ({mode}; no AMCL).'),
+                        *map_actions, nav2]
             return []
 
         return [
@@ -63,5 +79,8 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('profile', default_value='rtk', choices=['ordinary', 'rtk']),
         DeclareLaunchArgument('world', default_value=str(here.parent / 'campus/campus.sdf')),
+        DeclareLaunchArgument('reference_map', default_value='',
+                             description='Optional supplied campus/reference.yaml for longer-range planning'),
         OpaqueFunction(function=start),
     ])
+

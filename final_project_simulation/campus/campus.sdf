@@ -13273,7 +13273,7 @@
       </model>
       <model name="delivery_pad_2">
         <static>true</static>
-        <pose>-0.043 12.883 0.058499999999999996 0.0 0.0 0.0</pose>
+        <pose>1.3612 13.7061 0.058499999999999996 0.0 0.0 0.0</pose>
         <link name="body">
           <visual name="visual">
             <geometry>

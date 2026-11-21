@@ -88,12 +88,21 @@ def healthy(ready, now_sim, gps_sim, now_wall, odom_wall, gps_wall, scan_wall,
             and command_sim is not None and 0 <= now_sim - command_sim <= 0.5)
 
 
-def prepare_parameters(source, destination, profile):
+def prepare_parameters(source, destination, profile, reference_map=None, world=None):
     if profile not in ('ordinary', 'rtk'):
         raise ValueError('GPS navigation profile must be ordinary or rtk')
     params = yaml.safe_load(Path(source).read_text())
     params.pop('amcl', None)
     params.pop('map_server', None)
+    if reference_map:
+        from gps_reference_map import prepare_reference_map
+        if profile != 'rtk' or world is None:
+            raise ValueError('Reference-map extension requires RTK and the matching campus world')
+        road_map = prepare_reference_map(reference_map, world,
+                                         Path(destination).with_name('campus_roads.yaml'))
+        params['map_server'] = {'ros__parameters': {
+            'use_sim_time': True, 'frame_id': 'map',
+            'yaml_filename': str(road_map)}}
     for name in ('local_costmap', 'global_costmap'):
         cost = params[name][name]['ros__parameters']
         cost['plugins'] = ['obstacle_layer', 'inflation_layer']
@@ -103,6 +112,21 @@ def prepare_parameters(source, destination, profile):
         cost['initial_transform_timeout'] = 60.0
     glob = params['global_costmap']['global_costmap']['ros__parameters']
     glob.update(global_frame='map', width=30, height=30, resolution=0.1)
+    if reference_map:
+        glob.update(rolling_window=False,
+                    plugins=['static_layer', 'obstacle_layer', 'inflation_layer'])
+        glob.pop('width', None)
+        glob.pop('height', None)
+        glob['static_layer'] = {
+            'plugin': 'nav2_costmap_2d::StaticLayer', 'map_topic': '/map',
+            'map_subscribe_transient_local': True, 'subscribe_to_updates': False}
+        local = params['local_costmap']['local_costmap']['ros__parameters']
+        local['plugins'] = ['static_layer', 'obstacle_layer', 'inflation_layer']
+        local['static_layer'] = dict(glob['static_layer'])
+        # Grass is lethal in BOTH grids. Local trajectory scoring and recovery
+        # collision checks must not cut corners across a globally forbidden area.
+        # StaticLayer sizes the global grid from the known reference map.
+        # Local costmap stays rolling; live obstacles remain in both grids.
     controller = params['controller_server']['ros__parameters']
     tolerance = 0.2 if profile == 'rtk' else 1.5
     controller['goal_checker']['xy_goal_tolerance'] = tolerance
@@ -114,5 +138,8 @@ def prepare_parameters(source, destination, profile):
     # Its output is gated by the GPS localizer before reaching the robot bridge.
     params['collision_monitor']['ros__parameters']['cmd_vel_out_topic'] = '/gps_nav/cmd_vel_request'
     params['planner_server']['ros__parameters']['GridBased']['allow_unknown'] = False
+    if reference_map:
+        params['planner_server']['ros__parameters']['GridBased']['tolerance'] = 0.0
     Path(destination).write_text(yaml.safe_dump(params, sort_keys=False))
     return params
+
