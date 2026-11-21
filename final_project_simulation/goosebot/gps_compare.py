@@ -33,24 +33,82 @@ def yaw_of(q):
                       1 - 2 * (q.y * q.y + q.z * q.z))
 
 
+def read_baseline_parameters():
+    """Retry incomplete dumps, then query parameters individually if needed."""
+    import yaml
+
+    required = {'odom0', 'odom0_config', 'imu0', 'imu0_config', 'world_frame'}
+    last_error = 'empty parameter response'
+    for attempt in range(3):
+        try:
+            dumped = subprocess.run(
+                ['ros2', 'param', 'dump', '/ekf_filter_node'],
+                capture_output=True, text=True, timeout=15, check=True)
+            runtime = yaml.safe_load(dumped.stdout)
+            entry = runtime.get('/ekf_filter_node', runtime.get('ekf_filter_node', {})) if isinstance(runtime, dict) else {}
+            params = entry.get('ros__parameters', {}) if isinstance(entry, dict) else {}
+            if isinstance(params, dict) and required <= params.keys():
+                return params
+            last_error = 'empty or incomplete parameter dump'
+        except (subprocess.SubprocessError, yaml.YAMLError) as exc:
+            last_error = str(exc)
+        if attempt < 2:
+            time.sleep(0.3)
+
+    # Some ROS CLI/service responses yield an empty dump while individual gets
+    # work. List all inputs as well, so this fallback cannot hide extra sensors.
+    print('EKF parameter dump unavailable; checking individual parameters.', flush=True)
+    try:
+        listed = subprocess.run(
+            ['ros2', 'param', 'list', '/ekf_filter_node'],
+            capture_output=True, text=True, timeout=15, check=True)
+        names = set(required)
+        listed_names = {line.strip() for line in listed.stdout.splitlines()}
+        if not required <= listed_names:
+            raise ValueError('Parameter list is empty or incomplete')
+        for line in listed.stdout.splitlines():
+            name = line.strip()
+            for family in ('odom', 'pose', 'twist', 'imu'):
+                if name.startswith(family) and name[len(family):].isdigit():
+                    names.add(name)
+        params = {}
+        for name in sorted(names):
+            result = subprocess.run(
+                ['ros2', 'param', 'get', '/ekf_filter_node', name],
+                capture_output=True, text=True, timeout=15, check=True)
+            prefix, separator, value = result.stdout.strip().partition(':')
+            if not separator or prefix not in (
+                    'String value is', 'Boolean values are'):
+                raise ValueError(f'Could not read {name}: {result.stdout.strip()}')
+            params[name] = value.strip() if prefix == 'String value is' else yaml.safe_load(value)
+        return params
+    except (subprocess.SubprocessError, yaml.YAMLError, ValueError) as exc:
+        raise ValueError(
+            'Could not read running EKF parameters; this is not a confirmed '
+            f'configuration mismatch ({last_error}; individual query: {exc}). '
+            'Keep the world running and check ros2 param list /ekf_filter_node.') from exc
+
+
 def inspect_baseline():
     # Inspect running baseline inputs, rather than assuming messages imply fusion.
-    dumped = subprocess.run(['ros2', 'param', 'dump', '/ekf_filter_node'],
-                            capture_output=True, text=True, timeout=15, check=True)
-    import yaml
-    runtime = yaml.safe_load(dumped.stdout)
-    params = next(iter(runtime.values()))['ros__parameters']
+    params = read_baseline_parameters()
     expected_odom = [False] * 15
     expected_odom[6:8] = [True, True]
     expected_imu = [False] * 15
     expected_imu[11] = True
-    if (params.get('odom0_config') != expected_odom
-            or params.get('imu0_config') != expected_imu
-            or str(params.get('odom0', '')).strip('/') != 'odom_cmdvel'
-            or str(params.get('imu0', '')).strip('/') != 'imu/data'
-            or params.get('world_frame') != 'odom'):
-        raise ValueError('Running EKF differs from the supplied velocity + IMU-yaw-rate baseline. '
-                         'Inspect its parameters before using this GPS mode.')
+    expected = {
+        'odom0_config': expected_odom, 'imu0_config': expected_imu,
+        'odom0': 'odom_cmdvel', 'imu0': 'imu/data', 'world_frame': 'odom',
+    }
+    differences = []
+    for name, wanted in expected.items():
+        actual = params.get(name)
+        comparable = actual.strip('/') if name in ('odom0', 'imu0') and isinstance(actual, str) else actual
+        if comparable != wanted:
+            differences.append(f'{name}: got {actual!r}, expected {wanted!r}')
+    if differences:
+        raise ValueError('Running EKF differs from the supplied baseline: '
+                         + '; '.join(differences))
     for family in ('odom', 'pose', 'twist', 'imu'):
         allowed = {'odom0', 'imu0'}
         for name, value in params.items():
@@ -408,3 +466,4 @@ def main(argv=None):
 
 if __name__ == '__main__':
     main()
+
