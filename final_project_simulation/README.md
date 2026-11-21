@@ -513,14 +513,16 @@ Keep the simulator and SLAM commands unchanged. You can skip adding the displays
 
 **Terminal 4 — driving:**
 
+Use these starting teleop settings for **both IST and campus**. Reduce speed near tight corners if needed. These parameters affect keyboard driving; Nav2 has separate autonomous speed limits.
+
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -p speed:=0.1 -p turn:=0.5
+  --ros-args -p speed:=0.81 -p turn:=1.73
 ```
 
-Click inside Terminal 4 and follow **its printed key layout** (different from TurtleBot teleop). Use lowercase `i` forward, `j/l` turn, and `k` stop; `speed` and `turn` set 0.1 m/s and 0.5 rad/s. Confirm motion, scan alignment and RobotModel/TF status before exploring. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+Click inside Terminal 4 and follow **its printed key layout** (different from TurtleBot teleop). Use lowercase `i` forward, `j/l` turn, and `k` stop; `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Confirm motion, scan alignment and RobotModel/TF status before exploring. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
 
 <details>
 <summary>Example — IST mapping in progress</summary>
