@@ -447,6 +447,17 @@ GPS should stay near 28.1485°, −81.8495°. For degree-scale jumps, update the
 
 </details>
 
+<details>
+<summary>Expected result — short-range GPS navigation reached a goal</summary>
+
+![RViz showing a reached GPS navigation goal beside Goosebot in the campus world](images/gps_short_navigation_reached.png)
+
+**Navigation: active** means Nav2 is running. **Feedback: reached** shows this goal completed; the example reports about **0.10 m** remaining. **Localization: inactive** refers to AMCL, which is intentionally absent. The supplied GPS localizer provides the global pose; confirm its **GPS_LOCALIZATION_READY** message in Terminal 2.
+
+The visible grid is a **rolling costmap built from live LiDAR**, not a saved campus SLAM map. Colored bands are obstacle-clearance costs. This screenshot demonstrates the short-range mode, not the optional full-map road-only mode; it does not establish campus-wide route planning or grass restrictions. Your explored shape and camera view may differ.
+
+</details>
+
 #### C. Optional — longer routes using the supplied campus map
 
 Use the [optional campus-map navigation guide](goosebot/GPS_MAP_EXTENSION.md) for complete commands. `reference_map:=` loads `campus/reference.yaml`, which already shares the GPS east/north frame because it was generated from the same world geometry. **No additional mapping or manual alignment is needed for this mode.** GPS provides localization; the prior map provides global obstacle knowledge; live LiDAR detects new obstacles. No AMCL or 2D Pose Estimate is used.
