@@ -329,7 +329,10 @@ ros2 launch "$PWD/final_project_simulation/goosebot/gps_compare.launch.py" \
   output:="$PWD/final_project_simulation/results/gps_rtk_comparison"
 ```
 
-Keep still until **READY**. Use Terminal 4's Step 5 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2**. Generate the report:
+Keep still until **READY**. Use Terminal 4's Step 5 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2** to save.
+
+**Minimum recording distance: 5 m of total travel after READY.** This is distance travelled along the route, not distance from Home; turning in place does not count. Aim for 10–20 m to leave a margin. The report rejects shorter recordings. If it reports “Recorded route shorter than 5 m,” repeat with a longer route and a **new output directory**. If you already drove that far, inspect the recording/odometry before repeating. Generate the report only after the recorder has saved and exited:
+
 
 ```bash
 python3 final_project_simulation/goosebot/gps_compare.py report \
