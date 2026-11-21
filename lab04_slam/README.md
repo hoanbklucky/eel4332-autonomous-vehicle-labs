@@ -2,9 +2,41 @@
 
 ## Before you start — use the current course files
 
-**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+**Expected branch: `final-project-indoor-outdoor`.** Run these commands in **Ubuntu/WSL**. Choose the new-copy or existing-copy instructions, then update below.
 
-In Ubuntu/WSL, save all editor files and check:
+### New copy: fork and clone
+
+1. Sign in to GitHub, open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and choose **Fork → Create fork** under your account. Keep the repository name. One fork serves both labs; do not fork again for Lab 5.
+2. Replace `YOUR_USERNAME` below with your GitHub username. Run only if the destination folder does not already exist:
+
+```bash
+mkdir -p ~/courses
+cd ~/courses
+git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+cd eel4332-autonomous-vehicle-labs
+git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
+git config --local --replace-all remote.upstream.pushurl DISABLED
+```
+
+### Existing copy: keep your files and check remotes
+
+If you already cloned your fork, skip this block when the URLs are correct. If you cloned the instructor's public repository, **create your fork on GitHub first**, then replace `YOUR_USERNAME` and run:
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git remote set-url origin https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+git config --local --replace-all remote.origin.pushurl https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+if git remote get-url upstream >/dev/null 2>&1; then
+  git remote set-url upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
+else
+  git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
+fi
+git config --local --replace-all remote.upstream.pushurl DISABLED
+```
+
+Changing remote URLs preserves files and commits. `origin` is **your fork**, where you push your work; `upstream` is **the instructor's public repository**, where you fetch updates. Its push URL is `DISABLED`. If your folder came from Download ZIP, keep it as a backup, clone your fork into a new folder, and copy your own work into that clone.
+
+### Select the branch and receive updates
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
@@ -13,19 +45,36 @@ git branch --show-current
 git status --short
 ```
 
-`origin` must be your GitHub fork; `upstream` must be `hoanbklucky/eel4332-autonomous-vehicle-labs`. The branch must match the expected name. **If the branch differs or status lists changes, stop here:** [save/commit your work and follow the branch/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before proceeding. Do not discard edits, especially robot Xacro/configuration changes or maps.
+Save editor files first. If status lists changes, review them and commit the files you want to keep (`git add PATH_TO_FILE`, then `git commit -m "Save my lab work"`); back up ignored maps/results separately. Continue with a clean working tree. Do not discard work to update.
 
-Once on the correct branch with a clean working tree:
+Fetch, then switch to the expected branch; the conditional creates it only if it does not exist locally. Work committed on another branch stays on that branch.
 
 ```bash
 git fetch upstream &&
+if git show-ref --verify --quiet refs/heads/final-project-indoor-outdoor; then
+  git switch final-project-indoor-outdoor
+else
+  git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
+fi
+```
+
+After the switch succeeds, receive updates and check that they are included:
+
+```bash
 git merge --no-edit upstream/final-project-indoor-outdoor &&
 git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
 echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
-git log -1 --oneline
 ```
 
-Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
+Stop on any error. Resolve merge conflicts before continuing; `git merge --abort` cancels an in-progress merge. After a successful update, save the combined branch to your fork:
+
+```bash
+git push -u origin final-project-indoor-outdoor
+```
+
+**Command breakdown:** `clone` downloads a working copy; `remote` configures repository URLs; `fetch` downloads updates; `switch` selects the local branch; `merge` combines updates with your commits; `merge-base --is-ancestor` verifies inclusion; `push -u origin` uploads the branch and sets its tracking destination.
+
+Reopen **this local README** in VS Code (**WSL: Ubuntu**). Changing the GitHub browser branch or reopening VS Code does not update local files. Git updates files, not installed ROS packages; rebuild only when the lab asks.
 
 **Lab 4 version check:** this lab uses Cartographer in **both TurtleBot3 World (Waffle) and House (Waffle Pi)**. An older one-world or different-SLAM handout is not the current lab. Keep both saved maps for Lab 5.
 
@@ -55,7 +104,7 @@ Confirm VS Code shows **WSL: Ubuntu** (or your Ubuntu distribution) in the lower
 cd ~/courses/eel4332-autonomous-vehicle-labs/lab04_slam
 ```
 
-Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
+Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, use the inline setup above.
 
 ## Mission
 
