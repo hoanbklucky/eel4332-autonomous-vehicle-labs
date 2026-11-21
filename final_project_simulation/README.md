@@ -391,7 +391,17 @@ RMSE is root mean square distance to Gazebo truth at matching timestamps. GPS ne
 
 #### B. Navigate using live GPS fusion
 
-Stop all launches. Restart **Terminal 1's campus command above with `gps_profile:=rtk`**. Stay at fresh Home; keep SLAM, AMCL and teleop stopped. This is a separate live mode, not replay.
+Stop all previous launches with Ctrl+C and wait for their prompts. **Terminal 1 — start a fresh campus world with RTK-like GPS:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=rtk
+```
+
+**Command breakdown:** `world:=` selects campus; `gps_profile:=rtk` selects the RTK-like sensor profile for live navigation. Keep Terminal 1 running. Leave the robot stationary at fresh Home; keep SLAM, AMCL and teleop stopped. Continue with Terminal 2 below. This is a separate live mode, not replay.
 
 **Terminal 2 — GPS localization and Nav2:**
 
