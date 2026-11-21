@@ -99,6 +99,31 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
 
 To find the robot: collapse the building in Gazebo's Entity Tree, right-click **goosebot → Move To**, then zoom. This moves the camera.
 
+<details>
+<summary>Gazebo tips — follow the robot, turn it, or recover a flip</summary>
+
+Select the top-level **goosebot** in the Entity Tree, not a wheel or link.
+
+| Camera action | What it does |
+|---|---|
+| Right-click → **Move To** | Centers the camera on Goosebot once; does not move the robot. |
+| **Follow Options → Follow** | Moves the camera with Goosebot and keeps looking at it. |
+| **Follow Options → Free Look** | Moves with Goosebot while letting you look around; it still follows. |
+| **Follow Options → Look At** | Follows Goosebot while aiming at a selected target, which can be another object. |
+| **Stop following** | Close the menu, click inside the 3-D view, then press **Esc**. |
+
+**Turn the robot normally:** focus the teleop terminal; use lowercase **j/l** to turn and **k** to stop. Camera controls do not steer Goosebot.
+
+**If Goosebot flips:**
+
+1. Stop teleop with **k**, then Ctrl+C; cancel navigation if active. **Pause Gazebo**.
+2. Select the whole **goosebot** and expand **Pose**. If these fields are editable, set **Roll = 0**, **Pitch = 0**, keep the desired **Yaw**, and raise **Z** just enough for the wheels to clear the ground. Apply the edit, resume and let it settle. Avoid placing it inside walls.
+3. If Pose is read-only or recovery fails, stop all launches with Ctrl+C and rerun the same world command to respawn upright. Restart SLAM/RViz for mapping, or the appropriate localization/navigation mode.
+
+Moving the robot by editing Pose is a teleport: it can invalidate SLAM/localization. Restart the mapping session if the map becomes misaligned; initialize AMCL again for saved-map navigation. For the GPS experiment or GPS navigation, restart at fresh Home with the documented known heading rather than continuing after a teleport. Save useful results before restarting. Drive slowly and avoid obstacles/edges to reduce flips.
+
+</details>
+
 <a id="goosebot-readiness-check"></a>
 
 ## 4. Start SLAM — Terminal 2
