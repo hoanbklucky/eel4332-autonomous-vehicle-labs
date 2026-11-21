@@ -252,12 +252,28 @@ rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_v
 
 **Command breakdown:** `$(ros2 pkg prefix ...)` finds Nav2's installed package; `-d` loads its layout. Expect **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel.
 
-1. Set **2D Pose Estimate** at the robot's starting position and heading.
-2. Confirm `/scan` points overlap saved-map walls. Brief missing-map/TF warnings before initialization can occur.
-3. Send a nearby **Nav2 Goal**, then visit **two chosen destinations and Home**; wait 3 seconds at each destination. Keep teleop stopped.
-4. Select coordinates on **your SLAM map**; do not blindly use Gazebo/`mission.json` coordinates.
+1. **Initialize localization:** click **2D Pose Estimate**, then click and drag on the saved map at the robot's current position, pointing in its heading direction. Repeat this after restarting AMCL.
+2. **Check alignment:** laser points should overlap the map's walls. Correct the initial pose if they do not. Brief map/TF warnings can occur before initialization.
+3. **Choose a destination:** click **Nav2 Goal**, then click and drag in a free area of the map. The click selects the destination; dragging sets the final heading. Use the map in RViz; no coordinates from `mission.json` are needed.
+4. Try a nearby goal first, then visit **two chosen destinations and Home**; wait 3 seconds at each destination. Keep teleop stopped. Choose Home on the saved map too.
+5. **Check completion:** Navigation/Localization **active** means the system is running. **Feedback: active** means a goal is in progress. Count a goal as reached only after **succeeded** feedback and confirming the robot arrived and stopped.
 
-Save this layout separately as `~/rviz_configs/goosebot_navigation.rviz`; load it with `rviz2 -d ...` next time. Initialize AMCL again each session. **Navigation/Localization: active** indicates readiness; **reached/succeeded** indicates completion.
+**Save the RViz layout:** choose **File → Save Config As** and save `~/rviz_configs/goosebot_navigation.rviz` (create the directory with `mkdir -p ~/rviz_configs` if needed). On later sessions, start Gazebo and AMCL/Nav2 as above, then open your layout:
+
+```bash
+rviz2 -d ~/rviz_configs/goosebot_navigation.rviz --ros-args -p use_sim_time:=true
+```
+
+The layout saves display settings, not localization. Set **2D Pose Estimate** again each session and check scan alignment before sending goals.
+
+<details>
+<summary>Expected view — IST navigation in progress</summary>
+
+![RViz saved-map navigation beside Goosebot in Gazebo](images/ist_navigation_expected.png)
+
+**Left: RViz** shows the saved map, laser scans and colored obstacle-clearance margins. **Right: Gazebo** shows the simulated robot in IST. In this example, Navigation and Localization are active, and **Feedback: active** with distance remaining means the robot is still travelling. Wait for **succeeded** and verify it stopped at the chosen destination before counting the goal as reached. Your map and camera view may differ.
+
+</details>
 
 ## 7. IST blocked route
 
