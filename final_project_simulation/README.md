@@ -162,16 +162,18 @@ For your first run, add these yourself using **Add → By display type → rviz_
 
 Set **Global Options → Fixed Frame: map** and keep Map enabled on `/map`. Choose **Views → TopDownOrtho**. Expect the robot, scans and an initial occupancy map; the map grows as you drive. Keep this fixed frame throughout mapping. A blank Map Topic causes “Empty topic name”; edit the Topic property, not the red Status row.
 
-**Terminal 4 — start slow keyboard driving:**
+**Terminal 4 — start keyboard driving:**
+
+Use these starting teleop settings for **both IST and campus**. Reduce speed near tight corners if needed. These parameters affect keyboard driving; Nav2 has separate autonomous speed limits.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -p speed:=0.1 -p turn:=0.5
+  --ros-args -p speed:=0.81 -p turn:=1.73
 ```
 
-**Command breakdown:** `speed` and `turn` set 0.1 m/s and 0.5 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building/full-campus exploration is unnecessary.
+**Command breakdown:** `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building/full-campus exploration is unnecessary.
 
 <details>
 <summary>Troubleshooting only — missing map, scans or transforms</summary>
