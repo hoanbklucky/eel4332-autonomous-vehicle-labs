@@ -1,0 +1,30 @@
+# Authoritative course local EKF. world.launch.py loads this file directly.
+# Raw wheel pose/yaw are diagnostic only. Fuse measured forward speed and gyro
+# yaw rate; no fake zero-lateral measurement or perfect IMU orientation.
+ekf_filter_node:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 30.0
+    sensor_timeout: 0.1
+    two_d_mode: true
+    print_diagnostics: true
+    publish_tf: true
+    publish_acceleration: false
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_footprint
+    world_frame: odom
+    odom0: /wheel/odometry
+    # [x,y,z,roll,pitch,yaw,vx,vy,vz,vroll,vpitch,vyaw,ax,ay,az]
+    odom0_config: [false, false, false, false, false, false,
+                   true, false, false, false, false, false,
+                   false, false, false]
+    odom0_differential: false
+    odom0_relative: false
+    imu0: /imu/data
+    imu0_config: [false, false, false, false, false, false,
+                  false, false, false, false, false, true,
+                  false, false, false]
+    imu0_differential: false
+    imu0_relative: false
+    imu0_remove_gravitational_acceleration: true

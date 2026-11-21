@@ -12,3 +12,5 @@ The original perfect-map bridge and stereo SLAM launch are separate modes, not t
 
 
 Saved-map startup uses `navigation.launch.py map:=/absolute/path/to/map.yaml`. It checks the YAML/image pair and prepares an explicit map-server `yaml_filename` while preserving the source Nav2 YAML. It runs standard AMCL/Nav2; no manual load-map service is required. In the separate RViz terminal, use the main guide's explicit `rviz2 -d .../nav2_default_view.rviz` command to obtain Nav2 Goal and the Navigation 2 panel. Offline regression checks: `python3 -m unittest discover -s final_project_simulation/goosebot/tests -p 'test_navigation_launch.py' -v`. Pilot startup/map delivery and RViz plugins on the course WSL installation.
+
+The course world launcher uses `wheel_joint_odometry.py` and `ekf_wheel.yaml`: actual `/joint_states` wheel velocities → `/wheel/odometry` → local EKF with IMU yaw rate. It never starts the upstream command-derived odometry node. Raw wheel pose is diagnostic only; only wheel forward velocity is fused, and the EKF alone publishes `odom → base_footprint`.

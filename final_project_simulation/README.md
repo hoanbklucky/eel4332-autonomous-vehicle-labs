@@ -1,5 +1,18 @@
 # Final Project — Goosebot SLAM and Delivery in Simulation
 
+### Measured wheel odometry
+
+The course launcher uses `/joint_states → /wheel/odometry → local EKF (+ IMU yaw rate) → /odometry/filtered`. It does not estimate travel from drive commands. Wheel radius and track width come from the robot description. Wheel rotation can still slip; simulated joints are an encoder proxy, not physical encoder electronics.
+
+After updating, **stop all launches and restart the world using the command below**. Wait for **WHEEL_ODOMETRY_READY**. In another sourced terminal, check:
+
+```bash
+ros2 param get /ekf_filter_node odom0
+ros2 topic echo /wheel/odometry --once --field twist.twist
+```
+
+The first command checks the EKF input; expect `/wheel/odometry`. The second prints one measured wheel-velocity message. Only forward speed is fused from wheels; the IMU supplies yaw rate. The wheel node publishes no TF; the local EKF owns `odom → base_footprint`. Configuration: [ekf_wheel.yaml](goosebot/ekf_wheel.yaml), loaded directly from this checkout. No rebuild is needed for these Python/config changes if the wheel-state bridge is already installed; if `/joint_states` is absent, rerun the existing build helper. Missing/stale wheel data stops the course launch; there is no command fallback.
+
 ## Before you start — use the current course files
 
 **Expected branch: `main`.** This is the current `main` assignment. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
@@ -73,7 +86,7 @@ You may use AI tools to help write or modify code, add sensors, configure ROS 2,
 
 Complete Labs 4–5, then follow Steps 1–5 below to build Goosebot and start mapping in your chosen IST or campus world. The separate practice-arena warm-up is optional. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `$` prompt. **The course instructions use native WSL/Jazzy for both the warm-up and final. Docker is an optional alternative, not an additional requirement.**
 
-The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU, forward ToF, command-derived odometry, and EKF. **The narrow forward ToF is not a 360° mapping LiDAR.** The course build helper supplies the 360° LiDAR and bridge automatically. Start with those defaults; inspect/change one LiDAR setting only after completing mapping and saved-map navigation.
+The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU and forward ToF. The course launcher supplies measured wheel-joint odometry and its local EKF configuration. **The narrow forward ToF is not a 360° mapping LiDAR.** The course build helper supplies the 360° LiDAR and bridge automatically. Start with those defaults; inspect/change one LiDAR setting only after completing mapping and saved-map navigation.
 
 The original Goosebot default mode uses a pre-baked map and Gazebo ground-truth localization. **Do not use that mode as your final demonstration.** This project instead uses LiDAR SLAM Toolbox for mapping, then a saved map with AMCL. This differs from the TurtleBot/Cartographer preparation in Lab 4. Stereo RTAB-Map is optional. Do not launch the original `nav2_bringup.launch.py` or `stereo_slam.launch.py` alongside the commands below.
 
@@ -154,7 +167,7 @@ Expected prefix: `$HOME/goosebot_ws/install/goosebot_0`. The helper builds/verif
 The helper also supplies the LiDAR link/sensor, `/scan` bridge, and wheel joint-state publisher automatically. If the source was copied already, skip the clone/copy commands and run the helper from the repository root. It preserves model edits, creates the workspace source link only when absent, and refuses a link/source pointing to another checkout. Inspect and preserve files before changing such a link. The helper does not fetch a missing model; complete the full source-copy step first.
 
 
-The executable list must include `cmd_vel_to_odom.py`, `ground_truth_map_odom_bridge.py`, and `stereo_camera_info_fixer.py` before launching. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
+The course launcher runs the repository’s `wheel_joint_odometry.py` directly; no installed command-to-odometry executable is required. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
 
 The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone already exists, reuse/check it instead of cloning again; the helper checks an existing workspace source link. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
 
@@ -162,33 +175,7 @@ The package lives in your course fork so your model edits can be committed/pushe
 
 **If the build and executable checks in Step 1 pass, skip this section and continue to Step 2.**
 
-<details>
-<summary>Only if you see “executable cmd_vel_to_odom.py not found” — expand repair steps</summary>
-
-This message can mean a missing installed script **or a script without executable permission**. The supplied source revision stores its Python scripts as non-executable files, while the launch expects installed executables. With a symlink install, executable permission on the source matters.
-
-Stop the failed launch. In Ubuntu/WSL, repair permissions, reconfigure/build the existing package, then source it again:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-cd ~/goosebot_ws
-ls src/goosebot_0/scripts/cmd_vel_to_odom.py
-chmod +x src/goosebot_0/scripts/*.py
-colcon build --symlink-install --packages-select goosebot_0 --cmake-force-configure
-source install/setup.bash
-ros2 pkg prefix goosebot_0
-ros2 pkg executables goosebot_0
-ls -l "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py"
-test -x "$(ros2 pkg prefix goosebot_0)/lib/goosebot_0/cmd_vel_to_odom.py" && echo "Executable is ready"
-```
-
-Expect all three executable names listed above and **Executable is ready**. Launch the selected project world only after a successful build/check. The package prefix must belong to **~/goosebot_ws**; if it names another workspace, open a fresh terminal and source the correct one.
-
-If the first `ls` reports no such file, the source copy is incomplete. Repeat Step 1's **whole-package recursive copy from the pinned source** into `final_project_simulation/src/`, preserving your existing edits. Do not copy old build/install/log directories or place Python files manually inside `install/`.
-
-The package's `CMakeLists.txt` must contain `install(PROGRAMS ... DESTINATION lib/${PROJECT_NAME})` for the three launch scripts. The provided revision already does. If your local copy differs, compare/restore that install declaration and rebuild; preserve your modified model/configuration.
-
-</details>
+**Old odometry launch error?** Stop all launches, update this checkout and use the course `world.launch.py` below. It uses measured wheel joints and no longer starts `cmd_vel_to_odom.py`.
 
 ### 2. Use the supplied robot — no sensor editing yet
 

@@ -80,3 +80,5 @@ Preserve this order where practical:
 11. Troubleshooting
 
 - Final simplification: supply the LiDAR mount/sensor, /scan bridge and wheel joint-state visualization automatically. Do not require manual Xacro/sensor construction before mapping. Keep blocked-route testing and LiDAR tuning optional, with no required screenshots, discussion or grading. Required work is mapping, AMCL/Nav2 and explanation. Preserve mission-client and unrelated algorithm TODOs.
+
+- Course world odometry uses measured /joint_states through goosebot/wheel_joint_odometry.py and goosebot/ekf_wheel.yaml, loaded directly by world.launch.py. Never restore cmd_vel_to_odom as the motion estimate. Fuse wheel forward velocity and IMU yaw rate, not wheel pose or a synthetic zero lateral velocity. Local EKF alone owns odom -> base_footprint; wheel node publishes no TF. Preserve missing/stale-wheel fail-stop and mark old command-derived GPS examples as historical; new comparisons need fresh recordings.
