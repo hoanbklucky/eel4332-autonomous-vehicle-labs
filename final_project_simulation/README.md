@@ -2,6 +2,21 @@
 
 Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
+### Measured wheel odometry
+
+The course launcher uses `/joint_states → /wheel/odometry → local EKF (+ IMU yaw rate) → /odometry/filtered`. It does not estimate travel from drive commands. Wheel radius and track width come from the robot description. Wheel rotation can still slip; simulated joints are an encoder proxy, not physical encoder electronics.
+
+After updating, **stop all launches and restart the world using the command below**. Wait for **WHEEL_ODOMETRY_READY**. In another sourced terminal, check:
+
+```bash
+ros2 param get /ekf_filter_node odom0
+ros2 topic echo /wheel/odometry --once --field twist.twist
+```
+
+The first command checks the EKF input; expect `/wheel/odometry`. The second prints one measured wheel-velocity message. Only forward speed is fused from wheels; the IMU supplies yaw rate. The wheel node publishes no TF; the local EKF owns `odom → base_footprint`. Configuration: [ekf_wheel.yaml](goosebot/ekf_wheel.yaml), loaded directly from this checkout. No rebuild is needed for these Python/config changes if the wheel-state bridge is already installed; if `/joint_states` is absent, rerun the existing build helper. Missing/stale wheel data stops the course launch; there is no command fallback.
+
+Earlier GPS screenshots/results used the previous command-derived baseline and illustrate output format only. Record a **new run in a new output folder** for the wheel/IMU baseline; report your own values.
+
 ## Before you start
 
 Complete Labs 4–5. Use your existing Ubuntu/WSL, ROS 2 Jazzy and Gazebo Harmonic installation. Work in your course fork; `origin` is your fork and `upstream` is the public course repository. Save your edits before updating; do not discard model or map changes.
@@ -79,7 +94,7 @@ ros2 pkg prefix goosebot_0
 ros2 pkg executables goosebot_0
 ```
 
-Expect the prefix inside `~/goosebot_ws` and executables `cmd_vel_to_odom.py`, `ground_truth_map_odom_bridge.py`, `stereo_camera_info_fixer.py`. Do not copy old build/install/log directories. 
+Expect the prefix inside `~/goosebot_ws`. The course launcher runs `wheel_joint_odometry.py` directly from this repository. Do not copy old build/install/log directories. 
 
 ## 2. Use the supplied robot
 

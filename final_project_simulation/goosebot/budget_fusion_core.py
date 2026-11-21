@@ -5,7 +5,6 @@ neither map-frame truth nor absolute simulated IMU orientation is an input.
 """
 import math
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
 import numpy as np
 import yaml
@@ -14,52 +13,13 @@ from gps_navigation_core import wrap
 from gps_fusion_core import gps_to_enu, gps_covariance
 from gps_profiles import PROFILES
 
-WHEELS = ('front_left_wheel_joint', 'front_right_wheel_joint',
-          'rear_left_wheel_joint', 'rear_right_wheel_joint')
+from wheel_odometry_core import WHEELS, wheel_geometry, wheel_speed
+
 FILTER_SETTINGS = {'particles': 600, 'initial_xy_std_m': .25,
     'initial_yaw_std_rad': .03, 'distance_variance_per_s': .0001,
     'distance_variance_per_m': .0025, 'yaw_variance_per_s': .00001,
     'yaw_variance_per_rad': .0004, 'lidar_hit_sigma_m': .18,
     'effective_lidar_beams': 12}
-
-
-def wheel_geometry(description):
-    """Read actual expanded URDF radii/axes; never substitute cmd_vel odometry."""
-    try:
-        root = ET.fromstring(description)
-    except ET.ParseError as exc:
-        raise ValueError('Invalid expanded robot description') from exc
-    radii = []
-    for name in WHEELS:
-        joint = root.find(f"joint[@name='{name}']")
-        if joint is None or joint.find('axis') is None:
-            raise ValueError(f'Missing wheel joint/axis: {name}')
-        axis = np.fromstring(joint.find('axis').get('xyz', ''), sep=' ')
-        if axis.shape != (3,) or not np.allclose(axis, [0, 1, 0]):
-            raise ValueError('This activity supports the supplied +y wheel axes only')
-        link = joint.find('child').get('link')
-        cylinder = root.find(f"link[@name='{link}']/collision/geometry/cylinder")
-        if cylinder is None:
-            raise ValueError('Wheel collision must be a cylinder')
-        radius = float(cylinder.get('radius'))
-        if not math.isfinite(radius) or not .005 <= radius <= .2:
-            raise ValueError('Invalid wheel radius')
-        radii.append(radius)
-    return radii
-
-
-def wheel_speed(names, velocities, radii):
-    values = []
-    for name, radius in zip(WHEELS, radii):
-        if name not in names:
-            raise ValueError(f'/joint_states is missing {name}')
-        i = names.index(name)
-        if i >= len(velocities) or not math.isfinite(velocities[i]):
-            raise ValueError('Wheel joint velocities are missing/non-finite; do not replace them with cmd_vel')
-        values.append(float(velocities[i]) * radius)
-    if max(map(abs, values)) > 3:
-        raise ValueError('Implausible wheel speed; inspect wheel units and model')
-    return float(np.mean(values))
 
 
 class LikelihoodField:
@@ -236,3 +196,4 @@ def estimate(rows, metadata, field, seed=7, dropout=None):
         'seed': seed, 'gps_accepted': accepted_gps, 'gps_rejected': rejected_gps,
         'lidar_updates_C': c.lidar_updates, 'lidar_skipped_C': c.lidar_skipped,
         'lidar_updates_D': d.lidar_updates, 'lidar_skipped_D': d.lidar_skipped}
+

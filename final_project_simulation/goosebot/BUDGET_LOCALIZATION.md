@@ -13,7 +13,7 @@ C versus B shows the effect of LiDAR; C versus D shows what ordinary GPS adds wh
 
 Each particle is a possible robot position/heading. Wheel/gyro motion advances it, GPS weights its position, and LiDAR weights how closely its projected scan endpoints match known obstacle boundaries. The report records the fixed random seed; this is a teaching filter, not a guarantee of robustness.
 
-**Wheel measurements matter:** this activity uses actual wheel-joint angular velocities from `/joint_states`, multiplied by radii read from `/robot_description`. These are a **simulated encoder proxy**, without electronic quantization/noise. They are not the existing `/odom_cmdvel` command-based estimate. Wheel slip can still make wheel rotation differ from robot travel. The IMU contributes measured yaw rate, not its perfect simulated absolute orientation. Every estimate starts at the known Home pose/heading; a stationary gyro-bias estimate is made before driving.
+**Wheel measurements matter:** this activity uses actual wheel-joint angular velocities from `/joint_states`, multiplied by radii read from `/robot_description`. These are a **simulated encoder proxy**, without electronic quantization/noise. The normal course baseline now uses these same measured joints through `/wheel/odometry`; this optional replay implements its own filters. Wheel slip can still make wheel rotation differ from robot travel. The IMU contributes measured yaw rate, not its perfect simulated absolute orientation. Every estimate starts at the known Home pose/heading; a stationary gyro-bias estimate is made before driving.
 
 LiDAR matches against `campus/reference.yaml`, the supplied world-aligned **obstacle** map. It does not match against the artificial road-only mask, which would falsely treat grass edges as physical walls. An accurate prior map is an advantage of this experiment; hardware deployment would need a suitable measured/surveyed map and independent validation.
 
@@ -33,7 +33,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=ordinary
 ```
 
-Keep stationary at fresh Home. Leave SLAM, AMCL, GPS navigation and other teleop processes stopped. The existing baseline EKF may run with the world, but this experiment does not use its command-derived odometry or change its configuration. No new sensor XML or ROS rebuild is needed if the supplied wheel-state bridge is already installed.
+Keep stationary at fresh Home. Leave SLAM, AMCL, GPS navigation and other teleop processes stopped. The existing baseline EKF may run with the world, but this experiment reads wheel joints directly rather than its filtered output. No new sensor XML or ROS rebuild is needed if the supplied wheel-state bridge is already installed.
 
 ## 2. Record — Terminal 2
 
@@ -96,6 +96,6 @@ This writes separate `budget_dropout` outputs and shades the artificial interval
 - No artificial wheel bias is added in the activity. Simulation joint signals, sensor noise and the geometric prior map are idealized; centimeter-level results would not establish hardware accuracy.
 - A supplied likelihood-field particle filter is used, not a production AMCL/GPS stack. Fixed seed 7 makes the replay reproducible; particle depletion, poor geometry, map changes and poor initialization can still cause failure. It does not demonstrate arbitrary-start relocalization.
 - GPS can help or hurt; LiDAR cannot guarantee localization in every outdoor scene. The report establishes position-estimation performance on this drive, not obstacle avoidance, road compliance or successful live navigation.
-- The earlier RTK comparison used a different command-derived motion baseline and filters. Do not claim this activity beats RTK by comparing unrelated runs. A fair hardware comparison needs the same route, initialization and evaluation protocol.
+- Historical RTK screenshots used command-derived motion; the current RTK comparison uses wheel/IMU EKF increments and different filters. Do not claim this activity beats RTK by comparing unrelated runs. A fair hardware comparison needs the same route, initialization and evaluation protocol.
 
 **INSTRUCTOR VALIDATION REQUIRED:** synthetic replay/provenance tests and syntax checks are supplied. Pilot `/joint_states` velocities, recorder startup, the complete report and a controlled dropout run on the course Gazebo installation before assigning performance expectations. This activity has no extra required submission or rubric weight.

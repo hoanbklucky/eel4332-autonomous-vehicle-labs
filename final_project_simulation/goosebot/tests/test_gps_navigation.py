@@ -156,13 +156,17 @@ class GPSNavigationTests(unittest.TestCase):
 
     def test_running_baseline_validation_rejects_hidden_gps_input(self):
         from types import SimpleNamespace
-        p = {'world_frame': 'odom', 'odom0': 'odom_cmdvel', 'imu0': 'imu/data',
-             'odom0_config': [False] * 6 + [True, True] + [False] * 7,
+        p = {'world_frame': 'odom', 'odom0': 'wheel/odometry', 'imu0': 'imu/data',
+             'odom0_config': [False] * 6 + [True] + [False] * 8,
              'imu0_config': [False] * 11 + [True] + [False] * 3}
         def dumped():
             return SimpleNamespace(stdout=yaml.safe_dump({'ekf_filter_node': {'ros__parameters': p}}))
         with patch('gps_compare.subprocess.run', side_effect=lambda *a, **k: dumped()):
             self.assertEqual(inspect_baseline(), p)
+            p['odom0'] = 'odom_cmdvel'
+            with self.assertRaisesRegex(ValueError, 'odom0'):
+                inspect_baseline()
+            p['odom0'] = 'wheel/odometry'
             p['odom1'] = '/gps/already_fused'
             with self.assertRaisesRegex(ValueError, 'Additional baseline input'):
                 inspect_baseline()
@@ -170,3 +174,4 @@ class GPSNavigationTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

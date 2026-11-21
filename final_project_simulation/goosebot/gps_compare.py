@@ -104,12 +104,12 @@ def inspect_baseline():
     # Inspect running baseline inputs, rather than assuming messages imply fusion.
     params = read_baseline_parameters()
     expected_odom = [False] * 15
-    expected_odom[6:8] = [True, True]
+    expected_odom[6] = True
     expected_imu = [False] * 15
     expected_imu[11] = True
     expected = {
         'odom0_config': expected_odom, 'imu0_config': expected_imu,
-        'odom0': 'odom_cmdvel', 'imu0': 'imu/data', 'world_frame': 'odom',
+        'odom0': 'wheel/odometry', 'imu0': 'imu/data', 'world_frame': 'odom',
     }
     differences = []
     for name, wanted in expected.items():
@@ -153,7 +153,8 @@ def record(args):
     metadata = {
         'schema': 2, 'complete': False, 'world': world,
         'profiles': PROFILES,
-        'baseline': '/odometry/filtered: command-derived vx/vy + IMU yaw rate',
+        'motion_source': 'wheel_joint_velocity',
+        'baseline': '/odometry/filtered: measured wheel-joint vx + IMU yaw rate',
         'topics': {'odometry': '/odometry/filtered', 'gps': '/gps/fix',
                    'rtk': '/gps/rtk_fix',
                    'evaluation_only': '/ground_truth/pose'},
@@ -390,6 +391,10 @@ def report(args):
 
     directory = Path(args.input).expanduser().resolve()
     meta, t, cases, gps_t, gps_xy = estimate_recording(directory)
+    motion_source = meta.get('motion_source', 'legacy_or_unspecified')
+    if motion_source != 'wheel_joint_velocity':
+        print('Historical recording: this is not a confirmed measured-wheel baseline. '
+              'Record a fresh run for the current wheel/IMU experiment.')
     # Only now load evaluation data, after both estimates have been computed.
     truth_rows = sorted(read_csv(directory / 'truth.csv'), key=lambda r: float(r['t']))
     truth_t = np.array([float(r['t']) for r in truth_rows])
@@ -404,6 +409,7 @@ def report(args):
     summary = {
         'comparison': 'Identical recording; known spawn pose, no ground-truth estimator input',
         'scope': 'Offline planar position fusion; baseline IMU/odometry EKF and Nav2 unchanged',
+        'motion_source': motion_source,
         'controlled_prediction_scale': meta['settings']['controlled_prediction_scale'],
         'controlled_case_is_artificial': True, 'settings': meta['settings'], 'metrics': metrics,
     }
@@ -477,4 +483,5 @@ def main(argv=None):
 
 if __name__ == '__main__':
     main()
+
 

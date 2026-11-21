@@ -51,6 +51,7 @@ def start(context):
         raise RuntimeError('Expected one named SDF world')
     world_name = world_element.get('name')
     home = json.loads((world.parent / 'mission.json').read_text())['stops'][0]
+    here = Path(__file__).resolve().parent
     package = Path(get_package_share_directory('goosebot_0'))
     description = xacro.process_file(str(package / 'urdf/robot.urdf.xacro')).toxml()
     gps_profile = LaunchConfiguration('gps_profile').perform(context)
@@ -83,7 +84,11 @@ def start(context):
             return shutdown('Startup timed out. Check world loading/create logs; all owned processes are stopping.')
         return []
 
+    wheel_odom = ExecuteProcess(cmd=[sys.executable, '-u', str(here / 'wheel_joint_odometry.py')],
+                                output='screen', sigterm_timeout='10', sigkill_timeout='5')
     actions = [
+        RegisterEventHandler(OnProcessExit(target_action=wheel_odom,
+            on_exit=lambda _event, _context: shutdown('Wheel odometry stopped; stopping the course launch.'))),
         LogInfo(msg=f'Course spawn: entity=goosebot world={world_name} file={world} '
                     f'x={home["xy"][0]} y={home["xy"][1]} z=0.05 yaw={home.get("yaw", 0)}'),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(world.parent)),
@@ -98,10 +103,9 @@ def start(context):
         Node(package='ros_gz_bridge', executable='parameter_bridge', name='ros_gz_bridge',
              output='screen', parameters=[{'config_file': str(package / 'config/ros_gz_bridge.yaml'),
                                            'use_sim_time': True}]),
-        Node(package='goosebot_0', executable='cmd_vel_to_odom.py', name='cmd_vel_to_odom',
-             output='screen', parameters=[{'use_sim_time': True}]),
+        wheel_odom,
         Node(package='robot_localization', executable='ekf_node', name='ekf_filter_node',
-             output='screen', parameters=[str(package / 'config/ekf.yaml'), {'use_sim_time': True}]),
+             output='screen', parameters=[str(here / 'ekf_wheel.yaml'), {'use_sim_time': True}]),
         spawn,
         TimerAction(period=120.0, actions=[OpaqueFunction(function=startup_timeout)]),
     ]
