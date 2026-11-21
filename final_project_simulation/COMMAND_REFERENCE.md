@@ -98,7 +98,7 @@ git log -1 --oneline
 
 Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
 
-**Final version check:** this branch requires **both IST and campus**, an indoor LiDAR comparison, outdoor GPS inspection, and a system explanation. If your local final still says to choose one world, it has not received this revision.
+**Final version check:** this branch requires **both IST and campus**, the outdoor GPS experiment/navigation, and a system explanation; blocked-route testing and LiDAR tuning are optional. If your local final still says to choose one world, it has not received this revision.
 
 > [!IMPORTANT]
 > **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
@@ -132,7 +132,7 @@ Use that Ubuntu terminal for the commands below; follow any later `cd` commands 
 
 ## Mission
 
-Use the **provided Goosebot model with its configured 2-D LiDAR** in **both IST (indoor) and campus (outdoor)**. In each world, build a short-route SLAM map, save it, restart with AMCL, navigate to **two destinations**, and return home. Complete one indoor LiDAR comparison and a guided outdoor GPS activity. Explain the measured data flow and algorithms in your own words. Physical Goosebot SLAM/Nav2 is not required; lane following remains the hardware component.
+Use the **provided Goosebot model with its configured 2-D LiDAR** in **both IST (indoor) and campus (outdoor)**. In each world, build a short-route SLAM map, save it, restart with AMCL, navigate to **two destinations**, and return home. Complete the guided outdoor GPS experiment and live GPS navigation in the current README; LiDAR tuning is optional. Explain the measured data flow and algorithms in your own words. Physical Goosebot SLAM/Nav2 is not required; lane following remains the hardware component.
 
 ## Learning objectives
 
@@ -146,11 +146,11 @@ Use the **provided Goosebot model with its configured 2-D LiDAR** in **both IST 
 
 | Part | Required work | Saved map |
 |---|---|---|
-| A — IST indoors | Steps 3–6: short mapped route, two destinations and home; Step 7 blocked route; Step 8 one LiDAR setting comparison | `results/ist_map.yaml` and its image |
+| A — IST indoors | Steps 3–6: short mapped route, two destinations and home; blocked-route testing and LiDAR tuning optional | `results/ist_map.yaml` and its image |
 | B — campus outdoors | Repeat Steps 3–6 on a short campus route, two destinations and home; Step 9 guided GPS activity | `results/campus_map.yaml` and its image |
 | C — system understanding | Complete [the system explanation](SYSTEM_EXPLANATION.md) using your actual topics, configuration and observations | One shared explanation covering both environments |
 
-Complete IST first. Map enough space for your two destinations, a revisit and an alternative route; **do not map every room or the entire campus**. For campus, a route near IST and the neighboring crossings is sufficient; distant delivery pads are optional. The blocked-route test is required in IST; repeating it on campus is optional. Custom worlds and mission-client programming are optional extensions, not substitutes for either required world.
+Complete IST first. Map enough space for your two destinations, a revisit and an alternative route; **do not map every room or the entire campus**. For campus, a route near IST and the neighboring crossings is sufficient; distant delivery pads are optional. Blocked-route testing is optional in both worlds, with no submission required. Custom worlds and mission-client programming are optional extensions, not substitutes for either required world.
 
 ## AI assistance is allowed
 
@@ -315,7 +315,7 @@ The Step 1 build helper automatically configures the copied Goosebot source with
 
 **Already completed the old setup?** Save/commit your work, pull the course updates, and run the Step 1 build helper again. It adds missing baseline components, preserves complete existing LiDAR settings, and stops on conflicting/partial edits rather than overwriting them. Then source the workspace and restart the simulator. Do not repeat the upstream clone/copy.
 
-Use the defaults first: 720 samples, ±π horizontal coverage, one scan plane, 10 Hz, 0.12–12 m range, and a level mount 0.18 m above `base_link`. Finish Steps 3–7 before changing these settings. Your work is to build a map, localize, navigate and evaluate the delivery mission; the indoor LiDAR experiment follows in Step 8, and the campus GPS activity in Step 9.
+Use the defaults first: 720 samples, ±π horizontal coverage, one scan plane, 10 Hz, 0.12–12 m range, and a level mount 0.18 m above `base_link`. Keep these defaults for the required project. LiDAR tuning is an optional extension, with no submission required; the campus GPS experiment is required.
 
 ### 3. Launch the current part’s world — Terminal 1
 
@@ -839,15 +839,19 @@ Expect **Navigation: active**, **Localization: active**, and an evolving path/co
 
 </details>
 
-### 7. Test one blocked route
+### 7. Optional — test a blocked route
+
+No submission or grading requirement.
 
 For Part A, stop all launches and restart Step 3 with `ist/ist_blocked.sdf`. A campus repetition using `campus/campus_blocked.sdf` is optional. Keep your **baseline saved map**, robot, settings, and goals. Relaunch AMCL/Nav2 and initialize the pose again; do not remap the barrier.
 
 For IST the barrier crosses the upper hallway near the central junction at (0.5, 8.2) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
 
-### 8. Part A — compare one indoor LiDAR setting
+### 8. Optional — compare one indoor LiDAR setting
 
-**Do this after IST baseline navigation**, before starting campus. You do not need to build a sensor from scratch.
+No submission or grading requirement.
+
+**If you choose this optional extension**, do it after IST navigation and restore defaults before campus. You do not need to build a sensor from scratch.
 
 1. Save/commit your working baseline. Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro` in VS Code.
 2. Find `<sensor type="gpu_lidar" name="lidar_sensor">` and inspect its settings:
@@ -863,7 +867,7 @@ For IST the barrier crosses the upper hallway near the central junction at (0.5,
 3. Change **one setting only**: for example horizontal samples **720 → 360**, or update rate **10 → 5**. Keep the original ToF and the `scan` topic/`lidar_link` frame unchanged. Do not globally replace values throughout the file.
 4. Save, stop launches with Ctrl+C, rebuild using the Step 1 helper, source your workspace and relaunch Step 3. The helper preserves your complete LiDAR's edited settings.
 5. Inspect `/scan` in RViz and compare with the baseline. Fewer samples give wider angular spacing; a lower update rate gives fewer scans per simulated second. With a slow Gazebo real-time factor, wall-clock `ros2 topic hz /scan` is lower than the sensor's configured rate.
-6. Restore the baseline setting before your final delivery demonstration. Include baseline/changed values, a screenshot for each, and a short observation in your shared system explanation. Report the effect you actually observed; do not claim better mapping or navigation without testing it.
+6. Restore the baseline setting before your final delivery demonstration. No screenshots or written comparison are required.
 
 <details>
 <summary>Optional — how the LiDAR link, joint, sensor and bridge are constructed</summary>
@@ -1034,26 +1038,23 @@ Complete [SYSTEM_EXPLANATION.md](SYSTEM_EXPLANATION.md). Include a sensor/topic 
 
 - Separate student-built IST and campus maps, each with a revisit and enough route coverage.
 - AMCL scan/map alignment, two reached destinations and return home in **each** world.
-- One IST blocked-route attempt with evidence of the actual response (failure may be analyzed).
-- One controlled indoor LiDAR comparison; baseline restored before campus.
 - GPS messages and observations from three outdoor locations; no unsupported fusion claim.
 - A correct system explanation tied to the actual configuration and evidence.
 
 ## What to submit
 
-- **Two joined-clip videos, about 2–3 minutes each:** one IST and one campus. Each shows mapping/revisit, saved-map AMCL alignment, two reached destinations and home. Include the IST blocked attempt and brief LiDAR/GPS evidence where appropriate. Do not record installation or full driving sessions.
-- **Your fork/code and evidence:** model and configuration, `ist_map.yaml`/image and `campus_map.yaml`/image, commands, chosen map-frame goals/home, LiDAR comparison screenshots, and GPS readings at three locations. Exclude `build/`, `install/`, `log/`, databases and bags.
-- **One system explanation, about 2–3 pages plus the topic table/diagram:** follow [the worksheet](SYSTEM_EXPLANATION.md), write in your own words, and list each member's contribution. Concise, accurate reasoning matters more than length.
+- **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home. Include brief sensor evidence.
+- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
+- **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
 
 | Assessment | Weight |
 |---|---:|
-| Mapping and AMCL in both worlds | 25% |
-| Navigation in both worlds and IST blocked-route evidence | 25% |
-| Indoor LiDAR comparison and outdoor GPS activity | 15% |
+| Mapping in both worlds, indoor AMCL and outdoor GPS localization | 25% |
+| Navigation in both worlds | 25% |
+| Ordinary-GPS/RTK-like localization experiment | 15% |
 | System understanding and evidence-based explanation | 30% |
 | Reproducibility and contributions | 5% |
 
-No custom planner, mission-client implementation, or GPS fusion implementation is required. Retain and analyze failed attempts; ground-truth localization cannot substitute for SLAM/AMCL evidence.
 
 <details>
 <summary>Optional display troubleshooting — wheels or map rendering</summary>
@@ -1222,4 +1223,4 @@ The warm-up arena has low boundary walls and three blocks. RViz shows **Feedback
 
 References: [Goosebot source](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation), [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox), [Nav2 configuration](https://docs.nav2.org/configuration/index.html), [Gazebo sensors](https://gazebosim.org/docs/harmonic/sensors/). All required commands are above.
 
-**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the readiness check in each project world, sensor rendering/TF, mapping, saved-map localization, two destinations/home in each world, the indoor LiDAR comparison, campus GPS messages/noise, and the IST blocked variant (campus blocked optional) on the course WSL installation before release. Starting configurations require local verification and may need tuning.
+**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the readiness check in each project world, sensor rendering/TF, mapping, saved-map localization, two destinations/home in each world, the campus GPS experiment and live GPS navigation on the course WSL installation before release. Starting configurations require local verification and may need tuning.
