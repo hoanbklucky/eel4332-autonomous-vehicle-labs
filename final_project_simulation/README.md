@@ -1,6 +1,6 @@
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
-Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion outdoors**, reaching **two destinations and Home** in each. Also complete one IST blocked-route attempt, one indoor LiDAR comparison, and the ordinary-GPS/RTK-like localization experiment below. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
+Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
 ## Before you start
 
@@ -275,15 +275,22 @@ The layout saves display settings, not localization. Set **2D Pose Estimate** ag
 
 </details>
 
-## 7. IST blocked route
+<details>
+<summary>Optional extensions — blocked route and LiDAR tuning (no submission)</summary>
+
+Skip these for the required project. There are no extra screenshots, discussion questions or grading requirements.
+
+### Optional: IST blocked route
 
 Restart with `ist/ist_blocked.sdf`, keeping your baseline **IST map**, robot settings and goals. Restart AMCL/Nav2 and set the initial pose; do not remap the barrier. Show whether the robot detours, stops, recovers or fails. Campus blocked-route testing is optional.
 
-## 8. Indoor LiDAR comparison
+### Optional: indoor LiDAR tuning
 
 After IST baseline navigation, open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Inside **lidar_sensor**, change only **horizontal/samples: 720 → 360** or **update_rate: 10 → 5**.
 
-Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans under similar conditions. Save **one baseline and one changed screenshot**, plus two sentences describing the observed effect. Restore the baseline and rebuild before campus.
+Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans under similar conditions. Restore the baseline and rebuild before campus.
+
+</details>
 
 <a id="9-part-b--inspect-gps-outdoors"></a>
 <a id="9-part-b--gps-fusion-comparison"></a>
@@ -395,19 +402,19 @@ GPS should stay near 28.1485°, −81.8495°. For degree-scale jumps, update the
 
 ### 10. Explain the system
 
-Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your LiDAR/GPS observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
+Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your GPS experiment observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
 
 ## What to submit
 
-- **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home. Include the IST blocked attempt and brief sensor evidence.
-- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, two LiDAR screenshots, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
+- **Two videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home. Include brief sensor evidence.
+- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
 - **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
 
 | Assessment | Weight |
 |---|---:|
 | Mapping in both worlds, indoor AMCL and outdoor GPS localization | 25% |
-| Navigation in both worlds and IST blocked-route evidence | 25% |
-| Indoor LiDAR comparison and outdoor GPS activity | 15% |
+| Navigation in both worlds | 25% |
+| Ordinary-GPS/RTK-like localization experiment | 15% |
 | System understanding and evidence-based explanation | 30% |
 | Reproducibility and contributions | 5% |
 
