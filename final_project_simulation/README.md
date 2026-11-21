@@ -101,9 +101,59 @@ To find the robot: collapse the building in Gazebo's Entity Tree, right-click **
 
 <a id="goosebot-readiness-check"></a>
 
-## 4. Short readiness check — before mapping
+## 4. Start SLAM — Terminal 2
 
-With Gazebo playing, check in Terminal 2:
+Keep Gazebo playing in Terminal 1. Start SLAM **before opening RViz**, then keep this launch running:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
+  slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
+```
+
+**Command breakdown:** `online_async_launch.py` starts LiDAR SLAM; `slam_params_file:=` loads course settings. SLAM supplies the `map` frame and builds `/map` from scans.
+
+## 5. Open RViz, drive and save
+
+**Terminal 3 — open RViz after SLAM starts:**
+
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+rviz2 --ros-args -p use_sim_time:=true
+```
+
+For your first run, add these yourself using **Add → By display type → rviz_default_plugins**:
+
+| Display | Setting |
+|---|---|
+| LaserScan | Topic `/scan`; Best Effort reliability |
+| RobotModel | Description Source: Topic; Description Topic: `/robot_description` |
+| TF | Enable for frame checks; hide later if cluttered |
+| Map | Topic `/map`; Reliable / Transient Local if needed |
+
+Set **Global Options → Fixed Frame: map** and keep Map enabled on `/map`. Choose **Views → TopDownOrtho**. Expect the robot, scans and an initial occupancy map; the map grows as you drive. Keep this fixed frame throughout mapping. A blank Map Topic causes “Empty topic name”; edit the Topic property, not the red Status row.
+
+**Terminal 4 — start slow keyboard driving:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
+  --ros-args -p speed:=0.1 -p turn:=0.5
+```
+
+**Command breakdown:** `speed` and `turn` set 0.1 m/s and 0.5 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building/full-campus exploration is unnecessary.
+
+<details>
+<summary>Troubleshooting only — missing map, scans or transforms</summary>
+
+If RViz reports **Frame [map] does not exist**, keep Fixed Frame `map` and check Terminal 2 for SLAM startup errors. RViz cannot create this frame. Missing transforms can also cause scan “queue is full” messages.
+
+Run in a separate sourced terminal only if the robot/scans are missing:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -121,51 +171,7 @@ ros2 run tf2_ros tf2_echo odom base_footprint
 
 **Command breakdown:** `echo --once --field` prints one selected message field; `hz` measures wall-clock arrival rate; `tf2_echo A B` reports frame B relative to A. Numerical TF should appear after discovery; Ctrl+C each continuous check. Slow simulation produces less than the configured 10 Hz wall-clock scan rate.
 
-Open RViz in Terminal 3:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-rviz2 --ros-args -p use_sim_time:=true
-```
-
-For your first run, add these yourself using **Add → By display type → rviz_default_plugins**:
-
-| Display | Setting |
-|---|---|
-| LaserScan | Topic `/scan`; Best Effort reliability |
-| RobotModel | Description Source: Topic; Description Topic: `/robot_description` |
-| TF | Enable for frame checks; hide later if cluttered |
-| Map — after SLAM starts | Topic `/map`; Reliable / Transient Local if needed |
-
-Before SLAM, use **Fixed Frame: odom** and disable Map. Choose **Views → TopDownOrtho** for an overhead view. Expect the robot and scan points without persistent TF errors.
-
-Drive briefly in Terminal 4:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -p speed:=0.1 -p turn:=0.5
-```
-
-**Command breakdown:** `speed` and `turn` set 0.1 m/s and 0.5 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Speed-setting keys alone do not move the robot. Stop with k, then Ctrl+C. Keep Gazebo/RViz open; no separate readiness submission is required.
-
-## 5. Map and save
-
-**Terminal 2 — start SLAM:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
-  slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
-```
-
-**Command breakdown:** `online_async_launch.py` starts LiDAR SLAM; `slam_params_file:=` loads course settings. In RViz change **Fixed Frame to map**, enable Map and set its **Topic to /map**. A blank topic causes “Empty topic name”; a red Status row is not the editable Topic field.
-
-Restart teleop in Terminal 4. Explore a connected route to your two destinations, revisit an earlier area, and cover an alternative IST route. Full-building/full-campus exploration is unnecessary.
+</details>
 
 <details>
 <summary>Expected mapping views</summary>
@@ -275,7 +281,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/gps_compare.launch.py" \
   output:="$PWD/final_project_simulation/results/gps_rtk_comparison"
 ```
 
-Keep still until **READY**. Use Terminal 4's Step 4 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2**. Generate the report:
+Keep still until **READY**. Use Terminal 4's Step 5 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2**. Generate the report:
 
 ```bash
 python3 final_project_simulation/goosebot/gps_compare.py report \
