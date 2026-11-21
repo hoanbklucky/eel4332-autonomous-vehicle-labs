@@ -622,14 +622,16 @@ Use **2D Pose Estimate** at the starting position, dragging in its heading direc
 
 Send a nearby **Nav2 Goal** first, then visit three chosen delivery locations and return home. Wait 3 seconds at each delivery. Clicking goals in RViz is sufficient; autonomous mission sequencing using the existing client scaffold is optional. Keep keyboard teleop stopped during navigation.
 
-Select destinations and home on **your SLAM map**. The `mission.json` coordinates describe Gazebo/the geometric reference map, and may differ from your SLAM frame. Do not blindly copy them. IST example destinations are in the hallway near 1044, 1003, and 1066.
+**Choose destinations in RViz:** click **Nav2 Goal**, then click and drag in a free area of your saved map. The click selects the destination; dragging sets the final heading. Select Home the same way; no coordinates from `mission.json` are needed. IST example destinations are in the hallway near 1044, 1003, and 1066.
+
+**Check completion:** Navigation/Localization **active** means the system is running. **Feedback: active** means a goal is in progress. Count a goal as reached only after **succeeded** feedback and confirming the robot arrived and stopped.
 
 <details>
-<summary>Example — saved-map localization and navigation in progress</summary>
+<summary>Expected view — IST navigation in progress</summary>
 
-![IST saved map with AMCL localization and Nav2 active](images/ist_navigation.png)
+![RViz saved-map navigation beside Goosebot in Gazebo](images/ist_navigation_expected.png)
 
-Expect **Navigation: active**, **Localization: active**, and an evolving path/costmap around the mapped walls. This screenshot shows **Feedback: active**—navigation is in progress, not yet proof that the goal was reached. For completion, wait for reached/succeeded feedback and verify Goosebot stopped at the destination. The current partial map is an example, not a substitute for exploring your mission routes.
+**Left: RViz** shows the saved map, laser scans and colored obstacle-clearance margins. **Right: Gazebo** shows the simulated robot in IST. In this example, Navigation and Localization are active, and **Feedback: active** with distance remaining means the robot is still travelling. Wait for **succeeded** and verify it stopped at the chosen destination before counting the goal as reached. Your map and camera view may differ.
 
 </details>
 
