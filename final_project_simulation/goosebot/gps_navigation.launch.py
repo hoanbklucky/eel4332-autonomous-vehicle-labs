@@ -42,7 +42,7 @@ def generate_launch_description():
         nav2 = IncludeLaunchDescription(PythonLaunchDescriptionSource(str(
                 Path(get_package_share_directory('nav2_bringup')) / 'launch/navigation_launch.py')),
             launch_arguments={'use_sim_time': 'true', 'autostart': 'true',
-                'use_composition': 'false', 'params_file': str(params)}.items())
+                'use_composition': 'False', 'params_file': str(params)}.items())
         state = {'text': '', 'started': False}
 
         def output(event):
