@@ -343,7 +343,39 @@ python3 final_project_simulation/goosebot/gps_compare.py report \
 
 **Command breakdown:** `gps_profile:=comparison` supplies ordinary `/gps/fix` and RTK-like `/gps/rtk_fix` simultaneously. The recorder saves raw sensor data and separate evaluation-only truth. `report` replays supplied position filters and writes **`comparison.png`** and **`metrics.json`**. Use a new output directory for another run; files are not overwritten.
 
-The **left column** shows unmodified predictions; the **right** applies an artificial +15% prediction scale error equally to A/B/C to illustrate correction under a known error. Do not report that column as unmodified robot performance. Ground truth scores horizontal position error only; it never enters a filter. Both filters use the known commanded Home pose/heading as their starting reference.
+**Open `comparison.png` to see the plots.** Its **left column** shows the unmodified recorded experiment; its **right column** adds an artificial +15% prediction scale error equally to A/B/C. The top row shows routes; the bottom row shows position error over time (lower is better). Do not describe the controlled column as unmodified robot performance.
+
+**`metrics.json` contains named sections, not visual columns:**
+
+| In `comparison.png` | Section inside `metrics.json` |
+|---|---|
+| Left column — unmodified | `metrics → unmodified` |
+| Right column — artificial +15% scale error | `metrics → controlled_scale_error` |
+
+For the required results table, expand **`metrics → unmodified`** in VS Code. Use **`baseline` for A**, **`fused` for B**, and **`rtk` for C**. Copy `rmse_m` into the RMSE column and `final_error_m` into the final-error column; both are in meters. The terminal prints the same values as **RMSE / final error**. Use your own run's values, not the example below.
+
+Ground truth scores horizontal position error only; it never enters a filter. Both GPS position filters use the known commanded Home pose/heading as their starting reference.
+
+<details>
+<summary>Expected output — recording, report, plot and JSON examples</summary>
+
+![GPS comparison recorder receiving all streams and reporting READY](images/gps_comparison_ready.png)
+
+Wait for **READY** before driving. The parameter-dump fallback message is informational when individual checks succeed.
+
+![GPS recording saved cleanly and report printing the two cases](images/gps_comparison_report.png)
+
+After Ctrl+C, expect **Saved sensors.csv, evaluation-only truth.csv, metadata.json** and a clean exit. Run the report next; it prints separate `unmodified` and `controlled_scale_error` results.
+
+![Example ordinary-GPS and RTK-like comparison plot from one campus drive](images/gps_comparison_example.png)
+
+This instructor pilot shows ordinary GPS reducing overall RMSE while giving a worse final error than odometry alone; the idealized RTK-like estimate is more accurate in this run. Improvement is not guaranteed. The title's “BOTH A/B” wording is from this example's plot label; the artificial prediction scale is applied equally to A/B/C.
+
+![VS Code displaying metrics.json and the unmodified baseline results](images/gps_metrics_example.png)
+
+The JSON screenshot shows `metrics → unmodified → baseline`, including `rmse_m` and `final_error_m`. Scroll down for `fused`, `rtk`, and the separate controlled case. These screenshots use the instructor checkout and a run-specific folder; use your own checkout/output path.
+
+</details>
 
 **Submit:** the plot and this table from the unmodified case, plus two sentences explaining the measured differences. Briefly state whether the controlled case changes your conclusion.
 
