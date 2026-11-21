@@ -75,8 +75,19 @@ def read_baseline_parameters():
         for name in sorted(names):
             result = subprocess.run(
                 ['ros2', 'param', 'get', '/ekf_filter_node', name],
-                capture_output=True, text=True, timeout=15, check=True)
-            prefix, separator, value = result.stdout.strip().partition(':')
+                capture_output=True, text=True, timeout=15, check=False)
+            output = result.stdout.strip()
+            error = result.stderr.strip()
+            # robot_localization declares optional inputs (imu1, odom1, ...)
+            # with no value. They are listed, but are not configured sensors.
+            not_set = any(message.rstrip('.') == 'Parameter not set'
+                          for message in (output, error))
+            if name not in required and not_set and result.returncode in (0, 1):
+                params[name] = None
+                continue
+            if result.returncode:
+                raise ValueError(f'Could not read {name}: {error or output}')
+            prefix, separator, value = output.partition(':')
             if not separator or prefix not in (
                     'String value is', 'Boolean values are'):
                 raise ValueError(f'Could not read {name}: {result.stdout.strip()}')
