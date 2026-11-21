@@ -532,13 +532,13 @@ source ~/goosebot_ws/install/setup.bash
 rviz2 --ros-args -p use_sim_time:=true
 ```
 
-2. In **Terminal 4**, start slow keyboard driving:
+2. In **Terminal 4**, start keyboard driving:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -p speed:=0.1 -p turn:=0.5
+  --ros-args -p speed:=0.81 -p turn:=1.73
 ```
 
 **Command breakdown**
@@ -546,7 +546,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard \
 | Command / part | What it does |
 |---|---|
 | `teleop_twist_keyboard teleop_twist_keyboard` | Runs keyboard control; focus this terminal before pressing movement keys. |
-| `speed:=0.1` / `turn:=0.5` | Sets the starting linear speed to 0.1 m/s and turn speed to 0.5 rad/s. |
+| `speed:=0.81` / `turn:=1.73` | Sets the starting linear speed to 0.81 m/s and turn speed to 1.73 rad/s. |
 | `i`, `j` / `l`, `k` | Move forward, turn left/right, and stop, respectively. Changing a speed setting alone does not move the robot. |
 
 
@@ -931,7 +931,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf"
 ```
 
-Keep Terminal 1 running. Use Step 4's slow keyboard-driving command in **Terminal 4** when moving between measurement locations; press `k` to stop before sampling. Keep SLAM/Nav2 stopped during these measurements. In **Terminal 2**, source the same workspace:
+Keep Terminal 1 running. Use the keyboard-driving command in **Terminal 4** when moving between measurement locations; press `k` to stop before sampling. Keep SLAM/Nav2 stopped during these measurements. In **Terminal 2**, source the same workspace:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
