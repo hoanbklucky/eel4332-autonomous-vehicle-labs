@@ -464,6 +464,12 @@ Use the [optional campus-map navigation guide](goosebot/GPS_MAP_EXTENSION.md) fo
 
 The extension derives a road/path-only mask from the layout and applies it in both costmaps, forbidding grass shortcuts. The Residence delivery pad is on a connected road at (1.3612, 13.7061) m. This is an ungraded supplied-map extension, not student SLAM evidence; an instructor Gazebo pilot is still required.
 
+#### D. Optional — ordinary GPS + encoders + IMU + LiDAR
+
+Try the [budget localization experiment](goosebot/BUDGET_LOCALIZATION.md) to measure a lower-cost sensor combination on one recorded manual drive. It compares encoder/gyro alone, + ordinary GPS, + ordinary GPS/LiDAR map matching, and a LiDAR-without-GPS control. The guide includes full terminal commands and an optional controlled GPS-withholding replay.
+
+This uses measured simulated wheel-joint velocities, **not command-derived odometry**. It reports offline horizontal RMSE/final/maximum error; no live navigation or hardware-accuracy claim is made. It is optional, ungraded and requires a Gazebo pilot.
+
 ### 10. Explain the system
 
 Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your GPS experiment observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
