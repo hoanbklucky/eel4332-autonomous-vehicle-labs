@@ -15,8 +15,38 @@ import yaml
 from gps_fusion_core import read_world
 
 
+def crossing_candidates(layout):
+    """Short transverse intersections of existing pedestrian and motor paths.
+
+    This is a supplied simulation access rule, not detection of real crosswalks.
+    Parallel/oblique shared road segments do not become pedestrian routes.
+    """
+    pedestrians=[]; motors=[]
+    for feature in layout['paths']:
+        access=feature.get('robot_access', 'pedestrian' if feature['kind']=='walk' else 'motor_road')
+        target=pedestrians if access=='pedestrian' else motors
+        for start,end in zip(feature['points'],feature['points'][1:]):
+            a,b=np.asarray(start,dtype=float),np.asarray(end,dtype=float)
+            length=float(np.linalg.norm(b-a))
+            if length>=.03:target.append((feature,a,b-a,length))
+    def cross(a,b):return float(a[0]*b[1]-a[1]*b[0])
+    for pedestrian,a,v,length in pedestrians:
+        for motor,c,w,motor_length in motors:
+            det=cross(v,w)
+            sine=abs(det)/(length*motor_length)
+            if sine<math.sin(math.pi/4)-1e-9:continue
+            t=cross(c-a,w)/det;u=cross(c-a,v)/det
+            if not (-1e-9<=t<=1+1e-9 and -1e-9<=u<=1+1e-9):continue
+            cosine=abs(float(np.dot(v,w)))/(length*motor_length)
+            half_length=(motor['width']/2+pedestrian['width']/2*cosine)/sine+.5
+            if half_length>10:continue  # do not open a long asphalt corridor
+            yield dict(center=a+t*v, direction=v/length, half_length=half_length,
+                       width=pedestrian['width'], pedestrian=pedestrian.get('id'),
+                       motor=motor.get('id'))
+
+
 def road_mask(layout, obstacle_pixels, resolution, origin):
-    """Permit non-asphalt paved routes/sidewalks; subtract identified asphalt lanes.
+    """Permit pedestrian pavement and short mapped crossings across asphalt lanes.
 
     No added connectors, widened corridors, parking lots or grass shortcuts.
     Flat round joins match the world pavement at bends.
@@ -68,9 +98,32 @@ def road_mask(layout, obstacle_pixels, resolution, origin):
             x=origin[0]+(np.arange(i0,i1)+.5)*resolution-cx
             y=origin[1]+(height-np.arange(j0,j1)-.5)*resolution-cy
             target[j0:j1,i0:i1] |= x[None,:]**2+y[:,None]**2<=half_width**2
-    # A pedestrian centerline crossing a carriageway does not grant asphalt
-    # access. Motor-road pavement wins at overlaps; no median shortcut opens.
-    allowed &= (obstacle_pixels == 254) & ~motor_roads
+    # Restore only short transverse crossings supported by mapped pedestrian
+    # pavement on BOTH sides. Intersect with allowed pavement below; this
+    # cannot invent grass links, remove buildings, or open asphalt lengthwise.
+    crossings=np.zeros_like(allowed)
+    def on_pavement(xy):
+        i=int(math.floor((xy[0]-origin[0])/resolution))
+        j=height-1-int(math.floor((xy[1]-origin[1])/resolution))
+        return (0<=i<width and 0<=j<height and allowed[j,i]
+                and obstacle_pixels[j,i]==254)
+    for crossing in crossing_candidates(layout):
+        center=crossing['center'];unit=crossing['direction']
+        span=crossing['half_length'];half_width=crossing['width']/2
+        if not all(on_pavement(center+sign*span*unit) for sign in (-1,1)):continue
+        a,b=center-span*unit,center+span*unit
+        lo=np.minimum(a,b)-half_width;hi=np.maximum(a,b)+half_width
+        i0=max(0,int(math.floor((lo[0]-origin[0])/resolution)))
+        i1=min(width,int(math.ceil((hi[0]-origin[0])/resolution)))
+        j0=max(0,int(math.floor(height-(hi[1]-origin[1])/resolution)))
+        j1=min(height,int(math.ceil(height-(lo[1]-origin[1])/resolution)))
+        if i1<=i0 or j1<=j0:continue
+        x=origin[0]+(np.arange(i0,i1)+.5)*resolution-center[0]
+        y=origin[1]+(height-np.arange(j0,j1)-.5)*resolution-center[1]
+        along=x[None,:]*unit[0]+y[:,None]*unit[1]
+        across=-x[None,:]*unit[1]+y[:,None]*unit[0]
+        crossings[j0:j1,i0:i1] |= (np.abs(along)<=span)&(np.abs(across)<=half_width)
+    allowed &= (obstacle_pixels == 254) & (~motor_roads | crossings)
     safe = np.asarray(Image.fromarray(allowed.astype('uint8') * 255).filter(ImageFilter.MinFilter(3))) == 255
     return np.where(safe, 254, 0).astype('uint8')
 

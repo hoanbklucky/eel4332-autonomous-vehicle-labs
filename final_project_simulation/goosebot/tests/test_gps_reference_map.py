@@ -113,7 +113,7 @@ class ReferenceMapTests(unittest.TestCase):
         self.assertEqual(mask[50,50],254)
         self.assertEqual(mask[5,50],0)
 
-    def test_asphalt_blocks_crossing_paths_but_separate_sidewalk_remains(self):
+    def test_asphalt_allows_transverse_crossing_but_blocks_travel_along_lane(self):
         obstacles=np.full((100,100),254,dtype='uint8')
         layout={'paths':[
             {'kind':'road','robot_access':'motor_road','width':2.,'points':[[5,0],[5,10]]},
@@ -121,8 +121,40 @@ class ReferenceMapTests(unittest.TestCase):
             {'kind':'walk','robot_access':'pedestrian','width':1.,'points':[[0,5],[10,5]]}]}
         mask=road_mask(layout,obstacles,.1,[0,0,0])
         self.assertEqual(mask[50,20],254)  # separate sidewalk
-        self.assertEqual(mask[50,50],0)  # overlap with asphalt stays forbidden
+        self.assertEqual(mask[50,50],254)  # mapped sidewalk crosses asphalt
         self.assertEqual(mask[20,50],0)  # bare carriageway is forbidden
+
+    def test_parallel_overlap_and_dead_end_do_not_authorize_asphalt(self):
+        pixels=np.full((160,160),254,dtype='uint8')
+        motor={'kind':'road','robot_access':'motor_road','width':3.,'points':[[8,0],[8,16]]}
+        for walk in (
+            {'kind':'walk','width':1.,'points':[[8,2],[8,14]]},
+            {'kind':'walk','width':1.,'points':[[2,8],[8,8]]}):
+            mask=road_mask({'paths':[motor,walk]},pixels,.1,[0,0,0])
+            self.assertEqual(mask[79,80],0)
+
+    def test_crossing_does_not_remove_physical_obstacles(self):
+        pixels=np.full((160,160),254,dtype='uint8');pixels[77:83,77:83]=0
+        paths=[{'kind':'road','robot_access':'motor_road','width':3.,'points':[[8,0],[8,16]]},
+               {'kind':'walk','width':3.,'points':[[0,8],[16,8]]}]
+        mask=road_mask({'paths':paths},pixels,.1,[0,0,0])
+        self.assertEqual(mask[79,80],0)
+        self.assertFalse(np.any((pixels==0)&(mask==254)))
+
+    def test_north_sidewalk_crosses_asphalt_driveway_with_clearance(self):
+        from scipy.ndimage import distance_transform_edt
+        layout=json.loads((self.campus/'layout.json').read_text())
+        pixels=np.asarray(Image.open(self.campus/'reference.png'))
+        mask=road_mask(layout,pixels,.25,[-500.,-733.5,0.])
+        clearance=distance_transform_edt(mask==254,sampling=.25)
+        feature=next(f for f in layout['paths'] if f['id']=='path_507676845_0')
+        a,b=np.array(feature['points'][0]),np.array(feature['points'][-1])
+        for t in np.linspace(.05,.95,40):
+            x,y=np.floor((a+t*(b-a)-[-500.,-733.5])/.25).astype(int)
+            self.assertGreaterEqual(clearance[mask.shape[0]-1-y,x],.5)
+        # Driveway continues north/south, but permission does not follow it.
+        x,y=np.floor((np.array([-57.,365.])-[-500.,-733.5])/.25).astype(int)
+        self.assertEqual(mask[mask.shape[0]-1-y,x],0)
 
     def test_road_map_has_footprint_clearance_for_required_route(self):
         from scipy.ndimage import label, distance_transform_edt
