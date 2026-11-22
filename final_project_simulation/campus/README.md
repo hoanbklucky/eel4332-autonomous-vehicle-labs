@@ -6,6 +6,8 @@ Horizontal coordinates now use **1:1 meters**, restored from the previous 0.06 l
 
 **Path-width assumptions:** roads 6 m, service roads 3.5 m, paved walks 2 m, crossings 3 m. The old widths were teaching adjustments and could not simply be treated as surveyed measurements. These assumptions are recorded per feature in `layout.json` and used consistently by the world and road mask.
 
+**Width provenance:** paths are modeled from centerlines, not measured pavement boundaries. The crossing containing Home (`path_467811278_0`) is assigned **3 m** width; that value may underestimate the real crossing. Restoring geographic scale did not recover its true width. Replace these assumptions with measured widths when available, then regenerate the world and planning mask together.
+
 ## Required campus navigation
 
 Follow [final-project Step 9B](../README.md#gps-aided-outdoor-navigation). It includes every terminal command. Use the supplied `reference.yaml`, RTK-like GPS, the road-only global/local costmaps, live LiDAR, and goals **A → B → Home**. A/B are about 20 m from Home along mapped routes, avoiding a campus-wide drive. Short-range map-free navigation is retired. GPS provides pose; the prior map provides route knowledge. No AMCL, SLAM or 2D Pose Estimate runs during this activity.

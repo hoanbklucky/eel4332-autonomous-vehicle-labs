@@ -459,7 +459,7 @@ python3 final_project_simulation/goosebot/gps_goal.py --waypoint B && \
 python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
-Each command waits for its goal to finish; `&&` continues only after success. Expect **SUCCEEDED** after each. `--waypoint` reads GPS-aligned meter coordinates from `campus/mission.json`; no coordinates need to be copied. A and B are about 20 m along mapped routes from Home, on opposite sides, keeping the exercise local while testing full-map planning beyond current LiDAR range. Autonomous speed is capped at 0.30 m/s; keyboard speed is separate. You may also use **Nav2 Goal** on permitted roads/paths.
+Each command waits for its goal to finish; `&&` continues only after success. Expect **SUCCEEDED** after each. `--waypoint` reads GPS-aligned meter coordinates from `campus/mission.json`; no coordinates need to be copied. A and B are about 20 m along mapped routes from Home, on opposite sides, keeping the exercise local while testing full-map planning beyond current LiDAR range. Outdoor forward speed is capped at 1.0 m/s; Nav2 may slow for turns or obstacles; keyboard speed is separate. You may also use **Nav2 Goal** on permitted roads/paths.
 
 **Submit:** a campus video showing GPS readiness, the global path staying on roads/paths, and A, B and Home reached. Explain the distinct GPS, prior-map and LiDAR roles. Briefly demonstrate an off-road goal is rejected; cancel it before continuing. Do not disable the road mask or shrink the footprint. Cancel navigation if localization or motion behaves unexpectedly.
 

@@ -130,6 +130,10 @@ class ReferenceMapTests(unittest.TestCase):
             self.assertEqual(cost['plugins'], ['static_layer', 'obstacle_layer', 'inflation_layer'])
             self.assertTrue(cost['static_layer']['map_subscribe_transient_local'])
         self.assertIn('ObstacleFootprint', data['controller_server']['ros__parameters']['FollowPath']['critics'])
+        follow = data['controller_server']['ros__parameters']['FollowPath']
+        self.assertEqual(follow['max_vel_x'], 1.0)
+        self.assertEqual(follow['max_speed_xy'], 1.0)
+        self.assertEqual(data['velocity_smoother']['ros__parameters']['max_velocity'], [1.0, 0., .8])
         self.assertEqual(data['collision_monitor']['ros__parameters']['cmd_vel_out_topic'], '/gps_nav/cmd_vel_request')
         planner = data['planner_server']['ros__parameters']['GridBased']
         self.assertFalse(planner['allow_unknown'])

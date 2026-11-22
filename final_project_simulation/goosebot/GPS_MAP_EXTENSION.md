@@ -68,7 +68,7 @@ Expect white permitted roads/paths and black forbidden grass/obstacles, plus the
 3. Inspect the global path staying on roads/paths beyond the current scan. An off-road goal must be rejected. Live LiDAR continues to detect new obstacles.
 4. Save the required campus video. Existing screenshots show the older reduced campus and are not evidence of full-scale validation.
 
-Navigation uses a 0.30 m/s autonomous speed limit; the 0.81 m/s teleop setting is separate. To return to known Home, run in another sourced terminal:
+Outdoor navigation uses a 1.0 m/s forward-speed limit; Nav2 may slow for turns or obstacles; the 0.81 m/s teleop setting is separate. To return to known Home, run in another sourced terminal:
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs

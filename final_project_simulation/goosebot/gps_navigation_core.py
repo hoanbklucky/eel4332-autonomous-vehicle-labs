@@ -130,9 +130,9 @@ def prepare_parameters(source, destination, profile, reference_map=None, world=N
     controller = params['controller_server']['ros__parameters']
     tolerance = 0.2 if profile == 'rtk' else 1.5
     controller['goal_checker']['xy_goal_tolerance'] = tolerance
-    controller['FollowPath'].update(max_vel_x=0.3, max_speed_xy=0.3,
+    controller['FollowPath'].update(max_vel_x=1.0, max_speed_xy=1.0,
                                     max_vel_theta=0.8, xy_goal_tolerance=tolerance)
-    params['velocity_smoother']['ros__parameters']['max_velocity'] = [0.3, 0., 0.8]
+    params['velocity_smoother']['ros__parameters']['max_velocity'] = [1.0, 0., 0.8]
     params['velocity_smoother']['ros__parameters']['min_velocity'] = [-0.3, 0., -0.8]
     # Official navigation_launch.py uses collision_monitor as the last stage.
     # Its output is gated by the GPS localizer before reaching the robot bridge.
