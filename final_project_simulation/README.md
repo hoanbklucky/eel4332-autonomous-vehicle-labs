@@ -497,3 +497,19 @@ The practice-arena/perfect-map warm-up has **no required submission**. See the [
 
 **INSTRUCTOR VALIDATION REQUIRED:** profile generation, fusion math, TF composition, gating, scoring, plotting and Nav2 parameters have offline tests and synthetic-data checks. The dual-sensor bridge and live GPS/Nav2 launch still require a course-machine pilot; no end-to-end Gazebo navigation result is claimed.
 
+
+
+### Campus map startup check
+
+After `GPS_LOCALIZATION_READY`, wait for `CAMPUS_MAP_READY` and then Nav2 activation. The supplied helper configures and activates `/map_server`, then verifies a reliable, transient-local `/map` against the selected campus map before starting Nav2. Large maps may take time to load. A startup failure stops this launch; inspect the first map-server/helper error rather than sending a navigation goal. Stop older GPS navigation launches before restarting.
+
+If RViz says **No map received**, check `ros2 lifecycle get /map_server`: it must be `active`. Having a publisher alone does not confirm map publication. Update this branch and restart the GPS navigation launch to use the startup check. If the robot moved, restart the world at fresh Home before restarting GPS localization.
+
+If the map is publishing but RViz reports the GLSL sampler error, close RViz and try software rendering for RViz only:
+
+```bash
+LIBGL_ALWAYS_SOFTWARE=true rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" \
+  --ros-args -p use_sim_time:=true
+```
+
+This is a rendering diagnostic; it does not activate an inactive map server. Live WSL/Jazzy simulation validation is still required.

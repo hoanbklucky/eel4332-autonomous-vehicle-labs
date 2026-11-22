@@ -76,3 +76,19 @@ python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
 **Pilot checks:** `/map_server` active; no AMCL/SLAM; GPS is the sole global TF publisher; scan/map alignment at Home and a second location; a longer path remaining on pedestrian paths/sidewalks around a known obstacle; a grass/asphalt goal rejected; a new obstacle visible in live costmaps; reached/succeeded at destination and Home. Save logs for failures. The prior map is obstacle knowledge, not perfect robot localization. Include this activity in the existing campus navigation video and navigation rubric; no extra rubric category is added.
+
+
+### Campus map startup check
+
+After `GPS_LOCALIZATION_READY`, wait for `CAMPUS_MAP_READY` and then Nav2 activation. The supplied helper configures and activates `/map_server`, then verifies a reliable, transient-local `/map` against the selected campus map before starting Nav2. Large maps may take time to load. A startup failure stops this launch; inspect the first map-server/helper error rather than sending a navigation goal. Stop older GPS navigation launches before restarting.
+
+If RViz says **No map received**, check `ros2 lifecycle get /map_server`: it must be `active`. Having a publisher alone does not confirm map publication. Update this branch and restart the GPS navigation launch to use the startup check. If the robot moved, restart the world at fresh Home before restarting GPS localization.
+
+If the map is publishing but RViz reports the GLSL sampler error, close RViz and try software rendering for RViz only:
+
+```bash
+LIBGL_ALWAYS_SOFTWARE=true rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" \
+  --ros-args -p use_sim_time:=true
+```
+
+This is a rendering diagnostic; it does not activate an inactive map server. Live WSL/Jazzy simulation validation is still required.

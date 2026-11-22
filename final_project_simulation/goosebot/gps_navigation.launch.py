@@ -9,10 +9,10 @@ from gps_navigation_core import prepare_parameters
 _TEMP_DIRS = []  # retain files until the launch process exits
 
 
-def ready_actions(buffer, data):
+def ready_actions(buffer, data, sentinel='GPS_LOCALIZATION_READY:'):
     """Pure stream parser: tolerate a readiness line split across output chunks."""
     text = (buffer + data.decode(errors='replace'))[-8192:]
-    return text, 'GPS_LOCALIZATION_READY:' in text
+    return text, sentinel in text
 
 
 def generate_launch_description():
@@ -39,18 +39,14 @@ def generate_launch_description():
         reference_map = LaunchConfiguration('reference_map').perform(context).strip()
         if not reference_map:
             raise ValueError('Campus navigation requires its supplied reference_map; short-range mode is retired')
-        prepare_parameters(here / 'nav2_goosebot.yaml', params, profile,
-                           reference_map=reference_map or None, world=world)
-        map_actions = []
-        if reference_map:
-            map_actions = [
-                Node(package='nav2_map_server', executable='map_server', name='map_server',
-                     output='screen', parameters=[str(params)]),
-                Node(package='nav2_lifecycle_manager', executable='lifecycle_manager',
-                     name='lifecycle_manager_gps_map', output='screen', parameters=[{
-                         'use_sim_time': True, 'autostart': True,
-                         'node_names': ['map_server']}]),
-            ]
+        prepared = prepare_parameters(here / 'nav2_goosebot.yaml', params, profile,
+                           reference_map=reference_map, world=world)
+        map_server = Node(package='nav2_map_server', executable='map_server', name='map_server',
+            output='screen', parameters=[str(params), {
+                'autostart_node': False, 'bond_heartbeat_period': 0.0}])
+        map_startup = ExecuteProcess(cmd=[sys.executable, '-u', str(here / 'map_startup.py'),
+            '--map-yaml', prepared['map_server']['ros__parameters']['yaml_filename']],
+            output='screen', sigterm_timeout='10', sigkill_timeout='5')
         localizer = ExecuteProcess(cmd=[sys.executable, '-u', str(here / 'gps_localizer.py'),
                 '--world', str(world), '--profile', profile], output='screen',
                 sigterm_timeout='10', sigkill_timeout='5')
@@ -58,25 +54,32 @@ def generate_launch_description():
                 Path(get_package_share_directory('nav2_bringup')) / 'launch/navigation_launch.py')),
             launch_arguments={'use_sim_time': 'true', 'autostart': 'true',
                 'use_composition': 'False', 'params_file': str(params)}.items())
-        state = {'text': '', 'started': False}
+        state = {'text': '', 'started': False, 'map_text': '', 'nav_started': False}
 
         def output(event):
             state['text'], ready = ready_actions(state['text'], event.text)
             if ready and not state['started']:
                 state['started'] = True
-                mode = ('pedestrian-only campus reference map + live LiDAR' if reference_map
-                        else 'rolling live-LiDAR costmaps; no saved map')
-                return [LogInfo(msg=f'GPS pose ready; starting Nav2 ({mode}; no AMCL).'),
-                        *map_actions, nav2]
+                return [LogInfo(msg='GPS pose ready; activating and verifying campus map before Nav2.'),
+                        map_server, map_startup]
             return []
 
-        return [
+        def map_output(event):
+            state['map_text'], ready = ready_actions(state['map_text'], event.text, 'CAMPUS_MAP_READY:')
+            if ready and not state['nav_started']:
+                state['nav_started'] = True
+                return [LogInfo(msg='Campus map active and received; starting Nav2 (no AMCL).'), nav2]
+            return []
+
+        actions = [
             RegisterEventHandler(OnProcessIO(target_action=localizer, on_stdout=output)),
-            RegisterEventHandler(OnProcessExit(target_action=localizer,
-                on_exit=lambda _event, _context: [EmitEvent(event=Shutdown(
-                    reason='GPS localizer stopped; stopping its navigation stack.'))])),
-            localizer,
+            RegisterEventHandler(OnProcessIO(target_action=map_startup, on_stdout=map_output)),
         ]
+        for process in (localizer, map_server, map_startup):
+            actions.append(RegisterEventHandler(OnProcessExit(target_action=process,
+                on_exit=lambda _event, _context: [EmitEvent(event=Shutdown(
+                    reason='GPS localization or campus map stopped; stopping navigation.'))])))
+        return [*actions, localizer]
 
     return LaunchDescription([
         DeclareLaunchArgument('profile', default_value='rtk', choices=['ordinary', 'rtk']),

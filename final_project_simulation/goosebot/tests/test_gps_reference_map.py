@@ -213,10 +213,15 @@ class ReferenceMapTests(unittest.TestCase):
             callback = waiting[0].args[0].kwargs['on_stdout']
             self.assertEqual(callback(types.SimpleNamespace(text=b'GPS_LOCALIZ')), [])
             started = callback(types.SimpleNamespace(text=b'ATION_READY: ready\n'))
-            self.assertEqual(len(started), 4)  # log, map server, map lifecycle, Nav2
+            self.assertEqual(len(started), 3)  # log, map server, readiness helper
             self.assertEqual(started[1].kwargs['executable'], 'map_server')
-            self.assertEqual(started[2].kwargs['parameters'][0]['node_names'], ['map_server'])
-            arguments = dict(started[3].kwargs['launch_arguments'])
+            self.assertEqual(started[1].kwargs['parameters'][1]['bond_heartbeat_period'], 0.0)
+            map_callback = waiting[1].args[0].kwargs['on_stdout']
+            self.assertEqual(map_callback(types.SimpleNamespace(text=b'CAMPUS_MAP_')), [])
+            navigation = map_callback(types.SimpleNamespace(text=b'READY: validated\n'))
+            self.assertEqual(len(navigation), 2)
+            self.assertEqual(map_callback(types.SimpleNamespace(text=b'CAMPUS_MAP_READY: duplicate')), [])
+            arguments = dict(navigation[1].kwargs['launch_arguments'])
             self.assertTrue(eval('not ' + arguments['use_composition'], {'__builtins__': {}}))
             self.assertEqual(callback(types.SimpleNamespace(text=b'GPS_LOCALIZATION_READY: duplicate\n')), [])
             with self.assertRaisesRegex(ValueError,'short-range mode is retired'):
