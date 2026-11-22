@@ -52,6 +52,17 @@ Offline checks cover explicit-world spawn arguments, server PID detection, creat
 The campus OBJ generator now supplies explicit unit normals per triangle corner. All 37 regenerated meshes retain their original triangle coordinates/winding; vertex and normal counts agree. Generated baseline/blocked SDF, reference image, and mission files are unchanged. The baseline configuration helper replaces the odometry script's unconditional rclpy.shutdown() with idempotent rclpy.try_shutdown(); syntax and repeat-setup checks passed. Pilot campus rendering, collisions, scans, spawning, and Nav2 on WSL; no Gazebo runtime was available for this repair. An EKF context error during coordinated shutdown may be an independent upstream shutdown race; inspect the first error before the shutdown tail.
 
 
+## Indoor/outdoor branch validation — main
+
+Required scope now covers IST and campus: short maps, two destinations/home each, IST blocked-route test, indoor single-setting LiDAR comparison, campus GPS inspection at three stationary locations, and 30% system understanding. Campus blocked-route repetition and GPS fusion remain optional. Preserve independent ist_map/campus_map files.
+
+The pinned robot already declares gps_sensor (5 Hz, gps_link, gps/fix), horizontal position Gaussian stddev 1.5 m and vertical 3 m; its bridge maps gz.msgs.NavSat to sensor_msgs/msg/NavSatFix. Campus worlds/generator now add exactly one gz::sim::systems::NavSat world plugin and WGS84 ENU datum (latitude 28.1485, longitude -81.8495, elevation/heading 0), following the official gz-sim8 spherical_coordinates example. The 0.06 teaching-scale geometry means these are synthetic geographic readings, not the full-scale campus building coordinates.
+
+Offline checks passed: generator Python syntax, both generated SDFs, sole-plugin/datum diff against baseline worlds, unchanged scenery/camera/collisions/reference map, baseline/blocked geometric connectivity, Markdown fences and Bash syntax in main/new activity guides. Existing EKF/Nav2 settings and student TODOs were not altered; GPS is not an EKF input in the required baseline. Instructor private setup is retained, with its separate workspace.
+
+Before release, pilot both worlds and map names; AMCL two destinations/home per world; IST barrier; restored LiDAR setting; GPS Gazebo and ROS message flow, status/covariance fields, TF, rate under simulation time, and three-location stationary/moving observations. A bridge publisher alone is not successful GPS publication. No live Gazebo runtime validation was available during authoring; do not mark the GPS activity validated until this pilot succeeds. Do not infer real-world occlusion/multipath from drawn buildings. Inspect the configuration masks and actual runtime topics when assessing student fusion explanations.
+
+
 ## Saved-map startup and Nav2 RViz correction
 
 Course navigation.launch.py validates the saved YAML/image pair and explicitly injects the absolute yaml_filename in temporary Nav2 parameters as well as forwarding map to standard bringup. Standard Jazzy localization source should honor map already; the exact reason the reported installed system retained an empty parameter is unconfirmed. This wrapper removes reliance on only that forwarding path without claiming an upstream bug. The source YAML is preserved. Step 6 and the campus command use the wrapper; navigation RViz uses explicit nav2_default_view.rviz, including Nav2 Goal, rather than a generic or leftover mapping layout. Manual load_map is no longer part of the documented procedure.

@@ -2,7 +2,7 @@
 
 ## Before you start — obtain the current repository
 
-**Expected branch: `main`.** This is the current `main` assignment. **New students:** install Git in Part 2, then complete [Part 6 — Fork and clone](#part-6--fork-and-clone-the-course-repository) before running repository-dependent commands. Until then, read setup on GitHub; `code .` opens existing files but does not download them. **Already have a copy?** Save your edits, then use [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before continuing. Fetch the instructor updates for this branch; a clean status or up-to-date fork alone is insufficient.
+**Expected branch: `main`.** **New students:** install Git in Part 2, then complete [Part 6 — Fork and clone](#part-6--fork-and-clone-the-course-repository) before running repository-dependent commands. Until then, read setup on GitHub; `code .` opens existing files but does not download them. **Already have a copy?** Save your edits, then use [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before continuing. Fetch the instructor updates for this branch; a clean status or up-to-date fork alone is insufficient.
 
 ## Open in VS Code through WSL
 
@@ -403,9 +403,9 @@ References: [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/
 
 ## Part 6 — Fork and clone the course repository
 
-**Required before repository-dependent commands:** use your own fork so you can save work and receive instructor corrections. **Expected branch: `main`.** This is the current `main` assignment.
+**Required before repository-dependent commands:** use your own fork so you can save work and receive instructor corrections. **Expected branch: `main`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch.
 
-Open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs) on GitHub, click **Fork → Create fork**, and keep its name. For the indoor/outdoor branch, uncheck **Copy the main branch only** if shown; the fetch command below also works for an existing main-only fork.
+Open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs) on GitHub, click **Fork → Create fork**, and keep its name. The required indoor/outdoor activity is now included on `main`.
 
 Replace `YOUR_USERNAME` and run once for a new local copy in **Ubuntu/WSL**:
 

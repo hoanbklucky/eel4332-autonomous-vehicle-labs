@@ -1,6 +1,6 @@
-# Final Project — Goosebot SLAM and Delivery in Simulation
+# Final Project — Indoor and Outdoor Goosebot Navigation
 
-> **Full-scale campus update:** campus assets now use 1:1 horizontal meters with an unscaled Goosebot. Old reduced-world campus maps/goals do not match. The current required outdoor activity uses the supplied campus map and GPS on **`final-project-indoor-outdoor`**; follow its [updated final-project instructions](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs/blob/final-project-indoor-outdoor/final_project_simulation/README.md#gps-aided-outdoor-navigation). The remainder of this main-branch guide is the legacy single-world AMCL assignment.
+Use **`main`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion with the supplied pedestrian-only campus map outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
 ### Measured wheel odometry
 
@@ -15,22 +15,19 @@ ros2 topic echo /wheel/odometry --once --field twist.twist
 
 The first command checks the EKF input; expect `/wheel/odometry`. The second prints one measured wheel-velocity message. Only forward speed is fused from wheels; the IMU supplies yaw rate. The wheel node publishes no TF; the local EKF owns `odom → base_footprint`. Configuration: [ekf_wheel.yaml](goosebot/ekf_wheel.yaml), loaded directly from this checkout. No rebuild is needed for these Python/config changes if the wheel-state bridge is already installed; if `/joint_states` is absent, rerun the existing build helper. Missing/stale wheel data stops the course launch; there is no command fallback.
 
-## Before you start — use the current course files
+Earlier GPS screenshots/results used the former 0.06 campus scale and/or command-derived baseline and illustrate output format only. Record a **new run in a new output folder** for the wheel/IMU baseline; report your own values.
 
-**Expected branch: `main`.** This is the current `main` assignment. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+## Before you start
 
-In Ubuntu/WSL, save all editor files and check:
+Complete Labs 4–5. Use your existing Ubuntu/WSL, ROS 2 Jazzy and Gazebo Harmonic installation. Work in your course fork; `origin` is your fork and `upstream` is the public course repository. Save your edits before updating; do not discard model or map changes.
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-git remote -v
 git branch --show-current
 git status --short
 ```
 
-`origin` must be your GitHub fork; `upstream` must be `hoanbklucky/eel4332-autonomous-vehicle-labs`. The branch must match the expected name. **If the branch differs or status lists changes, stop here:** [save/commit your work and follow the branch/update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before proceeding. Do not discard edits, especially robot Xacro/configuration changes or maps.
-
-Once on the correct branch with a clean working tree:
+The branch should be `main`. If it differs or files are modified, follow [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) first. With the correct branch and a clean working tree:
 
 ```bash
 git fetch upstream &&
@@ -40,93 +37,26 @@ echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 
-Continue only after the inclusion check succeeds. Reopen **this local README** in VS Code (**WSL: Ubuntu**) and follow it. VS Code Sync or pulling your fork alone does not fetch instructor updates; push your combined commits to your fork after a successful update. A Git update changes files, not installed packages: rebuild only when this lab's setup says it is needed.
+**Command breakdown:** `fetch` downloads course updates; `merge` incorporates them; `merge-base --is-ancestor` checks they are included; `&&` continues only after success. Updating Git files does not rebuild your robot.
 
-**Final version check:** this branch uses the supplied Goosebot LiDAR and the IST-or-campus assignment below. The two-world/GPS revision is on a separate branch; use whichever version the instructor assigns.
+## Terminal conventions
 
-> [!IMPORTANT]
-> **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
->
-> **Before relaunching, switching worlds, or finishing:**
-> 1. Stop robot motion; save any map/results you need.
-> 2. Press **Ctrl+C** in each teleop, SLAM and Nav2 terminal that is running.
-> 3. Press **Ctrl+C in the simulator launch terminal** (usually Terminal 1).
-> 4. Wait for shutdown messages to finish and the shell prompt to return before launching again.
->
-> If you already closed the window, return to its launch terminal and press Ctrl+C there. If shutdown seems incomplete, check `pgrep -af 'gz sim|gz-sim'` and identify leftover simulation processes before restarting.
+Use four Ubuntu/WSL terminals: **1 Gazebo**, **2 SLAM or AMCL/Nav2**, **3 RViz**, **4 teleop/checks**. Open VS Code with `code .` from this checkout and confirm **WSL: Ubuntu**.
 
-## Open in VS Code through WSL
+| Syntax | Meaning |
+|---|---|
+| `source /opt/ros/jazzy/setup.bash` then `source ~/goosebot_ws/install/setup.bash` | Enable ROS, then this built workspace in each new ROS terminal. |
+| `ros2 run PACKAGE PROGRAM` / `ros2 launch PACKAGE FILE` | Run one program / a launch description. Local launch files may use an absolute path. |
+| `name:=value` / `--ros-args -p name:=value` | A launch argument / a ROS parameter. `use_sim_time:=true` uses Gazebo's clock. |
+| `~`, `$PWD`, `$(...)` | Home directory, current directory, and command output. Quotes keep a path together. |
+| Trailing `\` | Continue the same command on the next line; copy all lines. |
+| Ctrl+C | Stop the foreground program in its launch terminal. Closing only a GUI can leave processes running. |
 
-After cloning the repository, open **Windows Terminal / PowerShell**, run `wsl`, then run these commands in **Ubuntu/WSL**:
+**Before switching worlds or modes:** stop motion, save maps, then Ctrl+C teleop, SLAM/Nav2, RViz and Gazebo. Wait for prompts. Run only one simulator and one owner of `map → odom` (SLAM while mapping, AMCL while navigating). The perfect-map/ground-truth mode is optional practice only.
 
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-code .
-```
+## 1. Setup — once, then rebuild when needed
 
-Confirm VS Code shows **WSL: Ubuntu** (or your Ubuntu distribution) in the lower-left corner. Open `final_project_simulation/README.md` in Explorer. Choose **Terminal → New Terminal**; when working from this lab directory, run:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
-```
-
-Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
-
-## Mission
-
-Use the **provided Goosebot model with its configured 2-D LiDAR**, build your own SLAM map, and use **AMCL + Nav2** to reach three delivery locations and return home. Choose the supplied **IST interior** or **Florida Poly campus** world. Physical Goosebot SLAM/Nav2 is not required; your lane-following work is the hardware component.
-
-## Learning objectives
-
-Connect a robot model, sensors, bridges, TF, odometry, SLAM, localization, and navigation. Explain your own changes and diagnose problems rather than only repeating TurtleBot commands.
-
-## AI assistance is allowed
-
-You may use AI tools to help write or modify code, add sensors, configure ROS 2, and debug errors for this **final project**. You are responsible for testing the resulting code/configuration and must be able to explain your submitted changes and how the system works. Write the short final explanation in your own words. AI assistance does not replace the required simulation demonstration or your understanding.
-
-## Prerequisites and background
-
-Complete Labs 4–5, then follow Steps 1–5 below to build Goosebot and start mapping in your chosen IST or campus world. The separate practice-arena warm-up is optional. Keep your existing Ubuntu 24.04/WSL, ROS 2 Jazzy, and Gazebo Harmonic installation. Use VS Code's **WSL: Ubuntu integrated terminal** or a separate **Ubuntu/WSL terminal**; both work. Each long-running launch needs its own terminal. Commands have no leading `$` prompt. **The course instructions use native WSL/Jazzy for both the warm-up and final. Docker is an optional alternative, not an additional requirement.**
-
-The Goosebot source is [hoanbklucky/goose, nav2 branch](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation). It already supplies the body/wheels, drive plugin, stereo cameras, IMU and forward ToF. The course launcher supplies measured wheel-joint odometry and its local EKF configuration. **The narrow forward ToF is not a 360° mapping LiDAR.** The course build helper supplies the 360° LiDAR and bridge automatically. Start with those defaults; inspect/change one LiDAR setting only after completing mapping and saved-map navigation.
-
-The original Goosebot default mode uses a pre-baked map and Gazebo ground-truth localization. **Do not use that mode as your final demonstration.** This project instead uses LiDAR SLAM Toolbox for mapping, then a saved map with AMCL. This differs from the TurtleBot/Cartographer preparation in Lab 4. Stereo RTAB-Map is optional. Do not launch the original `nav2_bringup.launch.py` or `stereo_slam.launch.py` alongside the commands below.
-
-AMCL estimates the robot's pose on a saved map by matching live scans. Nav2's supplied starting configuration uses **NavFn with Dijkstra** for the global path and **DWB** to choose local motion commands. The global costmap follows the full saved map, rather than the original Goosebot's 20 m rolling window. Use the supplied footprint and sensor defaults first; tuning comes after baseline mapping/localization/navigation.
-
-## Provided files and environment choice
-
-| Environment | Features | Baseline / blocked world |
-|---|---|---|
-| **IST interior — recommended for a shorter project** | Photo-traced classrooms, oval hallway, two end cross-passages, north/south entrance lobbies and central side exits | `ist/ist.sdf` / `ist/ist_blocked.sdf` |
-| **Florida Poly campus** | Geographic footprints, lake chain, roads and causeways; larger mapping area | `campus/campus.sdf` / `campus/campus_blocked.sdf` |
-| Optional custom world | Same mission; requires checking collision geometry and a feasible alternative route | See [optional builder guide](CREATE_YOUR_OWN_WORLD.md) |
-
-<details>
-<summary>Preview — IST oval hallway and classroom layout</summary>
-
-![IST teaching interior](ist/ist_plan.png)
-
-Classroom identities and relative positions come from the first image's labels/black partitions; the oval hallway, both end cross-passages and central through-passage come from the second image. **Evacuation arrows and colored zone boundaries are excluded from geometry.** Rooms 1045/1048 and 1002/1068 flank the north/south entrance lobbies. Dimensions and doors remain illustrative. Yellow is actual hallway floor, not evacuation routes. **Version 4 replaces earlier IST geometry: rebuild your SLAM map and reselect goals.**
-
-</details>
-
-<details>
-<summary>Preview — campus layout</summary>
-
-![Geographic campus layout](campus/campus_plan.png)
-
-The campus uses 1:1 horizontal meters over about 1,217 × 1,333 m; path widths and heights are approximate. The required road-only GPS/map activity is on final-project-indoor-outdoor. Historical screenshots below show the reduced world.
-
-</details>
-
-Other supplied files: `goosebot/world.launch.py` (world/spawn wrapper), `goosebot/slam_goosebot.yaml`, and `goosebot/nav2_goosebot.yaml` (starting configurations). The worlds' `reference.yaml` files are geometric instructor references, **not student SLAM results**. The existing [mission-client scaffold](../lab05_navigation/src/mission_client.py) remains available as an optional programming extension; its TODOs are not completed for you.
-
-## Step-by-step procedure
-
-### 1. Install dependencies, copy Goosebot source, and build
-
-Run once in Ubuntu/WSL. This supplements your existing installation; no Ubuntu/ROS reinstall or Docker is needed.
+Install missing packages:
 
 ```bash
 sudo apt update
@@ -138,7 +68,7 @@ sudo apt install -y git python3-colcon-common-extensions python3-rosdep \
 source /opt/ros/jazzy/setup.bash
 ```
 
-In **your fork** of the course repository, copy only the provided source package (not its old build/install/virtual-environment directories). The pinned revision makes the starting model reproducible:
+**First setup only:** copy the complete pinned Goosebot package and build it. Existing users keep their edited package and rerun only the build helper.
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
@@ -155,7 +85,7 @@ rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
 bash final_project_simulation/goosebot/build_student_workspace.sh
 ```
 
-**After the helper reports a successful build**, configure this terminal and check the installed package:
+**Command breakdown:** the sparse clone selects the complete `goosebot_0` package; the pinned commit fixes its starting version; `cp -r --update=none` preserves existing destination files. The helper links this source into `~/goosebot_ws`, configures LiDAR/bridges, fixes executable permissions and the legacy GPS noise, installs dependencies, and builds.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -164,32 +94,13 @@ ros2 pkg prefix goosebot_0
 ros2 pkg executables goosebot_0
 ```
 
-Expected prefix: `$HOME/goosebot_ws/install/goosebot_0`. The helper builds/verifies in its own process; it does not configure the parent terminal. Source this workspace again in every launch terminal. Do not run the install/prefix checks before the build succeeds.
+Expect the prefix inside `~/goosebot_ws`. The course launcher runs `wheel_joint_odometry.py` directly from this repository. Do not copy old build/install/log directories. 
 
-The helper also supplies the LiDAR link/sensor, `/scan` bridge, and wheel joint-state publisher automatically. If the source was copied already, skip the clone/copy commands and run the helper from the repository root. It preserves model edits, creates the workspace source link only when absent, and refuses a link/source pointing to another checkout. Inspect and preserve files before changing such a link. The helper does not fetch a missing model; complete the full source-copy step first.
+## 2. Use the supplied robot
 
+LiDAR, `/scan` bridge, wheel visualization and GPS already exist after setup. **No sensor XML needs to be pasted.** Keep defaults for baseline mapping/navigation. After source/configuration changes, stop launches, rerun the Step 1 helper, source the workspace and relaunch; saving a file does not change a spawned robot.
 
-The course launcher runs the repository’s `wheel_joint_odometry.py` directly; no installed command-to-odometry executable is required. The full source package is needed: `CMakeLists.txt`, `package.xml`, `scripts/`, `launch/`, `urdf/`, `config/`, `maps/`, and `worlds/`. The recursive copy above already includes these; copying only the xacro/launch files is insufficient. Keep scripts in `scripts/`; CMake installs them into ROS's libexec directory.
-
-The package lives in your course fork so your model edits can be committed/pushed; the workspace points to it. If the temporary clone already exists, reuse/check it instead of cloning again; the helper checks an existing workspace source link. If rosdep reports its database is uninitialized, run `sudo rosdep init` once and `rosdep update`, then retry. Do not copy old Docker build output. Rebuild after adding files or changing installation rules.
-
-### 1a. Troubleshooting — only if an executable is not found
-
-**If the build and executable checks in Step 1 pass, skip this section and continue to Step 2.**
-
-**Old odometry launch error?** Stop all launches, update this checkout and use the course `world.launch.py` below. It uses measured wheel joints and no longer starts `cmd_vel_to_odom.py`.
-
-### 2. Use the supplied robot — no sensor editing yet
-
-The Step 1 build helper automatically configures the copied Goosebot source with a **360° LiDAR on `/scan`**, its ROS bridge, and the wheel joint-state publisher/bridge for RViz. No manual Xacro or bridge editing is required before mapping.
-
-**Already completed the old setup?** Save/commit your work, pull the course updates, and run the Step 1 build helper again. It adds missing baseline components, preserves complete existing LiDAR settings, and stops on conflicting/partial edits rather than overwriting them. Then source the workspace and restart the simulator. Do not repeat the upstream clone/copy.
-
-Use the defaults first: 720 samples, ±π horizontal coverage, one scan plane, 10 Hz, 0.12–12 m range, and a level mount 0.18 m above `base_link`. Finish Steps 3–7 before changing these settings. Your work is to build a map, localize, navigate and evaluate the delivery mission; a short LiDAR experiment comes last in Step 8.
-
-### 3. Launch your selected world — Terminal 1
-
-Stop all previous Gazebo, TurtleBot, SLAM, teleop, and navigation launches with Ctrl+C before starting. Closing the Gazebo window alone can leave a server running. Use this Goosebot launch, **not** the old TurtleBot campus launch:
+## 3. Launch the current part’s world — Terminal 1
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -199,86 +110,9 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/ist/ist.sdf"
 ```
 
-**Expected startup:** Terminal 1 starts the Gazebo server, spawns **`goosebot` into the explicitly named world**, then prints **`GOOSEBOT SPAWNED`** and opens the GUI after the create service accepts the robot. No `gz model` query is required before the window can open. Do not start another launch or `gz sim -g` while this launch starts. If spawning fails, the launch stops with an error.
+**Command breakdown:** `world.launch.py` starts Gazebo, spawns Goosebot and starts its ROS interfaces; `world:=` selects the SDF file. **Part B:** change only the world path to `campus/campus.sdf`. Expect `GOOSEBOT SPAWNED`. If a server is already running, stop its launch before retrying.
 
-If it reports **Gazebo server(s) already running**, stop the old simulation first. The launcher lists the PIDs and refuses to start; it does not kill other processes or spawn into the first world it finds. Use `pgrep -af 'gz sim|gz-sim'` to inspect leftovers. After a normal exit, wait for the launch terminal's prompt before restarting.
-
-The GUI and server are owned by this one course launch: closing the GUI requests shutdown of its other processes too. **Ctrl+C in Terminal 1 remains the standard way to stop everything.** If the server fails, the launch shuts down its GUI/ROS nodes. This is different from manually starting a GUI-only process.
-
-**Campus — alternative Terminal 1 command:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
-  world:="$PWD/final_project_simulation/campus/campus.sdf"
-```
-
-![Expected campus launch: Goosebot on the yellow home marker at IST south end, with campus scenery grouped in the Entity Tree](images/campus_ist_south_start.png)
-
-*Expected campus view: Goosebot starts at IST’s south end on the yellow Home marker. The Entity Tree lists `campus`, `sun`, and `goosebot` separately.*
-
-See [the campus guide](campus/README.md) for expected spawn, mapping, and blocked-world instructions. The wrapper reads the home pose from the world's adjacent `mission.json`, adds mesh lookup paths, and starts the server/robot/GUI in order. Keep the entire world directory together. Goosebot does **not** need `TURTLEBOT3_MODEL`.
-
-#### Find Goosebot in the large world
-
-The supplied IST opening camera looks inward from **+x (south)**, so the south entrance is in the foreground. Restart the simulator after pulling camera/world changes; an explicit custom `--gui-config` can override the world's GUI settings. Orbiting the camera changes which entrance is nearest.
-
-**To inspect Goosebot:**
-
-1. Collapse `ist_building` in the Entity Tree.
-2. Right-click the separate **`goosebot`** entry.
-3. Click **Move To**, the first item at the top of the menu. This moves the **camera**, not the robot; it is not inside the `View >` submenu.
-4. Put the pointer in the 3-D scene and scroll the mouse wheel upward to zoom closer. Scroll downward to zoom out.
-
-<details>
-<summary>Example — where to find Move To in Gazebo</summary>
-
-![Gazebo right-click menu for Goosebot showing Move To](images/gazebo_move_to.png)
-
-Right-click **goosebot** in the Entity Tree, then click **Move To**, the first menu item. It moves the camera, not the robot. Menu appearance can vary slightly by Gazebo version.
-
-</details>
-
-At whole-building zoom, the roughly 20 cm Goosebot can be only a few pixels wide. Selecting a tree entry highlights it but does not by itself move the camera.
-
-IST starts Goosebot at **(24.85, 0)** in the centre of the **south entrance passage**, facing inward toward −x (yaw π).
-
-<details>
-<summary>Troubleshooting — robot missing, too small, or absent from the Entity Tree</summary>
-
-**1. Check the model and actual pose.** Keep Terminal 1 running and open another Ubuntu/WSL terminal:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-gz model --list
-gz model -m goosebot --pose
-```
-
-Use the exact name printed by the list if your local launch differs, such as `custom_bot`. The course wrapper requests the entity name `goosebot`; `custom_bot` can still appear as the URDF model name in conversion warnings. See [Gazebo's model-command reference](https://gazebosim.org/api/sim/8/model_command.html).
-
-| Observation | What to check next |
-| --- | --- |
-| `goosebot` is listed at approximately (24.85, 0) with a small positive Z | It exists near home. Collapse `ist_building`, select the separate `goosebot` entry, and focus/zoom on the robot. |
-| Pose has a large negative Z | It may have fallen through the floor. Save the pose and simulator log for troubleshooting. |
-| Pose has different XY | Compare with the launch's printed spawn line; the robot may have moved, or a different launch/mission file is in use. |
-| Terminal lists the robot but the GUI does not | Check whether the GUI is stale or connected to another running server; use the clean restart below. A GUI label such as `default` alone does not establish which server it displays. |
-| No robot is listed | Inspect the full `[create-...]` log for creation errors/timeouts and check that only the intended server is running. |
-
-**2. Restart cleanly if the GUI and terminal disagree.** Stop all old simulator launches, including the maze/warm-up, with Ctrl+C in their launch terminals. Close all Gazebo windows. Check for remaining processes:
-
-```bash
-pgrep -af 'gz sim|gz-sim'
-```
-
-No output means this check found no matching processes. If it lists processes, identify and stop the leftover course simulation before relaunching; ask the instructor if unsure. Closing a window alone may leave its server running. Then launch Step 3 **once**. Do not repeatedly spawn extra robots to solve a camera problem.
-
-**3. Read the messages correctly.** `Entity creation successful` confirms creation was accepted, not that the robot stayed at its initial pose or is visible at the current zoom. The `gz_frame_id ... not defined in SDF. Copying ...` warning alone is not a spawn failure; retain that field and verify the ROS scan frame in Step 4.
-
-If the problem remains, share the launch's printed spawn line, full create log, model list, robot pose, and remaining-process output. These distinguish visibility, wrong-pose, and multiple-server problems.
-
-</details>
+To find the robot: collapse the building in Gazebo's Entity Tree, right-click **goosebot → Move To**, then zoom. This moves the camera.
 
 <details>
 <summary>Gazebo tips — follow the robot, turn it, or recover a flip</summary>
@@ -307,98 +141,9 @@ Moving the robot by editing Pose is a teleport: it can invalidate SLAM/localizat
 
 <a id="goosebot-readiness-check"></a>
 
-### 4. Start mapping
+## 4. Start SLAM — Terminal 2
 
-Keep the selected world running in Terminal 1. Continue directly to Step 5: **start SLAM in Terminal 2, open RViz in Terminal 3 using Fixed Frame `map`, then drive in Terminal 4**. Check the robot, scans and TF while mapping; no separate readiness drive is required.
-
-<details>
-<summary>Troubleshooting only — sensor and TF checks</summary>
-
-If mapping does not appear, use these checks in a separate sourced terminal. Stop each continuous check with Ctrl+C.
-
-**Terminal 2 — sensor and TF:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 topic echo /scan --once --field header.frame_id
-ros2 topic hz /scan
-```
-
-
-<details>
-<summary>Troubleshooting — /scan does not appear to be published yet</summary>
-
-This warning means ROS has not discovered a publisher/type for `/scan`; it is different from a TF warning. Press Ctrl+C to stop a waiting echo/hz command before running another check. Keep Gazebo playing and allow sensor/bridge startup time.
-
-**First check which installed model you are using:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 pkg prefix goosebot_0
-ros2 run xacro xacro "$(ros2 pkg prefix goosebot_0)/share/goosebot_0/urdf/robot.urdf.xacro" -o /tmp/goosebot_loaded.urdf
-python3 - <<'PY'
-import xml.etree.ElementTree as ET
-r = ET.parse('/tmp/goosebot_loaded.urdf').getroot()
-print('LiDAR link present:', r.find("link[@name='lidar_link']") is not None)
-for s in r.findall("gazebo/sensor"):
-    print('sensor:', s.get('name'), 'topic:', s.findtext('topic'))
-PY
-```
-
-Expect your intended workspace prefix, `LiDAR link present: True`, and `lidar_sensor` on `scan`. If absent, the source edit was incomplete or the wrong package is installed/sourced. Rerun the Step 1 build helper, rebuild, source the correct workspace, and restart Terminal 1. A robot already in Gazebo will not acquire a new sensor merely because you saved the file.
-
-**Then separate Gazebo output from ROS bridging:**
-
-```bash
-gz topic -l
-ros2 topic list -t
-ros2 topic info /scan --verbose
-```
-
-Find the new LiDAR's Gazebo scan topic in the list, distinct from `/tof_front/scan`. If it is `/scan`, inspect it with `gz topic -i -t /scan` and `gz topic -e -t /scan` (Ctrl+C after messages arrive). If Gazebo lists a different fully qualified scan topic, use that exact name when inspecting it and in the bridge's `gz_topic_name`; the ROS topic should remain `/scan`.
-
-| Result | Next step |
-| --- | --- |
-| Installed description has no new LiDAR | Fix/source the correct model and respawn. |
-| LiDAR is in the description but no Gazebo scan messages | Check the sensor block is attached to `lidar_link`, `always_on=true`, simulation is playing, and Terminal 1 has no sensor/render errors. Both supplied IST worlds include the Sensors system. |
-| Gazebo scan messages arrive but ROS `/scan` is absent | Check the installed `config/ros_gz_bridge.yaml` has the new top-level bridge entry supplied by the Step 1 helper, with the exact Gazebo topic. Restart the launch to reload it and check Terminal 1 for bridge errors. |
-| ROS scan messages arrive but RViz cannot display them | Continue with the TF/frame checks below; this is now a different problem. |
-
-Do not change `gz_frame_id` or add another odometry publisher to fix a missing ROS topic. Share the installed-description check, topic lists and bridge errors if it remains unresolved.
-
-</details>
-
-Expect `lidar_link`. A 10 Hz simulated sensor may measure only about 1.3 Hz in wall-clock time when Gazebo runs at 13% real time. Stop `hz` with Ctrl+C, then run these one at a time (Ctrl+C after each check):
-
-```bash
-ros2 run tf2_ros tf2_echo base_footprint lidar_link
-ros2 run tf2_ros tf2_echo odom base_footprint
-ros2 topic echo /odometry/filtered --once
-```
-
-Expect numerical transforms and odometry. A brief startup warning can resolve when TF arrives; persistent warnings need fixing. If the reported scan frame differs, correct the sensor frame/TF configuration.
-
-<details>
-<summary>Examples — successful LiDAR scan and TF checks</summary>
-
-![LiDAR frame and scan rate output](images/lidar_scan_check.png)
-
-Expect **lidar_link**. The example's approximately 1.4 Hz is wall-clock delivery during slow simulation, not the configured simulated scan frequency.
-
-![LiDAR transform from base footprint](images/lidar_transform_check.png)
-
-For the supplied mount, **base_footprint → lidar_link** has translation **(0, 0, 0.21) m** and zero rotation. Initial discovery warnings resolved once numerical output appeared; persistent warnings still need attention.
-
-</details>
-
-
-</details>
-
-### 5. Build and save your map
-
-**Terminal 2 — start SLAM before opening RViz:**
+Keep Gazebo playing in Terminal 1. Start SLAM **before opening RViz**, then keep this launch running:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -408,9 +153,12 @@ ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true \
   slam_params_file:="$PWD/final_project_simulation/goosebot/slam_goosebot.yaml"
 ```
 
-**Start these terminals in order:** Terminal 2 runs SLAM, Terminal 3 shows RViz, and Terminal 4 provides manual driving. Configure RViz before moving the robot so you can watch the map grow.
+**Command breakdown:** `online_async_launch.py` starts LiDAR SLAM; `slam_params_file:=` loads course settings. SLAM supplies the `map` frame and builds `/map` from scans.
 
-**Terminal 3 — visualization:**
+## 5. Open RViz, drive and save
+
+**Terminal 3 — open RViz after SLAM starts:**
+
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -418,89 +166,18 @@ source ~/goosebot_ws/install/setup.bash
 rviz2 --ros-args -p use_sim_time:=true
 ```
 
-#### RViz setup — add displays and select their topics
+For your first run, add these yourself using **Add → By display type → rviz_default_plugins**:
 
-If RViz is already open with `use_sim_time:=true`, reuse it. Otherwise run the Terminal 3 command above. Keep Gazebo and the Step 5 SLAM launch running.
+| Display | Setting |
+|---|---|
+| LaserScan | Topic `/scan`; Best Effort reliability |
+| RobotModel | Description Source: Topic; Description Topic: `/robot_description` |
+| TF | Enable for frame checks; hide later if cluttered |
+| Map | Topic `/map`; Reliable / Transient Local if needed |
 
-**1. Show the Displays panel and choose the fixed frame.**
+Set **Global Options → Fixed Frame: map** and keep Map enabled on `/map`. Choose **Views → TopDownOrtho**. Expect the robot, scans and an initial occupancy map; the map grows as you drive. Keep this fixed frame throughout mapping. A blank Map Topic causes “Empty topic name”; edit the Topic property, not the red Status row.
 
-- If the left panel is missing, select **Panels → Displays**.
-- Expand **Global Options** at the top. Click the value beside **Fixed Frame**, type `map`, and press Enter.
-- Keep `map` during SLAM and saved-map navigation. Start SLAM before opening RViz; there is no fixed-frame change during mapping.
-- RViz displays ROS messages, not the Gazebo building automatically. A blank grid does not mean the Gazebo world is missing.
-
-**2. Add Map and set its Topic.**
-
-1. Click **Add** at the bottom of the Displays panel.
-2. Select the **By display type** tab, expand **rviz_default_plugins** if needed, choose **Map**, and click **OK**.
-3. In the Displays panel, expand the new **Map** row with its small triangle.
-4. Find the editable **Topic** property below Status. Click the blank value cell to its right, select/type **`/map`**, and press Enter. Adding a display by type does **not** necessarily choose its topic.
-5. Keep its checkbox enabled. Once SLAM publishes, expect **Status: Ok** and a grey/white/black occupancy map that grows as you drive.
-
-**“Error subscribing: Empty topic name” means the Topic cell is blank.** Set the editable Topic property; the red `Status → Topic` line reports an error and is not the field to edit. “No map received” after setting `/map` means no map message has arrived yet; check that Step 5 SLAM is running and `ros2 topic list -t` contains `/map`. Changing RViz settings alone does not create a map.
-
-For saved-map navigation, use `/map` as well. The optional perfect-map warm-up uses **`/projected_map`** instead; do not carry that warm-up topic into final-project SLAM. If a running map publisher exists but no map arrives, inspect the Map Topic's QoS settings; the supplied map workflows use **Reliable / Transient Local**. Allow startup time and check the display's expanded Status.
-
-**3. Add LaserScan and select the LiDAR topic.**
-
-1. Click **Add → By display type → rviz_default_plugins → LaserScan → OK**.
-2. Expand **LaserScan**, click its editable **Topic** value, choose/type **`/scan`**, and press Enter.
-3. Keep its checkbox enabled. Expand Topic if needed to see QoS settings; **Best Effort** reliability is suitable for receiving sensor scans, including a Reliable publisher.
-4. If points are too small, set **Style** to **Points** and increase **Size (Pixels)**, for example to `3`, if those properties are shown.
-5. Expect points outlining nearby walls, not an image of the building. Do not choose `/tof_front/scan`, which is only the original narrow forward beam.
-
-**4. Add RobotModel — it is a display type, not a topic name.**
-
-1. Click **Add**, then select **By display type** (not **By topic**).
-2. Under **rviz_default_plugins**, scroll to **RobotModel**: it is written as one word. Select it and click **OK**. If a filter/search box is shown, clear it or type `RobotModel`.
-3. Expand the new **RobotModel** row in Displays.
-4. Set **Description Source → Topic**.
-5. Set **Description Topic → `/robot_description`**, then press Enter. This uses the expanded robot description published by `robot_state_publisher`; do not enter the Xacro filename here.
-6. Keep the display enabled and **Visual Enabled** checked. If Description Topic exposes QoS settings, use **Reliable / Transient Local** to receive the retained description.
-7. Expect Goosebot's chassis, wheels and added sensor, with Status Ok once its transforms are available. This does not add another robot to Gazebo.
-
-If RobotModel is absent from the By topic tab, that is not evidence the robot description is missing: use **By display type** as above. If the display reports a transform error, return to Step 4; a valid description still needs TF to position every link.
-
-**5. Add TF and choose an easy view.**
-
-- Use **Add → By display type → rviz_default_plugins → TF → OK** to show coordinate frames. Toggle TF off if its axes/text clutter the map.
-- In the **Views** panel, select **TopDownOrtho** for a flat overhead map, or keep Orbit. Use **Panels → Views** if the panel is hidden.
-- Zoom with the mouse wheel over the 3-D view. Goosebot can be very small compared with IST; during sensor inspection you can set the view's **Target Frame** to `base_footprint` to keep the robot centred.
-- Confirm scan points follow the mapped wall edges rather than forming a shifted/rotated duplicate.
-
-**6. Save your mapping layout and reuse it next time.**
-
-On your first run, add and configure the displays above yourself so you learn the process. Once they work:
-
-1. In a terminal, run `mkdir -p ~/rviz_configs`.
-2. In RViz, choose **File → Save Config As…** and save as `~/rviz_configs/goosebot_mapping.rviz` (use your home directory in the file chooser).
-3. On later mapping sessions, replace the generic RViz command with:
-
-```bash
-rviz2 -d ~/rviz_configs/goosebot_mapping.rviz \
-  --ros-args -p use_sim_time:=true
-```
-
-Keep the simulator and SLAM commands unchanged. You can skip adding the displays again when this file loads. Use **File → Save Config** (Ctrl+S) after later layout changes. A custom file is not automatically selected by every launch; explicitly use `-d` or **File → Open Config**. The configuration saves display/topic/QoS settings, tools and the view—not the SLAM map or running nodes. Save the map separately below.
-
-<details>
-<summary>RViz quick check — blank map, missing robot, or red display status</summary>
-
-| Symptom | Check |
-| --- | --- |
-| Map: Empty topic name | Edit Map's Topic property to `/map`, not the Status error row. |
-| Map: No map received | Start SLAM in Step 5, or the saved-map navigation launch in Step 6; confirm `/map` is published. |
-| Fixed Frame `map` does not exist | Keep Fixed Frame `map`; check that Terminal 2 SLAM is running and publishing `map → odom`. |
-| Cannot find RobotModel | Add → **By display type**, expand rviz_default_plugins, select **RobotModel**. |
-| RobotModel has no description | Set Description Source Topic and Description Topic `/robot_description`; verify robot_state_publisher remains running. |
-| Scan exists but is not visible | Select `/scan`, check TF/status and reliability, then increase point size or zoom closer. |
-| RobotModel/scan transform errors | Use simulation time in RViz and complete Step 4 TF checks; adding displays does not repair missing transforms. |
-
-</details>
-
-
-
-**Terminal 4 — driving:**
+**Terminal 4 — start keyboard driving:**
 
 Use these starting teleop settings for **both IST and campus**. Reduce speed near tight corners if needed. These parameters affect keyboard driving; Nav2 has separate autonomous speed limits.
 
@@ -511,49 +188,63 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -p speed:=0.81 -p turn:=1.73
 ```
 
-Click inside Terminal 4 and follow **its printed key layout** (different from TurtleBot teleop). Use lowercase `i` forward, `j/l` turn, and `k` stop; `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Confirm motion, scan alignment and RobotModel/TF status before exploring. Map all mission routes and revisit an earlier area. For IST, cover both halves of the oval, both end cross-passages, the north/south entrance lobbies, and the central passage through both side exits; classroom interiors are optional. For campus, cover the delivery routes and alternative crossings; every remote corner is unnecessary.
+**Command breakdown:** `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building/full-campus exploration is unnecessary.
 
 <details>
-<summary>Example — IST mapping in progress</summary>
+<summary>Troubleshooting only — missing map, scans or transforms</summary>
 
-![Goosebot at IST entrance with growing RViz map](images/ist_mapping.png)
+If RViz reports **Frame [map] does not exist**, keep Fixed Frame `map` and check Terminal 2 for SLAM startup errors. RViz cannot create this frame. Missing transforms can also cause scan “queue is full” messages.
 
-Early exploration produces a partial map around the entrance. Grey/white explored space, dark wall edges and red scan points should align. Unvisited space remains unknown. RobotModel and TF show **Status: Ok**. Continue exploring the mission routes before saving; you do not need to reproduce the exact pixels or view.
+Run in a separate sourced terminal only if the robot/scans are missing:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+ros2 topic echo /scan --once --field header.frame_id
+ros2 topic hz /scan
+```
+
+Expect `lidar_link` and arriving scans. Ctrl+C the rate check, then run these one at a time:
+
+```bash
+ros2 run tf2_ros tf2_echo base_footprint lidar_link
+ros2 run tf2_ros tf2_echo odom base_footprint
+```
+
+**Command breakdown:** `echo --once --field` prints one selected message field; `hz` measures wall-clock arrival rate; `tf2_echo A B` reports frame B relative to A. Numerical TF should appear after discovery; Ctrl+C each continuous check. Slow simulation produces less than the configured 10 Hz wall-clock scan rate.
 
 </details>
 
 <details>
-<summary>Example — campus mapping in progress</summary>
+<summary>Expected mapping views</summary>
 
-![Campus mapping: growing RViz occupancy map beside Goosebot in Gazebo](images/campus_mapping.png)
+![IST mapping in progress](images/ist_mapping.png)
 
-RViz on the left shows the partial occupancy map around the campus buildings; Gazebo on the right shows the same simulated environment. Map boundaries should follow the nearby building outlines, with RobotModel and TF reporting **Status: Ok**. Unexplored space remains unknown. Continue driving the delivery routes and alternative crossings before saving; your map and view need not match this screenshot exactly. The generic **2D Goal Pose** tool visible here is for this mapping layout; use the **Nav2 Goal** layout in Step 6 for navigation.
+![Campus mapping in progress](images/campus_mapping.png)
+
+The occupancy map grows as you drive. Scans should align with nearby boundaries; unexplored space remains unknown.
 
 </details>
 
-Stop robot motion. In another sourced terminal, save while SLAM and Gazebo remain running:
+**Save the RViz layout:** `mkdir -p ~/rviz_configs`, then **File → Save Config As** → `~/rviz_configs/goosebot_mapping.rviz`. Next time load it with `rviz2 -d ~/rviz_configs/goosebot_mapping.rviz --ros-args -p use_sim_time:=true`. Configure displays once; reuse afterward. This saves the display layout, not the SLAM map.
+
+Stop robot motion and save the map in another sourced terminal while SLAM and Gazebo stay running:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
 mkdir -p results
-ros2 run nav2_map_server map_saver_cli -f "$PWD/results/final_map" \
+MAP_NAME=ist_map  # Part B: change this to campus_map
+ros2 run nav2_map_server map_saver_cli -f "$PWD/results/$MAP_NAME" \
   --ros-args -p use_sim_time:=true
 ```
 
-Keep the YAML and image together. To view the image, use an Ubuntu image viewer, or `python3 -c "from PIL import Image; Image.open('results/final_map.pgm').save('results/final_map.png')"` from this directory and open the PNG in VS Code (install `python3-pil` if needed). The PNG is a viewing copy; keep the original map files.
+**Command breakdown:** `MAP_NAME` chooses `ist_map` or `campus_map`; `-f` sets the output basename. The saver writes YAML plus an image. Keep both together and save each world separately.
 
-### 6. Restart and navigate on your saved map
+## 6. IST — restart and navigate
 
-Switch from the mapping session to a fresh localization/navigation session:
-
-1. Save the map in Step 5, then stop teleop, SLAM, RViz and the simulator with Ctrl+C.
-2. **Terminal 1:** relaunch the same baseline world using Step 3. **Do not restart SLAM.**
-3. **Terminal 2:** start the AMCL/Nav2 command below and leave it running.
-4. **Terminal 3:** reopen RViz using the command below while Nav2 starts; confirm the saved map and set **2D Pose Estimate**. Keep Terminal 4's teleop stopped.
-
-**Opening RViz before Nav2 is allowed but does not prevent missing-map/TF warnings.** RViz only displays data and sends the initial-pose estimate. Brief `map frame does not exist` warnings can occur before AMCL receives its map, scans and initial pose. Do not wait for every navigation node to become active before opening RViz and initializing localization. Persistent **no map received** warnings require checking map loading, not merely changing startup order.
+Stop all launches as described above. Relaunch **the same world** in Terminal 1; leave SLAM stopped.
 
 **Terminal 2 — AMCL/Nav2:**
 
@@ -562,16 +253,12 @@ source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
 ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
-  map:="$PWD/final_project_simulation/results/final_map.yaml"
+  map:="$PWD/final_project_simulation/results/ist_map.yaml"
 ```
 
-The course wrapper validates the saved YAML and its referenced image, then supplies the absolute map path both as Nav2's `map` argument and explicitly in a temporary `map_server.ros__parameters.yaml_filename`. Your original configuration is preserved. Expect **Course navigation map: ...; image: ...** with the selected files. Missing files stop startup with an explanation. The wrapper sets `slam=False`, simulation time, autostart and non-composed AMCL/Nav2; do not start a second Nav2 launch alongside it. It does not start RViz or Gazebo.
+**Command breakdown:** this IST wrapper loads your map automatically and starts AMCL/Nav2. Do not manually call a load-map service during normal startup. For campus, save your map in Step 5, then use Step 9's experiment and GPS-aided navigation instead of this AMCL launch.
 
-After pulling this course update, no ROS rebuild is needed for this local-file launcher. Stop the previous AMCL/Nav2 launch with Ctrl+C before using it; keep the correct simulator running. If your existing saved map has a different name, point `map:=` to that actual YAML (do not rename just the YAML without checking its image reference).
-
-Leave Terminal 2 running; it prints logs and opens no window. Continue to RViz and set the initial pose even if costmaps are waiting for `map` TF. Once localization and navigation finish activating, expect **Managed nodes are active**. Confirm `results/final_map.yaml` and its image exist and match the selected world.
-
-In **Terminal 3**, close old mapping RViz windows and explicitly load the standard **Nav2** RViz layout:
+**Terminal 3 — navigation RViz:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -580,42 +267,21 @@ rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_v
   --ros-args -p use_sim_time:=true
 ```
 
-**Expected RViz tools:** **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel. A generic `rviz2 --ros-args ...` window is useful for Step 5 mapping but may only show **2D Goal Pose**. Use the explicit `-d` command above for navigation. If the Nav2 tool/panel is missing, inspect RViz's terminal for plugin-loading errors rather than sending goals from a leftover mapping window.
+**Command breakdown:** `$(ros2 pkg prefix ...)` finds Nav2's installed package; `-d` loads its layout. Expect **Nav2 Goal**, **2D Pose Estimate**, and the **Navigation 2** panel.
 
-**Save a separate navigation layout:** after confirming **Nav2 Goal**, **2D Pose Estimate**, the **Navigation 2** panel, Map `/map`, and LaserScan `/scan`, use **File → Save Config As…** to save `~/rviz_configs/goosebot_navigation.rviz`. Adjust/add any displays you need yourself on this first run. Do not overwrite the mapping layout or the system Nav2 configuration. On later navigation sessions, replace the standard-layout RViz command above with:
+1. **Initialize localization:** click **2D Pose Estimate**, then click and drag on the saved map at the robot's current position, pointing in its heading direction. Repeat this after restarting AMCL.
+2. **Check alignment:** laser points should overlap the map's walls. Correct the initial pose if they do not. Brief map/TF warnings can occur before initialization.
+3. **Choose a destination:** click **Nav2 Goal**, then click and drag in a free area of the map. The click selects the destination; dragging sets the final heading. Use the map in RViz; no coordinates from `mission.json` are needed.
+4. Try a nearby goal first, then visit **two chosen destinations and Home**; wait 3 seconds at each destination. Keep teleop stopped. Choose Home on the saved map too.
+5. **Check completion:** Navigation/Localization **active** means the system is running. **Feedback: active** means a goal is in progress. Count a goal as reached only after **succeeded** feedback and confirming the robot arrived and stopped.
 
-```bash
-rviz2 -d ~/rviz_configs/goosebot_navigation.rviz \
-  --ros-args -p use_sim_time:=true
-```
-
-Start Gazebo and AMCL/Nav2 as usual and set **2D Pose Estimate** for the new session. Loading an RViz configuration does not start navigation, load the map server, or restore AMCL localization. Keep the warm-up's `/projected_map` layout separate from these final-project `/map` layouts.
-
-<details>
-<summary>Troubleshooting — saved map or map frame still missing in Step 6</summary>
-
-In another sourced terminal, check:
+**Save the RViz layout:** choose **File → Save Config As** and save `~/rviz_configs/goosebot_navigation.rviz` (create the directory with `mkdir -p ~/rviz_configs` if needed). On later sessions, start Gazebo and AMCL/Nav2 as above, then open your layout:
 
 ```bash
-ros2 lifecycle get /map_server
-ros2 lifecycle get /amcl
-ros2 param get /map_server yaml_filename
-ros2 topic info /map --verbose
+rviz2 -d ~/rviz_configs/goosebot_navigation.rviz --ros-args -p use_sim_time:=true
 ```
 
-The map server should become **active**, with `yaml_filename` equal to the absolute YAML printed by the course launcher. Map loading is automatic; **do not make a manual load-map service call part of the normal procedure**. If the path is blank or different, stop the old AMCL/Nav2 process and confirm only one map server is running before relaunching the updated wrapper. Check `ros2 node list` for duplicate-node warnings. If startup fails, inspect the first map-server error, the YAML image path, and file permissions. A valid YAML alone is insufficient if its image is missing or unreadable.
-
-In RViz, **Map → Topic** must be `/map`, with Reliable / Transient Local QoS if a retained map is not displayed. Do not use the warm-up's `/projected_map`. AMCL still needs scans, TF and **2D Pose Estimate** to supply `map → odom`; loading a map or opening RViz does not initialize the pose. Do not restart SLAM or add a static `map → odom` publisher to hide a missing transform. Brief transform warnings before initialization can occur.
-
-</details>
-
-Use **2D Pose Estimate** at the starting position, dragging in its heading direction. Enable Map and LaserScan `/scan`. **Alignment means live scan points overlap the saved map's wall edges** around several sides of the robot; they should not form a shifted/rotated outline. Costmap inflation colors are clearance margins, not the physical wall. If alignment is poor, correct the initial pose before sending goals. AMCL now owns `map → odom`; the EKF still owns `odom → base_footprint`.
-
-Send a nearby **Nav2 Goal** first, then visit three chosen delivery locations and return home. Wait 3 seconds at each delivery. Clicking goals in RViz is sufficient; autonomous mission sequencing using the existing client scaffold is optional. Keep keyboard teleop stopped during navigation.
-
-**Choose destinations in RViz:** click **Nav2 Goal**, then click and drag in a free area of your saved map. The click selects the destination; dragging sets the final heading. Select Home the same way; no coordinates from `mission.json` are needed. IST example destinations are in the hallway near 1044, 1003, and 1066.
-
-**Check completion:** Navigation/Localization **active** means the system is running. **Feedback: active** means a goal is in progress. Count a goal as reached only after **succeeded** feedback and confirming the robot arrived and stopped.
+The layout saves display settings, not localization. Set **2D Pose Estimate** again each session and check scan alignment before sending goals.
 
 <details>
 <summary>Expected view — IST navigation in progress</summary>
@@ -629,216 +295,243 @@ Send a nearby **Nav2 Goal** first, then visit three chosen delivery locations an
 <details>
 <summary>Optional extensions — blocked route and LiDAR tuning (no submission)</summary>
 
-Skip these for the required project. Neither activity is graded.
+Skip these for the required project. There are no extra screenshots, discussion questions or grading requirements.
 
-### Optional: test a blocked route
+### Optional: IST blocked route
 
-Stop all launches and restart Step 3 with `ist/ist_blocked.sdf` (or `campus/campus_blocked.sdf`). Keep your **baseline saved map**, robot, settings, and goals. Relaunch AMCL/Nav2 and initialize the pose again; do not remap the barrier.
+Restart with `ist/ist_blocked.sdf`, keeping your baseline **IST map**, robot settings and goals. Restart AMCL/Nav2 and set the initial pose; do not remap the barrier. Show whether the robot detours, stops, recovers or fails. Campus blocked-route testing is optional.
 
-For IST the barrier crosses the upper hallway near the central junction at (0.5, 8.2) m; the lower loop and connecting passages provide alternatives. For campus it blocks one causeway. Check that live scans/costmaps detect it. Describe the actual result: detour, changed global path, recovery, stopping, or failure. A detour alone does not establish which algorithm replanned.
+### Optional: indoor LiDAR tuning
 
-### Optional: explore LiDAR settings
+After IST baseline navigation, open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro`. Inside **lidar_sensor**, change only **horizontal/samples: 720 → 360** or **update_rate: 10 → 5**.
 
-**Do this last**, after you have saved your baseline map and demonstrated AMCL/Nav2. You do not need to build a sensor from scratch.
-
-1. Save/commit your working baseline. Open `final_project_simulation/src/goosebot_0/urdf/robot.urdf.xacro` in VS Code.
-2. Find `<sensor type="gpu_lidar" name="lidar_sensor">` and inspect its settings:
-
-   | Setting inside the LiDAR block | Baseline | Meaning |
-   | --- | --- | --- |
-   | `update_rate` | 10 | Scans per simulated second. |
-   | `horizontal/samples` | 720 | Number of directions measured per scan. |
-   | `horizontal/min_angle`, `max_angle` | −3.14159, +3.14159 | Horizontal field of view in radians. |
-   | `vertical/samples` | 1 | A single plane for 2-D SLAM. |
-   | `range/min`, `max` | 0.12, 12.0 | Measurement limits in metres. |
-
-3. Change **one setting only**: for example horizontal samples **720 → 360**, or update rate **10 → 5**. Keep the original ToF and the `scan` topic/`lidar_link` frame unchanged. Do not globally replace values throughout the file.
-4. Save, stop launches with Ctrl+C, rebuild using the Step 1 helper, source your workspace and relaunch Step 3. The helper preserves your complete LiDAR's edited settings.
-5. Inspect `/scan` in RViz and compare with the baseline. Fewer samples give wider angular spacing; a lower update rate gives fewer scans per simulated second. With a slow Gazebo real-time factor, wall-clock `ros2 topic hz /scan` is lower than the sensor's configured rate.
-6. Restore the baseline setting before your final delivery demonstration. No screenshots, written comparison or extra video are required.
-
-<details>
-<summary>Optional — how the LiDAR link, joint, sensor and bridge are constructed</summary>
-
-See [the beginner Xacro reference](goosebot/LIDAR_REFERENCE.md) for the complete annotated XML and field-by-field explanation. Building another sensor or changing its mount is optional, not a prerequisite for this project.
+Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans under similar conditions. Restore the baseline and rebuild before campus.
 
 </details>
 
-</details>
+<a id="9-part-b--inspect-gps-outdoors"></a>
+<a id="9-part-b--gps-fusion-comparison"></a>
 
-## What to submit
+### 9. Part B — GPS/RTK localization and outdoor navigation
 
-- **One video, about 3–5 minutes:** show your LiDAR/scan display, mapping and a revisit, saved-map localization, successful navigation to three deliveries and home. Clips may be joined; do not record the entire setup.
-- **Your fork/code:** the configured Goosebot source, SLAM/Nav2 configuration, saved map YAML/image, and the commands you used. Commit source/configuration; exclude `build/`, `install/`, `log/`, databases, and bags.
-- **A short explanation in your own words, about one page:** what you changed; how scans, TF, odometry, SLAM, AMCL, planning and control fit together; one problem/fix; and why simulation success does not prove physical Goosebot readiness. List each member's contribution.
+#### A. Compare localization on one drive
 
-No long report, custom planner implementation, or mandatory mission-client implementation is required. Assessment: mapping/localization 40%, navigation 35%, explanation/reproducibility 25%. Diagnose and retain failed attempts rather than presenting ground-truth localization as your solution.
+**Question:** how does GPS precision affect localization? Two independent simulated sensors measure the same drive:
 
-<details>
-<summary>Optional display troubleshooting — wheels or map rendering</summary>
+| Estimate | Input | Horizontal noise standard deviation |
+|---|---|---|
+| A | Existing odometry + IMU | No GPS |
+| B | A + ordinary GPS | About 1.5–1.7 m per axis |
+| C | A + RTK-like GPS | About 2 cm per axis |
 
-The course helper supplies wheel joint states for RViz. If only wheel links show transform errors while chassis/LiDAR TF works, first inspect `ros2 topic echo /joint_states --once`; do not add another odometry publisher. Wheel appearance is not a mapping/localization completion requirement.
+The profiles model **measurement noise only**—not real RTK correction links, multipath or loss of RTK fix. Add no XML and do not edit Xacro. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib python3-pil`.
 
-If RViz reports the shader error `active samplers with a different type refer to the same texture image unit`, save its configuration and stop only RViz. You may try `LIBGL_ALWAYS_SOFTWARE=1 rviz2 --ros-args -p use_sim_time:=true` for that process. This is a rendering diagnostic, may be slower, and is not guaranteed to fix the driver problem. Keep Gazebo/SLAM running and verify map messages independently; do not rebuild the robot to fix a graphics error.
-
-</details>
-
-<a id="goosebot-warm-up"></a>
-
-<details>
-<summary>Optional practice arena — manual driving and a perfect-map Nav2 goal</summary>
-
-## Optional troubleshooting — practice arena and perfect-map navigation
-
-**Skip this entire exercise for the normal final-project workflow.** Follow Steps 4–5 directly: start SLAM, open RViz using `map`, then drive. This exercise does not replace the final SLAM/AMCL demonstration.
-
-Use **native Ubuntu/WSL + ROS 2 Jazzy**, the package built in Step 1, and the **same `~/goosebot_ws` workspace** as your final. No second installation, Docker setup, or robot-model modification is required for this warm-up. If you already completed Step 1, reuse your package/workspace and preserve your edits.
-
-This optional warm-up uses a **10 × 8 m open arena with low walls and three obstacles**, so Goosebot remains visible and there is room to steer. The original tall-wall maze is optional below. Pull the latest course repo to obtain these assets; rebuilding Goosebot is unnecessary for a world/map change.
-
-<details>
-<summary>Preview — simple practice arena</summary>
-
-![Low-wall arena, spawn and example goal](warmup/warmup_plan.svg)
-
-</details>
-
-The practice arena's **perfect-map mode** provides both a pre-generated map and Gazebo ground-truth global localization. This checks Goosebot operation and Nav2 integration; **it is not SLAM and does not use AMCL**. This mode is allowed for this warm-up only; the final still requires the supplied LiDAR, your SLAM map, and AMCL.
-
-**Terminal 1 — low-wall practice arena and Goosebot:** stop other simulator/SLAM/navigation launches first.
+**Terminal 1:** stop old launches and start fresh at campus Home:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch goosebot_0 spawn_robot.launch.py \
-  world:="$PWD/final_project_simulation/warmup/warmup.sdf" x:=-3.5 y:=-2.5 yaw:=0.0
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=comparison
 ```
 
-**Terminal 2 — manual driving:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard \
-  --ros-args -p speed:=0.1 -p turn:=0.5
-```
-
-Click inside Terminal 2 and use **lowercase keys**, with Shift and Caps Lock off. Goosebot uses different keys from TurtleBot teleop:
-
-| Key | Effect |
-| --- | --- |
-| `i` | Drive forward |
-| `,` | Drive backward |
-| `j` / `l` | Turn left / right |
-| `k` | Stop |
-| `w` / `x` | Increase / decrease the linear speed setting |
-| `q` / `z` | Increase / decrease both speed settings |
-
-**A changed “speed/turn” number only changes the settings; it does not command movement.** Press `i` to move. Start at 0.1 m/s; restarting the command above resets these settings. Keep Gazebo playing and stop Nav2 while driving manually. Drive a short distance, then press `k`. Stop the robot and quit teleop with Ctrl+C. For a repeatable navigation check, stop Terminal 1 too and relaunch the practice arena at the original spawn pose.
-
-**Terminal 2 — supplied perfect-map Nav2:** run this after teleop has stopped. Keep its original model-specific configuration; the final's LiDAR configuration is used later.
+**Terminal 2 — record, then report:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch goosebot_0 nav2_bringup.launch.py slam:=false use_sim_time:=true \
-  map:="$PWD/final_project_simulation/warmup/reference.yaml"
+ros2 launch "$PWD/final_project_simulation/goosebot/gps_compare.launch.py" \
+  output:="$PWD/final_project_simulation/results/gps_rtk_comparison"
 ```
 
-Use this arena's `reference.yaml` with `warmup.sdf`; **do not use the maze map with the practice arena**. The supplied map is generated from obstacle geometry and is not a student SLAM result.
+Keep still until **READY**. Use Terminal 4's Step 5 teleop to drive a safe **10–20 m loop with turns**. Stop with **k**, wait three simulated seconds, then **Ctrl+C in Terminal 2** to save.
 
-**Expected behavior:** Nav2 runs its navigation nodes in Terminal 2 and prints log messages; **no new window opens**. When the log says **`Managed nodes are active`**, the navigation nodes are ready. Leave Terminal 2 running and continue to Terminal 3, which opens RViz. Do not press Ctrl+C in Terminal 2 until you want to stop Nav2.
+**Minimum recording distance: 5 m of total travel after READY.** This is distance travelled along the route, not distance from Home; turning in place does not count. Aim for 10–20 m to leave a margin. The report rejects shorter recordings. If it reports “Recorded route shorter than 5 m,” repeat with a longer route and a **new output directory**. If you already drove that far, inspect the recording/odometry before repeating. Generate the report only after the recorder has saved and exited:
 
-**Terminal 3 — RViz:**
+
+```bash
+python3 final_project_simulation/goosebot/gps_compare.py report \
+  --input final_project_simulation/results/gps_rtk_comparison
+```
+
+**Command breakdown:** `gps_profile:=comparison` supplies ordinary `/gps/fix` and RTK-like `/gps/rtk_fix` simultaneously. The recorder saves raw sensor data and separate evaluation-only truth. `report` replays supplied position filters and writes **`comparison.png`** and **`metrics.json`**. Use a new output directory for another run; files are not overwritten.
+
+**Open `comparison.png` to see the plots.** Its **left column** shows the unmodified recorded experiment; its **right column** adds an artificial +15% prediction scale error equally to A/B/C. The top row shows routes; the bottom row shows position error over time (lower is better). Do not describe the controlled column as unmodified robot performance.
+
+**`metrics.json` contains named sections, not visual columns:**
+
+| In `comparison.png` | Section inside `metrics.json` |
+|---|---|
+| Left column — unmodified | `metrics → unmodified` |
+| Right column — artificial +15% scale error | `metrics → controlled_scale_error` |
+
+For the required results table, expand **`metrics → unmodified`** in VS Code. Use **`baseline` for A**, **`fused` for B**, and **`rtk` for C**. Copy `rmse_m` into the RMSE column and `final_error_m` into the final-error column; both are in meters. The terminal prints the same values as **RMSE / final error**. Use your own run's values, not the example below.
+
+Ground truth scores horizontal position error only; it never enters a filter. Both GPS position filters use the known commanded Home pose/heading as their starting reference.
+
+<details>
+<summary>Expected output — recording, report, plot and JSON examples</summary>
+
+![GPS comparison recorder receiving all streams and reporting READY](images/gps_comparison_ready.png)
+
+Wait for **READY** before driving. The parameter-dump fallback message is informational when individual checks succeed.
+
+![GPS recording saved cleanly and report printing the two cases](images/gps_comparison_report.png)
+
+After Ctrl+C, expect **Saved sensors.csv, evaluation-only truth.csv, metadata.json** and a clean exit. Run the report next; it prints separate `unmodified` and `controlled_scale_error` results.
+
+![Example ordinary-GPS and RTK-like comparison plot from one campus drive](images/gps_comparison_example.png)
+
+This instructor pilot shows ordinary GPS reducing overall RMSE while giving a worse final error than odometry alone; the idealized RTK-like estimate is more accurate in this run. Improvement is not guaranteed. The title's “BOTH A/B” wording is from this example's plot label; the artificial prediction scale is applied equally to A/B/C.
+
+![VS Code displaying metrics.json and the unmodified baseline results](images/gps_metrics_example.png)
+
+The JSON screenshot shows `metrics → unmodified → baseline`, including `rmse_m` and `final_error_m`. Scroll down for `fused`, `rtk`, and the separate controlled case. These screenshots use the instructor checkout and a run-specific folder; use your own checkout/output path.
+
+</details>
+
+**Submit:** the plot and this table from the unmodified case, plus two sentences explaining the measured differences. Briefly state whether the controlled case changes your conclusion.
+
+| Estimate | Horizontal RMSE (m) | Final position error (m) |
+|---|---|---|
+| A — odometry + IMU | Fill | Fill |
+| B — A + ordinary GPS | Fill | Fill |
+| C — A + RTK-like GPS | Fill | Fill |
+
+RMSE is root mean square distance to Gazebo truth at matching timestamps. GPS need not improve an already accurate estimate. This experiment evaluates localization, not navigation success.
+
+<a id="gps-aided-outdoor-navigation"></a>
+
+#### B. Required — GPS navigation using the campus map
+
+The campus now uses **1:1 horizontal meters**; Goosebot and sensor ranges are unscaled. The supplied map matches the world and GPS east/north frame. **No new mapping or manual alignment is needed for this navigation activity.** Keep your local campus SLAM result as separate mapping evidence. The old short-range/map-free navigation exercise is retired.
+
+**Updating an existing run:** stop all launches, pull the complete update and restart at the new Home. Old campus SLAM maps, coordinates and recordings belong to the former 0.06 world; record/save new evidence. Generated assets are committed—no mesh generation or ROS rebuild is needed for this update. Do not mix old world files with the new map.
+
+**Terminal 1 — fresh full-scale campus with RTK-like GPS:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-rviz2 -d "$(ros2 pkg prefix nav2_bringup)/share/nav2_bringup/rviz/nav2_default_view.rviz" \
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=rtk
+```
+
+**Before starting Terminal 2:** wait until Gazebo has finished loading and Goosebot appears at Home. If the simulation is paused, click **Play**. Keep the robot stationary; leave SLAM, AMCL and teleop stopped. Keep Terminal 1 running throughout the activity. Use these readiness checks rather than a fixed number of seconds.
+
+**Terminal 2 — GPS localization, campus map and Nav2:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/gps_navigation.launch.py" \
+  profile:=rtk reference_map:="$PWD/final_project_simulation/campus/reference.yaml"
+```
+
+Wait for **GPS_LOCALIZATION_READY**, then **CAMPUS_MAP_READY**, and active Nav2 nodes. **Do not send navigation goals until all three are ready.** The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
+
+**Command breakdown:** `gps_profile:=rtk` selects simulated RTK-like noise; `profile:=rtk` selects matching filter uncertainty. `reference_map:=` validates the matching full-scale map, builds the pedestrian-only grid, and starts the map server. Grass and travel along asphalt motor lanes are forbidden in both costmaps. Short crossings across asphalt are permitted where mapped pedestrian pavement continues on both sides; separate sidewalks and interior non-asphalt paved corridors remain permitted. GPS estimates pose; the supplied map supports global planning; live LiDAR detects obstacles. There is no AMCL or 2D Pose Estimate. The map is supplied knowledge, not perfect localization or student SLAM evidence.
+
+**Terminal 3 — full-map navigation view:**
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" \
   --ros-args -p use_sim_time:=true
 ```
 
-Use Fixed Frame `map`; set the Map display's topic to **`/projected_map`**. Enable RobotModel with `/robot_description` and TF. The forward ToF, if displayed as LaserScan, is **`/tof_front/scan`** and gives only a narrow beam. The supplied LiDAR also publishes `/scan`; the warm-up still uses perfect-map localization. Do not initialize AMCL with 2D Pose Estimate: the ground-truth bridge supplies `map → odom` in this mode.
+Check scans overlap nearby map building edges. **Localization: inactive** refers to absent AMCL; use the GPS-ready message. The global map covers the campus; the local costmap rolls around Goosebot. Non-asphalt interior paved routes and sidewalks alongside asphalt roads are included; a generic road label does not block them. Map resolution is 0.25 m to keep full-campus planning practical; the local grid is 0.025 m. The configured footprint is 0.20 × 0.20 m. Widths use the instructor’s map measurements where matched, with a 3 m minimum for unmeasured walks; see [widths/access](campus/WIDTHS_AND_ACCESS.md).
 
-**Terminal 4 — check interfaces, then send one goal:**
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 topic echo /odometry/filtered --once
-ros2 topic echo /tof_front/scan --once --field header.frame_id
-ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
-  "{pose: {header: {frame_id: 'map'}, pose: {position: {x: 3.0, y: -2.5}, orientation: {w: 1.0}}}}" --feedback
-```
-
-Expect odometry/sensor messages, robot movement in Gazebo, and a **SUCCEEDED** action result. You may instead select one reachable free-space Nav2 Goal in RViz. If TF is missing, inspect `ros2 run tf2_ros tf2_echo odom base_footprint` in a sourced terminal; stop the check with Ctrl+C. Resolve warm-up startup/motion problems before modifying the model.
-
-**No separate submission or warm-up credit is required.** Use this exercise only if you want extra practice or need to isolate startup, motion or Nav2 problems.
-
-**Finish:** stop Nav2, RViz and the practice arena with Ctrl+C. Continue with Step 2 in this same source/workspace. Keep the warm-up's perfect-map/ground-truth launches stopped while running final-project SLAM or AMCL; each mode must have only one `map → odom` publisher.
-
-<details>
-<summary>Troubleshooting — keyboard input but no motion</summary>
-
-Check terminal focus, lowercase movement keys, and that Gazebo is playing. Stop other teleop/Nav2 processes that may also publish velocity commands. In a separate sourced terminal, run `ros2 topic echo /cmd_vel`, then press `i` in teleop: expect nonzero `linear.x`. A bridge message saying it passed a Twist confirms receipt, not physical movement. If nonzero commands arrive but Goosebot stays still, save the full simulator/bridge log for troubleshooting. Press `k` to stop and Ctrl+C to end the topic check.
-
-</details>
-
-<details>
-<summary>Optional challenge — original tall-wall maze</summary>
-
-The original maze has narrow passages and tall textured walls that obstruct the camera. It is an optional extra challenge. Stop all practice-arena launches first. In Terminal 1 use:
+**Terminal 4 — reach A, then B, then Home:**
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
-ros2 launch goosebot_0 spawn_robot.launch.py \
-  world:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/worlds/maze.world" x:=-0.5
+cd ~/courses/eel4332-autonomous-vehicle-labs
+python3 final_project_simulation/goosebot/gps_goal.py --waypoint A && \
+python3 final_project_simulation/goosebot/gps_goal.py --waypoint B && \
+python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
-For perfect-map navigation, Terminal 2 must use its matching map:
+Each command waits for its goal to finish; `&&` continues only after success. Expect **SUCCEEDED** after each. `--waypoint` reads GPS-aligned meter coordinates from `campus/mission.json`; no coordinates need to be copied. A and B are about 20 m along mapped routes from Home, on opposite sides, keeping the exercise local while testing full-map planning beyond current LiDAR range. Outdoor forward speed is capped at 1.0 m/s; Nav2 may slow for turns or obstacles; keyboard speed is separate. You may also use **Nav2 Goal** on permitted pedestrian paths/sidewalks.
+
+**Current campus map — after connectivity corrections**
+
+The updated pedestrian network is loaded in RViz alongside the matching Gazebo world. Sidewalks and short permitted crossings remain connected; asphalt lanes outside those crossings stay forbidden. In this screenshot no goal is active, so **Feedback: unknown** is expected. **Localization: inactive** refers to absent AMCL.
+
+![Updated full-campus pedestrian planning map in RViz with Goosebot at Home in Gazebo](images/campus_gps_navigation_current_map.png)
+
+**Example campus navigation run**
+
+These instructor screenshots show the RViz/Gazebo views during a live run. They were captured before the latest pavement-gap and bend-join corrections, so small gaps/notches in these images should not be treated as expected features of the updated map. Timing and exact paths vary.
+
+**1. Campus overview:** the white pedestrian network is permitted; purple regions are forbidden. Gazebo shows the corresponding campus pavement and water.
+
+![Campus pedestrian navigation map in RViz alongside the matching Gazebo world](images/campus_gps_navigation_overview.png)
+
+**2. Following a path:** the planned path stays on the permitted pavement, and the small Goosebot moves along it in Gazebo. RViz shows **Navigation: active** and **Feedback: active**.
+
+![Goosebot following a planned pedestrian path in RViz and Gazebo](images/campus_gps_navigation_following_path.png)
+
+**3. Goal reached:** RViz shows **Feedback: reached**, zero remaining distance and ETA, with Goosebot stopped on the pavement. **Localization: inactive** is expected here because AMCL is absent; GPS localization is provided separately.
+
+![Campus navigation goal reached in RViz with Goosebot on the pavement in Gazebo](images/campus_gps_navigation_goal_reached.png)
+
+**Submit:** a campus video showing GPS readiness, the global path staying on pedestrian paths/sidewalks, and A, B and Home reached. Explain the distinct GPS, prior-map and LiDAR roles. Briefly demonstrate grass and asphalt-lane goals away from permitted crossings are rejected; cancel it before continuing. Do not disable the pedestrian mask or shrink the footprint. Cancel navigation if localization or motion behaves unexpectedly.
+
+**INSTRUCTOR VALIDATION REQUIRED:** matching geometry/map, route clearance and launch parameters have offline tests; the full-scale Gazebo run still needs a course-machine pilot. See [map details and checks](goosebot/GPS_MAP_EXTENSION.md). Ordinary-GPS/RTK-like localization remains the separate experiment above; this required live activity uses RTK-like GPS.
+
+#### C. Optional — ordinary GPS + encoders + IMU + LiDAR
+
+Try the [budget localization experiment](goosebot/BUDGET_LOCALIZATION.md) to measure a lower-cost sensor combination on one recorded manual drive. It compares encoder/gyro alone, + ordinary GPS, + ordinary GPS/LiDAR map matching, and a LiDAR-without-GPS control. The guide includes full terminal commands and an optional controlled GPS-withholding replay.
+
+This uses measured simulated wheel-joint velocities, **not command-derived odometry**. It reports offline horizontal RMSE/final/maximum error; no live navigation or hardware-accuracy claim is made. It is optional, ungraded and requires a Gazebo pilot.
+
+### 10. Explain the system
+
+Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your GPS experiment observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
+
+## What to submit
+
+- **Two edited videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home (campus A/B on the supplied pedestrian-only map). Include brief sensor evidence.
+- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
+- **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
+
+| Assessment | Weight |
+|---|---:|
+| Mapping in both worlds, indoor AMCL and outdoor GPS localization | 25% |
+| Indoor navigation and required campus-map GPS navigation | 25% |
+| Ordinary-GPS/RTK-like localization experiment | 15% |
+| System understanding and evidence-based explanation | 30% |
+| Reproducibility and contributions | 5% |
+
+<a id="goosebot-warm-up"></a>
+
+## Optional reference
+
+The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. Step 9 separates the offline localization comparison from the live GPS navigation mode. Indoor AMCL remains unchanged.
+
+**INSTRUCTOR VALIDATION REQUIRED:** profile generation, fusion math, TF composition, gating, scoring, plotting and Nav2 parameters have offline tests and synthetic-data checks. The dual-sensor bridge and live GPS/Nav2 launch still require a course-machine pilot; no end-to-end Gazebo navigation result is claimed.
+
+
+
+### Campus map startup check
+
+After `GPS_LOCALIZATION_READY`, wait for `CAMPUS_MAP_READY` and then Nav2 activation. The supplied helper configures and activates `/map_server`, then verifies a reliable, transient-local `/map` against the selected campus map before starting Nav2. Large maps may take time to load. A startup failure stops this launch; inspect the first map-server/helper error rather than sending a navigation goal. Stop older GPS navigation launches before restarting.
+
+If RViz says **No map received**, check `ros2 lifecycle get /map_server`: it must be `active`. Having a publisher alone does not confirm map publication. Update this branch and restart the GPS navigation launch to use the startup check. If the robot moved, restart the world at fresh Home before restarting GPS localization.
+
+If the map is publishing but RViz reports the GLSL sampler error, close RViz and try software rendering for RViz only:
 
 ```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-ros2 launch goosebot_0 nav2_bringup.launch.py slam:=false use_sim_time:=true \
-  map:="$(ros2 pkg prefix goosebot_0)/share/goosebot_0/maps/maze.yaml"
+LIBGL_ALWAYS_SOFTWARE=true rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" \
+  --ros-args -p use_sim_time:=true
 ```
 
-Reuse the slow manual-driving command and RViz setup above, but select a reachable free-space goal on the maze map instead of using the arena's example coordinates.
-
-</details>
-
-<details>
-<summary>Optional alternatives — Docker and stereo SLAM</summary>
-
-**Docker is optional for both the warm-up and final.** The required course workflow stays native WSL/Jazzy. Students who already use Docker may follow the [upstream Docker setup](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation#2-docker-setup), use the same pinned source revision as Step 1, run ROS commands inside the container, and adapt paths to its filesystem. Keep source/configuration/maps in a persistent host-mounted workspace, retain changes when containers are recreated, and demonstrate the same required outcomes. Do not copy native or old Docker `build/install/log` directories between environments.
-
-**Stereo RTAB-Map is an optional extension**, not a prerequisite. Its [upstream live-stereo mode](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation#32-mode-b--live-stereo-slam) must run separately from perfect-map localization and the final's LiDAR SLAM/AMCL. Running stereo SLAM does not replace the final mapping/AMCL/Nav2 demonstration.
-
-</details>
-
-<details>
-<summary>Example — warm-up navigation reached a goal</summary>
-
-![Warm-up arena with Nav2 feedback reached](images/warmup_navigation.png)
-
-The warm-up arena has low boundary walls and three blocks. RViz shows **Feedback: reached**. Localization may show inactive here because this mode uses perfect localization, not AMCL. Use the supplied warm-up map; this is not your final SLAM map.
-
-</details>
-
-</details>
-
-## Troubleshooting and references
-
-- **No `/scan`:** check Gazebo playing, sensor enabled, topic spelling, bridge entry, and sensor-rendering plugins. A bridge does not create sensor data by itself.
-- **No motion:** focus the teleop terminal; check `/cmd_vel` type with `ros2 topic info /cmd_vel --verbose` against the supplied bridge. This model expects `geometry_msgs/msg/Twist`; do not enable stamped commands on only one end.
-- **TF problems:** inspect the actual scan frame; exactly one mapper/localizer owns `map → odom`. Never run the original Goosebot perfect-map bridge alongside SLAM or AMCL.
-- **Far goals fail:** verify map coverage and the full-map global costmap. Do not navigate into unmapped space. Sparse outdoor structure and open-loop odometry can make campus mapping harder; IST is the shorter starting option.
-- **Robot invisible / duplicate clocks:** stop all old simulator launches; inspect leftover Gazebo processes before terminating only the stale processes you identify. Launch one world/server at a time.
-
-References: [Goosebot source](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation), [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox), [Nav2 configuration](https://docs.nav2.org/configuration/index.html), [Gazebo sensors](https://gazebosim.org/docs/harmonic/sensors/). All required commands are above.
-
-**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the SLAM-first startup in the selected project world, sensor rendering/TF, mapping, saved-map localization, all required deliveries on the course WSL installation before release. Starting configurations require local verification and may need tuning.
+This is a rendering diagnostic; it does not activate an inactive map server. Live WSL/Jazzy simulation validation is still required.

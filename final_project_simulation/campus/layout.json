@@ -464,6 +464,88 @@
       "name": "BARC",
       "points": [
         [
+          -203.3657,
+          136.162055
+        ],
+        [
+          -188.041844,
+          128.978966
+        ],
+        [
+          -186.406356,
+          117.560856
+        ],
+        [
+          -196.142092,
+          116.40429
+        ],
+        [
+          -195.876667,
+          114.17
+        ],
+        [
+          -195.611242,
+          111.93571
+        ],
+        [
+          -194.042981,
+          112.122014
+        ],
+        [
+          -191.341667,
+          109.105
+        ],
+        [
+          -214.083333,
+          88.766667
+        ],
+        [
+          -215.763754,
+          87.270443
+        ],
+        [
+          -215.760479,
+          87.266765
+        ],
+        [
+          -278.885,
+          30.813333
+        ],
+        [
+          -290.986667,
+          44.35
+        ],
+        [
+          -277.608333,
+          56.316667
+        ],
+        [
+          -288.051667,
+          67.983333
+        ],
+        [
+          -264.8,
+          88.788333
+        ],
+        [
+          -266.801667,
+          102.748333
+        ],
+        [
+          -288.523333,
+          99.631667
+        ],
+        [
+          -291.94,
+          123.465
+        ]
+      ],
+      "letter": "B",
+      "height": 28.3333,
+      "source": "OpenStreetMap way 1105807878",
+      "color": "#e8e1d8",
+      "source_points_before_pavement_review": [
+        [
           -291.94,
           123.465
         ],
@@ -516,10 +598,7 @@
           99.631667
         ]
       ],
-      "letter": "B",
-      "height": 28.3333,
-      "source": "OpenStreetMap way 1105807878",
-      "color": "#e8e1d8"
+      "geometry_review": "Teaching-footprint correction: retain the main building mass outside mapped pedestrian pavement plus 0.75 m clearance. Original OSM/PDF points retained for provenance; this correction is approximate, not surveyed. Do not carve navigation-only holes through physical collision geometry."
     },
     {
       "id": "osm_1528887774_0",
@@ -618,6 +697,56 @@
       "name": "Residence Hall III",
       "points": [
         [
+          160.388333,
+          99.768333
+        ],
+        [
+          136.784353,
+          108.756633
+        ],
+        [
+          107.913434,
+          140.448395
+        ],
+        [
+          93.051667,
+          161.098333
+        ],
+        [
+          75.705206,
+          182.993795
+        ],
+        [
+          80.32418,
+          187.46766
+        ],
+        [
+          92.153017,
+          196.203763
+        ],
+        [
+          149.539771,
+          134.555286
+        ],
+        [
+          151.186667,
+          136.088333
+        ],
+        [
+          149.578385,
+          134.514825
+        ],
+        [
+          172.179306,
+          111.414428
+        ]
+      ],
+      "letter": "K",
+      "height": 35.0,
+      "source": "Approximate footprint inferred from supplied 2026 perspective PDF",
+      "color": "#d5c4e6",
+      "source_points_before_pavement_review": [
+        [
           20.701667,
           252.421667
         ],
@@ -650,15 +779,38 @@
           161.098333
         ]
       ],
-      "letter": "K",
-      "height": 35.0,
-      "source": "Approximate footprint inferred from supplied 2026 perspective PDF",
-      "color": "#d5c4e6"
+      "geometry_review": "Teaching-footprint correction: retain the main building mass outside mapped pedestrian pavement plus 0.75 m clearance. Original OSM/PDF points retained for provenance; this correction is approximate, not surveyed. Do not carve navigation-only holes through physical collision geometry."
     },
     {
       "id": "pdf_store",
       "name": "Campus Store",
       "points": [
+        [
+          167.048333,
+          90.27
+        ],
+        [
+          180.098333,
+          70.403333
+        ],
+        [
+          166.565012,
+          76.066244
+        ],
+        [
+          158.1845,
+          85.265576
+        ],
+        [
+          164.883322,
+          91.424231
+        ]
+      ],
+      "letter": "C",
+      "height": 10.8333,
+      "source": "Approximate footprint inferred from supplied 2026 perspective PDF",
+      "color": "#d5c4e6",
+      "source_points_before_pavement_review": [
         [
           136.008333,
           106.818333
@@ -676,10 +828,7 @@
           80.976667
         ]
       ],
-      "letter": "C",
-      "height": 10.8333,
-      "source": "Approximate footprint inferred from supplied 2026 perspective PDF",
-      "color": "#d5c4e6"
+      "geometry_review": "Teaching-footprint correction: retain the main building mass outside mapped pedestrian pavement plus 0.75 m clearance. Original OSM/PDF points retained for provenance; this correction is approximate, not surveyed. Do not carve navigation-only holes through physical collision geometry."
     },
     {
       "id": "pdf_phoenix",
@@ -8280,7 +8429,8 @@
     "FIPR Institute is off-campus in Bartow and intentionally omitted.",
     "Outer bounds are rounded outward to the 0.25 m grid; geographic feature coordinates are unchanged.",
     "Path widths now use instructor map measurements M01-M03 where matched; other walks use the reported 3 m minimum. M04 is an overall corridor including non-pavement and is never applied as a drivable width.",
-    "Surface/access review restores interior non-asphalt paved corridors previously excluded by generic road labels. Separate asphalt-road sidewalks remain drivable. Explicit asphalt carriageways/parking access remain excluded."
+    "Surface/access review restores interior non-asphalt paved corridors previously excluded by generic road labels. Separate asphalt-road sidewalks remain drivable. Explicit asphalt carriageways/parking access remain excluded.",
+    "Pavement review: corrected BARC corner and approximate Campus Store/Residence III footprints that overlapped mapped walks; visible geometry, collision meshes and obstacle map share the correction. Rounded pavement joins remove false post-like notches at bends. No lamp posts are modeled."
   ],
   "navigation_goals": [
     {

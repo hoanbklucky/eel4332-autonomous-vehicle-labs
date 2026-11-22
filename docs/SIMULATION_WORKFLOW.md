@@ -1,6 +1,6 @@
 # Simulation workflow index
 
-> **Final-project update:** the required final now uses Goosebot with a supplied LiDAR in IST or campus. Follow [the final README](../final_project_simulation/README.md); TurtleBot commands below apply to Labs 2/4/5. Validate sensor/bridge/TF, LiDAR SLAM, saved-map AMCL/Nav2, and both world variants. The supplied ground-truth mode is used only for the optional Goosebot troubleshooting warm-up, not as final SLAM/AMCL evidence.
+> **Final-project update:** the required final now uses Goosebot with a supplied LiDAR in both IST and campus. Follow [the final README](../final_project_simulation/README.md); TurtleBot commands below apply to Labs 2/4/5. Validate sensor/bridge/TF, LiDAR SLAM, indoor saved-map AMCL, dual GPS/RTK-like localization and live outdoor GPS/Nav2. The supplied ground-truth mode is used only for the optional Goosebot troubleshooting warm-up, not as final SLAM/AMCL evidence.
 
 Follow the self-contained course READMEs. Required commands are included there; ROBOTIS links are references.
 
@@ -12,9 +12,10 @@ Follow the self-contained course READMEs. Required commands are included there; 
 | Saved-map Nav2 navigation | [Lab 5](../lab05_navigation/README.md) |
 | Goosebot readiness check in the selected IST/campus world | [Final README, Step 4](../final_project_simulation/README.md#goosebot-readiness-check) |
 | Optional practice arena and perfect-map Nav2 | [Optional troubleshooting](../final_project_simulation/README.md#goosebot-warm-up) |
+| GPS/RTK-like localization comparison and GPS-aided campus Nav2 | [Final Step 9](../final_project_simulation/README.md#9-part-b--gps-fusion-comparison) |
 | Delivery mission and evaluation | [Final](../final_project_simulation/README.md) |
 
-Lab 2 and the first environment in Labs 4–5 use Waffle/World; Labs 4–5 also use Waffle Pi/House. The final uses its own Goosebot/LiDAR SLAM Toolbox + AMCL/Nav2 procedure in IST or campus. Keep these launch workflows separate.
+Lab 2 and the first environment in Labs 4–5 use Waffle/World; Labs 4–5 also use Waffle Pi/House. The final uses its own Goosebot/LiDAR SLAM Toolbox in both worlds, AMCL indoors and live GPS/Nav2 outdoors. Keep these launch workflows separate.
 
 Use native WSL/Jazzy and the final's workspace for the warm-up and final. Docker and stereo SLAM are optional; if using the optional perfect-map exercise, keep it separate from final SLAM/AMCL.
 

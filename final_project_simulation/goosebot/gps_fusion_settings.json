@@ -1,0 +1,10 @@
+{
+  "initial_std_m": 0.25,
+  "process_variance_m2_per_s": 0.0025,
+  "process_variance_m2_per_m": 0.04,
+  "fallback_horizontal_std_deg": 1.5e-05,
+  "gps_gate_mahalanobis_squared": 25.0,
+  "max_world_radius_m": 2000.0,
+  "max_interpolation_gap_s": 0.5,
+  "controlled_prediction_scale": 1.15
+}

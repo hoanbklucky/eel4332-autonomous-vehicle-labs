@@ -1,10 +1,10 @@
 # Fork, clone, select the branch, and keep course files current
 
-Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from ROS workspaces. **Expected branch: `main`.** This is the current `main` assignment. Use the instructor-assigned branch; changing a GitHub browser branch does not change your local files.
+Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from ROS workspaces. **Expected branch: `main`.** Use the instructor-assigned branch; changing a GitHub browser branch does not change your local files.
 
 ## 1. Fork and clone (new students)
 
-1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. For a non-main assignment, uncheck **Copy the main branch only** if offered. An existing main-only fork can still receive another branch with the fetch steps below; no second fork is needed.
+1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. The required indoor/outdoor activity is included on `main`.
 2. In Ubuntu/WSL, replace `YOUR_USERNAME` with your actual GitHub username. Run this only for a **new** local copy:
 
 ```bash

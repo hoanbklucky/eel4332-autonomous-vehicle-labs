@@ -1,6 +1,6 @@
 """Start server, spawn in the named world, then open the GUI on create success."""
-import sys
 import json
+import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -16,6 +16,9 @@ from launch.events import Shutdown
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gps_profiles import apply_profile
 
 
 def existing_servers(proc=Path('/proc')):
@@ -51,6 +54,8 @@ def start(context):
     here = Path(__file__).resolve().parent
     package = Path(get_package_share_directory('goosebot_0'))
     description = xacro.process_file(str(package / 'urdf/robot.urdf.xacro')).toxml()
+    gps_profile = LaunchConfiguration('gps_profile').perform(context)
+    description = apply_profile(description, gps_profile)
     description_parameter = ParameterValue(description, value_type=str)
     server = ExecuteProcess(cmd=['gz', 'sim', '-s', '-r', str(world)], output='screen',
                             sigterm_timeout='10', sigkill_timeout='10')
@@ -81,7 +86,7 @@ def start(context):
 
     wheel_odom = ExecuteProcess(cmd=[sys.executable, '-u', str(here / 'wheel_joint_odometry.py')],
                                 output='screen', sigterm_timeout='10', sigkill_timeout='5')
-    return [
+    actions = [
         RegisterEventHandler(OnProcessExit(target_action=wheel_odom,
             on_exit=lambda _event, _context: shutdown('Wheel odometry stopped; stopping the course launch.'))),
         LogInfo(msg=f'Course spawn: entity=goosebot world={world_name} file={world} '
@@ -104,10 +109,19 @@ def start(context):
         spawn,
         TimerAction(period=120.0, actions=[OpaqueFunction(function=startup_timeout)]),
     ]
+    if gps_profile == 'comparison':
+        actions.append(Node(package='ros_gz_bridge', executable='parameter_bridge',
+            name='rtk_comparison_bridge', output='screen',
+            arguments=['/gps/rtk_fix@sensor_msgs/msg/NavSatFix[gz.msgs.NavSat'],
+            parameters=[{'use_sim_time': True}]))
+    return actions
 
 
 def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('world', description='Absolute SDF path with adjacent mission.json'),
+        DeclareLaunchArgument('gps_profile', default_value='model',
+            choices=['model', 'ordinary', 'rtk', 'comparison'],
+            description='Runtime GNSS noise; comparison adds a second RTK-like sensor'),
         OpaqueFunction(function=start),
     ])
