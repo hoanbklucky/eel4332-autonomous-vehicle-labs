@@ -310,7 +310,7 @@ def plan():
     by=top+65+len(labels)*24+35
     for i,v in enumerate(DATA['stops']):s.append(f'<text x="{left+(x1-x0)*k+25}" y="{by+i*24}" font-size="12">Yellow {i}: {escape(v["name"])}</text>')
     s += [f'<text x="45" y="{height-35}" font-size="11">Map data © OpenStreetMap contributors (ODbL); 2026 PDF used for labels and approximate purple additions.</text>',
-          f'<text x="45" y="{height-17}" font-size="11">Blue = non-traversable water. Widths are explicit physical assumptions. Not a surveyed digital twin.</text>','</g></svg>']
+          f'<text x="45" y="{height-17}" font-size="11">Blue = non-traversable water. Widths: map measurements where matched; other paths estimated. Not surveyed.</text>','</g></svg>']
     (ROOT/'campus_plan.svg').write_text('\n'.join(s)+'\n')
 
 
