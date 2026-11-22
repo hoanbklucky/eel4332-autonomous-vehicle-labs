@@ -13,7 +13,7 @@ def wrap(angle):
 class PlanarFusion:
     """State x,y,yaw; initial heading is the known commanded Home heading.
 
-    Prediction uses local EKF motion (command-derived translation + IMU yaw
+    Prediction uses local EKF motion (measured wheel-derived translation + IMU yaw
     rate). GPS corrects position; x/y-yaw cross covariance can correct heading
     after motion. This is a supplied simulation teaching EKF, not RTK firmware.
     """
@@ -111,7 +111,7 @@ def prepare_parameters(source, destination, profile, reference_map=None, world=N
         cost['rolling_window'] = True
         cost['initial_transform_timeout'] = 60.0
     glob = params['global_costmap']['global_costmap']['ros__parameters']
-    glob.update(global_frame='map', width=30, height=30, resolution=0.1)
+    glob.update(global_frame='map', width=30, height=30, resolution=0.25)
     if reference_map:
         glob.update(rolling_window=False,
                     plugins=['static_layer', 'obstacle_layer', 'inflation_layer'])
@@ -130,10 +130,10 @@ def prepare_parameters(source, destination, profile, reference_map=None, world=N
     controller = params['controller_server']['ros__parameters']
     tolerance = 0.2 if profile == 'rtk' else 1.5
     controller['goal_checker']['xy_goal_tolerance'] = tolerance
-    controller['FollowPath'].update(max_vel_x=0.12, max_speed_xy=0.12,
+    controller['FollowPath'].update(max_vel_x=0.3, max_speed_xy=0.3,
                                     max_vel_theta=0.8, xy_goal_tolerance=tolerance)
-    params['velocity_smoother']['ros__parameters']['max_velocity'] = [0.12, 0., 0.8]
-    params['velocity_smoother']['ros__parameters']['min_velocity'] = [-0.12, 0., -0.8]
+    params['velocity_smoother']['ros__parameters']['max_velocity'] = [0.3, 0., 0.8]
+    params['velocity_smoother']['ros__parameters']['min_velocity'] = [-0.3, 0., -0.8]
     # Official navigation_launch.py uses collision_monitor as the last stage.
     # Its output is gated by the GPS localizer before reaching the robot bridge.
     params['collision_monitor']['ros__parameters']['cmd_vel_out_topic'] = '/gps_nav/cmd_vel_request'

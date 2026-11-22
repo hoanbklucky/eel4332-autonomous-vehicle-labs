@@ -4,11 +4,11 @@ All required instructions are in [the concise final README](README.md). The GPS 
 
 ## GPS fusion comparison method
 
-The runnable student procedure and deliverables are in [Step 9](README.md#9-part-b--gps-fusion-comparison). This supplied teaching utility does not complete any existing student algorithm TODO.
+The runnable student procedure and deliverables are in [Step 9](README.md#9-part-b--gpsrtk-localization-and-outdoor-navigation). This supplied teaching utility does not complete any existing student algorithm TODO.
 
 - **Inputs:** `/odometry/filtered` from the existing local EKF (measured wheel-joint forward velocity plus IMU yaw rate), `/gps/fix`, and raw `/ground_truth/pose` in a **separate scoring file**. The recorder checks running EKF parameters, centered GPS mount, message frames, stationary start and clock monotonicity.
 - **Initialization:** read the same campus SDF datum and adjacent mission.json Home pose used by world.launch.py. Rotate/translate local odometry into world ENU using this known initial pose and first odometry yaw. Both variants receive the same prior. There is no truth-based trajectory alignment or GPS-based heading estimate.
-- **Conversion:** WGS84 latitude/longitude/altitude → ECEF → local ENU at the supplied world datum. This comparison supports ENU and heading_deg=0 only. It uses simulation meters, without undoing the teaching arena's geographic scaling. The centered GPS mount has zero horizontal lever arm; customized noncentered mounts are rejected.
+- **Conversion:** WGS84 latitude/longitude/altitude → ECEF → local ENU at the supplied world datum. This comparison supports ENU and heading_deg=0 only. It uses full-scale simulation meters; the old 0.06 campus factor is retired. The centered GPS mount has zero horizontal lever arm; customized noncentered mounts are rejected.
 - **Prediction:** the existing odometry/IMU trajectory supplies horizontal increments. A is their sum. B predicts with the same increments, then applies independent GPS position updates. This is a **two-state x/y Kalman filter**, not a full-state EKF or `navsat_transform_node` deployment. Neither heading nor the running ROS navigation estimate is corrected.
 - **Update:** `P ← P + Q`; `K = P(P + R)⁻¹`; `x ← x + K(z − x)`. The implementation uses the Joseph covariance update and rejects large Mahalanobis innovations. All tuning is explicitly recorded in metadata; it is illustrative, not a calibrated hardware uncertainty model.
 - **Unknown GPS covariance:** bridge covariance-type 0/invalid matrices use WGS84 conversion of the configured angular standard deviation into a nonzero per-axis meter covariance. At campus latitude, 0.000015 degrees is approximately 1.47 m East / 1.66 m North. No zero-variance GPS updates are accepted.
@@ -22,7 +22,10 @@ Keep the robot at Home until READY. Start a fresh world for a fresh record. Sour
 
 “Different EKF baseline” means runtime inputs/masks differ from the provided velocity + yaw-rate configuration; inspect them rather than silently comparing different estimators. Missing TF, moving before READY, clock reset, noncentered GPS, non-ENU datum, duplicate timestamps, odometry gaps or insufficient truth overlap require a fresh/repaired experiment. A synthetic test pass does not substitute for a WSL/Gazebo pilot.
 
-### Live GPS-aided navigation\n\nNow supplied separately in Step 9; see the GPS / RTK navigation method below.\n
+### Live GPS-aided navigation
+
+Required with the supplied campus map in Step 9B; see the method below.
+
 References: [Nav2 GPS navigation](https://docs.nav2.org/jazzy/tutorials/general_tutorials/navigation2_with_gps/navigation2_with_gps/), [robot_localization GPS integration](https://github.com/cra-ros-pkg/robot_localization/blob/jazzy/doc/integrating_gps.rst), [Gazebo NavSat](https://gazebosim.org/api/sim/8/classgz_1_1sim_1_1systems_1_1NavSat.html).
 
 
@@ -38,7 +41,7 @@ The recorder validates both sensor declarations and captures both streams. Its t
 
 ### Live GPS navigation
 
-`gps_navigation.launch.py` runs `gps_localizer.py`, waits for its complete readiness sentinel, then includes **navigation_launch.py only** from nav2_bringup. No AMCL, map server or saved-map localization is started. Temporary parameters remove static layers, enable rolling costmaps, retain LiDAR obstacle/inflation layers and disallow planning through unknown cells. Goals should be short and inside observed free space.
+`gps_navigation.launch.py` validates the full-scale `campus/reference.yaml`, derives a road/path-only map, waits for GPS readiness, and starts its map server plus navigation-only Nav2. No AMCL or SLAM runs. The global static costmap covers the campus at 0.25 m resolution; the fine 0.025 m local grid rolls around Goosebot and retains the static road mask and live LiDAR. Grass is forbidden in both. Follow required goals A/B/Home from Step 9B; the map-free short-range activity is retired.
 
 The live planar state is [x,y,yaw]. Initial position and global heading come from the **known commanded Home spawn**, not Gazebo truth or perfect IMU orientation. Body displacement and yaw increments come from the existing local odometry/IMU EKF. GPS positions update x/y; cross covariance can correct heading after motion. The supplied covariance model is illustrative, not hardware-calibrated. Physical GPS navigation needs appropriate global heading initialization/observability.
 
@@ -48,11 +51,11 @@ GPS fixes with up to 0.25 simulated seconds latency receive a small estimated-mo
 
 Nav2's collision monitor outputs `/gps_nav/cmd_vel_request`; the global localizer forwards it to `/cmd_vel` only while pose sources and LiDAR are fresh. A steady-clock watchdog also sends zero commands when unhealthy. Loss of accepted GPS for 2 simulated seconds, local odometry for 2 wall seconds, GPS for 20 wall seconds or scans for 5 wall seconds stops the localizer and its Nav2 launch. Request freshness is 0.5 simulated seconds with a 5-wall-second upper limit, allowing slow simulation. Normal Ctrl+C closes the gate and sends zero commands before shutting down. Keep teleop stopped, since a separate teleop publisher would bypass this command path.
 
-RTK-like mode uses 0.2 m goal tolerance; optional ordinary-GPS mode uses 1.5 m. Those settings deliberately reflect different precision and are not equal-accuracy benchmarks. Nav2's AMCL localization indicator may be inactive in GPS mode; use the GPS-ready message and TF, and distinguish lifecycle activity from action SUCCEEDED.
+Required campus-map mode uses RTK-like GPS with 0.2 m goal tolerance. Legacy filter code also supports ordinary-GPS tolerance 1.5 m, but that is not the required map-navigation mode. Those settings deliberately reflect different precision and are not equal-accuracy benchmarks. Nav2's AMCL localization indicator may be inactive in GPS mode; use the GPS-ready message and TF, and distinguish lifecycle activity from action SUCCEEDED.
 
 ### Pilot before student release
 
-Run the comparison with both actual Gazebo sensors, inspect synchronized A/B/C metrics, then test RTK-like live initialization, short Nav2 goals, Home return, obstacle detection, command/TF ownership and shutdown. Also test GPS/scan interruption. Offline tests and synthetic CSV plots are not end-to-end ROS/Gazebo validation. These launchers are simulation teaching tools, not validated physical-robot navigation software.
+Run the comparison with both actual Gazebo sensors, inspect synchronized A/B/C metrics, then test RTK-like live initialization, map-based A/B goals, Home return, obstacle detection, command/TF ownership and shutdown. Also test GPS/scan interruption. Offline tests and synthetic CSV plots are not end-to-end ROS/Gazebo validation. These launchers are simulation teaching tools, not validated physical-robot navigation software.
 
 
 ## Archived expanded instructions
@@ -188,7 +191,7 @@ Classroom identities and relative positions come from the first image's labels/b
 
 ![Geographic campus layout](campus/campus_plan.png)
 
-The campus is uniformly scaled to a 73 × 80 m teaching arena; some newer footprints and all building heights are approximate. Blue water has solid collision geometry. Grass remains traversable.
+The campus now uses 1:1 horizontal meters. Some footprints/heights and path widths remain approximate. Blue water has solid collision geometry; required road-only planning forbids grass.
 
 </details>
 
@@ -985,7 +988,7 @@ Explain why readings vary while stationary and whether the differences between l
 
 #### 9.4. Explain coordinates and actual fusion
 
-World +x is east and +y is north (ENU). The datum anchors the simulation at the approximate campus origin, but the arena uses **0.06-scaled geography**. GPS follows distances in the simulation; it will not reproduce the real building coordinates from OSM. Noise remains in simulation meters and can be large relative to this teaching arena. Do not use these synthetic fixes for real campus navigation.
+World +x is east and +y is north (ENU). The campus now uses full-scale horizontal meters at the supplied geographic datum. Widths and footprints remain approximate; GPS profiles are synthetic, not a surveyed real-campus positioning system.
 
 Your SLAM `map` has its own origin/heading. Latitude/longitude cannot be sent directly as a Nav2 `map`-frame XY goal or copied into an EKF's Cartesian odometry input. GPS requires geographic-to-local conversion, frame/heading alignment and covariance handling before fusion.
 

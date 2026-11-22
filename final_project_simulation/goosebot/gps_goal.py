@@ -2,6 +2,7 @@
 """Send an ENU-aligned Nav2 goal from GPS degrees, or return to known Home."""
 import argparse
 import math
+import json
 from pathlib import Path
 import time
 
@@ -10,20 +11,28 @@ from gps_fusion_core import gps_to_enu, read_world
 
 def goal_xy(args):
     world = read_world(args.world)
+    if getattr(args, 'waypoint', None):
+        mission = json.loads(Path(args.world).with_name('mission.json').read_text())
+        matches = [g for g in mission.get('navigation_goals', []) if g['id'] == args.waypoint]
+        if len(matches) != 1:
+            raise ValueError('Unknown campus waypoint; use A or B from the current mission.json')
+        return [*matches[0]['xy'], matches[0]['yaw']]
     if args.home:
         return [*world['home_xy'], world['home_yaw']]
     if args.latitude is None or args.longitude is None:
-        raise ValueError('Use --home or both --latitude and --longitude')
+        raise ValueError('Use --home, --waypoint A/B, or both --latitude and --longitude')
     xy = gps_to_enu(args.latitude, args.longitude, world['datum'][2], world['datum'])[:2]
-    if math.hypot(*xy) > 200 or not math.isfinite(args.yaw_deg):
-        raise ValueError('Invalid goal outside the teaching campus')
+    if math.hypot(*xy) > 2000 or not math.isfinite(args.yaw_deg):
+        raise ValueError('Invalid goal outside the full-scale campus')
     return [*xy, math.radians(args.yaw_deg)]
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--world', default=str(Path(__file__).resolve().parents[1] / 'campus/campus.sdf'))
-    parser.add_argument('--home', action='store_true')
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--home', action='store_true')
+    modes.add_argument('--waypoint', choices=['A', 'B'])
     parser.add_argument('--latitude', type=float)
     parser.add_argument('--longitude', type=float)
     parser.add_argument('--yaw-deg', type=float, default=0)

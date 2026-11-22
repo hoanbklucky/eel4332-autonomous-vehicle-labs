@@ -5,6 +5,7 @@ Student SLAM maps need independent alignment and are deliberately rejected.
 """
 import importlib.util
 import json
+import hashlib
 import math
 from pathlib import Path
 
@@ -62,11 +63,10 @@ def prepare_reference_map(map_path, world_path, destination):
     layout = json.loads(source.with_name('layout.json').read_text())
     with Image.open(source.parent / data['image']) as image:
         pixels = np.asarray(image.convert('L'))
-    # A 5 cm road grid preserves the narrow scaled footpaths while keeping a
-    # conservative one-cell boundary margin. Obstacles are never interpolated
-    # away: each original 10 cm reference cell becomes four identical cells.
-    pixels = np.repeat(np.repeat(pixels, 2, axis=0), 2, axis=1)
-    resolution = float(data['resolution']) / 2
+    # Full campus: retain the supplied 25 cm global grid. Upsampling the
+    # entire 1.2 km campus to 5 cm would allocate hundreds of millions of cells.
+    # Nav2's rolling local grid remains fine-resolution for footprint checking.
+    resolution = float(data['resolution'])
     mask = road_mask(layout, pixels, resolution, data['origin'])
     world = read_world(world_path)
     home = np.asarray(world['home_xy'])
@@ -93,6 +93,8 @@ def validate_reference_map(map_path, world_path):
         raise ValueError('GPS prior-map mode accepts only campus/reference.yaml beside the selected campus world; not an unaligned SLAM map')
     world = read_world(world_path)
     layout = json.loads(path.with_name('layout.json').read_text())
+    if layout.get('scale') != 1.0:
+        raise ValueError('Use the full-scale campus layout, world and reference map together')
     lon, lat = layout['origin_lon_lat']
     if world['datum'] != [lat, lon, 0.0]:
         raise ValueError('Campus map layout and GPS world datum differ')
@@ -108,7 +110,7 @@ def validate_reference_map(map_path, world_path):
     if (bounds.shape != (4,) or not np.isfinite(bounds).all()
             or origin.shape != (3,) or not np.isfinite(origin).all()
             or not np.array_equal(origin, [bounds[0], bounds[1], 0.])
-            or resolution != .1):
+            or resolution != float(layout.get('reference_resolution_m', .25))):
         raise ValueError('Reference-map origin/resolution no longer matches the generated campus grid')
     image = (path.parent / data['image']).resolve()
     if image != path.with_name('reference.png'):
@@ -125,4 +127,15 @@ def validate_reference_map(map_path, world_path):
     width, height, expected = generator.raster(resolution)
     if pixels.shape != (height, width) or pixels.tobytes() != bytes(expected):
         raise ValueError('Reference image differs from layout-generated obstacles; restore matching supplied assets')
+    manifest = json.loads(path.with_name('assets_manifest.json').read_text())
+    required = [world_path.name, 'layout.json', 'generate_campus.py', 'reference.yaml',
+                'reference.png', 'mission.json']
+    required += [name for name in manifest.get('sha256', {}) if name.startswith('meshes/')]
+    if manifest.get('horizontal_scale') != 1.0:
+        raise ValueError('Use the matching full-scale campus asset manifest')
+    for name in required:
+        asset = path.parent/name
+        if (not asset.is_file() or hashlib.sha256(asset.read_bytes()).hexdigest()
+                != manifest.get('sha256', {}).get(name)):
+            raise ValueError(f'Campus asset bundle mismatch: {name}; update world/map/meshes together')
     return data

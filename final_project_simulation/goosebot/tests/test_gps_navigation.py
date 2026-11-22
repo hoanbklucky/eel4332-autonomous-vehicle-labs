@@ -154,6 +154,17 @@ class GPSNavigationTests(unittest.TestCase):
         args = SimpleNamespace(world=HERE.parent / 'campus/campus.sdf', home=True)
         np.testing.assert_allclose(goal_xy(args), [*self.world['home_xy'], self.world['home_yaw']])
 
+    def test_named_campus_goals_are_read_from_mission(self):
+        from types import SimpleNamespace
+        import json
+        world = HERE.parent/'campus/campus.sdf'
+        mission=json.loads(world.with_name('mission.json').read_text())
+        for goal in mission['navigation_goals']:
+            args=SimpleNamespace(world=world,home=False,waypoint=goal['id'])
+            np.testing.assert_allclose(goal_xy(args),[*goal['xy'],goal['yaw']])
+        with self.assertRaisesRegex(ValueError,'Unknown campus waypoint'):
+            goal_xy(SimpleNamespace(world=world,home=False,waypoint='old_scaled_goal'))
+
     def test_running_baseline_validation_rejects_hidden_gps_input(self):
         from types import SimpleNamespace
         p = {'world_frame': 'odom', 'odom0': 'wheel/odometry', 'imu0': 'imu/data',

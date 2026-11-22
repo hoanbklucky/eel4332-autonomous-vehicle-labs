@@ -37,6 +37,8 @@ def generate_launch_description():
         _TEMP_DIRS.append(temp)
         params = Path(temp.name) / 'nav2_gps.yaml'
         reference_map = LaunchConfiguration('reference_map').perform(context).strip()
+        if not reference_map:
+            raise ValueError('Campus navigation requires its supplied reference_map; short-range mode is retired')
         prepare_parameters(here / 'nav2_goosebot.yaml', params, profile,
                            reference_map=reference_map or None, world=world)
         map_actions = []
@@ -79,8 +81,8 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('profile', default_value='rtk', choices=['ordinary', 'rtk']),
         DeclareLaunchArgument('world', default_value=str(here.parent / 'campus/campus.sdf')),
-        DeclareLaunchArgument('reference_map', default_value='',
-                             description='Optional supplied campus/reference.yaml for longer-range planning'),
+        DeclareLaunchArgument('reference_map', default_value=str(here.parent / 'campus/reference.yaml'),
+                             description='Required full-scale campus/reference.yaml for road-only planning'),
         OpaqueFunction(function=start),
     ])
 

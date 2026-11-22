@@ -51,15 +51,15 @@ For IST, after saving the map, what changes when SLAM stops and AMCL starts? Exp
 
 ## 5. From goal to motion
 
-Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`; for GPS mode also inspect `gps_navigation_core.py`'s rolling-costmap and command-routing overrides. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
+Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`; for GPS mode also inspect `gps_navigation_core.py`'s full-map/rolling-local-costmap and command-routing overrides. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
 
 Show evidence that two goals and return home succeeded **in each world**, using AMCL indoors and the live GPS mode outdoors. Explain how live LiDAR scans and costmaps support obstacle avoidance along your normal routes.
 
 ## 6. Indoor/outdoor observations and limits
 
-- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gps-fusion-comparison). Identify A (existing odometry/IMU), B (+ ordinary GPS) and C (+ RTK-like GPS); discuss unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Separately show live GPS-aided campus navigation and identify the GPS global localizer, local EKF and LiDAR costmap roles. Give a reason for GPS helping or hurting in your recorded run.
+- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gpsrtk-localization-and-outdoor-navigation). Identify A (existing odometry/IMU), B (+ ordinary GPS) and C (+ RTK-like GPS); discuss unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Separately show required GPS-aided campus navigation with the supplied road-only map, explain how global planning differs from the rolling local costmap, and identify the GPS global localizer, local EKF and LiDAR costmap roles. Give a reason for GPS helping or hurting in your recorded run.
 - **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
-- **Reality gap:** explain at least two limits, including the simulated GPS/teaching scale or wheel slip, and what would require validation on physical Goosebot.
+- **Reality gap:** explain at least two limits, including the idealized GPS noise or approximate map widths or wheel slip, and what would require validation on physical Goosebot.
 - **Reproducibility:** identify your branch/revision, maps, chosen goals/home, changed settings and one diagnosed problem/fix. List each member's contribution and briefly state how AI assistance was verified if used.
 
 ## How the 30% explanation component is assessed

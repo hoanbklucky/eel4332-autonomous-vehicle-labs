@@ -178,7 +178,7 @@ def estimate(rows, metadata, field, seed=7, dropout=None):
                 continue
             xy = gps_to_enu(row['latitude'], row['longitude'], row['altitude'], metadata['world']['datum'])[:2]
             covariance = gps_covariance(row, metadata['world']['datum'][0], PROFILES['ordinary']['horizontal_std_deg'])
-            if np.linalg.norm(xy) > 200:
+            if np.linalg.norm(xy) > 2000:
                 rejected_gps += 1
                 continue
             b.gps(xy, covariance)

@@ -99,3 +99,5 @@ This writes separate `budget_dropout` outputs and shades the artificial interval
 - Historical RTK screenshots used command-derived motion; the current RTK comparison uses wheel/IMU EKF increments and different filters. Do not claim this activity beats RTK by comparing unrelated runs. A fair hardware comparison needs the same route, initialization and evaluation protocol.
 
 **INSTRUCTOR VALIDATION REQUIRED:** synthetic replay/provenance tests and syntax checks are supplied. Pilot `/joint_states` velocities, recorder startup, the complete report and a controlled dropout run on the course Gazebo installation before assigning performance expectations. This activity has no extra required submission or rubric weight.
+
+The campus is now full horizontal scale. Use matching new world/map assets and a fresh recording; earlier screenshots/results are historical. A local 10–20 m drive is sufficient; do not scale wheel radii, IMU rates, GPS noise or sensor ranges.

@@ -33,17 +33,22 @@ class ReferenceMapTests(unittest.TestCase):
 
     def test_supplied_map_pixels_match_layout_and_datum(self):
         data = validate_reference_map(self.map, self.world)
-        self.assertEqual(data['origin'], [-30, -44, 0])
-        self.assertEqual(data['resolution'], .1)
+        self.assertEqual(data['origin'], [-500., -733.5, 0.])
+        self.assertEqual(data['resolution'], .25)
 
     def test_rejects_unaligned_map_mismatched_datum_origin_and_image(self):
         with self.assertRaisesRegex(ValueError, 'unaligned SLAM'):
             validate_reference_map(self.root / 'student_map.yaml', self.world)
         for name in ('campus.sdf', 'mission.json', 'reference.yaml', 'reference.png',
-                     'layout.json', 'generate_campus.py'):
+                     'layout.json', 'generate_campus.py', 'assets_manifest.json'):
             shutil.copyfile(self.campus / name, self.root / name)
+        shutil.copytree(self.campus/'meshes',self.root/'meshes')
         world = self.root / 'campus.sdf'
         path = self.root / 'reference.yaml'
+        world.write_text(world.read_text()+'\n<!-- stale or locally changed world -->\n')
+        with self.assertRaisesRegex(ValueError, 'bundle mismatch: campus.sdf'):
+            validate_reference_map(path, world)
+        shutil.copyfile(self.world, world)
         layout = json.loads((self.root / 'layout.json').read_text())
         layout['origin_lon_lat'][0] += 1
         (self.root / 'layout.json').write_text(json.dumps(layout))
@@ -74,45 +79,44 @@ class ReferenceMapTests(unittest.TestCase):
         self.assertEqual(mask[60, 20], 0)  # gap between walkway and road
         self.assertFalse(np.any((obstacles == 0) & (mask == 254)))
 
-    def test_road_map_has_usable_home_and_long_connected_routes(self):
+    def test_road_map_has_footprint_clearance_for_required_route(self):
+        from scipy.ndimage import label, distance_transform_edt
         output = prepare_reference_map(self.map, self.world, self.root / 'roads.yaml')
         data = yaml.safe_load(output.read_text())
-        self.assertEqual(data['resolution'], .05)
+        self.assertEqual(data['resolution'], .25)
         raster = np.asarray(Image.open(data['image']))
-        safe = np.asarray(Image.fromarray(raster).filter(ImageFilter.MinFilter(7))) == 254
+        # At least 0.5 m from forbidden grid cells exceeds the 0.181 m
+        # footprint circumradius plus half the 0.25 m cell diagonal.
+        safe = distance_transform_edt(raster == 254, sampling=.25) >= .5
+        components, _ = label(safe)
+        mission=json.loads((self.campus/'mission.json').read_text())
         def cell(xy):
-            x, y = np.floor((np.asarray(xy) - data['origin'][:2]) / .05).astype(int)
-            return raster.shape[0] - 1 - y, x
-        start = cell([-8.5, 9.5])
-        self.assertTrue(safe[start])
-        queue, visited = deque([start]), {start}
-        while queue:
-            j, i = queue.popleft()
-            for jj, ii in ((j-1, i), (j+1, i), (j, i-1), (j, i+1)):
-                if (0 <= jj < safe.shape[0] and 0 <= ii < safe.shape[1]
-                        and safe[jj, ii] and (jj, ii) not in visited):
-                    visited.add((jj, ii))
-                    queue.append((jj, ii))
-        self.assertIn(cell([-5.756, 11.983]), visited)  # IST
-        self.assertIn(cell([-9.587, 1.621]), visited)  # GCW
-        self.assertGreater(max(np.hypot(j-start[0], i-start[1]) * .05 for j, i in visited), 20)
-        self.assertIn(cell([1.3612, 13.7061]), visited)  # relocated Residence road stop
-        # The complete 0.7 m decorative marker fits on the permitted pavement.
-        for dx in np.linspace(-.35, .35, 15):
-            for dy in np.linspace(-.35, .35, 15):
-                self.assertEqual(raster[cell([1.3612 + dx, 13.7061 + dy])], 254)
+            x,y=np.floor((np.asarray(xy)-data['origin'][:2])/.25).astype(int)
+            return raster.shape[0]-1-y,x
+        start=cell(mission['stops'][0]['xy']);component=components[start]
+        self.assertNotEqual(component,0)
+        self.assertEqual([g['id'] for g in mission['navigation_goals']],['A','B'])
+        for goal in mission['navigation_goals']:
+            self.assertEqual(components[cell(goal['xy'])],component)
+        self.assertGreater(np.linalg.norm(np.array(mission['navigation_goals'][0]['xy'])-mission['stops'][0]['xy']),15)
+        self.assertLess(raster.size,30_000_000)  # no full-campus 5 cm upsampling
 
-    def test_residence_pad_matches_layout_worlds_mission_and_goals(self):
-        layout = json.loads((self.campus / 'layout.json').read_text())
-        mission = json.loads((self.campus / 'mission.json').read_text())
-        self.assertEqual(layout['stops'], mission['stops'])
-        self.assertEqual(mission['stops'][2]['xy'], [1.3612, 13.7061])
-        for name in ('campus.sdf', 'campus_blocked.sdf'):
-            tree = ET.parse(self.campus / name)
-            pose = tree.find(".//model[@name='delivery_pad_2']/pose").text.split()
-            self.assertEqual(list(map(float, pose[:2])), mission['stops'][2]['xy'])
-        rows = (self.campus / 'reference_goals.csv').read_text().splitlines()
-        self.assertEqual(list(map(float, rows[2].split(',')[:2])), mission['stops'][2]['xy'])
+    def test_generated_world_mission_layout_and_marker_coordinates_agree(self):
+        layout=json.loads((self.campus/'layout.json').read_text())
+        mission=json.loads((self.campus/'mission.json').read_text())
+        self.assertEqual(layout['scale'],1.)
+        self.assertEqual(layout['stops'],mission['stops'])
+        self.assertEqual(layout['navigation_goals'],mission['navigation_goals'])
+        for name in ('campus.sdf','campus_blocked.sdf'):
+            tree=ET.parse(self.campus/name)
+            for i,stop in enumerate(mission['stops']):
+                pose=tree.find(f".//model[@name='delivery_pad_{i}']/pose").text.split()
+                np.testing.assert_allclose(list(map(float,pose[:2])),stop['xy'])
+            camera=list(map(float,tree.find(".//plugin[@filename='MinimalScene']/camera_pose").text.split()))
+            self.assertLess(np.linalg.norm(np.array(camera[:2])-mission['stops'][0]['xy']),10)
+        rows=(self.campus/'reference_goals.csv').read_text().splitlines()
+        for row,stop in zip(rows[1:],mission['stops'][1:]):
+            np.testing.assert_allclose(list(map(float,row.split(',')[:2])),stop['xy'])
 
     def test_prior_mode_grass_is_lethal_in_both_costmaps_and_gate_remains(self):
         data = prepare_parameters(HERE / 'nav2_goosebot.yaml', self.root / 'params.yaml',
@@ -166,6 +170,8 @@ class ReferenceMapTests(unittest.TestCase):
         spec.loader.exec_module(module)
         with patch.dict(sys.modules, modules):
             description = module.generate_launch_description()
+            declared = next(a for a in description.args[0] if a.args and a.args[0]=='reference_map')
+            self.assertEqual(declared.kwargs['default_value'],str(self.map))
             start = next(a.kwargs['function'] for a in description.args[0] if 'function' in a.kwargs)
             context = {'profile': 'rtk', 'world': str(self.world), 'reference_map': str(self.map)}
             waiting = start(context)
@@ -178,6 +184,8 @@ class ReferenceMapTests(unittest.TestCase):
             arguments = dict(started[3].kwargs['launch_arguments'])
             self.assertTrue(eval('not ' + arguments['use_composition'], {'__builtins__': {}}))
             self.assertEqual(callback(types.SimpleNamespace(text=b'GPS_LOCALIZATION_READY: duplicate\n')), [])
+            with self.assertRaisesRegex(ValueError,'short-range mode is retired'):
+                start(dict(context,reference_map=''))
         for directory in module._TEMP_DIRS:
             directory.cleanup()
 
