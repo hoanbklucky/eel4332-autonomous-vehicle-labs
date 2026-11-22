@@ -52,7 +52,7 @@ Offline checks cover explicit-world spawn arguments, server PID detection, creat
 The campus OBJ generator now supplies explicit unit normals per triangle corner. All 37 regenerated meshes retain their original triangle coordinates/winding; vertex and normal counts agree. Generated baseline/blocked SDF, reference image, and mission files are unchanged. The baseline configuration helper replaces the odometry script's unconditional rclpy.shutdown() with idempotent rclpy.try_shutdown(); syntax and repeat-setup checks passed. Pilot campus rendering, collisions, scans, spawning, and Nav2 on WSL; no Gazebo runtime was available for this repair. An EKF context error during coordinated shutdown may be an independent upstream shutdown race; inspect the first error before the shutdown tail.
 
 
-## Indoor/outdoor branch validation — final-project-indoor-outdoor
+## Indoor/outdoor branch validation — main
 
 Required scope now covers IST and campus: short maps, two destinations/home each, IST blocked-route test, indoor single-setting LiDAR comparison, campus GPS inspection at three stationary locations, and 30% system understanding. Campus blocked-route repetition and GPS fusion remain optional. Preserve independent ist_map/campus_map files.
 

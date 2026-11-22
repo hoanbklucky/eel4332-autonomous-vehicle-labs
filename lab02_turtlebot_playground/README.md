@@ -2,7 +2,7 @@
 
 ## Before you start — use the current course files
 
-**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+**Expected branch: `main`.** First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
 
 In Ubuntu/WSL, save all editor files and check:
 
@@ -19,9 +19,9 @@ Once on the correct branch with a clean working tree:
 
 ```bash
 git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 

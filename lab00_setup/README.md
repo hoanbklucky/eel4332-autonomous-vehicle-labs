@@ -2,7 +2,7 @@
 
 ## Before you start — obtain the current repository
 
-**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. **New students:** install Git in Part 2, then complete [Part 6 — Fork and clone](#part-6--fork-and-clone-the-course-repository) before running repository-dependent commands. Until then, read setup on GitHub; `code .` opens existing files but does not download them. **Already have a copy?** Save your edits, then use [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before continuing. Fetch the instructor updates for this branch; a clean status or up-to-date fork alone is insufficient.
+**Expected branch: `main`.** **New students:** install Git in Part 2, then complete [Part 6 — Fork and clone](#part-6--fork-and-clone-the-course-repository) before running repository-dependent commands. Until then, read setup on GitHub; `code .` opens existing files but does not download them. **Already have a copy?** Save your edits, then use [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) before continuing. Fetch the instructor updates for this branch; a clean status or up-to-date fork alone is insufficient.
 
 ## Open in VS Code through WSL
 
@@ -403,9 +403,9 @@ References: [ROBOTIS PC Setup](https://docs.robotis.com/docs/systems/turtlebot3/
 
 ## Part 6 — Fork and clone the course repository
 
-**Required before repository-dependent commands:** use your own fork so you can save work and receive instructor corrections. **Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch.
+**Required before repository-dependent commands:** use your own fork so you can save work and receive instructor corrections. **Expected branch: `main`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch.
 
-Open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs) on GitHub, click **Fork → Create fork**, and keep its name. For the indoor/outdoor branch, uncheck **Copy the main branch only** if shown; the fetch command below also works for an existing main-only fork.
+Open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs) on GitHub, click **Fork → Create fork**, and keep its name. The required indoor/outdoor activity is now included on `main`.
 
 Replace `YOUR_USERNAME` and run once for a new local copy in **Ubuntu/WSL**:
 
@@ -416,17 +416,17 @@ git clone --branch main https://github.com/YOUR_USERNAME/eel4332-autonomous-vehi
 cd eel4332-autonomous-vehicle-labs
 git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
 git fetch upstream
-git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
-git merge --no-edit upstream/final-project-indoor-outdoor
-git push -u origin final-project-indoor-outdoor
+git switch main
+git merge --no-edit upstream/main
+git push -u origin main
 git remote -v
 git branch --show-current
 code .
 ```
 
-Stop on errors. Expect **your fork as origin**, **the instructor repository as upstream**, branch **final-project-indoor-outdoor**, and **WSL: Ubuntu** in VS Code. Download ZIP, reopening VS Code, or updating VS Code Server does not keep course files synchronized.
+Stop on errors. Expect **your fork as origin**, **the instructor repository as upstream**, branch **main**, and **WSL: Ubuntu** in VS Code. Download ZIP, reopening VS Code, or updating VS Code Server does not keep course files synchronized.
 
-**Already have a clone? Do not clone over it or repeat remote creation.** Save local work and use [existing-clone migration](../docs/UPDATING_COURSE_REPOSITORY.md#2-already-cloned-the-instructor-repository) and the guide's branch-selection/update steps. Before each lab, fetch/merge `upstream/final-project-indoor-outdoor` and verify inclusion using that guide. VS Code Sync/pulling your fork alone does not fetch instructor changes. Preserve robot Xacro/settings and maps when resolving conflicts.
+**Already have a clone? Do not clone over it or repeat remote creation.** Save local work and use [existing-clone migration](../docs/UPDATING_COURSE_REPOSITORY.md#2-already-cloned-the-instructor-repository) and the guide's branch-selection/update steps. Before each lab, fetch/merge `upstream/main` and verify inclusion using that guide. VS Code Sync/pulling your fork alone does not fetch instructor changes. Preserve robot Xacro/settings and maps when resolving conflicts.
 
 ---
 
@@ -487,7 +487,7 @@ If an older copy of this repository reports that ROS packages such as `generate-
 
 ```bash
 git fetch upstream
-git merge --no-edit upstream/final-project-indoor-outdoor
+git merge --no-edit upstream/main
 python -m pip install -r requirements.txt
 ```
 
@@ -576,7 +576,7 @@ Before Lab 01, you should be able to:
 - [ ] launch Gazebo through `ros_gz_sim`
 - [ ] open RViz2
 - [ ] import NumPy and Matplotlib
-- [ ] fork/clone (or open the private instructor copy), verify branch `final-project-indoor-outdoor`, and confirm it includes the latest fetched instructor commits
+- [ ] fork/clone (or open the private instructor copy), verify branch `main`, and confirm it includes the latest fetched instructor commits
 - [ ] verify `ros2 bag`, `teleop_twist_keyboard`, and `rqt_image_view` are available
 
 After every item passes, continue to [Lab 1 — ROS 2 and Gazebo Fundamentals](../lab01_ros2_gazebo_fundamentals/README.md).

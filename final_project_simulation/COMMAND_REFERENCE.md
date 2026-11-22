@@ -66,7 +66,7 @@ The following older instructions are retained for troubleshooting only. GPS proc
 
 ## Before you start — use the current course files
 
-**Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
+**Expected branch: `main`.** First-time user? Fork and clone using [Setup Part 6](../lab00_setup/README.md#part-6--fork-and-clone-the-course-repository). An old ZIP download or an unchanged fork may contain obsolete commands.
 
 In Ubuntu/WSL, save all editor files and check:
 
@@ -83,9 +83,9 @@ Once on the correct branch with a clean working tree:
 
 ```bash
 git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 
@@ -94,7 +94,7 @@ git log -1 --oneline
 | Command / part | What it does |
 |---|---|
 | `git fetch upstream` (students) / `git fetch origin` (instructor) | Downloads course-branch updates without changing your working files yet. |
-| `git merge --no-edit .../final-project-indoor-outdoor` | Integrates that remote branch into your current branch. Save your work first and resolve any reported conflicts. |
+| `git merge --no-edit .../main` | Integrates that remote branch into your current branch. Save your work first and resolve any reported conflicts. |
 | `git merge-base --is-ancestor ... HEAD` | Checks that your current history contains the fetched course commit; success is exit status zero. |
 | `git log -1 --oneline` | Displays the current commit so you can identify your version. |
 
@@ -131,7 +131,7 @@ cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
 
 Use that Ubuntu terminal for the commands below; follow any later `cd` commands as written. This assumes VS Code is installed on Windows with the **WSL extension**. If the repository is not cloned yet, complete Lab 00's clone step first.
 
-> **Branch preview:** this indoor/outdoor revision is on `final-project-indoor-outdoor`. Complete both required worlds below; `main` retains the earlier assignment until this revision is released.
+> **Current assignment:** the indoor/outdoor revision is released on `main`. Complete both required worlds below.
 
 ## Mission
 
@@ -890,7 +890,7 @@ The existing world-level settings are:
 </spherical_coordinates>
 ```
 
-**Do not copy this XML into `robot.urdf.xacro` or paste another copy into the world.** For the supplied files, no edit or rebuild is needed for this inspection. If a block is missing from an older checkout, first update `final-project-indoor-outdoor` using the instructions at the top of this README and restart Gazebo. Custom-world modifications are optional and outside this required activity.
+**Do not copy this XML into `robot.urdf.xacro` or paste another copy into the world.** For the supplied files, no edit or rebuild is needed for this inspection. If a block is missing from an older checkout, first update `main` using the instructions at the top of this README and restart Gazebo. Custom-world modifications are optional and outside this required activity.
 
 </details>
 
@@ -943,7 +943,7 @@ ros2 topic hz /gps/fix
 
 **Large jumps between nearby or stationary samples indicate a configuration problem.** In Gazebo Sensors 8, the upstream horizontal `<stddev>1.5</stddev>` is applied in degrees, causing hundred-kilometer errors. My earlier instructions incorrectly described that value as meters. The course setup now changes only that legacy GPS horizontal default to `0.000015` degrees, preserves the vertical `3.0` m setting, and leaves other custom values unchanged.
 
-**For an existing workspace:** save your edits, update `final-project-indoor-outdoor` using the instructions at the top, stop all simulator/ROS launches with Ctrl+C, then run the Step 1 build helper again. Source the rebuilt workspace and restart the campus world. Inspect the copied Xacro: inside `gps_sensor → navsat → position_sensing → horizontal → noise`, expect `<stddev>0.000015</stddev>`. Do not replace unrelated `1.5` values. Existing fixes collected with the legacy setting should be collected again. If large offsets persist after this correction, verify the active campus world's datum and launch path. No Gazebo runtime validation of the correction was available during authoring.
+**For an existing workspace:** save your edits, update `main` using the instructions at the top, stop all simulator/ROS launches with Ctrl+C, then run the Step 1 build helper again. Source the rebuilt workspace and restart the campus world. Inspect the copied Xacro: inside `gps_sensor → navsat → position_sensing → horizontal → noise`, expect `<stddev>0.000015</stddev>`. Do not replace unrelated `1.5` values. Existing fixes collected with the legacy setting should be collected again. If large offsets persist after this correction, verify the active campus world's datum and launch path. No Gazebo runtime validation of the correction was available during authoring.
 
 Stop `hz` with Ctrl+C before the next command. Expect `sensor_msgs/msg/NavSatFix` messages containing timestamp, frame, status, latitude/longitude in **degrees**, altitude in **meters**, and covariance/type fields. Inspect `status` and `position_covariance_type`; do not assume the bridge reports known uncertainty. Record the actual frame (expected `gps_link`).
 

@@ -1,6 +1,6 @@
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
-Use **`final-project-indoor-outdoor`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion with the supplied pedestrian-only campus map outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
+Use **`main`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion with the supplied pedestrian-only campus map outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
 ### Measured wheel odometry
 
@@ -27,13 +27,13 @@ git branch --show-current
 git status --short
 ```
 
-The branch should be `final-project-indoor-outdoor`. If it differs or files are modified, follow [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) first. With the correct branch and a clean working tree:
+The branch should be `main`. If it differs or files are modified, follow [the update guide](../docs/UPDATING_COURSE_REPOSITORY.md) first. With the correct branch and a clean working tree:
 
 ```bash
 git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 
@@ -460,6 +460,12 @@ python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
 Each command waits for its goal to finish; `&&` continues only after success. Expect **SUCCEEDED** after each. `--waypoint` reads GPS-aligned meter coordinates from `campus/mission.json`; no coordinates need to be copied. A and B are about 20 m along mapped routes from Home, on opposite sides, keeping the exercise local while testing full-map planning beyond current LiDAR range. Outdoor forward speed is capped at 1.0 m/s; Nav2 may slow for turns or obstacles; keyboard speed is separate. You may also use **Nav2 Goal** on permitted pedestrian paths/sidewalks.
+
+**Current campus map — after connectivity corrections**
+
+The updated pedestrian network is loaded in RViz alongside the matching Gazebo world. Sidewalks and short permitted crossings remain connected; asphalt lanes outside those crossings stay forbidden. In this screenshot no goal is active, so **Feedback: unknown** is expected. **Localization: inactive** refers to absent AMCL.
+
+![Updated full-campus pedestrian planning map in RViz with Goosebot at Home in Gazebo](images/campus_gps_navigation_current_map.png)
 
 **Example campus navigation run**
 

@@ -1,10 +1,10 @@
 # Fork, clone, select the branch, and keep course files current
 
-Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from ROS workspaces. **Expected branch: `final-project-indoor-outdoor`.** This is the indoor/outdoor revision; do not merge `main` as a substitute for updates to this branch. Use the instructor-assigned branch; changing a GitHub browser branch does not change your local files.
+Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from ROS workspaces. **Expected branch: `main`.** Use the instructor-assigned branch; changing a GitHub browser branch does not change your local files.
 
 ## 1. Fork and clone (new students)
 
-1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. For a non-main assignment, uncheck **Copy the main branch only** if offered. An existing main-only fork can still receive another branch with the fetch steps below; no second fork is needed.
+1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. The required indoor/outdoor activity is included on `main`.
 2. In Ubuntu/WSL, replace `YOUR_USERNAME` with your actual GitHub username. Run this only for a **new** local copy:
 
 ```bash
@@ -14,15 +14,15 @@ git clone --branch main https://github.com/YOUR_USERNAME/eel4332-autonomous-vehi
 cd eel4332-autonomous-vehicle-labs
 git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
 git fetch upstream
-git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
-git merge --no-edit upstream/final-project-indoor-outdoor
-git push -u origin final-project-indoor-outdoor
+git switch main
+git merge --no-edit upstream/main
+git push -u origin main
 git remote -v
 git branch --show-current
 code .
 ```
 
-Stop on any error. `origin` is **your fork** (push work); `upstream` is **the instructor's public repository** (receive updates). The branch must print `final-project-indoor-outdoor`. Open the cloned folder in VS Code with **WSL: Ubuntu**. Do not use Download ZIP as your working copy: it has no Git history/remotes for updates. Reopening VS Code does not fetch course changes.
+Stop on any error. `origin` is **your fork** (push work); `upstream` is **the instructor's public repository** (receive updates). The branch must print `main`. Open the cloned folder in VS Code with **WSL: Ubuntu**. Do not use Download ZIP as your working copy: it has no Git history/remotes for updates. Reopening VS Code does not fetch course changes.
 
 ## 2. Already cloned the instructor repository?
 
@@ -59,13 +59,13 @@ git fetch upstream
 git branch --list
 ```
 
-If local `final-project-indoor-outdoor` exists, run `git switch final-project-indoor-outdoor`. If absent, create it from the instructor version:
+If local `main` exists, run `git switch main`. If absent, create it from the instructor version:
 
 ```bash
-git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
+git switch --no-track -c main upstream/main
 ```
 
-Use **one** of these switch alternatives, not both. Commits saved on your previous branch remain there. They do not automatically move to the new branch. Review which work is relevant before copying/cherry-picking it; ask the instructor if unsure. Do not merge an entire older assignment branch just to move one model edit. After updating, `git push -u origin final-project-indoor-outdoor` creates/updates this branch in your fork and sets tracking to your fork, not upstream.
+Use **one** of these switch alternatives, not both. Commits saved on your previous branch remain there. They do not automatically move to the new branch. Review which work is relevant before copying/cherry-picking it; ask the instructor if unsure. Do not merge an entire older assignment branch just to move one model edit. After updating, `git push -u origin main` creates/updates this branch in your fork and sets tracking to your fork, not upstream.
 
 ## 5. Update before every lab and final-project session
 
@@ -76,25 +76,25 @@ git branch --show-current
 git status --short
 ```
 
-Verify branch `final-project-indoor-outdoor`, correct remotes, and no pending changes before proceeding:
+Verify branch `main`, correct remotes, and no pending changes before proceeding:
 
 ```bash
 git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 
 Then back up the combined result to your fork:
 
 ```bash
-git push -u origin final-project-indoor-outdoor
+git push -u origin main
 ```
 
 The inclusion check confirms **all commits from the latest successfully fetched instructor branch are in your local history**, even if you also have your own commits. A clean `git status`, `Already up to date` from your fork, or a recent student commit alone does not prove this. Repeat the fetch/update when the instructor announces changes.
 
-If your fork has newer commits and rejects the push, fetch `origin`, merge `origin/final-project-indoor-outdoor`, resolve conflicts, and push again. Do not force-push. VS Code **Sync Changes** / ordinary Pull synchronize the tracked fork; they do not replace fetching `upstream`.
+If your fork has newer commits and rejects the push, fetch `origin`, merge `origin/main`, resolve conflicts, and push again. Do not force-push. VS Code **Sync Changes** / ordinary Pull synchronize the tracked fork; they do not replace fetching `upstream`.
 
 ## 6. Conflicts, verification and installed software
 

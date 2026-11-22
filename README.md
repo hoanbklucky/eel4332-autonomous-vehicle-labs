@@ -1,6 +1,6 @@
 # EEL 4332 — Introduction to Autonomous Vehicles
 
-> **Before each lab:** use branch **`final-project-indoor-outdoor`**, fetch instructor updates, and verify your local copy includes them. Start with [Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository) and the [fork/clone/update guide](docs/UPDATING_COURSE_REPOSITORY.md). A fork or ZIP created earlier does not update itself. Labs 4–5 and the final include explicit version checks.
+> **Before each lab:** use branch **`main`**, fetch instructor updates, and verify your local copy includes them. Start with [Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository) and the [fork/clone/update guide](docs/UPDATING_COURSE_REPOSITORY.md). A fork or ZIP created earlier does not update itself. Labs 4–5 and the final include explicit version checks.
 
 > [!IMPORTANT]
 > **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
@@ -105,19 +105,19 @@ See the [course map](docs/COURSE_MAP.md) for topic placement and the [simulation
 
 ## Fork, open, and sync
 
-New students: [fork and clone through Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository), selecting `final-project-indoor-outdoor`. Existing students: save work, verify your fork/instructor remotes and branch, and follow [the update guide](docs/UPDATING_COURSE_REPOSITORY.md). Do this before every lab, especially Labs 4–5 and the final.
+New students: [fork and clone through Setup Part 6](lab00_setup/README.md#part-6--fork-and-clone-the-course-repository), selecting `main`. Existing students: save work, verify your fork/instructor remotes and branch, and follow [the update guide](docs/UPDATING_COURSE_REPOSITORY.md). Do this before every lab, especially Labs 4–5 and the final.
 
-With saved work and a clean working tree on `final-project-indoor-outdoor`:
+With saved work and a clean working tree on `main`:
 
 ```bash
 git fetch upstream &&
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 git log -1 --oneline
 ```
 
-After success, `git push -u origin final-project-indoor-outdoor` backs up your combined work. VS Code Sync synchronizes the tracked fork, not instructor updates. Preserve both maps for Labs 4–5; use each lab's current model/map commands.
+After success, `git push -u origin main` backs up your combined work. VS Code Sync synchronizes the tracked fork, not instructor updates. Preserve both maps for Labs 4–5; use each lab's current model/map commands.
 
 ## Repository structure
 

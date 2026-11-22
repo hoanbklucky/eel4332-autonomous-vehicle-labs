@@ -4,7 +4,7 @@
 
 ## Before you start — use the current course files
 
-**Expected branch: `final-project-indoor-outdoor`.** Run these commands in **Ubuntu/WSL**. Choose the new-copy or existing-copy instructions, then update below.
+**Expected branch: `main`.** Run these commands in **Ubuntu/WSL**. Choose the new-copy or existing-copy instructions, then update below.
 
 ### New copy: fork and clone
 
@@ -53,25 +53,25 @@ Fetch, then switch to the expected branch; the conditional creates it only if it
 
 ```bash
 git fetch upstream &&
-if git show-ref --verify --quiet refs/heads/final-project-indoor-outdoor; then
-  git switch final-project-indoor-outdoor
+if git show-ref --verify --quiet refs/heads/main; then
+  git switch main
 else
-  git switch --no-track -c final-project-indoor-outdoor upstream/final-project-indoor-outdoor
+  git switch --no-track -c main upstream/main
 fi
 ```
 
 After the switch succeeds, receive updates and check that they are included:
 
 ```bash
-git merge --no-edit upstream/final-project-indoor-outdoor &&
-git merge-base --is-ancestor upstream/final-project-indoor-outdoor HEAD &&
-echo "Current checkout includes the latest fetched final-project-indoor-outdoor course commits"
+git merge --no-edit upstream/main &&
+git merge-base --is-ancestor upstream/main HEAD &&
+echo "Current checkout includes the latest fetched main course commits"
 ```
 
 Stop on any error. Resolve merge conflicts before continuing; `git merge --abort` cancels an in-progress merge. After a successful update, save the combined branch to your fork:
 
 ```bash
-git push -u origin final-project-indoor-outdoor
+git push -u origin main
 ```
 
 **Command breakdown:** `clone` downloads a working copy; `remote` configures repository URLs; `fetch` downloads updates; `switch` selects the local branch; `merge` combines updates with your commits; `merge-base --is-ancestor` verifies inclusion; `push -u origin` uploads the branch and sets its tracking destination.
