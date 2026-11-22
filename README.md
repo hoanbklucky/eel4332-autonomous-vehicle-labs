@@ -88,7 +88,7 @@ Lab 3 first develops differential-drive kinematics and wheel odometry as prepara
 
 ## How these labs map to the course
 
-Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 introduces saved-map localization and guided navigation. The final transfers these skills to the supplied Goosebot model: students map both IST and campus with the supplied LiDAR, compare ordinary GPS with RTK-like localization, navigate using AMCL indoors and GPS fusion with the supplied full-scale road-only campus map outdoors. Blocked-route testing and LiDAR tuning are optional.
+Labs 1-3 establish operation and modeling. Lab 4 integrates sensors, timestamps, TF, odometry, and SLAM into a mapping deliverable. Lab 5 introduces saved-map localization and guided navigation. The final transfers these skills to the supplied Goosebot model: students map both IST and campus with the supplied LiDAR, compare ordinary GPS with RTK-like localization, navigate using AMCL indoors and GPS fusion with the supplied full-scale pedestrian-only campus map outdoors. Blocked-route testing and LiDAR tuning are optional.
 
 The former Labs 04-09 are condensed into Labs 04 and 05. Detailed theory is in each lab's **OPTIONAL_BACKGROUND.md**. Separate Kalman-filter, A*, Pure Pursuit, and safety-monitor implementations are optional extensions. Nav2 supplies the live planner/controller. The final's required integration task is mapping/localization/navigation, with required campus-map navigation and a supplied outdoor GPS/RTK-like experiment. A mission client is optional. The [legacy sequence](optional_legacy/previous_lab_sequence/README.md) remains an optional reference.
 

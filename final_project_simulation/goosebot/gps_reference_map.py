@@ -16,7 +16,7 @@ from gps_fusion_core import read_world
 
 
 def road_mask(layout, obstacle_pixels, resolution, origin):
-    """Intersect actual visual road/path rectangles with unoccupied map cells.
+    """Permit pedestrian rectangles only; subtract asphalt/motor-road rectangles.
 
     No added connectors, widened corridors, parking lots or grass shortcuts.
     One-cell erosion leaves a conservative raster boundary margin.
@@ -24,9 +24,14 @@ def road_mask(layout, obstacle_pixels, resolution, origin):
     from PIL import Image, ImageFilter
     height, width = obstacle_pixels.shape
     allowed = np.zeros((height, width), dtype=bool)
+    motor_roads = np.zeros((height, width), dtype=bool)
     for feature in layout['paths']:
         if feature['kind'] not in ('road', 'walk'):
             continue
+        access = feature.get('robot_access', 'pedestrian' if feature['kind']=='walk' else 'motor_road')
+        if access not in ('pedestrian','motor_road'):
+            raise ValueError('Unknown campus access classification')
+        target = allowed if access=='pedestrian' else motor_roads
         half_width = float(feature['width']) / 2
         for start, end in zip(feature['points'], feature['points'][1:]):
             a, b = np.asarray(start, dtype=float), np.asarray(end, dtype=float)
@@ -48,15 +53,17 @@ def road_mask(layout, obstacle_pixels, resolution, origin):
             y = origin[1] + (height - np.arange(j0, j1) - .5) * resolution - a[1]
             along = x[None, :] * unit[0] + y[:, None] * unit[1]
             across = -x[None, :] * unit[1] + y[:, None] * unit[0]
-            allowed[j0:j1, i0:i1] |= ((along >= -.015) & (along <= length + .015)
+            target[j0:j1, i0:i1] |= ((along >= -.015) & (along <= length + .015)
                                       & (np.abs(across) <= half_width))
-    allowed &= obstacle_pixels == 254
+    # A pedestrian centerline crossing a carriageway does not grant asphalt
+    # access. Motor-road pavement wins at overlaps; no median shortcut opens.
+    allowed &= (obstacle_pixels == 254) & ~motor_roads
     safe = np.asarray(Image.fromarray(allowed.astype('uint8') * 255).filter(ImageFilter.MinFilter(3))) == 255
     return np.where(safe, 254, 0).astype('uint8')
 
 
 def prepare_reference_map(map_path, world_path, destination):
-    """Write a temporary road-only navigation map; never modify supplied assets."""
+    """Write a temporary pedestrian-only navigation map; never modify supplied assets."""
     from PIL import Image
     data = validate_reference_map(map_path, world_path)
     source = Path(map_path).expanduser().resolve()
@@ -74,7 +81,7 @@ def prepare_reference_map(map_path, world_path, destination):
     row = mask.shape[0] - 1 - cell[1]
     if not (0 <= row < mask.shape[0] and 0 <= cell[0] < mask.shape[1]
             and mask[row, cell[0]] == 254):
-        raise ValueError('Known Home is outside the permitted road/path mask')
+        raise ValueError('Known Home is outside the permitted pedestrian mask')
     output = Path(destination).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     raster_path = output.with_suffix('.pgm')

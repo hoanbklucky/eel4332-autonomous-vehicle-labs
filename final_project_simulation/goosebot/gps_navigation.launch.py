@@ -64,7 +64,7 @@ def generate_launch_description():
             state['text'], ready = ready_actions(state['text'], event.text)
             if ready and not state['started']:
                 state['started'] = True
-                mode = ('road-only campus reference map + live LiDAR' if reference_map
+                mode = ('pedestrian-only campus reference map + live LiDAR' if reference_map
                         else 'rolling live-LiDAR costmaps; no saved map')
                 return [LogInfo(msg=f'GPS pose ready; starting Nav2 ({mode}; no AMCL).'),
                         *map_actions, nav2]
@@ -82,7 +82,7 @@ def generate_launch_description():
         DeclareLaunchArgument('profile', default_value='rtk', choices=['ordinary', 'rtk']),
         DeclareLaunchArgument('world', default_value=str(here.parent / 'campus/campus.sdf')),
         DeclareLaunchArgument('reference_map', default_value=str(here.parent / 'campus/reference.yaml'),
-                             description='Required full-scale campus/reference.yaml for road-only planning'),
+                             description='Required full-scale campus/reference.yaml for pedestrian-only planning'),
         OpaqueFunction(function=start),
     ])
 

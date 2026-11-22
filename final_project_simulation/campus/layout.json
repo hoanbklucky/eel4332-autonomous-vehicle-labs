@@ -1238,7 +1238,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373763_0",
@@ -1260,7 +1262,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373765_0",
@@ -1314,7 +1318,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373766_0",
@@ -1336,7 +1342,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373767_0",
@@ -1362,7 +1370,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373768_0",
@@ -1392,7 +1402,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373769_0",
@@ -1474,7 +1486,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373770_0",
@@ -1504,7 +1518,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373771_0",
@@ -1542,7 +1558,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373773_0",
@@ -1568,7 +1586,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373774_0",
@@ -1594,7 +1614,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373775_0",
@@ -1624,7 +1646,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373776_0",
@@ -1686,7 +1710,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_370373777_0",
@@ -1760,7 +1786,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651339_0",
@@ -1794,7 +1822,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651340_0",
@@ -1812,7 +1842,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651341_0",
@@ -1862,7 +1894,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651342_0",
@@ -1884,7 +1918,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651343_0",
@@ -1902,7 +1938,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651344_0",
@@ -1936,7 +1974,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651345_0",
@@ -1970,7 +2010,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651346_0",
@@ -1992,7 +2034,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651347_0",
@@ -2030,7 +2074,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651348_0",
@@ -2060,7 +2106,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651349_0",
@@ -2114,7 +2162,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651350_0",
@@ -2144,7 +2194,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651351_0",
@@ -2170,7 +2222,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651352_0",
@@ -2196,7 +2250,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651353_0",
@@ -2242,7 +2298,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651354_0",
@@ -2272,7 +2330,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651355_0",
@@ -2310,7 +2370,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_372651356_0",
@@ -2332,13 +2394,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467810969_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.12,
       "points": [
         [
           -147.151667,
@@ -2426,13 +2490,16 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Representative map-measured width from image(20261122-021500).png; approximate, not surveyed",
+      "width_measurement_id": "M01",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811274_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -53.818333,
@@ -2532,7 +2599,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811275_0",
@@ -2562,7 +2631,9 @@
         ]
       ],
       "bridge": true,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811276_0",
@@ -2592,7 +2663,9 @@
         ]
       ],
       "bridge": true,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811277_0",
@@ -2622,13 +2695,15 @@
         ]
       ],
       "bridge": true,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811278_0",
       "name": "Walkway",
       "kind": "road",
-      "width": 3.0,
+      "width": 11.31,
       "points": [
         [
           -147.151667,
@@ -2648,7 +2723,10 @@
         ]
       ],
       "bridge": true,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Representative map-measured width from image(20261122-021601).png; approximate, not surveyed",
+      "width_measurement_id": "M02",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_467811279_0",
@@ -2678,13 +2756,15 @@
         ]
       ],
       "bridge": true,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560163_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           56.781667,
@@ -2720,13 +2800,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560164_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -275.645,
@@ -2754,13 +2836,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560166_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -238.101667,
@@ -2836,13 +2920,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560168_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -313.2,
@@ -2854,7 +2940,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560169_0",
@@ -2876,7 +2964,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560170_0",
@@ -2894,7 +2984,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560171_0",
@@ -2912,13 +3004,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560173_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -69.061667,
@@ -2930,13 +3024,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560176_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           34.03,
@@ -2968,13 +3064,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560178_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           18.158333,
@@ -3006,13 +3104,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560180_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           4.936667,
@@ -3024,13 +3124,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560182_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           24.293333,
@@ -3054,13 +3156,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560184_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           121.966667,
@@ -3080,13 +3184,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560185_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           57.203333,
@@ -3098,13 +3204,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560186_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           62.926667,
@@ -3116,13 +3224,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560187_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           34.03,
@@ -3142,13 +3252,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560188_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           52.218333,
@@ -3160,13 +3272,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560191_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           120.621667,
@@ -3178,13 +3292,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560193_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           171.111667,
@@ -3196,13 +3312,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560194_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           218.598333,
@@ -3214,13 +3332,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560195_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           277.951667,
@@ -3236,13 +3356,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560197_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           318.323333,
@@ -3266,13 +3388,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560198_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           325.468333,
@@ -3284,13 +3408,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560199_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           240.153333,
@@ -3306,13 +3432,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560200_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           191.37,
@@ -3324,13 +3452,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560201_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           240.31,
@@ -3362,7 +3492,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560202_0",
@@ -3380,7 +3512,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560203_0",
@@ -3402,7 +3536,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560204_0",
@@ -3420,13 +3556,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560205_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -75.283333,
@@ -3442,7 +3580,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560206_0",
@@ -3460,13 +3600,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560207_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           474.681667,
@@ -3522,13 +3664,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560208_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           430.051667,
@@ -3556,13 +3700,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560208_1",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -500.0,
@@ -3594,13 +3740,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560210_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           119.306667,
@@ -3616,13 +3764,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560211_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           191.37,
@@ -3638,13 +3788,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560212_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           213.22,
@@ -3656,13 +3808,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560214_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           201.136667,
@@ -3674,7 +3828,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560215_0",
@@ -3696,7 +3852,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560216_0",
@@ -3718,13 +3876,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560217_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -129.77,
@@ -3744,13 +3904,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560218_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -260.941667,
@@ -3834,13 +3996,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560219_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -221.68,
@@ -3852,13 +4016,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_468560220_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -166.233333,
@@ -3870,7 +4036,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476604_0",
@@ -3900,13 +4068,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476605_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -162.19,
@@ -3918,13 +4088,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476607_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -121.641667,
@@ -3936,13 +4108,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476609_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -187.65,
@@ -3954,13 +4128,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476612_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -228.816667,
@@ -3972,13 +4148,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476616_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -185.148333,
@@ -4046,13 +4224,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476618_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -154.475,
@@ -4124,13 +4304,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476620_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 7.22,
       "points": [
         [
           42.353333,
@@ -4142,7 +4324,10 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Estimated continuation of image(20261122-021722).png; approximate, not surveyed",
+      "width_measurement_id": "M03",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476622_0",
@@ -4168,7 +4353,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476625_0",
@@ -4186,7 +4373,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476628_0",
@@ -4204,7 +4393,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476631_0",
@@ -4226,7 +4417,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476633_0",
@@ -4244,7 +4437,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476637_0",
@@ -4262,7 +4457,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476640_0",
@@ -4284,7 +4481,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476641_0",
@@ -4310,7 +4509,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476642_0",
@@ -4332,7 +4533,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_481476643_0",
@@ -4354,13 +4557,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505121651_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -4.015,
@@ -4376,13 +4581,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505121654_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -4.015,
@@ -4394,13 +4601,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505121657_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           27.69,
@@ -4420,13 +4629,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127435_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -248.3,
@@ -4438,13 +4649,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127437_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -140.163333,
@@ -4456,13 +4669,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127438_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -157.193333,
@@ -4474,13 +4689,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127441_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           27.69,
@@ -4492,13 +4709,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127442_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           27.69,
@@ -4526,13 +4745,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127443_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -4.015,
@@ -4544,7 +4765,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127444_0",
@@ -4582,7 +4805,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127445_0",
@@ -4604,7 +4829,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127446_0",
@@ -4626,7 +4853,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127447_0",
@@ -4684,7 +4913,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127448_0",
@@ -4702,13 +4933,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_505127449_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -242.921667,
@@ -4724,13 +4957,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676801_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           52.218333,
@@ -4742,13 +4977,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676802_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           36.826667,
@@ -4760,13 +4997,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676803_0",
       "name": "Walkway",
       "kind": "road",
-      "width": 6.0,
+      "width": 7.22,
       "points": [
         [
           42.353333,
@@ -4782,7 +5021,10 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Representative map-measured width from image(20261122-021722).png; approximate, not surveyed",
+      "width_measurement_id": "M03",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676804_0",
@@ -4800,13 +5042,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676808_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           59.855,
@@ -4818,13 +5062,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676809_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -260.941667,
@@ -4840,13 +5086,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676812_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           311.345,
@@ -4858,13 +5106,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676813_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           297.573333,
@@ -4880,13 +5130,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676814_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           246.445,
@@ -4898,13 +5150,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676815_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           253.296667,
@@ -4916,13 +5170,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676816_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           240.153333,
@@ -4934,7 +5190,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676817_0",
@@ -4952,13 +5210,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676818_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           297.573333,
@@ -4970,13 +5230,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676821_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           280.356667,
@@ -4988,13 +5250,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676823_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           261.688333,
@@ -5006,13 +5270,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676824_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           240.458333,
@@ -5024,13 +5290,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676825_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           233.351667,
@@ -5042,13 +5310,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676826_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           226.49,
@@ -5060,13 +5330,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676827_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           30.231667,
@@ -5078,13 +5350,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676828_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           15.056667,
@@ -5096,13 +5370,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676829_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           24.735,
@@ -5114,13 +5390,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676830_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -157.193333,
@@ -5140,13 +5418,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676831_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           56.781667,
@@ -5162,13 +5442,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676832_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           47.015,
@@ -5180,13 +5462,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676833_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -146.808333,
@@ -5198,13 +5482,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676834_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -133.185,
@@ -5216,13 +5502,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676835_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -168.746667,
@@ -5234,13 +5522,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676836_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -282.595,
@@ -5264,13 +5554,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676837_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -288.866667,
@@ -5282,13 +5574,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676838_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -313.985,
@@ -5304,13 +5598,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676839_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -315.398333,
@@ -5322,13 +5618,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676840_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -275.645,
@@ -5356,13 +5654,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676841_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -272.298333,
@@ -5374,13 +5674,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676842_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -215.34,
@@ -5400,13 +5702,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676843_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -205.878333,
@@ -5418,13 +5722,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676844_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -60.718333,
@@ -5456,13 +5762,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676845_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -49.401667,
@@ -5474,13 +5782,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676846_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           60.473333,
@@ -5496,13 +5806,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676847_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           83.715,
@@ -5514,13 +5826,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676848_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           261.688333,
@@ -5548,13 +5862,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676849_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           277.951667,
@@ -5566,13 +5882,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676850_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           394.401667,
@@ -5596,13 +5914,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676851_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           400.056667,
@@ -5614,13 +5934,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676852_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           394.578333,
@@ -5648,13 +5970,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676854_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           416.948333,
@@ -5666,13 +5990,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676855_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           449.035,
@@ -5684,13 +6010,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676856_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           160.345,
@@ -5702,13 +6030,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676857_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           130.663333,
@@ -5720,13 +6050,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676858_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           175.263333,
@@ -5738,13 +6070,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676859_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           115.811667,
@@ -5764,13 +6098,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_507676860_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           151.186667,
@@ -5782,13 +6118,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362455_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           220.198333,
@@ -5800,13 +6138,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362457_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           223.418333,
@@ -5818,7 +6158,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362459_0",
@@ -5836,7 +6178,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362502_0",
@@ -5858,7 +6202,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362505_0",
@@ -5892,7 +6238,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_515362508_0",
@@ -5930,7 +6278,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_543965298_0",
@@ -5972,7 +6322,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_543965299_0",
@@ -5990,7 +6342,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_543965300_0",
@@ -6008,13 +6362,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951171_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           424.898333,
@@ -6042,13 +6398,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951172_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           331.946667,
@@ -6060,13 +6418,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951173_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           331.005,
@@ -6086,13 +6446,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951174_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -178.415,
@@ -6128,7 +6490,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951175_0",
@@ -6146,13 +6510,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951178_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           22.211667,
@@ -6164,13 +6530,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951179_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           16.616667,
@@ -6182,13 +6550,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951180_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           17.991667,
@@ -6200,13 +6570,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_545951181_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           52.61,
@@ -6218,13 +6590,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_566223258_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           334.596667,
@@ -6244,13 +6618,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_576117231_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           179.033333,
@@ -6262,13 +6638,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_576117232_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           151.186667,
@@ -6280,7 +6658,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_595186068_0",
@@ -6314,13 +6694,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_621007852_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           114.771667,
@@ -6332,13 +6714,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_621007853_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           10.365,
@@ -6350,13 +6734,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_621007854_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -63.623333,
@@ -6368,13 +6754,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_621007855_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -79.808333,
@@ -6386,13 +6774,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725469993_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           278.58,
@@ -6404,13 +6794,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725469995_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           362.776667,
@@ -6426,13 +6818,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725469995_1",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           360.785,
@@ -6508,13 +6902,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725469998_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           112.308333,
@@ -6526,13 +6922,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725469999_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           269.335,
@@ -6544,7 +6942,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470002_0",
@@ -6566,13 +6966,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470003_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -294.246667,
@@ -6600,13 +7002,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470004_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -195.983333,
@@ -6618,13 +7022,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470005_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           253.561667,
@@ -6636,13 +7042,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470006_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           253.561667,
@@ -6658,13 +7066,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470007_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           269.335,
@@ -6680,13 +7090,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_725470008_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           269.335,
@@ -6698,13 +7110,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1506131392_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           365.368333,
@@ -6716,13 +7130,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1506131393_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -117.706667,
@@ -6734,13 +7150,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1506131394_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -219.481667,
@@ -6752,13 +7170,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1506131395_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -195.876667,
@@ -6770,13 +7190,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1506131396_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -205.053333,
@@ -6788,13 +7210,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1528887775_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -105.613333,
@@ -6806,13 +7230,15 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1528887776_0",
       "name": "Walkway",
       "kind": "walk",
-      "width": 2.0,
+      "width": 3.0,
       "points": [
         [
           -87.121667,
@@ -6840,7 +7266,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
+      "robot_access": "pedestrian",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692595_0",
@@ -6870,7 +7298,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692596_0",
@@ -6892,7 +7322,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692598_0",
@@ -6918,7 +7350,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692598_1",
@@ -6976,7 +7410,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692599_0",
@@ -6994,7 +7430,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692600_0",
@@ -7012,7 +7450,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     },
     {
       "id": "path_1534692601_0",
@@ -7030,7 +7470,9 @@
         ]
       ],
       "bridge": false,
-      "width_source": "Physical-width assumption, not surveyed: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m"
+      "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
+      "robot_access": "motor_road",
+      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
     }
   ],
   "parking": [
@@ -7614,11 +8056,12 @@
   "notes": [
     "Horizontal geographic coordinates restored from the former 0.06 layout to 1:1 meters; Goosebot and sensor ranges remain unscaled.",
     "OSM/PDF-derived footprints and nominal building heights remain approximate, not a surveyed digital twin.",
-    "Historical teaching path widths were not measured. Explicit full-scale assumptions: road 6 m, service road 3.5 m, walk 2 m, crossing 3 m. No claim these are surveyed campus widths.",
     "Home and delivery markers lie on mapped centerlines. Required goals A/B follow the crossing for a short full-map activity.",
     "Water collision is a simulation abstraction; grass is excluded by the road-only planning mask.",
     "FIPR Institute is off-campus in Bartow and intentionally omitted.",
-    "Outer bounds are rounded outward to the 0.25 m grid; geographic feature coordinates are unchanged."
+    "Outer bounds are rounded outward to the 0.25 m grid; geographic feature coordinates are unchanged.",
+    "Path widths now use instructor map measurements M01-M03 where matched; other walks use the reported 3 m minimum. M04 is an overall corridor including non-pavement and is never applied as a drivable width.",
+    "Robot navigation excludes motor/asphalt road rectangles as well as grass, water and buildings. Only mapped pedestrian features are permitted; this is not a traffic-rule or crossing-permission model."
   ],
   "navigation_goals": [
     {
@@ -7643,5 +8086,67 @@
     }
   ],
   "previous_horizontal_scale": 0.06,
-  "reference_resolution_m": 0.25
+  "reference_resolution_m": 0.25,
+  "width_measurements": [
+    {
+      "id": "M01",
+      "description": "Narrow lake-side pedestrian path",
+      "width_m": 3.12,
+      "readout_ft": 10.25,
+      "source_image": "image(20261122-021500).png",
+      "feature_ids": [
+        "path_467810969_0"
+      ],
+      "application": "Representative cross-section; constant width along this feature is an approximation",
+      "applied_as_pavement_width": true
+    },
+    {
+      "id": "M02",
+      "description": "Broad paved crossing at Home, south of IST",
+      "width_m": 11.31,
+      "readout_ft": 37.11,
+      "source_image": "image(20261122-021601).png",
+      "feature_ids": [
+        "path_467811278_0"
+      ],
+      "application": "Representative cross-section; constant width along this feature is an approximation",
+      "applied_as_pavement_width": true
+    },
+    {
+      "id": "M03",
+      "description": "Diagonal paved route from the lake junction toward Residence Hall I",
+      "width_m": 7.22,
+      "readout_ft": 23.69,
+      "source_image": "image(20261122-021722).png",
+      "feature_ids": [
+        "path_507676803_0"
+      ],
+      "continuation_feature_ids": [
+        "path_481476620_0"
+      ],
+      "application": "Matched by surrounding geometry; continuation inherits the width as an estimate",
+      "applied_as_pavement_width": true
+    },
+    {
+      "id": "M04",
+      "description": "Polytechnic Circle overall corridor",
+      "width_m": 21.87,
+      "readout_ft": 71.76,
+      "source_image": "image(20261122-021837).png",
+      "feature_ids": [],
+      "includes_median_sidewalk_or_verge": true,
+      "application": "Instructor confirmed this includes non-pavement areas. Context only; never buffer a drivable strip by this whole width",
+      "applied_as_pavement_width": false
+    }
+  ],
+  "width_policy": {
+    "minimum_walk_width_m": 3.0,
+    "minimum_source": "Instructor reports the smallest walking paths are about 3 m",
+    "unmeasured_road_carriageway_width_m": 6.0,
+    "unmeasured_service_width_m": 3.5,
+    "unmeasured_crossing_width_m": 3.0,
+    "quality": "Google Maps distance readouts supplied by instructor; approximate map measurements, not surveyed dimensions",
+    "corridor_rule": "Keep carriageways separate. Overall corridor widths that include medians/verges do not define traversable pavement.",
+    "navigation_access": "Pedestrian paths and separate sidewalks only; motor/asphalt carriageways are excluded even where a pedestrian feature crosses them."
+  }
 }

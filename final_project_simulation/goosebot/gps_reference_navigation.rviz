@@ -21,7 +21,7 @@ Visualization Manager:
     Plane Cell Count: 30
     Color: 160; 160; 164
   - Class: rviz_default_plugins/Map
-    Name: Road-only planning map
+    Name: Pedestrian-only planning map
     Enabled: true
     Topic:
       Depth: 1

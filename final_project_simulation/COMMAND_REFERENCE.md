@@ -41,7 +41,7 @@ The recorder validates both sensor declarations and captures both streams. Its t
 
 ### Live GPS navigation
 
-`gps_navigation.launch.py` validates the full-scale `campus/reference.yaml`, derives a road/path-only map, waits for GPS readiness, and starts its map server plus navigation-only Nav2. No AMCL or SLAM runs. The global static costmap covers the campus at 0.25 m resolution; the fine 0.025 m local grid rolls around Goosebot and retains the static road mask and live LiDAR. Grass is forbidden in both. Follow required goals A/B/Home from Step 9B; the map-free short-range activity is retired.
+`gps_navigation.launch.py` validates the full-scale `campus/reference.yaml`, derives a pedestrian-only map, waits for GPS readiness, and starts its map server plus navigation-only Nav2. No AMCL or SLAM runs. The global static costmap covers the campus at 0.25 m resolution; the fine 0.025 m local grid rolls around Goosebot and retains the static pedestrian mask and live LiDAR. Grass is forbidden in both. Follow required goals A/B/Home from Step 9B; the map-free short-range activity is retired.
 
 The live planar state is [x,y,yaw]. Initial position and global heading come from the **known commanded Home spawn**, not Gazebo truth or perfect IMU orientation. Body displacement and yaw increments come from the existing local odometry/IMU EKF. GPS positions update x/y; cross covariance can correct heading after motion. The supplied covariance model is illustrative, not hardware-calibrated. Physical GPS navigation needs appropriate global heading initialization/observability.
 
@@ -191,7 +191,7 @@ Classroom identities and relative positions come from the first image's labels/b
 
 ![Geographic campus layout](campus/campus_plan.png)
 
-The campus now uses 1:1 horizontal meters. Some footprints/heights and path widths remain approximate. Blue water has solid collision geometry; required road-only planning forbids grass.
+The campus now uses 1:1 horizontal meters. Some footprints/heights and path widths remain approximate. Blue water has solid collision geometry; required pedestrian-only planning forbids grass.
 
 </details>
 

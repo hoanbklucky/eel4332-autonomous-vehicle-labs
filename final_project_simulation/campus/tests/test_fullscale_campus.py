@@ -17,8 +17,32 @@ class FullScaleTests(unittest.TestCase):
         for value,original in zip(first,[-7.0624,11.0594]):
             self.assertAlmostEqual(value,original/.06,places=5)
         self.assertGreater(d['bounds'][2]-d['bounds'][0],1200)
-        self.assertTrue(all(v['width']>=2 for v in d['paths']))
+        self.assertTrue(all(v['width']>=3 for v in d['paths']))
         self.assertTrue(all('not surveyed' in v['width_source'] for v in d['paths']))
+
+    def test_width_measurements_are_local_and_corridor_is_not_pavement(self):
+        d=json.loads((ROOT/'layout.json').read_text())
+        by_id={v['id']:v for v in d['paths']}
+        for measurement in d['width_measurements']:
+            if measurement['applied_as_pavement_width']:
+                for name in measurement['feature_ids']+measurement.get('continuation_feature_ids',[]):
+                    self.assertEqual(by_id[name]['width'],measurement['width_m'])
+                    self.assertEqual(by_id[name]['width_measurement_id'],measurement['id'])
+                    for world in ['campus.sdf','campus_blocked.sdf']:
+                        tree=ET.parse(ROOT/world)
+                        model=tree.find(f".//model[@name='{name}_0']")
+                        width=float(model.findtext('link/visual/geometry/box/size').split()[1])
+                        self.assertEqual(width,measurement['width_m'])
+            else:
+                self.assertEqual(measurement['width_m'],21.87)
+                self.assertTrue(measurement['includes_median_sidewalk_or_verge'])
+                self.assertEqual(measurement['feature_ids'],[])
+        self.assertEqual(by_id['path_467811278_0']['width'],11.31)
+        self.assertEqual(by_id['path_467810969_0']['width'],3.12)
+        self.assertEqual(by_id['path_507676803_0']['width'],7.22)
+        self.assertFalse(any(v['width']==21.87 for v in d['paths']))
+        self.assertTrue(all(v['robot_access']=='motor_road' for v in d['paths'] if v['name']=='Polytechnic Circle'))
+        self.assertEqual(by_id['path_467811278_0']['robot_access'],'pedestrian')
 
     def test_all_manifest_assets_match(self):
         manifest=json.loads((ROOT/'assets_manifest.json').read_text())

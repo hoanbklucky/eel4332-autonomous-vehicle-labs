@@ -4,15 +4,15 @@
 
 Horizontal coordinates now use **1:1 meters**, restored from the previous 0.06 layout. The world covers about **1,217 × 1,333 m**. Goosebot, wheel radii, sensor ranges and GPS noise are unscaled. OSM/PDF-derived footprints, building heights and widths are approximate; this is not a surveyed digital twin.
 
-**Path-width assumptions:** roads 6 m, service roads 3.5 m, paved walks 2 m, crossings 3 m. The old widths were teaching adjustments and could not simply be treated as surveyed measurements. These assumptions are recorded per feature in `layout.json` and used consistently by the world and road mask.
+**Measured width references:** narrow walk **3.12 m**, Home pedestrian crossing **11.31 m**, diagonal Residence-side route **7.22 m**. Unmeasured walks use the instructor-reported **3 m minimum**. The **21.87 m** Polytechnic Circle measurement includes median/sidewalk/verge and is not a drivable width. Read [width provenance and access rules](WIDTHS_AND_ACCESS.md).
 
-**Width provenance:** paths are modeled from centerlines, not measured pavement boundaries. The crossing containing Home (`path_467811278_0`) is assigned **3 m** width; that value may underestimate the real crossing. Restoring geographic scale did not recover its true width. Replace these assumptions with measured widths when available, then regenerate the world and planning mask together.
+**Robot access:** mapped pedestrian paths and separate sidewalks only. Asphalt carriageways/service roads and grass remain forbidden in both navigation costmaps, including where a pedestrian centerline overlaps a motor road. The visible world still shows those roads.
 
 ## Required campus navigation
 
-Follow [final-project Step 9B](../README.md#gps-aided-outdoor-navigation). It includes every terminal command. Use the supplied `reference.yaml`, RTK-like GPS, the road-only global/local costmaps, live LiDAR, and goals **A → B → Home**. A/B are about 20 m from Home along mapped routes, avoiding a campus-wide drive. Short-range map-free navigation is retired. GPS provides pose; the prior map provides route knowledge. No AMCL, SLAM or 2D Pose Estimate runs during this activity.
+Follow [final-project Step 9B](../README.md#gps-aided-outdoor-navigation). It includes every terminal command. Use the supplied `reference.yaml`, RTK-like GPS, the pedestrian-only global/local costmaps, live LiDAR, and goals **A → B → Home**. A/B are about 20 m from Home along mapped routes, avoiding a campus-wide drive. Short-range map-free navigation is retired. GPS provides pose; the prior map provides route knowledge. No AMCL, SLAM or 2D Pose Estimate runs during this activity.
 
-Campus SLAM remains a separate, local mapping activity around Home; do not map the entire campus or use an unaligned student map for GPS navigation. The road mask forbids grass in navigation; the underlying physical world does not model grass as an obstacle. Roads and paved walks are allowed; this does not implement traffic rules.
+Campus SLAM remains a separate, local mapping activity around Home; do not map the entire campus or use an unaligned student map for GPS navigation. The pedestrian mask forbids asphalt motor roads and grass in navigation; the underlying physical world does not model grass as an obstacle. Only pedestrian paths and separate sidewalks are allowed; this does not implement traffic rules.
 
 ## Start campus — Terminal 1
 
@@ -43,7 +43,7 @@ Coordinates below are world/reference-map/GPS-ENU meters; student SLAM maps may 
 | Campus goal A | -129.772204 | 174.716679 |
 | Campus goal B | -142.870762 | 138.066713 |
 
-`mission.json` supplies Home and A/B goals directly to the launch/goal helper. Named delivery pads remain landmarks, not additional required long drives. `reference_goals.csv` lists delivery-pad positions. `layout.json` is the geometry/width source; `generate_campus.py` regenerates both worlds, meshes, the obstacle map and plan. The 25 cm obstacle map limits memory for the full campus; the local Nav2 grid is 2.5 cm. The road-only map is derived temporarily at launch and has a conservative one-cell boundary margin.
+`mission.json` supplies Home and A/B goals directly to the launch/goal helper. Named delivery pads remain landmarks, not additional required long drives. `reference_goals.csv` lists delivery-pad positions. `layout.json` is the geometry/width source; `generate_campus.py` regenerates both worlds, meshes, the obstacle map and plan. The 25 cm obstacle map limits memory for the full campus; the local Nav2 grid is 2.5 cm. The pedestrian-only map is derived temporarily at launch and has a conservative one-cell boundary margin.
 
 Regenerate only when editing geometry:
 

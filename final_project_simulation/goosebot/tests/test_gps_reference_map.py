@@ -70,7 +70,7 @@ class ReferenceMapTests(unittest.TestCase):
     def test_road_mask_never_opens_grass_or_water_and_does_not_bridge_gaps(self):
         obstacles = np.full((100, 100), 254, dtype='uint8')
         obstacles[45:55, 45:55] = 0  # physical obstacle/water wins over a path
-        layout = {'paths': [{'kind': 'road', 'width': 1., 'points': [[1, 5], [9, 5]]},
+        layout = {'paths': [{'kind': 'walk', 'width': 1., 'points': [[1, 5], [9, 5]]},
                             {'kind': 'walk', 'width': 1., 'points': [[2, 1], [2, 3]]}]}
         mask = road_mask(layout, obstacles, .1, [0, 0, 0])
         self.assertEqual(mask[50, 20], 254)
@@ -78,6 +78,17 @@ class ReferenceMapTests(unittest.TestCase):
         self.assertEqual(mask[10, 80], 0)  # grass
         self.assertEqual(mask[60, 20], 0)  # gap between walkway and road
         self.assertFalse(np.any((obstacles == 0) & (mask == 254)))
+
+    def test_asphalt_blocks_crossing_paths_but_separate_sidewalk_remains(self):
+        obstacles=np.full((100,100),254,dtype='uint8')
+        layout={'paths':[
+            {'kind':'road','robot_access':'motor_road','width':2.,'points':[[5,0],[5,10]]},
+            {'kind':'walk','robot_access':'pedestrian','width':1.,'points':[[2,0],[2,10]]},
+            {'kind':'walk','robot_access':'pedestrian','width':1.,'points':[[0,5],[10,5]]}]}
+        mask=road_mask(layout,obstacles,.1,[0,0,0])
+        self.assertEqual(mask[50,20],254)  # separate sidewalk
+        self.assertEqual(mask[50,50],0)  # overlap with asphalt stays forbidden
+        self.assertEqual(mask[20,50],0)  # bare carriageway is forbidden
 
     def test_road_map_has_footprint_clearance_for_required_route(self):
         from scipy.ndimage import label, distance_transform_edt
@@ -100,6 +111,7 @@ class ReferenceMapTests(unittest.TestCase):
             self.assertEqual(components[cell(goal['xy'])],component)
         self.assertGreater(np.linalg.norm(np.array(mission['navigation_goals'][0]['xy'])-mission['stops'][0]['xy']),15)
         self.assertLess(raster.size,30_000_000)  # no full-campus 5 cm upsampling
+        self.assertEqual(raster[cell([-75.,391.])],0)  # Polytechnic Circle median
 
     def test_generated_world_mission_layout_and_marker_coordinates_agree(self):
         layout=json.loads((self.campus/'layout.json').read_text())
