@@ -420,7 +420,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=rtk
 ```
 
-Keep still at Home. Leave SLAM, AMCL and teleop stopped.
+**Before starting Terminal 2:** wait until Gazebo has finished loading and Goosebot appears at Home. If the simulation is paused, click **Play**. Keep the robot stationary; leave SLAM, AMCL and teleop stopped. Keep Terminal 1 running throughout the activity. Use these readiness checks rather than a fixed number of seconds.
 
 **Terminal 2 — GPS localization, campus map and Nav2:**
 
@@ -432,7 +432,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/gps_navigation.launch.py" \
   profile:=rtk reference_map:="$PWD/final_project_simulation/campus/reference.yaml"
 ```
 
-Wait for **GPS_LOCALIZATION_READY**, then **CAMPUS_MAP_READY**, and active Nav2 nodes. The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
+Wait for **GPS_LOCALIZATION_READY**, then **CAMPUS_MAP_READY**, and active Nav2 nodes. **Do not send navigation goals until all three are ready.** The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
 
 **Command breakdown:** `gps_profile:=rtk` selects simulated RTK-like noise; `profile:=rtk` selects matching filter uncertainty. `reference_map:=` validates the matching full-scale map, builds the pedestrian-only grid, and starts the map server. Grass and identified asphalt motor roads are forbidden in both costmaps; separate sidewalks and interior non-asphalt paved corridors remain permitted. GPS estimates pose; the supplied map supports global planning; live LiDAR detects obstacles. There is no AMCL or 2D Pose Estimate. The map is supplied knowledge, not perfect localization or student SLAM evidence.
 
