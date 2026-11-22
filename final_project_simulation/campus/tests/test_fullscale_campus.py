@@ -1,0 +1,55 @@
+"""Asset consistency and 1:1 scale checks; no ROS required."""
+import hashlib
+import importlib.util
+import json
+import math
+from pathlib import Path
+import unittest
+import xml.etree.ElementTree as ET
+
+ROOT=Path(__file__).resolve().parents[1]
+class FullScaleTests(unittest.TestCase):
+    def test_geographic_horizontal_scale_is_restored(self):
+        d=json.loads((ROOT/'layout.json').read_text())
+        self.assertEqual(d['scale'],1.)
+        self.assertEqual(d['previous_horizontal_scale'],.06)
+        first=next(v for v in d['buildings'] if v['name']=='IST')['points'][0]
+        for value,original in zip(first,[-7.0624,11.0594]):
+            self.assertAlmostEqual(value,original/.06,places=5)
+        self.assertGreater(d['bounds'][2]-d['bounds'][0],1200)
+        self.assertTrue(all(v['width']>=2 for v in d['paths']))
+        self.assertTrue(all('not surveyed' in v['width_source'] for v in d['paths']))
+
+    def test_all_manifest_assets_match(self):
+        manifest=json.loads((ROOT/'assets_manifest.json').read_text())
+        self.assertEqual(manifest['horizontal_scale'],1.)
+        for name,digest in manifest['sha256'].items():
+            self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),digest,name)
+
+    def test_both_worlds_keep_geometry_and_camera_near_known_home(self):
+        d=json.loads((ROOT/'layout.json').read_text());home=d['stops'][0]['xy']
+        for file in ['campus.sdf','campus_blocked.sdf']:
+            world=ET.parse(ROOT/file).getroot().find('world')
+            group=world.find("model[@name='campus']")
+            self.assertEqual(group.findtext('pose'),'0 0 0 0 0 0')
+            camera=list(map(float,world.find(".//plugin[@filename='MinimalScene']/camera_pose").text.split()))
+            self.assertLess(math.dist(camera[:2],home),10)
+            for i,stop in enumerate(d['stops']):
+                pose=list(map(float,group.find(f"model[@name='delivery_pad_{i}']/pose").text.split()))
+                self.assertLess(math.dist(pose[:2],stop['xy']),1e-6)
+
+    def test_scanline_raster_matches_point_membership(self):
+        spec=importlib.util.spec_from_file_location('fullscale_generator',ROOT/'generate_campus.py')
+        g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+        # Use a small isolated domain to check exact center sampling at edges.
+        old=g.DATA;g.DATA=dict(bounds=[0,0,4,4],buildings=[dict(points=[[1,.7],[3,1.4],[2,3.2]])],water=[],barrier={})
+        try:
+            w,h,pixels=g.raster(.25)
+            obstacles=g.obstacles()
+            for j in range(h):
+                for i in range(w):
+                    occupied=any(g.inside((i+.5)*.25,4-(j+.5)*.25,p) for p in obstacles)
+                    self.assertEqual(pixels[j*w+i]==0,occupied)
+        finally:g.DATA=old
+
+if __name__=='__main__':unittest.main()

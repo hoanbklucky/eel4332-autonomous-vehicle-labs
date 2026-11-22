@@ -1,5 +1,7 @@
 # Final Project — Goosebot SLAM and Delivery in Simulation
 
+> **Full-scale campus update:** campus assets now use 1:1 horizontal meters with an unscaled Goosebot. Old reduced-world campus maps/goals do not match. The current required outdoor activity uses the supplied campus map and GPS on **`final-project-indoor-outdoor`**; follow its [updated final-project instructions](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs/blob/final-project-indoor-outdoor/final_project_simulation/README.md#gps-aided-outdoor-navigation). The remainder of this main-branch guide is the legacy single-world AMCL assignment.
+
 ### Measured wheel odometry
 
 The course launcher uses `/joint_states → /wheel/odometry → local EKF (+ IMU yaw rate) → /odometry/filtered`. It does not estimate travel from drive commands. Wheel radius and track width come from the robot description. Wheel rotation can still slip; simulated joints are an encoder proxy, not physical encoder electronics.
@@ -114,7 +116,7 @@ Classroom identities and relative positions come from the first image's labels/b
 
 ![Geographic campus layout](campus/campus_plan.png)
 
-The campus is uniformly scaled to a 73 × 80 m teaching arena; some newer footprints and all building heights are approximate. Blue water has solid collision geometry. Grass remains traversable.
+The campus uses 1:1 horizontal meters over about 1,217 × 1,333 m; path widths and heights are approximate. The required road-only GPS/map activity is on final-project-indoor-outdoor. Historical screenshots below show the reduced world.
 
 </details>
 

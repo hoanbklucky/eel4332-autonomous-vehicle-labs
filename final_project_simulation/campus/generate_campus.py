@@ -6,12 +6,12 @@ meshes share triangulated geometry; map pixels use the same footprint polygons.
 """
 from pathlib import Path
 from collections import deque
-import json, math, struct, zlib, xml.etree.ElementTree as ET
+import json, math, struct, zlib, hashlib, xml.etree.ElementTree as ET
 from html import escape
 
 ROOT = Path(__file__).resolve().parent
 DATA = json.loads((ROOT / 'layout.json').read_text())
-RES = .1
+RES = float(DATA.get('reference_resolution_m', .25))
 
 
 def area(p):
@@ -126,36 +126,45 @@ def inside(x,y,p):
 def raster(res,blocked=False):
     x0,y0,x1,y1=DATA['bounds'];w=round((x1-x0)/res);h=round((y1-y0)/res)
     pixels=bytearray([254])*(w*h)
+    # Scanline polygon fill: cost scales with polygon rows, not campus area.
+    # This keeps the full-size campus reproducible without a Python point loop
+    # over tens of millions of cells. Sample at the same cell centers as before.
     for p in obstacles(blocked):
-        imin=max(0,int((min(x for x,y in p)-x0)/res)-1);imax=min(w-1,int((max(x for x,y in p)-x0)/res)+1)
-        jmin=max(0,int((y1-max(y for x,y in p))/res)-1);jmax=min(h-1,int((y1-min(y for x,y in p))/res)+1)
+        jmin=max(0,int((y1-max(y for x,y in p))/res)-1)
+        jmax=min(h-1,int((y1-min(y for x,y in p))/res)+1)
         for j in range(jmin,jmax+1):
-            for i in range(imin,imax+1):
-                if inside(x0+(i+.5)*res,y1-(j+.5)*res,p):pixels[j*w+i]=0
+            y=y1-(j+.5)*res
+            cuts=sorted(ax+(y-ay)*(bx-ax)/(by-ay)
+                        for (ax,ay),(bx,by) in zip(p,p[1:]+p[:1])
+                        if (ay>y)!=(by>y))
+            for left,right in zip(cuts[::2],cuts[1::2]):
+                start=max(0,math.ceil((left-x0)/res-.5))
+                stop=min(w,math.ceil((right-x0)/res-.5))
+                if stop>start:pixels[j*w+start:j*w+stop]=b'\0'*(stop-start)
     return w,h,pixels
 
 
 def validate():
-    # Grid clearance check is deliberately separate from ROS/Nav2 execution.
+    # Coarse whole-campus connectivity only; fine footprint/road checks are
+    # separate tests. A byte grid avoids millions of Python set entries.
+    res=1.0
     for blocked in (False,True):
-        res=.2;w,h,pix=raster(res,blocked);occ=set()
-        for j in range(h):
-            for i in range(w):
-                if pix[j*w+i]==0:
-                    for dj in range(-2,3):
-                        for di in range(-2,3):
-                            if di*di+dj*dj<=4:occ.add((i+di,j+dj))
+        w,h,pix=raster(res,blocked)
         x0,y0,x1,y1=DATA['bounds']
         def cell(v):return (int((v[0]-x0)/res),int((y1-v[1])/res))
-        start=cell(DATA['stops'][0]['xy']);seen={start};q=deque([start])
-        assert start not in occ,'Home lacks clearance'
+        i,j=cell(DATA['stops'][0]['xy']);start=j*w+i
+        assert pix[start]!=0,'Home is occupied'
+        seen=bytearray(w*h);seen[start]=1;q=deque([start])
         while q:
-            i,j=q.popleft()
-            for v in [(i-1,j),(i+1,j),(i,j-1),(i,j+1)]:
-                if 0<=v[0]<w and 0<=v[1]<h and v not in seen and v not in occ:seen.add(v);q.append(v)
-        for v in DATA['stops']:assert cell(v['xy']) in seen,(v['name'],blocked)
-    print('All delivery stops reachable in baseline and blocked geometry (0.4 m grid clearance).')
-
+            index=q.popleft();i=index%w;j=index//w
+            for di,dj in ((-1,0),(1,0),(0,-1),(0,1)):
+                ii,jj=i+di,j+dj
+                if 0<=ii<w and 0<=jj<h:
+                    nxt=jj*w+ii
+                    if pix[nxt] and not seen[nxt]:seen[nxt]=1;q.append(nxt)
+        for v in DATA['stops']+DATA.get('navigation_goals',[]):
+            i,j=cell(v['xy']);assert seen[j*w+i],(v['name'],blocked)
+    print('Campus markers connected on the coarse obstacle grid; road/footprint checks are separate.')
 
 
 def organize_campus(world):
@@ -214,9 +223,15 @@ def write_world(blocked):
     root=ET.Element('sdf',version='1.8');world=ET.SubElement(root,'world',name='default')
     p=ET.SubElement(world,'physics',name='physics',type='ignored')
     ET.SubElement(p,'max_step_size').text='.001';ET.SubElement(p,'real_time_factor').text='1'
-    for file,name in [('physics','Physics'),('user-commands','UserCommands'),('scene-broadcaster','SceneBroadcaster'),('sensors','Sensors'),('imu','Imu')]:
+    for file,name in [('physics','Physics'),('user-commands','UserCommands'),('scene-broadcaster','SceneBroadcaster'),('sensors','Sensors'),('imu','Imu'),('navsat','NavSat')]:
         p=ET.SubElement(world,'plugin',filename=f'gz-sim-{file}-system',name=f'gz::sim::systems::{name}')
         if name=='Sensors':ET.SubElement(p,'render_engine').text='ogre2'
+    # ENU datum anchors synthetic GPS readings; horizontal geometry is full-scale meters.
+    lon,lat=DATA['origin_lon_lat']
+    spherical=ET.SubElement(world,'spherical_coordinates')
+    for tag,value in [('surface_model','EARTH_WGS84'),('world_frame_orientation','ENU'),
+                      ('latitude_deg',lat),('longitude_deg',lon),('elevation',0),('heading_deg',0)]:
+        ET.SubElement(spherical,tag).text=str(value)
     l=ET.SubElement(world,'light',name='sun',type='directional');ET.SubElement(l,'pose').text='0 0 40 0 0 0'
     ET.SubElement(l,'diffuse').text='.9 .9 .9 1';ET.SubElement(l,'direction').text='-.5 .1 -1'
     x0,y0,x1,y1=DATA['bounds']
@@ -247,6 +262,9 @@ def write_world(blocked):
     if blocked:
         b=DATA['barrier'];box(world,'causeway_barrier',b['x'],b['y'],b['width'],b['depth'],b['height'],'#f3a42d',yaw=b['yaw'],collision=True)
     world.append(ET.fromstring("<gui fullscreen=\"0\">\n<plugin filename=\"MinimalScene\" name=\"3D View\">\n  <gz-gui>\n    <title>3D View</title>\n    <property type=\"bool\" key=\"showTitleBar\">false</property>\n    <property type=\"string\" key=\"state\">docked</property>\n  </gz-gui>\n\n  <engine>ogre2</engine>\n  <scene>scene</scene>\n  <ambient_light>0.4 0.4 0.4</ambient_light>\n  <background_color>0.8 0.8 0.8</background_color>\n  <camera_pose>-10 3 5 0 0.633 1.344</camera_pose>\n</plugin>\n<plugin filename=\"EntityContextMenuPlugin\" name=\"Entity context menu\">\n  <gz-gui>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"GzSceneManager\" name=\"Scene Manager\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"InteractiveViewControl\" name=\"Interactive view control\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"CameraTracking\" name=\"Camera Tracking\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"MarkerManager\" name=\"Marker manager\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"SelectEntities\" name=\"Select Entities\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"Spawn\" name=\"Spawn Entities\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"VisualizationCapabilities\" name=\"Visualization Capabilities\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"width\" type=\"double\">5</property>\n    <property key=\"height\" type=\"double\">5</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"WorldControl\" name=\"World control\">\n  <gz-gui>\n    <title>World control</title>\n    <property type=\"bool\" key=\"showTitleBar\">false</property>\n    <property type=\"bool\" key=\"resizable\">false</property>\n    <property type=\"double\" key=\"height\">72</property>\n    <property type=\"double\" key=\"z\">1</property>\n\n    <property type=\"string\" key=\"state\">floating</property>\n    <anchors target=\"3D View\">\n      <line own=\"left\" target=\"left\"/>\n      <line own=\"bottom\" target=\"bottom\"/>\n    </anchors>\n  </gz-gui>\n\n  <play_pause>true</play_pause>\n  <step>true</step>\n  <start_paused>true</start_paused>\n  <use_event>true</use_event>\n\n</plugin>\n<plugin filename=\"WorldStats\" name=\"World stats\">\n  <gz-gui>\n    <title>World stats</title>\n    <property type=\"bool\" key=\"showTitleBar\">false</property>\n    <property type=\"bool\" key=\"resizable\">false</property>\n    <property type=\"double\" key=\"height\">110</property>\n    <property type=\"double\" key=\"width\">290</property>\n    <property type=\"double\" key=\"z\">1</property>\n\n    <property type=\"string\" key=\"state\">floating</property>\n    <anchors target=\"3D View\">\n      <line own=\"right\" target=\"right\"/>\n      <line own=\"bottom\" target=\"bottom\"/>\n    </anchors>\n  </gz-gui>\n\n  <sim_time>true</sim_time>\n  <real_time>true</real_time>\n  <real_time_factor>true</real_time_factor>\n  <iterations>true</iterations>\n</plugin>\n<plugin filename=\"Shapes\" name=\"Shapes\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"x\" type=\"double\">0</property>\n    <property key=\"y\" type=\"double\">0</property>\n    <property key=\"width\" type=\"double\">300</property>\n    <property key=\"height\" type=\"double\">50</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n    <property key=\"cardBackground\" type=\"string\">#666666</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"Lights\" name=\"Lights\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"x\" type=\"double\">300</property>\n    <property key=\"y\" type=\"double\">0</property>\n    <property key=\"width\" type=\"double\">150</property>\n    <property key=\"height\" type=\"double\">50</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n    <property key=\"cardBackground\" type=\"string\">#666666</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"TransformControl\" name=\"Transform control\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"x\" type=\"double\">0</property>\n    <property key=\"y\" type=\"double\">50</property>\n    <property key=\"width\" type=\"double\">250</property>\n    <property key=\"height\" type=\"double\">50</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n    <property key=\"cardBackground\" type=\"string\">#777777</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"Screenshot\" name=\"Screenshot\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"x\" type=\"double\">250</property>\n    <property key=\"y\" type=\"double\">50</property>\n    <property key=\"width\" type=\"double\">50</property>\n    <property key=\"height\" type=\"double\">50</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n    <property key=\"cardBackground\" type=\"string\">#777777</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"CopyPaste\" name=\"CopyPaste\">\n  <gz-gui>\n    <property key=\"resizable\" type=\"bool\">false</property>\n    <property key=\"x\" type=\"double\">300</property>\n    <property key=\"y\" type=\"double\">50</property>\n    <property key=\"width\" type=\"double\">100</property>\n    <property key=\"height\" type=\"double\">50</property>\n    <property key=\"state\" type=\"string\">floating</property>\n    <property key=\"showTitleBar\" type=\"bool\">false</property>\n    <property key=\"cardBackground\" type=\"string\">#777777</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"ComponentInspector\" name=\"Component inspector\">\n  <gz-gui>\n    <property type=\"bool\" key=\"showTitleBar\">false</property>\n    <property type=\"string\" key=\"state\">docked</property>\n  </gz-gui>\n</plugin>\n<plugin filename=\"EntityTree\" name=\"Entity tree\">\n  <gz-gui>\n    <property type=\"bool\" key=\"showTitleBar\">false</property>\n    <property type=\"string\" key=\"state\">docked</property>\n  </gz-gui>\n</plugin>\n</gui>"))
+    camera=world.find("gui/plugin[@filename='MinimalScene']/camera_pose")
+    home=DATA['stops'][0];yaw=home['yaw']
+    camera.text=f"{home['xy'][0]-6*math.cos(yaw):.6f} {home['xy'][1]-6*math.sin(yaw):.6f} 5 0 0.633 {yaw}"
     organize_campus(world)
     ET.indent(root)
     (ROOT/('campus_blocked.sdf' if blocked else 'campus.sdf')).write_text(ET.tostring(root,encoding='unicode')+'\n')
@@ -259,13 +277,13 @@ def png(path,w,h,pix):
 
 
 def plan():
-    x0,y0,x1,y1=DATA['bounds'];k=10;left,top=45,80
+    x0,y0,x1,y1=DATA['bounds'];k=730/(x1-x0);left,top=45,80
     def xy(p):return (left+(p[0]-x0)*k,top+(y1-p[1])*k)
     width=(x1-x0)*k+360;height=(y1-y0)*k+135
     s=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
        '<rect width="100%" height="100%" fill="#faf8f2"/>','<g font-family="sans-serif">',
        '<text x="45" y="30" font-size="23" font-weight="bold">Florida Polytechnic University — campus footprint model</text>',
-       '<text x="45" y="54" font-size="13">Geographic outlines · north up · 0.06 uniform teaching scale · illustrative heights</text>']
+       '<text x="45" y="54" font-size="13">Geographic outlines · north up · 1:1 horizontal meters · illustrative heights</text>']
     def poly(v,c):
         ps=' '.join(f'{a:.2f},{b:.2f}' for a,b in map(xy,v['points']))
         s.append(f'<polygon points="{ps}" fill="{c}" stroke="#46534b" stroke-width=".4"/>')
@@ -292,7 +310,7 @@ def plan():
     by=top+65+len(labels)*24+35
     for i,v in enumerate(DATA['stops']):s.append(f'<text x="{left+(x1-x0)*k+25}" y="{by+i*24}" font-size="12">Yellow {i}: {escape(v["name"])}</text>')
     s += [f'<text x="45" y="{height-35}" font-size="11">Map data © OpenStreetMap contributors (ODbL); 2026 PDF used for labels and approximate purple additions.</text>',
-          f'<text x="45" y="{height-17}" font-size="11">Blue = non-traversable water. Paths/crossings enlarged for robot clearance. Not a surveyed digital twin.</text>','</g></svg>']
+          f'<text x="45" y="{height-17}" font-size="11">Blue = non-traversable water. Widths are explicit physical assumptions. Not a surveyed digital twin.</text>','</g></svg>']
     (ROOT/'campus_plan.svg').write_text('\n'.join(s)+'\n')
 
 
@@ -306,9 +324,15 @@ def generate():
     w,h,pix=raster(RES);png(ROOT/'reference.png',w,h,pix)
     x0,y0,_,_=DATA['bounds']
     (ROOT/'reference.yaml').write_text(f'image: reference.png\nmode: trinary\nresolution: {RES}\norigin: [{x0}, {y0}, 0.0]\nnegate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.25\n')
-    (ROOT/'mission.json').write_text(json.dumps(dict(stops=DATA['stops'],barrier=DATA['barrier']),indent=2)+'\n')
+    (ROOT/'mission.json').write_text(json.dumps(dict(scale=DATA['scale'], stops=DATA['stops'], navigation_goals=DATA.get('navigation_goals',[]), barrier=DATA['barrier']),indent=2)+'\n')
     (ROOT/'reference_goals.csv').write_text('x_m,y_m,yaw_rad\n'+''.join(f'{v["xy"][0]},{v["xy"][1]},{v["yaw"]}\n' for v in DATA['stops'][1:]))
     plan()
+    assets = ['layout.json', 'generate_campus.py', 'campus.sdf', 'campus_blocked.sdf',
+              'reference.yaml', 'reference.png', 'mission.json', 'reference_goals.csv', 'campus_plan.svg']
+    assets += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'meshes').glob('*.obj'))]
+    manifest = {'schema': 1, 'horizontal_scale': DATA['scale'],
+                'sha256': {name: hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in assets}}
+    (ROOT/'assets_manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
     print(f'Generated geographic campus: {len(DATA["buildings"])} buildings; {len(DATA["water"])} water polygons; {len(DATA["paths"])} path/road features; {w}x{h} map.')
 
 
