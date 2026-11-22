@@ -4,18 +4,31 @@ Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from R
 
 ## How your repositories connect
 
+### If you cloned the public course repository directly
+
 ```mermaid
 flowchart LR
-    Course["Public course repository on GitHub"]
-    Fork["Your fork on GitHub"]
-    Local["Your local clone in Ubuntu or WSL"]
-    Course -->|Fork on GitHub| Fork
-    Fork -->|Clone once| Local
-    Course -->|Fetch updates from upstream| Local
-    Local -->|Push your work to origin| Fork
+    Course["Public course repository"]
+    Local["Your local clone"]
+    Course -->|Clone or fetch| Local
+    Local -. Push blocked without write access .-> Course
 ```
 
-In your local clone, `upstream` is the remote name for the public course repository. `origin` is the remote name for your GitHub fork. Fetch course updates from `upstream`, merge them into your local branch, then push your work to `origin`.
+Git initially calls the course repository `origin` in this setup. You can edit and commit locally, but pushing to the course repository requires write access. If you already cloned it this way, follow Step 2 to connect your existing clone to your fork.
+
+### Course workflow with your own fork
+
+```mermaid
+flowchart LR
+    Course["Public course repository"]
+    Fork["Your GitHub fork"]
+    Local["Your local clone"]
+    Course -->|Fork on GitHub| Fork
+    Fork -->|Clone once| Local
+    Local -->|Push to origin| Fork
+```
+
+Fork first so you have a GitHub repository you can push to and share for grading. In your local clone, `origin` points to your fork and `upstream` points to the public course repository. When course files change, fetch from `upstream` and merge locally, then push the updated work to `origin`.
 
 ## 1. Fork and clone (new students)
 
