@@ -13,14 +13,18 @@ The instructor reports the smallest walking paths are about **3 m**. Unmeasured 
 
 ## Where Goosebot may drive
 
-**Non-asphalt interior paved corridors, plazas, pedestrian paths/crossings and separate sidewalks—including sidewalks alongside asphalt roads—are permitted.** Identified asphalt traffic carriageways, carriageway connectors and asphalt parking access/aisles remain forbidden, as do grass, medians, water and buildings.
+**Only pedestrian paths, pedestrian crossings/bridges and separate sidewalks are permitted. Asphalt motor roads, service roads, grass, medians, water and buildings are forbidden.** The broad tan crossing at Home is a pedestrian feature even though its old generic `kind` was `road`; its explicit access class resolves that ambiguity.
 
-A generic source `kind: road` does not identify a surface material. That earlier shortcut incorrectly blocked 33 interior paved features, including the measured 7.22 m route. The layout now records separate `surface` and `robot_access` classifications, with the reviewed feature IDs and assumptions. Non-asphalt corridors render tan in Gazebo; identified asphalt lanes remain gray. Surface assignments are a simulation approximation, not a surveyed material map.
-
-A sidewalk beside an asphalt carriageway is its own permitted feature. Neither the road label nor the 21.87 m overall corridor may blanket-block it. At an actual overlap with an identified asphalt lane, that lane remains forbidden; this does not authorize traffic-lane driving. The connected network is checked from Home to IST, Residence, GCW, both A/B goals and both ends of all five pedestrian crossings with footprint clearance.
+The world still displays asphalt carriageways using their existing estimated widths (6 m per carriageway, 3.5 m service roads). These are not newly measured widths and do not grant robot access. Separate pedestrian features remain permitted beside them. At an overlap, motor-road pavement is subtracted from the pedestrian mask; a mapped centerline crossing an asphalt road does not authorize the robot to enter it. No blanket 21.87 m road strip is opened.
 
 The same feature widths generate the visible world and the temporary pedestrian navigation mask. The mask intersects permitted pavement with obstacle-free cells and leaves a conservative one-cell margin. Both global and local costmaps use it, so LiDAR clearing cannot open a shortcut. Required A/B/Home remain on the pedestrian crossing; the outdoor forward-speed cap remains 1 m/s and the footprint remains 20 × 20 cm.
 
 After updating, **stop all launches and restart campus and GPS/Nav2** to load the new visible pavement and regenerate the mask. No ROS rebuild is needed. Navigation uses the supplied matching map assets; do not shrink the robot or remove the pedestrian restriction to make a route pass.
 
 Edit widths/access in `layout.json`, then run `python3 final_project_simulation/campus/generate_campus.py` to regenerate the asset bundle. Keep the generated world/map/manifest together. The Google Maps screenshots are not embedded in the repository; only the supplied measurements and provenance are recorded. Live Gazebo validation is still required.
+
+## Pavement continuity review
+
+The BARC corner and approximate Campus Store/Residence III footprints overlapped mapped pedestrian pavement. Their teaching footprints now retain the main building mass outside that pavement with 0.75 m clearance; original coordinates remain in `source_points_before_pavement_review`. These are documented geometry approximations, not surveyed building corrections. Gazebo visuals, collision meshes and the obstacle map all use the corrected footprints, so this does not hide a physical obstacle from navigation. Indoor/covered paths at IST remain blocked by the actual building footprint.
+
+Flat round pavement joins now fill the triangular wedges between adjacent path segments at bends. The same joins appear in Gazebo and the pedestrian mask. The former post-like notches were geometry artifacts; this campus model contains no street lamp posts. Asphalt exclusions still take precedence.

@@ -79,6 +79,32 @@ class ReferenceMapTests(unittest.TestCase):
         self.assertEqual(mask[60, 20], 0)  # gap between walkway and road
         self.assertFalse(np.any((obstacles == 0) & (mask == 254)))
 
+    def test_bend_join_has_no_post_like_forbidden_wedge(self):
+        pixels=np.full((160,160),254,dtype='uint8')
+        layout={'paths':[{'kind':'walk','width':3.,
+            'points':[[2,4],[8,4],[8,12]]}]}
+        mask=road_mask(layout,pixels,.1,[0,0,0])
+        # Outer quadrant omitted by two butt-ended rectangles; round pavement
+        # join includes it, with enough boundary clearance for raster erosion.
+        self.assertEqual(mask[160-1-32,88],254)
+        self.assertEqual(mask[160-1-20,100],0)  # outside actual join remains grass
+
+    def test_reviewed_pavement_is_continuous_past_corrected_buildings(self):
+        from scipy.ndimage import distance_transform_edt
+        layout=json.loads((self.campus/'layout.json').read_text())
+        pixels=np.asarray(Image.open(self.campus/'reference.png'))
+        mask=road_mask(layout,pixels,.25,[-500.,-733.5,0.])
+        clearance=distance_transform_edt(mask==254,sampling=.25)
+        by_id={f['id']:f for f in layout['paths']}
+        for name in ('path_725470002_0','path_507676817_0','path_468560178_0'):
+            feature=by_id[name]
+            for a,b in zip(feature['points'],feature['points'][1:]):
+                a,b=np.array(a),np.array(b)
+                for t in np.linspace(.05,.95,max(2,int(np.linalg.norm(b-a)*2))):
+                    xy=a+(b-a)*t
+                    x,y=np.floor((xy-[-500.,-733.5])/.25).astype(int)
+                    self.assertGreaterEqual(clearance[mask.shape[0]-1-y,x],.5,(name,xy))
+
     def test_generic_road_label_does_not_exclude_non_asphalt_paved_corridor(self):
         pixels=np.full((100,100),254,dtype='uint8')
         layout={'paths':[{'kind':'road','surface':'non_asphalt_paved',

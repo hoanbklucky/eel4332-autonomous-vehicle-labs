@@ -187,6 +187,12 @@ def organize_campus(world):
             pts=[(x+ca*u-sa*v,y+sa*u+ca*v) for u,v in
                  [(-w/2,-d/2),(w/2,-d/2),(w/2,d/2),(-w/2,d/2)]]
             top=z+h/2
+        elif model.find('.//visual/geometry/cylinder') is not None:
+            cylinder=model.find('.//visual/geometry/cylinder')
+            radius=float(cylinder.findtext('radius'));height=float(cylinder.findtext('length'))
+            x,y,z,_,_,_=xyzrpy
+            pts=[(x-radius,y-radius),(x+radius,y+radius)]
+            top=z+height/2
         else:
             uri=model.findtext('.//visual/geometry/mesh/uri')
             vertices=[list(map(float,line.split()[1:])) for line in
@@ -251,6 +257,21 @@ def write_world(blocked):
             dx,dy=b[0]-a[0],b[1]-a[1];length=math.hypot(dx,dy)
             if length<.03:continue
             box(world,v['id']+'_'+str(k),(a[0]+b[0])/2,(a[1]+b[1])/2,length+.03,v['width'],.015 if v['bridge'] else .01,path_color(v),yaw=math.atan2(dy,dx))
+    # Continuous pavement at bends: segment boxes alone leave triangular
+    # grass wedges at their joins. These are flat pavement, never posts.
+    for v in DATA['paths']:
+        for k, point in enumerate(v['points'][1:-1]):
+            model=ET.SubElement(world,'model',name=v['id']+'_join_'+str(k))
+            ET.SubElement(model,'static').text='true'
+            ET.SubElement(model,'pose').text=f'{point[0]} {point[1]} 0 0 0 0'
+            link=ET.SubElement(model,'link',name='pavement')
+            visual=ET.SubElement(link,'visual',name='pavement')
+            cylinder=ET.SubElement(ET.SubElement(visual,'geometry'),'cylinder')
+            ET.SubElement(cylinder,'radius').text=str(v['width']/2)
+            ET.SubElement(cylinder,'length').text='.01'
+            material=ET.SubElement(visual,'material')
+            ET.SubElement(material,'ambient').text=color(path_color(v))
+            ET.SubElement(material,'diffuse').text=color(path_color(v))
     for v in DATA['water']:solid(world,v,.45,'#397f99')
     for v in DATA['buildings']:
         solid(world,v,v['height'],v['color'])

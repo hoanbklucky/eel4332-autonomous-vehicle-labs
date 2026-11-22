@@ -19,6 +19,7 @@ def road_mask(layout, obstacle_pixels, resolution, origin):
     """Permit non-asphalt paved routes/sidewalks; subtract identified asphalt lanes.
 
     No added connectors, widened corridors, parking lots or grass shortcuts.
+    Flat round joins match the world pavement at bends.
     One-cell erosion leaves a conservative raster boundary margin.
     """
     from PIL import Image, ImageFilter
@@ -55,6 +56,18 @@ def road_mask(layout, obstacle_pixels, resolution, origin):
             across = -x[None, :] * unit[1] + y[:, None] * unit[0]
             target[j0:j1, i0:i1] |= ((along >= -.015) & (along <= length + .015)
                                       & (np.abs(across) <= half_width))
+        # Match the flat circular pavement joins in the Gazebo world. Segment
+        # rectangles alone create post-like forbidden wedges at polyline bends.
+        for point in feature['points'][1:-1]:
+            cx, cy = point
+            i0=max(0,int(math.floor((cx-half_width-origin[0])/resolution)))
+            i1=min(width,int(math.ceil((cx+half_width-origin[0])/resolution)))
+            j0=max(0,int(math.floor(height-(cy+half_width-origin[1])/resolution)))
+            j1=min(height,int(math.ceil(height-(cy-half_width-origin[1])/resolution)))
+            if i1<=i0 or j1<=j0:continue
+            x=origin[0]+(np.arange(i0,i1)+.5)*resolution-cx
+            y=origin[1]+(height-np.arange(j0,j1)-.5)*resolution-cy
+            target[j0:j1,i0:i1] |= x[None,:]**2+y[:,None]**2<=half_width**2
     # A pedestrian centerline crossing a carriageway does not grant asphalt
     # access. Motor-road pavement wins at overlaps; no median shortcut opens.
     allowed &= (obstacle_pixels == 254) & ~motor_roads
