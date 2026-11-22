@@ -1,74 +1,72 @@
-# Required system explanation — both environments
+# Individual final project report
 
-Submit one concise explanation covering IST and campus: about 2–3 pages plus the topic table and diagram. Use your own words. Refer to actual files, topic output, screenshots and results; listing software names alone is insufficient. This component is **30%** of the project grade.
+**Name** — [Your name]  
+**GitHub repository** — [Link]
 
-## 1. Sensors, topics and roles
+[Download the editable Word template](Goosebot_Final_Project_Report_Template.docx).
 
-Complete the table for **every sensor available in your robot**: mapping LiDAR, forward ToF, IMU, both stereo cameras, and GPS. Include image calibration topics where present. Mark a sensor as **available but unused** if the required mapping/navigation nodes do not consume it. Separate derived estimates, joint visualization, ground truth and motion commands from sensor measurements.
+Replace the bracketed text with results from your own runs. Add one or two sentences explaining what each result shows.
 
-| Sensor or derived signal | Exact ROS 2 topic | Message type | Header / reference frame | Publisher and consumer(s) | Used for what in your run? |
-|---|---|---|---|---|---|
-| Mapping LiDAR | Fill | Fill | Fill | Fill | Fill |
-| Forward ToF | Fill | Fill | Fill | Fill | Fill |
-| IMU | Fill | Fill | Fill | Fill | Fill |
-| Stereo left/right | Fill | Fill | Fill | Fill | Fill |
-| GPS (campus) | Fill | Fill | Fill | Fill | Fill |
-| Command-derived odometry | Fill | Fill | Fill | Fill | Fill |
-| Filtered odometry | Fill | Fill | Fill | Fill | Fill |
-| Map / localization estimate | Fill | Fill | Fill | Fill | Fill |
-| Motion command | Fill | Fill | Applicable frame/convention | Fill | Fill |
+## Steps 4–5 · IST mapping
 
-Useful evidence, in a sourced terminal (inspect while the relevant phase is running):
+[Paste a screenshot of your saved IST map in RViz.]
 
-```bash
-ros2 topic list -t
-ros2 topic info /scan --verbose
-ros2 topic info /imu/data --verbose
-ros2 topic info /gps/fix --verbose
-ros2 node list
-ros2 node info /ekf_filter_node
-```
+[Describe the part of IST you mapped and point out a feature you recognize in the map.]
 
-Repeat `ros2 node info` using the actual SLAM, AMCL and navigation node names you discovered. A publisher or subscriber count is evidence about connections, not proof that measurements are fused correctly. A bridge changes transport/message representation; explain which node estimates state.
+## Step 6 · IST navigation
 
-## 2. Data-flow diagram and TF
+[Paste a screenshot or a short result excerpt from your AMCL navigation run.]
 
-Draw your **actual** data flow from Gazebo sensors through bridges and ROS nodes to mapping, localization, costmaps, planning/control, `/cmd_vel` and robot motion. Label important arrows with topic names. Show the mapping phase and the saved-map navigation phase separately (or label mutually exclusive nodes).
+[Name your two destinations and say whether Goosebot reached each one and returned Home.]
 
-Identify who supplies each transform in `map → odom → base_footprint → base_link → sensor frames`, and explain how TF lets a scan be placed on a map. Which transform changes when you initialize AMCL indoors, and which node owns it during live GPS navigation outdoors? Why must SLAM, AMCL and a ground-truth localizer not all publish the same global transform?
+## Step 9 · Raw sensor readings
 
-## 3. What is actually fused?
+[Paste a short excerpt from one message for each source. For LiDAR, a few range values are enough.]
 
-Inspect the course file `final_project_simulation/goosebot/ekf_wheel.yaml` loaded directly by `world.launch.py` and the running EKF node. Identify its input topics and **enabled state components** in each configuration mask, not just sensor names. Explain how the estimate is produced from these inputs. Does the baseline use absolute IMU heading, yaw rate, linear acceleration, wheel encoder odometry, or command-derived dead reckoning? Support your answer from the configuration/script, rather than assumptions about a typical robot.
+| Source | ROS 2 topic | Short reading excerpt |
+|---|---|---|
+| Ordinary GPS | [Topic] | [Reading] |
+| RTK-like GPS | [Topic] | [Reading] |
+| IMU | [Topic] | [Reading] |
+| Wheel joint states | [Topic] | [Reading] |
+| LiDAR | [Topic] | [Reading] |
 
-Does the running baseline EKF consume LiDAR, images or GPS in your run? Distinguish it from Step 9's separate supplied offline position filter, which does consume GPS. If not, where are those measurements used, if anywhere? Distinguish EKF state fusion from SLAM scan matching and AMCL scan-to-map localization. Explain why camera or GPS messages appearing in `ros2 topic list` do not establish fusion. In the live outdoor mode, identify `/gps_nav/odometry` and the supplied global x/y/yaw filter separately from the local EKF and offline position filters.
+[Briefly describe what you see in the readings. For example, point out the latitude and longitude in a GPS message.]
 
-## 4. Mapping versus localization
+## Step 9 · ROS 2 node graph
 
-What measurements and transforms does SLAM Toolbox use to estimate a map/trajectory? What does an occupancy-grid cell represent? Show a revisit and explain the result you observed; do not claim loop closure from a screenshot alone.
+[Paste your node graph screenshot. Label `/wheel/odometry` and `/imu/data` entering the local EKF.]
 
-For IST, after saving the map, what changes when SLAM stops and AMCL starts? Explain AMCL's use of the saved map, laser measurements and motion information, and why a reasonable initial pose and scan alignment matter. Identify the roles of `map`, `odom` and robot frames. Explain how your own saved-map origin can differ from Gazebo world coordinates.
+[Describe one connection shown in your graph.]
 
-## 5. From goal to motion
+## Step 9A · Localization accuracy
 
-Trace one goal: map-frame destination → global costmap and planner → path → local costmap and controller → velocity command → simulated drive. Identify the configured global planner, search method and local controller from `nav2_goosebot.yaml`; for GPS mode also inspect `gps_navigation_core.py`'s full-map/rolling-local-costmap and command-routing overrides. Explain global versus local planning, occupancy versus inflated cost, and what live scans contribute.
+[Paste your comparison plot and the error table for the unmodified drive.]
 
-Show evidence that two goals and return home succeeded **in each world**, using AMCL indoors and the live GPS mode outdoors. Explain how live LiDAR scans and costmaps support obstacle avoidance along your normal routes.
+[Say which of the three estimates had the lowest position error and cite a value from your table. Briefly note whether the controlled case changed your conclusion.]
 
-## 6. Indoor/outdoor observations and limits
+## Step 9B · Campus navigation
 
-- **Campus GPS:** include the comparison plot and error table from [Step 9](README.md#9-part-b--gpsrtk-localization-and-outdoor-navigation). Identify A (existing odometry/IMU), B (+ ordinary GPS) and C (+ RTK-like GPS); discuss unmodified and deliberately scaled prediction cases. State that known Home pose/heading initializes both, truth is only for scoring, and the plot does not establish improved SLAM/Nav2. Separately show required GPS-aided campus navigation with the supplied pedestrian-only map, explain how global planning differs from the rolling local costmap, and identify the GPS global localizer, local EKF and LiDAR costmap roles. Give a reason for GPS helping or hurting in your recorded run.
-- **Comparison:** what changed between the indoor and outdoor routes (structure within sensor range, map coverage, localization or planning difficulty)? Ground the comparison in observations.
-- **Reality gap:** explain at least two limits, including the idealized GPS noise or approximate map widths or wheel slip, and what would require validation on physical Goosebot.
-- **Reproducibility:** identify your branch/revision, maps, chosen goals/home, changed settings and one diagnosed problem/fix. List each member's contribution and briefly state how AI assistance was verified if used.
+[Paste a screenshot showing Goosebot and its planned route on the supplied pedestrian-only map, or a short result excerpt from your run.]
 
-## How the 30% explanation component is assessed
+[Say whether Goosebot reached A, B, and Home. Describe one thing you noticed about the route.]
+
+## How mapping and navigation work
+
+**Indoors in IST** — [In your own words, explain how LiDAR and SLAM Toolbox helped Goosebot build the map. Then explain how AMCL and Nav2 used your saved map to locate Goosebot and drive to a goal.]
+
+**Outdoors on campus** — [In your own words, explain how Goosebot used the supplied pedestrian-only map, RTK-like GPS, and live LiDAR to locate itself, plan a route, and avoid obstacles. What was different about how the map was obtained?]
+
+## Brief reflection
+
+[In a few sentences, reflect on what you learned from building the IST map, using the supplied campus map, and navigating in both places.]
+
+## How the 50% report component is assessed
 
 | Criterion | Project percentage points |
 |---|---:|
-| Accurate sensors/topics/frames and evidence-backed data-flow diagram | 8 |
-| Correct EKF inputs, TF ownership, mapping/localization distinction | 10 |
-| Correct goal-to-motion explanation and LiDAR obstacle-avoidance role | 6 |
-| Thoughtful GPS comparison, indoor/outdoor observations and limits | 6 |
-
-Specific, correct statements about your tested configuration earn credit. Unsupported claims that all sensors are fused together, GPS replaced the map, or simulation proves hardware readiness do not.
+| IST map and explanation | 10 |
+| Raw sensor readings and labeled node graph | 10 |
+| One-drive localization accuracy comparison | 15 |
+| Indoor and outdoor navigation results | 5 |
+| System explanation and reflection | 10 |

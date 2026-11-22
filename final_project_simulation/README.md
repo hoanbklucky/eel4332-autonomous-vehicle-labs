@@ -1,21 +1,23 @@
 # Final Project — Indoor and Outdoor Goosebot Navigation
 
-Use **`main`**. Complete IST first, then campus. Build a SLAM map in each world. Navigate with **AMCL indoors** and **GPS fusion with the supplied pedestrian-only campus map outdoors**, reaching **two destinations and Home** in each. Also complete the ordinary-GPS/RTK-like localization experiment below. Blocked-route testing and LiDAR tuning are optional, with no required submission. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
+Use **`main`**. Complete IST first, then campus. Build and save a SLAM map in IST. For campus, go directly to Step 9 and use the supplied map for navigation. Navigate with **AMCL indoors** and **RTK-like GPS fusion with the supplied pedestrian-only campus map outdoors**, reaching **two destinations and Home** in each. Compare localization accuracy on one campus drive using wheel odometry/IMU alone, ordinary GPS fusion, and RTK-like GPS fusion. Live navigation with non-RTK GPS strategies, blocked-route testing, and LiDAR tuning are optional. Physical SLAM/Nav2 and mission-client coding are optional; lane following remains the hardware component.
 
-### Measured wheel odometry
+## From simulated sensors to navigation
 
-The course launcher uses `/joint_states → /wheel/odometry → local EKF (+ IMU yaw rate) → /odometry/filtered`. It does not estimate travel from drive commands. Wheel radius and track width come from the robot description. Wheel rotation can still slip; simulated joints are an encoder proxy, not physical encoder electronics.
+Gazebo starts with the 3D world described by [IST’s SDF](ist/ist.sdf) or [campus’s SDF](campus/campus.sdf). Goosebot uses simulated measurements to build its own 2D model of that environment.
 
-After updating, **stop all launches and restart the world using the command below**. Wait for **WHEEL_ODOMETRY_READY**. In another sourced terminal, check:
+| Component | Role in this project |
+|---|---|
+| **Gazebo and ROS 2 bridges** | Gazebo simulates the world, robot motion, and sensors. The bridges make simulated readings available to ROS 2. For example, LiDAR publishes ranges on `/scan`, and simulated wheel joint motion is used to compute wheel odometry. |
+| **Sensor fusion (local EKF)** | Combines wheel-derived forward speed with IMU yaw rate to estimate robot motion. This provides local odometry for mapping and navigation. Outdoors, a second filter combines this wheel/IMU motion estimate with RTK-like GPS fixes to estimate Goosebot’s pose on the supplied campus map. |
+| **SLAM Toolbox** | Uses LiDAR scans and local odometry to estimate the robot’s trajectory and build a map as you drive. Successive scans reveal free space along the beams and obstacles where beams hit. |
+| **Occupancy map** | A 2D grid of free, occupied, and unknown space. During mapping, SLAM Toolbox publishes the live grid on `/map`. Saving writes a YAML file with resolution, origin, and image filename, plus the grid image. During navigation, a map server loads the selected map and publishes it on `/map`. |
+| **Localization and Nav2** | Indoors, AMCL matches live LiDAR scans to the saved IST map to estimate the robot’s pose. Outdoors, GPS-aided localization provides the pose on the supplied pedestrian-only campus map. Nav2 uses that pose and costmaps built from map data and live obstacles to plan a path and send velocity commands to Goosebot. |
+| **RViz** | Subscribes to ROS 2 data and displays the occupancy map, live scans, robot pose, and planned path in a common coordinate frame. A saved `.rviz` file stores display settings. |
 
-```bash
-ros2 param get /ekf_filter_node odom0
-ros2 topic echo /wheel/odometry --once --field twist.twist
-```
+**Occupancy map and costmaps.** The occupancy map records which cells are free, occupied, or unknown. Nav2 builds costmaps from map data and live obstacle readings to decide where Goosebot can drive and which routes give it more clearance. A cell next to a wall can be free in the occupancy map and still have a high cost because it is close to the wall. The global planner uses the global costmap to choose a route. The local controller uses the local costmap to follow that route and avoid nearby obstacles.
 
-The first command checks the EKF input; expect `/wheel/odometry`. The second prints one measured wheel-velocity message. Only forward speed is fused from wheels; the IMU supplies yaw rate. The wheel node publishes no TF; the local EKF owns `odom → base_footprint`. Configuration: [ekf_wheel.yaml](goosebot/ekf_wheel.yaml), loaded directly from this checkout. No rebuild is needed for these Python/config changes if the wheel-state bridge is already installed; if `/joint_states` is absent, rerun the existing build helper. Missing/stale wheel data stops the course launch; there is no command fallback.
-
-Earlier GPS screenshots/results used the former 0.06 campus scale and/or command-derived baseline and illustrate output format only. Record a **new run in a new output folder** for the wheel/IMU baseline; report your own values.
+As you drive in Step 5, watch the **LaserScan** display change immediately and the **Map** display grow as you explore. The scan shows what the LiDAR measures now. The map shows what SLAM has inferred from measurements collected along the drive.
 
 ## Before you start
 
@@ -64,7 +66,7 @@ sudo apt install -y git python3-colcon-common-extensions python3-rosdep \
   ros-jazzy-ros-gz ros-jazzy-xacro ros-jazzy-robot-state-publisher \
   ros-jazzy-robot-localization ros-jazzy-slam-toolbox \
   ros-jazzy-navigation2 ros-jazzy-nav2-bringup \
-  ros-jazzy-teleop-twist-keyboard python3-yaml
+  ros-jazzy-teleop-twist-keyboard ros-jazzy-rqt-graph python3-yaml
 source /opt/ros/jazzy/setup.bash
 ```
 
@@ -81,11 +83,15 @@ git -C /tmp/eel4332-goose-source checkout bffaf3cdf2b38f3b5a53a977064e0c787e046f
 cp -r --update=none /tmp/eel4332-goose-source/11_simulation/ros2_ws/src/goosebot_0 final_project_simulation/src/
 # Omit the redundant packaged snapshot; the extracted source is already copied.
 rm -f final_project_simulation/src/goosebot_0/goosebot-simulation.zip
-# Link, fix script permissions, install dependencies, and build this source copy.
+# Required for Python launch executables with --symlink-install.
 bash final_project_simulation/goosebot/build_student_workspace.sh
 ```
 
 **Command breakdown:** the sparse clone selects the complete `goosebot_0` package; the pinned commit fixes its starting version; `cp -r --update=none` preserves existing destination files. The helper links this source into `~/goosebot_ws`, configures LiDAR/bridges, fixes executable permissions and the legacy GPS noise, installs dependencies, and builds.
+
+### Verify the Goosebot installation
+
+The first two commands load ROS 2 Jazzy and your built course workspace into this terminal. The last two show where ROS 2 found `goosebot_0` and which programs are available through `ros2 run`.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -94,7 +100,7 @@ ros2 pkg prefix goosebot_0
 ros2 pkg executables goosebot_0
 ```
 
-Expect the prefix inside `~/goosebot_ws`. The course launcher runs `wheel_joint_odometry.py` directly from this repository. Do not copy old build/install/log directories. 
+Expect the prefix inside `~/goosebot_ws`. The course launcher runs `wheel_joint_odometry.py` directly from this repository. Do not copy old build/install/log directories.
 
 ## 2. Use the supplied robot
 
@@ -110,7 +116,25 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
   world:="$PWD/final_project_simulation/ist/ist.sdf"
 ```
 
-**Command breakdown:** `world.launch.py` starts Gazebo, spawns Goosebot and starts its ROS interfaces; `world:=` selects the SDF file. **Part B:** change only the world path to `campus/campus.sdf`. Expect `GOOSEBOT SPAWNED`. If a server is already running, stop its launch before retrying.
+**Command breakdown:** `world.launch.py` starts Gazebo, spawns Goosebot and starts its ROS interfaces; `world:=` selects the SDF file. Follow Step 9 for the campus launch. Expect `GOOSEBOT SPAWNED`. If a server is already running, stop its launch before retrying.
+
+<a id="goosebot-readiness-check"></a>
+
+Wait for **WHEEL_ODOMETRY_READY** before continuing. After updating the checkout, stop any running launches and restart with the command above.
+
+<details>
+<summary>Check wheel odometry and EKF inputs</summary>
+
+In another sourced terminal, run:
+
+```bash
+ros2 param get /ekf_filter_node odom0
+ros2 topic echo /wheel/odometry --once --field twist.twist
+```
+
+The first command checks the EKF input; expect `/wheel/odometry`. The second prints one wheel-derived velocity message. Only forward speed is fused from wheels; the IMU supplies yaw rate. The wheel node publishes no TF; the local EKF owns `odom → base_footprint`. Configuration: [ekf_wheel.yaml](goosebot/ekf_wheel.yaml), loaded directly from this checkout. No rebuild is needed for these Python/config changes if the wheel-state bridge is already installed; if `/joint_states` is absent, rerun the existing build helper. Missing/stale wheel data stops the course launch; there is no command fallback.
+
+</details>
 
 To find the robot: collapse the building in Gazebo's Entity Tree, right-click **goosebot → Move To**, then zoom. This moves the camera.
 
@@ -139,11 +163,9 @@ Moving the robot by editing Pose is a teleport: it can invalidate SLAM/localizat
 
 </details>
 
-<a id="goosebot-readiness-check"></a>
-
 ## 4. Start SLAM — Terminal 2
 
-Keep Gazebo playing in Terminal 1. Start SLAM **before opening RViz**, then keep this launch running:
+Keep the IST world playing in Terminal 1. Start SLAM **before opening RViz**, then keep this launch running:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -177,9 +199,11 @@ For your first run, add these yourself using **Add → By display type → rviz_
 
 Set **Global Options → Fixed Frame: map** and keep Map enabled on `/map`. Choose **Views → TopDownOrtho**. Expect the robot, scans and an initial occupancy map; the map grows as you drive. Keep this fixed frame throughout mapping. A blank Map Topic causes “Empty topic name”; edit the Topic property, not the red Status row.
 
+**Quick RViz check.** In the Displays panel, uncheck **LaserScan** and notice that the live LiDAR points disappear while the occupancy map stays visible. Recheck **LaserScan**, then uncheck **Map** to see the current scan by itself. Re-enable **Map** before continuing. These checkboxes only change what RViz shows. SLAM Toolbox keeps receiving scans and updating the map.
+
 **Terminal 4 — start keyboard driving:**
 
-Use these starting teleop settings for **both IST and campus**. Reduce speed near tight corners if needed. These parameters affect keyboard driving; Nav2 has separate autonomous speed limits.
+Use these starting teleop settings for IST. Reduce speed near tight corners if needed. These parameters affect keyboard driving; Nav2 has separate autonomous speed limits.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -188,7 +212,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -p speed:=0.81 -p turn:=1.73
 ```
 
-**Command breakdown:** `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building/full-campus exploration is unnecessary.
+**Command breakdown:** `speed` and `turn` set 0.81 m/s and 1.73 rad/s. Focus this terminal: lowercase **i** forward, **j/l** turn, **k** stop. Confirm robot motion, scan alignment and RobotModel/TF status, then explore a connected route to your two destinations and revisit an earlier area. Cover an alternative IST route; full-building exploration is unnecessary.
 
 <details>
 <summary>Troubleshooting only — missing map, scans or transforms</summary>
@@ -220,8 +244,6 @@ ros2 run tf2_ros tf2_echo odom base_footprint
 
 ![IST mapping in progress](images/ist_mapping.png)
 
-![Campus mapping in progress](images/campus_mapping.png)
-
 The occupancy map grows as you drive. Scans should align with nearby boundaries; unexplored space remains unknown.
 
 </details>
@@ -235,12 +257,12 @@ source /opt/ros/jazzy/setup.bash
 source ~/goosebot_ws/install/setup.bash
 cd ~/courses/eel4332-autonomous-vehicle-labs/final_project_simulation
 mkdir -p results
-MAP_NAME=ist_map  # Part B: change this to campus_map
+MAP_NAME=ist_map
 ros2 run nav2_map_server map_saver_cli -f "$PWD/results/$MAP_NAME" \
   --ros-args -p use_sim_time:=true
 ```
 
-**Command breakdown:** `MAP_NAME` chooses `ist_map` or `campus_map`; `-f` sets the output basename. The saver writes YAML plus an image. Keep both together and save each world separately.
+**Command breakdown:** `MAP_NAME` sets the IST map name and `-f` sets the output basename. Keep the YAML and image together.
 
 ## 6. IST — restart and navigate
 
@@ -256,7 +278,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/navigation.launch.py" \
   map:="$PWD/final_project_simulation/results/ist_map.yaml"
 ```
 
-**Command breakdown:** this IST wrapper loads your map automatically and starts AMCL/Nav2. Do not manually call a load-map service during normal startup. For campus, save your map in Step 5, then use Step 9's experiment and GPS-aided navigation instead of this AMCL launch.
+**Command breakdown:** this IST wrapper loads your map automatically and starts AMCL/Nav2. Do not manually call a load-map service during normal startup. For campus, follow Step 9 for the accuracy comparison and GPS-aided navigation.
 
 **Terminal 3 — navigation RViz:**
 
@@ -316,8 +338,6 @@ Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans und
 
 #### Before fusion — investigate raw sensor data
 
-**Question:** what does each sensor actually measure, and how do its readings change when Goosebot moves? Discover and test the inspection commands yourself before viewing fusion results. The local wheel/IMU EKF is already running; inspect its inputs rather than treating its filtered output as a raw sensor.
-
 **Terminal 1 — shared setup for this investigation and the comparison:** stop old launches and start fresh at campus Home:
 
 ```bash
@@ -330,26 +350,50 @@ ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
 
 Wait for Gazebo and Goosebot to load; click **Play** if paused. Keep Terminal 1 running. Leave SLAM, AMCL, GPS navigation and the comparison recorder stopped during this investigation. In each inspection terminal, source ROS and your course workspace as in the earlier steps.
 
-1. **Predict, then discover.** Before driving, predict which readings should vary while stationary, during straight travel and during a turn. Find the available topics, their message types and publisher nodes. Identify ordinary GPS, RTK-like GPS, IMU, wheel joint states and the 2-D LiDAR; use the launch/configuration files to distinguish the two GPS sources.
-2. **Read and interpret.** Construct commands to read a single message, inspect a selected field and measure publication rate. Use the message definition to identify units, timestamps, frame IDs and uncertainty fields where provided. For GPS, inspect position, fix status and covariance; for the IMU, inspect angular velocity and acceleration; for wheel joints, match names to the velocity array; for LiDAR, inspect range limits and a few range values. Explain any unavailable covariance or non-finite ranges rather than deleting them.
-3. **Test your predictions.** Collect several stationary samples. Use Step 5's teleop to drive a short straight section, turn, then stop with **k**. Compare the wheel, IMU and LiDAR readings across these states; compare stationary variation in the two GPS streams. Keep Nav2 stopped. Explain one prediction that your measurements supported or contradicted.
-4. **Connect the measurements to fusion.** Which sensors provide absolute position, rotational motion, wheel motion or distance to surrounding objects? Why are joint states, wheel-derived odometry, commanded velocity and EKF output different kinds of information? Explain why a few stationary GPS samples show variation but cannot establish position accuracy without a reference.
+**Start with one GPS reading.** In a sourced inspection terminal, run these commands while Goosebot is stationary:
 
-**Hints—not finished commands:** start with `ros2 topic --help` and `ros2 interface --help`. Look for operations that list topics, identify types/publishers, print messages, inspect message definitions and estimate rates. Inspect their help for single-message and field-selection options. If a discovered sensor topic prints nothing, check that simulation time is advancing, then investigate the publisher and QoS compatibility.
+```bash
+ros2 topic list -t
+ros2 topic echo /gps/fix --once
+```
 
-**Evidence:** add this compact table to the existing system explanation; use your own commands and observations. Include GPS position units versus covariance units, and units for the other measurements. Show one GPS reading and one wheel/IMU reading in the existing campus video. No extra video or rubric category is added.
+The first command lists topic names and message types. Find `/gps/fix` in the list. The second prints one ordinary GPS fix and exits. Look for `latitude` and `longitude` in degrees, `altitude` in meters, and the timestamp under `header`.
 
-| Source | Discovered topic and message type | Command you tested | Field, units and observed behavior |
-|---|---|---|---|
-| Ordinary GPS | Fill | Fill | Fill |
-| RTK-like GPS | Fill | Fill | Fill |
-| IMU | Fill | Fill | Fill |
-| Wheel joint states | Fill | Fill | Fill |
-| 2-D LiDAR | Fill | Fill | Fill |
+Use the topic list to find the RTK-like GPS, IMU, wheel joint states, and 2-D LiDAR. Replace `/gps/fix` in the example with each topic name to read one message while Goosebot is parked.
 
-Before the comparison, stop teleop and restart Terminal 1 with the same command at fresh Home; the recorder assumes the known starting pose. Keep stationary until the recorder reports **READY**.
+**Topic hints:** The 2-D LiDAR publishes distance readings on `/scan`. For the wheels, read `/joint_states`, which reports each wheel joint’s rotation angle and angular speed. The wheel odometry node uses wheel rotation and robot geometry to estimate the robot’s motion and publishes that estimate on `/wheel/odometry`.
 
-#### A. Compare localization on one drive
+**In your report**, record the topic name and a short excerpt of the raw message for each source, including ordinary GPS. For long arrays such as LiDAR ranges, a few values are enough.
+
+#### View the ROS 2 node graph
+
+Keep the campus simulation running from the raw sensor activity. In the same sourced inspection terminal, run:
+
+```bash
+ros2 run rqt_graph rqt_graph
+```
+
+Select **Nodes/Topics (all)** and click **Refresh** if needed. In your report, include one screenshot and label the two topics entering `/ekf_filter_node`: `/wheel/odometry` and `/imu/data`.
+
+![Campus ROS 2 node graph showing wheel and IMU inputs to the EKF and its filtered odometry output](images/campus_ros2_node_graph.png)
+
+*Example campus graph with **Hide → Dead sinks** and **Leaf topics** unchecked. Look for `/odometry/filtered` to the right of `/ekf_filter_node`.*
+
+**How to read the graph.** Ovals are nodes (programs). Small rectangles are topics (named channels for messages). Follow the arrows from the publishing node through the topic to the subscribing node. Larger boxes such as `/wheel` group topics by namespace.
+
+| Connection | What flows through it |
+|---|---|
+| `/ros_gz_bridge` → `/joint_states` → `/wheel_joint_odometry` | Gazebo wheel rotation readings. The wheel odometry node uses these readings and robot geometry from `/robot_description` to estimate motion. |
+| `/wheel_joint_odometry` → `/wheel/odometry` → `/ekf_filter_node` | Wheel-derived motion. The local EKF uses the forward speed from this message. |
+| `/ros_gz_bridge` → `/imu/data` → `/ekf_filter_node` | Simulated IMU readings. The local EKF uses yaw rate to estimate how fast the robot is turning. |
+
+The EKF publishes filtered odometry on `/odometry/filtered` and sends the `odom` → `base_footprint` transform on `/tf`. The graph can hide outputs with no subscribers, including when **Hide → Dead sinks** is checked. To check who publishes the filtered output directly, run `ros2 topic info /odometry/filtered --verbose` in a sourced terminal.
+
+<a id="a-compare-localization-on-one-drive"></a>
+
+#### A. Required — compare localization on one drive
+
+Earlier GPS screenshots/results used the former 0.06 campus scale and/or command-derived baseline and illustrate output format only. Record a **new run in a new output folder** for the wheel/IMU baseline; report your own values.
 
 **Question:** how does GPS precision affect localization? Two independent simulated sensors measure the same drive:
 
@@ -361,7 +405,7 @@ Before the comparison, stop teleop and restart Terminal 1 with the same command 
 
 The profiles model **measurement noise only**—not real RTK correction links, multipath or loss of RTK fix. Add no XML and do not edit Xacro. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib python3-pil`.
 
-**After the raw-sensor investigation:** restart the comparison-profile world at fresh Home using the Terminal 1 command above, then start the recorder below.
+**After capturing the raw readings and node graph:** restart the comparison-profile world at fresh Home using the Terminal 1 command above, then start the recorder below.
 
 **Terminal 2 — record, then report:**
 
@@ -431,11 +475,11 @@ RMSE is root mean square distance to Gazebo truth at matching timestamps. GPS ne
 
 <a id="gps-aided-outdoor-navigation"></a>
 
-#### B. Required — GPS navigation using the campus map
+#### B. Required — RTK-like GPS navigation using the campus map
 
-The campus now uses **1:1 horizontal meters**; Goosebot and sensor ranges are unscaled. The supplied map matches the world and GPS east/north frame. **No new mapping or manual alignment is needed for this navigation activity.** Keep your local campus SLAM result as separate mapping evidence. The old short-range/map-free navigation exercise is retired.
+The campus now uses **1:1 horizontal meters**; Goosebot and sensor ranges are unscaled. The supplied map matches the world and GPS east/north frame. **No new mapping or manual alignment is needed for this navigation activity.** The launch loads the supplied pedestrian-only map for you. The old short-range/map-free navigation exercise is retired.
 
-**Updating an existing run:** stop all launches, pull the complete update and restart at the new Home. Old campus SLAM maps, coordinates and recordings belong to the former 0.06 world; record/save new evidence. Generated assets are committed—no mesh generation or ROS rebuild is needed for this update. Do not mix old world files with the new map.
+**Updating an existing run:** stop all launches, pull the complete update and restart at the new Home. Old campus coordinates and recordings from the former 0.06 world need to be replaced with a fresh run. Generated assets are committed—no mesh generation or ROS rebuild is needed for this update. Do not mix old world files with the new map.
 
 **Terminal 1 — fresh full-scale campus with RTK-like GPS:**
 
@@ -512,7 +556,7 @@ These instructor screenshots show the RViz/Gazebo views during a live run. They 
 
 **Submit:** a campus video showing GPS readiness, the global path staying on pedestrian paths/sidewalks, and A, B and Home reached. Explain the distinct GPS, prior-map and LiDAR roles. Briefly demonstrate grass and asphalt-lane goals away from permitted crossings are rejected; cancel it before continuing. Do not disable the pedestrian mask or shrink the footprint. Cancel navigation if localization or motion behaves unexpectedly.
 
-See [map details and checks](goosebot/GPS_MAP_EXTENSION.md). Ordinary-GPS/RTK-like localization remains the separate experiment above; this required live activity uses RTK-like GPS.
+See [map details and checks](goosebot/GPS_MAP_EXTENSION.md). Step 9A compares localization accuracy from one recorded manual drive. This live navigation activity uses RTK-like GPS.
 
 #### C. Optional — ordinary GPS + encoders + IMU + LiDAR
 
@@ -520,23 +564,25 @@ Try the [budget localization experiment](goosebot/BUDGET_LOCALIZATION.md) to mea
 
 This uses measured simulated wheel-joint velocities, **not command-derived odometry**. It reports offline horizontal RMSE/final/maximum error; no live navigation or hardware-accuracy claim is made. It is optional and ungraded; use your own recording to assess its performance.
 
-### 10. Explain the system
+### 10. Write your individual report
 
-Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your raw-sensor investigation table, prediction/test observations, GPS experiment results and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
+Use the [Word report template](Goosebot_Final_Project_Report_Template.docx). Paste your results in project order and briefly explain what each result shows. End with a short reflection on the indoor and outdoor runs.
 
 ## What to submit
 
-- **Two edited videos, about 2–3 minutes each:** IST and campus; mapping/revisit, indoor AMCL / outdoor GPS localization, two reached destinations and Home (campus A/B on the supplied pedestrian-only map). Include brief sensor evidence.
-- **Fork/code and evidence:** model/configuration, separate IST/campus YAML+image maps, commands/goals, ordinary-GPS/RTK-like comparison plot and error table. Exclude build/install/log, databases and bags.
-- **Shared system explanation:** include each member's contribution and one problem/fix. AI assistance is allowed; test its output and explain your work in your own words.
+- **Individual report.** Use the [Word report template](Goosebot_Final_Project_Report_Template.docx) to paste results from the required project steps, briefly explain each result, and reflect on indoor and outdoor mapping and navigation.
+- **Two navigation videos or video links, about 2–3 minutes each.** Submit one for IST and one for campus. Show navigation to two destinations and back Home using AMCL in IST and RTK-like GPS localization on campus. Use goals A and B on the supplied pedestrian-only campus map. Make sure the instructor can open both links if you submit links.
+- **GitHub repository link.** Link to your individual project repository and give the instructor access. Include your model/configuration, your saved IST map (YAML and image), and the commands and goals needed to reproduce your runs. Exclude build, install, and log directories, databases, and ROS bags.
 
-| Assessment | Weight |
+AI assistance is allowed. Test its output and explain your work in your own words.
+
+| Deliverable | Weight |
 |---|---:|
-| Mapping in both worlds, indoor AMCL and outdoor GPS localization | 25% |
-| Indoor navigation and required campus-map GPS navigation | 25% |
-| Ordinary-GPS/RTK-like localization experiment | 15% |
-| System understanding and evidence-based explanation | 30% |
-| Reproducibility and contributions | 5% |
+| Individual report | 50% |
+| IST navigation video | 20% |
+| Campus navigation video | 20% |
+| GitHub repository and reproducibility | 10% |
+|---|---:|
 
 <a id="goosebot-warm-up"></a>
 
