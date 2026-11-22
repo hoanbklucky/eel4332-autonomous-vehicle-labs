@@ -20,7 +20,7 @@ The runnable student procedure and deliverables are in [Step 9](README.md#9-part
 
 Keep the robot at Home until READY. Start a fresh world for a fresh record. Source the correct workspace and stop SLAM/Nav2. Use a new output directory, keep the corrected GPS noise, and ensure the ordinary world launch publishes GPS, filtered odometry and raw ground truth. The raw truth bridge is already supplied; do **not** start ground_truth_map_odom_bridge.py. A publisher count alone is not proof of arriving data.
 
-“Different EKF baseline” means runtime inputs/masks differ from the provided velocity + yaw-rate configuration; inspect them rather than silently comparing different estimators. Missing TF, moving before READY, clock reset, noncentered GPS, non-ENU datum, duplicate timestamps, odometry gaps or insufficient truth overlap require a fresh/repaired experiment. A synthetic test pass does not substitute for a WSL/Gazebo pilot.
+“Different EKF baseline” means runtime inputs/masks differ from the provided velocity + yaw-rate configuration; inspect them rather than silently comparing different estimators. Missing TF, moving before READY, clock reset, noncentered GPS, non-ENU datum, duplicate timestamps, odometry gaps or insufficient truth overlap require a fresh/repaired experiment.
 
 ### Live GPS-aided navigation
 
@@ -53,7 +53,7 @@ Nav2's collision monitor outputs `/gps_nav/cmd_vel_request`; the global localize
 
 Required campus-map mode uses RTK-like GPS with 0.2 m goal tolerance. Legacy filter code also supports ordinary-GPS tolerance 1.5 m, but that is not the required map-navigation mode. Those settings deliberately reflect different precision and are not equal-accuracy benchmarks. Nav2's AMCL localization indicator may be inactive in GPS mode; use the GPS-ready message and TF, and distinguish lifecycle activity from action SUCCEEDED.
 
-### Pilot before student release
+### Additional runtime checks
 
 Run the comparison with both actual Gazebo sensors, inspect synchronized A/B/C metrics, then test RTK-like live initialization, map-based A/B goals, Home return, obstacle detection, command/TF ownership and shutdown. Also test GPS/scan interruption. Offline tests and synthetic CSV plots are not end-to-end ROS/Gazebo validation. These launchers are simulation teaching tools, not validated physical-robot navigation software.
 
@@ -421,7 +421,6 @@ ros2 topic hz /scan
 | `ros2 topic hz /scan` | Estimates message arrival rate in wall-clock time. Keep it running for several samples, then Ctrl+C. |
 
 
-
 <details>
 <summary>Troubleshooting — /scan does not appear to be published yet</summary>
 
@@ -651,7 +650,6 @@ Keep the simulator and SLAM commands unchanged. You can skip adding the displays
 | RobotModel/scan transform errors | Use simulation time in RViz and complete Step 4 TF checks; adding displays does not repair missing transforms. |
 
 </details>
-
 
 
 **Terminal 4 — driving:**
@@ -943,7 +941,7 @@ ros2 topic hz /gps/fix
 
 **Large jumps between nearby or stationary samples indicate a configuration problem.** In Gazebo Sensors 8, the upstream horizontal `<stddev>1.5</stddev>` is applied in degrees, causing hundred-kilometer errors. My earlier instructions incorrectly described that value as meters. The course setup now changes only that legacy GPS horizontal default to `0.000015` degrees, preserves the vertical `3.0` m setting, and leaves other custom values unchanged.
 
-**For an existing workspace:** save your edits, update `main` using the instructions at the top, stop all simulator/ROS launches with Ctrl+C, then run the Step 1 build helper again. Source the rebuilt workspace and restart the campus world. Inspect the copied Xacro: inside `gps_sensor → navsat → position_sensing → horizontal → noise`, expect `<stddev>0.000015</stddev>`. Do not replace unrelated `1.5` values. Existing fixes collected with the legacy setting should be collected again. If large offsets persist after this correction, verify the active campus world's datum and launch path. No Gazebo runtime validation of the correction was available during authoring.
+**For an existing workspace:** save your edits, update `main` using the instructions at the top, stop all simulator/ROS launches with Ctrl+C, then run the Step 1 build helper again. Source the rebuilt workspace and restart the campus world. Inspect the copied Xacro: inside `gps_sensor → navsat → position_sensing → horizontal → noise`, expect `<stddev>0.000015</stddev>`. Do not replace unrelated `1.5` values. Existing fixes collected with the legacy setting should be collected again. If large offsets persist after this correction, verify the active campus world's datum and launch path.
 
 Stop `hz` with Ctrl+C before the next command. Expect `sensor_msgs/msg/NavSatFix` messages containing timestamp, frame, status, latitude/longitude in **degrees**, altitude in **meters**, and covariance/type fields. Inspect `status` and `position_covariance_type`; do not assume the bridge reports known uncertainty. Record the actual frame (expected `gps_link`).
 
@@ -1005,7 +1003,6 @@ Inspect the course `final_project_simulation/goosebot/ekf_wheel.yaml`: does it s
 - No Gazebo messages: check sensor declaration, NavSat world plugin and spherical coordinates. A ROS topic publisher alone does not prove sensor samples exist.
 - Gazebo messages but no ROS messages: check the installed bridge's type/direction/exact topic, correct sourced workspace, and bridge logs. Restart after configuration changes; avoid a duplicate bridge.
 
-**INSTRUCTOR VALIDATION REQUIRED:** XML, bridge types and baseline sensor configuration were checked against source. Pilot message publication, TF, simulated rate and stationary/moving readings on course WSL before release. No Gazebo runtime test was available during authoring.
 
 ### 10. Explain and compare the complete system
 
@@ -1200,4 +1197,3 @@ The warm-up arena has low boundary walls and three blocks. RViz shows **Feedback
 
 References: [Goosebot source](https://github.com/hoanbklucky/goose/tree/nav2/11_simulation), [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox), [Nav2 configuration](https://docs.nav2.org/configuration/index.html), [Gazebo sensors](https://gazebosim.org/docs/harmonic/sensors/). All required commands are above.
 
-**INSTRUCTOR VALIDATION REQUIRED:** the new Goosebot integration and image-derived IST world have offline syntax/geometry checks, not an end-to-end Gazebo run. Pilot the readiness check in each project world, sensor rendering/TF, mapping, saved-map localization, two destinations/home in each world, the campus GPS experiment and live GPS navigation on the course WSL installation before release. Starting configurations require local verification and may need tuning.

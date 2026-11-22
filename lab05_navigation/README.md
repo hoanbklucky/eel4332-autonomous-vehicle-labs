@@ -380,10 +380,8 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation, SLAM, or navigation in separate sourced terminals. If the robot is still absent, capture the complete launch output rather than repeatedly launching more worlds.
 
 
-
 Package errors: check the build and sourcing. Misaligned scans: check map, initial pose, and world/model. Conflicting motion: stop all teleoperation publishers. Record the exact command and full error when requesting help.
 
-The instructor must pilot saved-map localization, World navigation, both House goals, model-specific configuration, and cancellation on the course WSL image.
 
 ## References
 

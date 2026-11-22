@@ -1,6 +1,6 @@
 # Instructor validation — course simulation
 
-Validate on the course WSL installation; upstream tutorials and offline geometry checks do not certify an end-to-end run.
+The instructor has exercised the core required indoor/outdoor simulation workflow. Keep this checklist for regression testing after software/configuration changes and for optional scenarios; unchecked items are not a blanket release gate or a claim that every extension has been tested.
 
 ## Labs 2/4/5 — TurtleBot preparation
 
@@ -12,7 +12,7 @@ Validate on the course WSL installation; upstream tutorials and offline geometry
 
 ## Final — Goosebot with supplied LiDAR
 
-Use [the final README](../final_project_simulation/README.md). The baseline LiDAR/bridge/wheel visualization is supplied by the build helper; pilot that baseline before release. The sensor-settings activity comes after mapping/localization/navigation.
+Use [the final README](../final_project_simulation/README.md). The baseline LiDAR/bridge/wheel visualization is supplied by the build helper; pilot that baseline after relevant configuration changes. The sensor-settings activity comes after mapping/localization/navigation.
 
 - [ ] Build the pinned Goosebot source natively in the course WSL installation.
 - [ ] Verify the supplied 360° LiDAR, scan frame, bridge, mounting clearance and complete robot footprint.
@@ -35,7 +35,7 @@ After pulling, run final README Step 1b with `warmup/warmup.sdf` and its matchin
 - [ ] Pilot wheel joint-state visualization and the final single-setting LiDAR observation; it must not gate baseline mapping/localization/navigation.
 
 
-## Sequenced world startup — local pilot required
+## Sequenced world startup — regression checks
 
 Offline checks cover explicit-world spawn arguments, server PID detection, create-result callbacks and Python syntax. The previous `gz model` verification gate timed out on the instructor's machine and was removed; it must not block GUI startup. The new ROS launch sequence itself requires Gazebo testing:
 
@@ -46,10 +46,9 @@ Offline checks cover explicit-world spawn arguments, server PID detection, creat
 - [ ] Confirm camera configuration, /clock, /scan, /joint_states, EKF TF and RViz after delayed GUI startup.
 
 
-
 ## Campus mesh normals and shutdown repair
 
-The campus OBJ generator now supplies explicit unit normals per triangle corner. All 37 regenerated meshes retain their original triangle coordinates/winding; vertex and normal counts agree. Generated baseline/blocked SDF, reference image, and mission files are unchanged. The baseline configuration helper replaces the odometry script's unconditional rclpy.shutdown() with idempotent rclpy.try_shutdown(); syntax and repeat-setup checks passed. Pilot campus rendering, collisions, scans, spawning, and Nav2 on WSL; no Gazebo runtime was available for this repair. An EKF context error during coordinated shutdown may be an independent upstream shutdown race; inspect the first error before the shutdown tail.
+The campus OBJ generator now supplies explicit unit normals per triangle corner. All 37 regenerated meshes retain their original triangle coordinates/winding; vertex and normal counts agree. Generated baseline/blocked SDF, reference image, and mission files are unchanged. The baseline configuration helper replaces the odometry script's unconditional rclpy.shutdown() with idempotent rclpy.try_shutdown(); syntax and repeat-setup checks passed. Pilot campus rendering, collisions, scans, spawning, and Nav2 on WSL; An EKF context error during coordinated shutdown may be an independent upstream shutdown race; inspect the first error before the shutdown tail.
 
 
 ## Indoor/outdoor branch validation — main
@@ -60,11 +59,11 @@ The pinned robot already declares gps_sensor (5 Hz, gps_link, gps/fix), horizont
 
 Offline checks passed: generator Python syntax, both generated SDFs, sole-plugin/datum diff against baseline worlds, unchanged scenery/camera/collisions/reference map, baseline/blocked geometric connectivity, Markdown fences and Bash syntax in main/new activity guides. Existing EKF/Nav2 settings and student TODOs were not altered; GPS is not an EKF input in the required baseline. Instructor private setup is retained, with its separate workspace.
 
-Before release, pilot both worlds and map names; AMCL two destinations/home per world; IST barrier; restored LiDAR setting; GPS Gazebo and ROS message flow, status/covariance fields, TF, rate under simulation time, and three-location stationary/moving observations. A bridge publisher alone is not successful GPS publication. No live Gazebo runtime validation was available during authoring; do not mark the GPS activity validated until this pilot succeeds. Do not infer real-world occlusion/multipath from drawn buildings. Inspect the configuration masks and actual runtime topics when assessing student fusion explanations.
+Before release, pilot both worlds and map names; AMCL two destinations/home per world; IST barrier; restored LiDAR setting; GPS Gazebo and ROS message flow, status/covariance fields, TF, rate under simulation time, and three-location stationary/moving observations. A bridge publisher alone is not successful GPS publication. Do not infer real-world occlusion/multipath from drawn buildings. Inspect the configuration masks and actual runtime topics when assessing student fusion explanations.
 
 
 ## Saved-map startup and Nav2 RViz correction
 
 Course navigation.launch.py validates the saved YAML/image pair and explicitly injects the absolute yaml_filename in temporary Nav2 parameters as well as forwarding map to standard bringup. Standard Jazzy localization source should honor map already; the exact reason the reported installed system retained an empty parameter is unconfirmed. This wrapper removes reliance on only that forwarding path without claiming an upstream bug. The source YAML is preserved. Step 6 and the campus command use the wrapper; navigation RViz uses explicit nav2_default_view.rviz, including Nav2 Goal, rather than a generic or leftover mapping layout. Manual load_map is no longer part of the documented procedure.
 
-Three offline regression checks pass: blank/stale map parameter override with unrelated settings preserved, early failure for missing map/image, and absolute-image/no-map-server-section support (including paths with spaces). Python/YAML and command syntax checked. Live ROS lifecycle/map publication and RViz plugin startup remain instructor pilot checks; no ROS runtime available here. Confirm auto-loaded /map, nonblank map_server yaml_filename, initial-pose scan alignment, Nav2 Goal and reached feedback after a fresh launch on WSL. No ROS rebuild is needed for repository-local launch/doc changes.
+Three offline regression checks pass: blank/stale map parameter override with unrelated settings preserved, early failure for missing map/image, and absolute-image/no-map-server-section support (including paths with spaces). Python/YAML and command syntax checked. For future startup changes, check ROS lifecycle/map publication and RViz plugins. Confirm auto-loaded /map, nonblank map_server yaml_filename, initial-pose scan alignment, Nav2 Goal and reached feedback after a fresh launch on WSL. No ROS rebuild is needed for repository-local launch/doc changes.

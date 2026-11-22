@@ -21,7 +21,7 @@ The same feature widths generate the visible world and the temporary pedestrian 
 
 After updating, **stop all launches and restart campus and GPS/Nav2** to load the new visible pavement and regenerate the mask. No ROS rebuild is needed. Navigation uses the supplied matching map assets; do not shrink the robot or remove the pedestrian restriction to make a route pass.
 
-Edit widths/access in `layout.json`, then run `python3 final_project_simulation/campus/generate_campus.py` to regenerate the asset bundle. Keep the generated world/map/manifest together. The Google Maps screenshots are not embedded in the repository; only the supplied measurements and provenance are recorded. Live Gazebo validation is still required.
+Edit widths/access in `layout.json`, then run `python3 final_project_simulation/campus/generate_campus.py` to regenerate the asset bundle. Keep the generated world/map/manifest together. The Google Maps screenshots are not embedded in the repository; only the supplied measurements and provenance are recorded.
 
 ## Pavement continuity review
 

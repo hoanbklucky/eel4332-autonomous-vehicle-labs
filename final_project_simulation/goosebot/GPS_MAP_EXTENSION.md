@@ -2,7 +2,7 @@
 
 **No new mapping or manual alignment is needed for this pedestrian-only mode.** The supplied `campus/reference.yaml` and `reference.png` were generated from the same obstacle geometry as the world. Their +x east / +y north coordinates match the GPS ENU frame already used by the live localizer. World and map now use 1:1 horizontal meters; Goosebot is unscaled. Do not apply the old 0.06 factor.
 
-This is the required outdoor navigation activity in final-project Step 9B. **INSTRUCTOR VALIDATION REQUIRED:** map/world grid checks and launch/configuration tests pass offline; the full mode still needs a Gazebo pilot.
+This is the required outdoor navigation activity in final-project Step 9B.
 
 | Component | Role |
 |---|---|
@@ -75,7 +75,7 @@ cd ~/courses/eel4332-autonomous-vehicle-labs
 python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
-**Pilot checks:** `/map_server` active; no AMCL/SLAM; GPS is the sole global TF publisher; scan/map alignment at Home and a second location; a longer path remaining on pedestrian paths/sidewalks around a known obstacle; a grass/asphalt-lane goal outside crossings rejected; a new obstacle visible in live costmaps; reached/succeeded at destination and Home. Save logs for failures. The prior map is obstacle knowledge, not perfect robot localization. Include this activity in the existing campus navigation video and navigation rubric; no extra rubric category is added.
+**Runtime checks:** `/map_server` active; no AMCL/SLAM; GPS is the sole global TF publisher; scan/map alignment at Home and a second location; a longer path remaining on pedestrian paths/sidewalks around a known obstacle; a grass/asphalt-lane goal outside crossings rejected; a new obstacle visible in live costmaps; reached/succeeded at destination and Home. Save logs for failures. The prior map is obstacle knowledge, not perfect robot localization. Include this activity in the existing campus navigation video and navigation rubric; no extra rubric category is added.
 
 
 ### Campus map startup check
@@ -91,4 +91,4 @@ LIBGL_ALWAYS_SOFTWARE=true rviz2 -d "$PWD/final_project_simulation/goosebot/gps_
   --ros-args -p use_sim_time:=true
 ```
 
-This is a rendering diagnostic; it does not activate an inactive map server. Live WSL/Jazzy simulation validation is still required.
+This is a rendering diagnostic; it does not activate an inactive map server.

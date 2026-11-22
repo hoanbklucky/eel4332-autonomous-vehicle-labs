@@ -373,13 +373,11 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 Confirm `waffle` appears in Gazebo's Entity Tree before restarting teleoperation, SLAM, or navigation in separate sourced terminals. If the robot is still absent, capture the complete launch output rather than repeatedly launching more worlds.
 
 
-
 - Package not found: confirm installation/build succeeded, then source the workspace in that terminal.
 - No robot motion: click the keyboard terminal, check printed velocities, and confirm Gazebo is playing.
 - No map: inspect Cartographer's full error output and check `ros2 topic echo /scan --once`.
 - Do not combine this workflow with the earlier Nav2-minimal simulator, custom TF bridges, or mesh workarounds.
 
-The instructor must pilot World and House mapping, model selection, and both map handoffs to Lab 5 on the course WSL image.
 
 ## References
 

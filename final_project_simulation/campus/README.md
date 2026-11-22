@@ -55,4 +55,4 @@ This uses Python's standard library. Keep map, world, layout and mission from th
 
 The blocked world is an optional obstacle trial, not required evidence. It adds a 4 m barrier across the crossing; do not remap it. Water is solid collision geometry for simulation. Ground decorations are visual-only and layered to avoid flicker; all scenery is grouped beneath static `campus` with identity pose. Meshes include explicit normals for DART collision loading.
 
-**INSTRUCTOR VALIDATION REQUIRED:** offline geometry, route-clearance and configuration checks do not establish successful live Gazebo navigation. Pilot A/B/Home before student release. Historical screenshots show the older reduced arena.
+See the current full-scale map and navigation examples in the [final guide](../README.md).

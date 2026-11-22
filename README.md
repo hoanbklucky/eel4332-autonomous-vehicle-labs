@@ -185,8 +185,5 @@ Useful official references:
 - F1TENTH open course labs: https://github.com/f1tenth/f1tenth_labs_openrepo
 - Goosebot course/platform repository: https://github.com/hoanbklucky/goose
 
-Follow the copy-ready commands in the course READMEs. They adapt the official ROBOTIS Jazzy workflow and define the course model/world, scope, and submissions.
+Use the supplied launch/setup commands where given. In the final project's raw-sensor investigation, discover and test the inspection commands yourself. The course READMEs adapt the official ROBOTIS Jazzy workflow and define the model/world, scope and submissions.
 
-## Instructor note
-
-Some simulation launch commands and Goosebot topic names are intentionally marked **INSTRUCTOR VALIDATION REQUIRED**. They should be tested on the final Fall 2026 course image before release to students.

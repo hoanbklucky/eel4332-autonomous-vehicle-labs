@@ -314,6 +314,41 @@ Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans und
 
 ### 9. Part B — GPS/RTK localization and outdoor navigation
 
+#### Before fusion — investigate raw sensor data
+
+**Question:** what does each sensor actually measure, and how do its readings change when Goosebot moves? Discover and test the inspection commands yourself before viewing fusion results. The local wheel/IMU EKF is already running; inspect its inputs rather than treating its filtered output as a raw sensor.
+
+**Terminal 1 — shared setup for this investigation and the comparison:** stop old launches and start fresh at campus Home:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/goosebot_ws/install/setup.bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
+  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=comparison
+```
+
+Wait for Gazebo and Goosebot to load; click **Play** if paused. Keep Terminal 1 running. Leave SLAM, AMCL, GPS navigation and the comparison recorder stopped during this investigation. In each inspection terminal, source ROS and your course workspace as in the earlier steps.
+
+1. **Predict, then discover.** Before driving, predict which readings should vary while stationary, during straight travel and during a turn. Find the available topics, their message types and publisher nodes. Identify ordinary GPS, RTK-like GPS, IMU, wheel joint states and the 2-D LiDAR; use the launch/configuration files to distinguish the two GPS sources.
+2. **Read and interpret.** Construct commands to read a single message, inspect a selected field and measure publication rate. Use the message definition to identify units, timestamps, frame IDs and uncertainty fields where provided. For GPS, inspect position, fix status and covariance; for the IMU, inspect angular velocity and acceleration; for wheel joints, match names to the velocity array; for LiDAR, inspect range limits and a few range values. Explain any unavailable covariance or non-finite ranges rather than deleting them.
+3. **Test your predictions.** Collect several stationary samples. Use Step 5's teleop to drive a short straight section, turn, then stop with **k**. Compare the wheel, IMU and LiDAR readings across these states; compare stationary variation in the two GPS streams. Keep Nav2 stopped. Explain one prediction that your measurements supported or contradicted.
+4. **Connect the measurements to fusion.** Which sensors provide absolute position, rotational motion, wheel motion or distance to surrounding objects? Why are joint states, wheel-derived odometry, commanded velocity and EKF output different kinds of information? Explain why a few stationary GPS samples show variation but cannot establish position accuracy without a reference.
+
+**Hints—not finished commands:** start with `ros2 topic --help` and `ros2 interface --help`. Look for operations that list topics, identify types/publishers, print messages, inspect message definitions and estimate rates. Inspect their help for single-message and field-selection options. If a discovered sensor topic prints nothing, check that simulation time is advancing, then investigate the publisher and QoS compatibility.
+
+**Evidence:** add this compact table to the existing system explanation; use your own commands and observations. Include GPS position units versus covariance units, and units for the other measurements. Show one GPS reading and one wheel/IMU reading in the existing campus video. No extra video or rubric category is added.
+
+| Source | Discovered topic and message type | Command you tested | Field, units and observed behavior |
+|---|---|---|---|
+| Ordinary GPS | Fill | Fill | Fill |
+| RTK-like GPS | Fill | Fill | Fill |
+| IMU | Fill | Fill | Fill |
+| Wheel joint states | Fill | Fill | Fill |
+| 2-D LiDAR | Fill | Fill | Fill |
+
+Before the comparison, stop teleop and restart Terminal 1 with the same command at fresh Home; the recorder assumes the known starting pose. Keep stationary until the recorder reports **READY**.
+
 #### A. Compare localization on one drive
 
 **Question:** how does GPS precision affect localization? Two independent simulated sensors measure the same drive:
@@ -326,15 +361,7 @@ Stop launches, run the Step 1 helper, source and relaunch IST. Compare scans und
 
 The profiles model **measurement noise only**—not real RTK correction links, multipath or loss of RTK fix. Add no XML and do not edit Xacro. Install plotting dependencies once: `sudo apt install -y python3-numpy python3-matplotlib python3-pil`.
 
-**Terminal 1:** stop old launches and start fresh at campus Home:
-
-```bash
-source /opt/ros/jazzy/setup.bash
-source ~/goosebot_ws/install/setup.bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-ros2 launch "$PWD/final_project_simulation/goosebot/world.launch.py" \
-  world:="$PWD/final_project_simulation/campus/campus.sdf" gps_profile:=comparison
-```
+**After the raw-sensor investigation:** restart the comparison-profile world at fresh Home using the Terminal 1 command above, then start the recorder below.
 
 **Terminal 2 — record, then report:**
 
@@ -485,17 +512,17 @@ These instructor screenshots show the RViz/Gazebo views during a live run. They 
 
 **Submit:** a campus video showing GPS readiness, the global path staying on pedestrian paths/sidewalks, and A, B and Home reached. Explain the distinct GPS, prior-map and LiDAR roles. Briefly demonstrate grass and asphalt-lane goals away from permitted crossings are rejected; cancel it before continuing. Do not disable the pedestrian mask or shrink the footprint. Cancel navigation if localization or motion behaves unexpectedly.
 
-**INSTRUCTOR VALIDATION REQUIRED:** matching geometry/map, route clearance and launch parameters have offline tests; the full-scale Gazebo run still needs a course-machine pilot. See [map details and checks](goosebot/GPS_MAP_EXTENSION.md). Ordinary-GPS/RTK-like localization remains the separate experiment above; this required live activity uses RTK-like GPS.
+See [map details and checks](goosebot/GPS_MAP_EXTENSION.md). Ordinary-GPS/RTK-like localization remains the separate experiment above; this required live activity uses RTK-like GPS.
 
 #### C. Optional — ordinary GPS + encoders + IMU + LiDAR
 
 Try the [budget localization experiment](goosebot/BUDGET_LOCALIZATION.md) to measure a lower-cost sensor combination on one recorded manual drive. It compares encoder/gyro alone, + ordinary GPS, + ordinary GPS/LiDAR map matching, and a LiDAR-without-GPS control. The guide includes full terminal commands and an optional controlled GPS-withholding replay.
 
-This uses measured simulated wheel-joint velocities, **not command-derived odometry**. It reports offline horizontal RMSE/final/maximum error; no live navigation or hardware-accuracy claim is made. It is optional, ungraded and requires a Gazebo pilot.
+This uses measured simulated wheel-joint velocities, **not command-derived odometry**. It reports offline horizontal RMSE/final/maximum error; no live navigation or hardware-accuracy claim is made. It is optional and ungraded; use your own recording to assess its performance.
 
 ### 10. Explain the system
 
-Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your GPS experiment observations and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
+Submit one shared **2–3 page explanation plus a topic table/diagram**, using [the system worksheet](SYSTEM_EXPLANATION.md). Explain sensor roles, actual EKF inputs, TF, SLAM versus AMCL, and goal → planning → control → motion. Include your raw-sensor investigation table, prediction/test observations, GPS experiment results and indoor/outdoor comparison. The GPS comparison code is supplied; students do not implement a filter. Step 9 supplies live GPS-aided campus navigation as well as the localization comparison.
 
 ## What to submit
 
@@ -517,9 +544,6 @@ Submit one shared **2–3 page explanation plus a topic table/diagram**, using [
 
 The practice-arena/perfect-map warm-up has **no required submission**. See the [detailed command and troubleshooting reference](COMMAND_REFERENCE.md) for that exercise, extra output examples, model diagnostics and full command breakdowns. All required steps are above. Step 9 separates the offline localization comparison from the live GPS navigation mode. Indoor AMCL remains unchanged.
 
-**INSTRUCTOR VALIDATION REQUIRED:** profile generation, fusion math, TF composition, gating, scoring, plotting and Nav2 parameters have offline tests and synthetic-data checks. The dual-sensor bridge and live GPS/Nav2 launch still require a course-machine pilot; no end-to-end Gazebo navigation result is claimed.
-
-
 
 ### Campus map startup check
 
@@ -534,4 +558,4 @@ LIBGL_ALWAYS_SOFTWARE=true rviz2 -d "$PWD/final_project_simulation/goosebot/gps_
   --ros-args -p use_sim_time:=true
 ```
 
-This is a rendering diagnostic; it does not activate an inactive map server. Live WSL/Jazzy simulation validation is still required.
+This is a rendering diagnostic; it does not activate an inactive map server.
