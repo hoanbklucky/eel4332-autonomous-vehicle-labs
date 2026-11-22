@@ -434,7 +434,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/gps_navigation.launch.py" \
 
 Wait for **GPS_LOCALIZATION_READY**, **pedestrian-only campus reference map + live LiDAR**, and active Nav2 nodes. The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
 
-**Command breakdown:** `gps_profile:=rtk` selects simulated RTK-like noise; `profile:=rtk` selects matching filter uncertainty. `reference_map:=` validates the matching full-scale map, builds the pedestrian-only grid, and starts the map server. Grass and asphalt motor roads are forbidden in both costmaps. GPS estimates pose; the supplied map supports global planning; live LiDAR detects obstacles. There is no AMCL or 2D Pose Estimate. The map is supplied knowledge, not perfect localization or student SLAM evidence.
+**Command breakdown:** `gps_profile:=rtk` selects simulated RTK-like noise; `profile:=rtk` selects matching filter uncertainty. `reference_map:=` validates the matching full-scale map, builds the pedestrian-only grid, and starts the map server. Grass and identified asphalt motor roads are forbidden in both costmaps; separate sidewalks and interior non-asphalt paved corridors remain permitted. GPS estimates pose; the supplied map supports global planning; live LiDAR detects obstacles. There is no AMCL or 2D Pose Estimate. The map is supplied knowledge, not perfect localization or student SLAM evidence.
 
 **Terminal 3 — full-map navigation view:**
 
@@ -446,7 +446,7 @@ rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" 
   --ros-args -p use_sim_time:=true
 ```
 
-Check scans overlap nearby map building edges. **Localization: inactive** refers to absent AMCL; use the GPS-ready message. The global map covers the campus; the local costmap rolls around Goosebot. Map resolution is 0.25 m to keep full-campus planning practical; the local grid is 0.025 m. The configured footprint is 0.20 × 0.20 m. Widths use the instructor’s map measurements where matched, with a 3 m minimum for unmeasured walks; see [widths/access](campus/WIDTHS_AND_ACCESS.md).
+Check scans overlap nearby map building edges. **Localization: inactive** refers to absent AMCL; use the GPS-ready message. The global map covers the campus; the local costmap rolls around Goosebot. Non-asphalt interior paved routes and sidewalks alongside asphalt roads are included; a generic road label does not block them. Map resolution is 0.25 m to keep full-campus planning practical; the local grid is 0.025 m. The configured footprint is 0.20 × 0.20 m. Widths use the instructor’s map measurements where matched, with a 3 m minimum for unmeasured walks; see [widths/access](campus/WIDTHS_AND_ACCESS.md).
 
 **Terminal 4 — reach A, then B, then Home:**
 

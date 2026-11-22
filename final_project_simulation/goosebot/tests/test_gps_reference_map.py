@@ -79,6 +79,14 @@ class ReferenceMapTests(unittest.TestCase):
         self.assertEqual(mask[60, 20], 0)  # gap between walkway and road
         self.assertFalse(np.any((obstacles == 0) & (mask == 254)))
 
+    def test_generic_road_label_does_not_exclude_non_asphalt_paved_corridor(self):
+        pixels=np.full((100,100),254,dtype='uint8')
+        layout={'paths':[{'kind':'road','surface':'non_asphalt_paved',
+            'robot_access':'pedestrian','width':3.,'points':[[1,5],[9,5]]}]}
+        mask=road_mask(layout,pixels,.1,[0,0,0])
+        self.assertEqual(mask[50,50],254)
+        self.assertEqual(mask[5,50],0)
+
     def test_asphalt_blocks_crossing_paths_but_separate_sidewalk_remains(self):
         obstacles=np.full((100,100),254,dtype='uint8')
         layout={'paths':[
@@ -107,8 +115,19 @@ class ReferenceMapTests(unittest.TestCase):
         start=cell(mission['stops'][0]['xy']);component=components[start]
         self.assertNotEqual(component,0)
         self.assertEqual([g['id'] for g in mission['navigation_goals']],['A','B'])
-        for goal in mission['navigation_goals']:
-            self.assertEqual(components[cell(goal['xy'])],component)
+        for goal in mission['navigation_goals']+mission['stops']:
+            self.assertEqual(components[cell(goal['xy'])],component,goal['name'])
+        layout=json.loads((self.campus/'layout.json').read_text())
+        for feature in layout['paths']:
+            if feature['bridge']:
+                for point in [feature['points'][0],feature['points'][-1]]:
+                    self.assertEqual(components[cell(point)],component,feature['id'])
+        # A separate sidewalk follows the outer asphalt corridor. Its path is
+        # drivable without granting access to the road or the median beside it.
+        sidewalk=next(v for v in layout['paths'] if v['id']=='path_507676844_0')
+        point=sidewalk['points'][len(sidewalk['points'])//2]
+        self.assertEqual(components[cell(point)],component)
+
         self.assertGreater(np.linalg.norm(np.array(mission['navigation_goals'][0]['xy'])-mission['stops'][0]['xy']),15)
         self.assertLess(raster.size,30_000_000)  # no full-campus 5 cm upsampling
         self.assertEqual(raster[cell([-75.,391.])],0)  # Polytechnic Circle median

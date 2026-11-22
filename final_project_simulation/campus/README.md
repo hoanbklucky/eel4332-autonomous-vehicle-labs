@@ -6,13 +6,13 @@ Horizontal coordinates now use **1:1 meters**, restored from the previous 0.06 l
 
 **Measured width references:** narrow walk **3.12 m**, Home pedestrian crossing **11.31 m**, diagonal Residence-side route **7.22 m**. Unmeasured walks use the instructor-reported **3 m minimum**. The **21.87 m** Polytechnic Circle measurement includes median/sidewalk/verge and is not a drivable width. Read [width provenance and access rules](WIDTHS_AND_ACCESS.md).
 
-**Robot access:** mapped pedestrian paths and separate sidewalks only. Asphalt carriageways/service roads and grass remain forbidden in both navigation costmaps, including where a pedestrian centerline overlaps a motor road. The visible world still shows those roads.
+**Robot access:** mapped pedestrian paths, separate sidewalks and reviewed interior non-asphalt paved corridors. Identified asphalt carriageways/parking access and grass remain forbidden in both navigation costmaps, including where a pedestrian centerline overlaps a motor road. The visible world still shows those roads.
 
 ## Required campus navigation
 
 Follow [final-project Step 9B](../README.md#gps-aided-outdoor-navigation). It includes every terminal command. Use the supplied `reference.yaml`, RTK-like GPS, the pedestrian-only global/local costmaps, live LiDAR, and goals **A → B → Home**. A/B are about 20 m from Home along mapped routes, avoiding a campus-wide drive. Short-range map-free navigation is retired. GPS provides pose; the prior map provides route knowledge. No AMCL, SLAM or 2D Pose Estimate runs during this activity.
 
-Campus SLAM remains a separate, local mapping activity around Home; do not map the entire campus or use an unaligned student map for GPS navigation. The pedestrian mask forbids asphalt motor roads and grass in navigation; the underlying physical world does not model grass as an obstacle. Only pedestrian paths and separate sidewalks are allowed; this does not implement traffic rules.
+Campus SLAM remains a separate, local mapping activity around Home; do not map the entire campus or use an unaligned student map for GPS navigation. The pedestrian mask forbids asphalt motor roads and grass in navigation; the underlying physical world does not model grass as an obstacle. Non-asphalt interior paved corridors, pedestrian paths and separate sidewalks are allowed; this does not implement traffic rules.
 
 ## Start campus — Terminal 1
 

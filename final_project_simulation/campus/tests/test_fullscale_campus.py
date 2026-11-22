@@ -43,6 +43,9 @@ class FullScaleTests(unittest.TestCase):
         self.assertFalse(any(v['width']==21.87 for v in d['paths']))
         self.assertTrue(all(v['robot_access']=='motor_road' for v in d['paths'] if v['name']=='Polytechnic Circle'))
         self.assertEqual(by_id['path_467811278_0']['robot_access'],'pedestrian')
+        self.assertEqual(by_id['path_507676803_0']['robot_access'],'pedestrian')
+        self.assertTrue(all(v['surface']=='non_asphalt_paved' for v in d['paths'] if v['robot_access']=='pedestrian'))
+        self.assertTrue(any(v['kind']=='road' and v['surface']=='non_asphalt_paved' for v in d['paths']))
 
     def test_all_manifest_assets_match(self):
         manifest=json.loads((ROOT/'assets_manifest.json').read_text())

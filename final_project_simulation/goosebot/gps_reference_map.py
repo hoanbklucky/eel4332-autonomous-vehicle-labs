@@ -16,7 +16,7 @@ from gps_fusion_core import read_world
 
 
 def road_mask(layout, obstacle_pixels, resolution, origin):
-    """Permit pedestrian rectangles only; subtract asphalt/motor-road rectangles.
+    """Permit non-asphalt paved routes/sidewalks; subtract identified asphalt lanes.
 
     No added connectors, widened corridors, parking lots or grass shortcuts.
     One-cell erosion leaves a conservative raster boundary margin.
@@ -102,6 +102,11 @@ def validate_reference_map(map_path, world_path):
     layout = json.loads(path.with_name('layout.json').read_text())
     if layout.get('scale') != 1.0:
         raise ValueError('Use the full-scale campus layout, world and reference map together')
+    for feature in layout['paths']:
+        surface=feature.get('surface')
+        wanted={'non_asphalt_paved':'pedestrian','asphalt':'motor_road'}.get(surface)
+        if wanted is None or feature.get('robot_access')!=wanted:
+            raise ValueError('Restore the explicit matching campus surface/access classifications')
     lon, lat = layout['origin_lon_lat']
     if world['datum'] != [lat, lon, 0.0]:
         raise ValueError('Campus map layout and GPS world datum differ')

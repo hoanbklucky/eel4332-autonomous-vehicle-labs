@@ -219,6 +219,14 @@ def organize_campus(world):
           f'{1+max((layer for _,layer in surfaces),default=0)} separated layers.')
 
 
+def path_color(feature):
+    # Source highway kind is not a surface material. Some broad pedestrian
+    # corridors carry the generic road label; use reviewed surface explicitly.
+    if feature.get('surface')=='non_asphalt_paved':return '#ded6bf'
+    if feature.get('surface')=='asphalt':return '#737b7d'
+    return '#ded6bf' if feature['kind']=='walk' or feature['bridge'] else '#737b7d'
+
+
 def write_world(blocked):
     root=ET.Element('sdf',version='1.8');world=ET.SubElement(root,'world',name='default')
     p=ET.SubElement(world,'physics',name='physics',type='ignored')
@@ -242,7 +250,7 @@ def write_world(blocked):
         for k,(a,b) in enumerate(zip(v['points'],v['points'][1:])):
             dx,dy=b[0]-a[0],b[1]-a[1];length=math.hypot(dx,dy)
             if length<.03:continue
-            box(world,v['id']+'_'+str(k),(a[0]+b[0])/2,(a[1]+b[1])/2,length+.03,v['width'],.015 if v['bridge'] else .01,'#ded6bf' if v['kind']=='walk' or v['bridge'] else '#737b7d',yaw=math.atan2(dy,dx))
+            box(world,v['id']+'_'+str(k),(a[0]+b[0])/2,(a[1]+b[1])/2,length+.03,v['width'],.015 if v['bridge'] else .01,path_color(v),yaw=math.atan2(dy,dx))
     for v in DATA['water']:solid(world,v,.45,'#397f99')
     for v in DATA['buildings']:
         solid(world,v,v['height'],v['color'])
@@ -292,7 +300,7 @@ def plan():
     for v in DATA['sports']:poly(v,'#94be7e')
     for v in DATA['paths']:
         pts=' '.join(f'{a:.2f},{b:.2f}' for a,b in map(xy,v['points']))
-        s.append(f'<polyline points="{pts}" fill="none" stroke="'+('#f1ead8' if v['kind']=='walk' or v['bridge'] else '#858e8d')+f'" stroke-width="{v["width"]*k}" stroke-linejoin="round"/>')
+        s.append(f'<polyline points="{pts}" fill="none" stroke="'+('#f1ead8' if v.get('surface')=='non_asphalt_paved' else '#858e8d')+f'" stroke-width="{v["width"]*k}" stroke-linejoin="round"/>')
     for v in DATA['water']:poly(v,'#78b9cc')
     for v in DATA['buildings']:poly(v,'#9c83bc' if v['source'].startswith('Approximate') else '#e9e1d5')
     labels=[]
