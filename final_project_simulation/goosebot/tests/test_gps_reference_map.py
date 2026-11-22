@@ -85,7 +85,7 @@ class ReferenceMapTests(unittest.TestCase):
         data = yaml.safe_load(output.read_text())
         self.assertEqual(data['resolution'], .25)
         raster = np.asarray(Image.open(data['image']))
-        # At least 0.5 m from forbidden grid cells exceeds the 0.181 m
+        # At least 0.5 m from forbidden grid cells exceeds the 0.142 m
         # footprint circumradius plus half the 0.25 m cell diagonal.
         safe = distance_transform_edt(raster == 254, sampling=.25) >= .5
         components, _ = label(safe)

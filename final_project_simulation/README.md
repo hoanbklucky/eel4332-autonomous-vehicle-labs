@@ -446,7 +446,7 @@ rviz2 -d "$PWD/final_project_simulation/goosebot/gps_reference_navigation.rviz" 
   --ros-args -p use_sim_time:=true
 ```
 
-Check scans overlap nearby map building edges. **Localization: inactive** refers to absent AMCL; use the GPS-ready message. The global map covers the campus; the local costmap rolls around Goosebot. Map resolution is 0.25 m to keep full-campus planning practical; the local grid is 0.025 m. The configured footprint is 0.30 × 0.20 m. Road/path widths are documented physical assumptions, not surveyed dimensions.
+Check scans overlap nearby map building edges. **Localization: inactive** refers to absent AMCL; use the GPS-ready message. The global map covers the campus; the local costmap rolls around Goosebot. Map resolution is 0.25 m to keep full-campus planning practical; the local grid is 0.025 m. The configured footprint is 0.20 × 0.20 m. Road/path widths are documented physical assumptions, not surveyed dimensions.
 
 **Terminal 4 — reach A, then B, then Home:**
 
