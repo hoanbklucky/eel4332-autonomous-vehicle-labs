@@ -1240,7 +1240,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373763_0",
@@ -1264,7 +1265,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373765_0",
@@ -1320,7 +1322,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373766_0",
@@ -1344,7 +1347,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373767_0",
@@ -1372,7 +1376,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373768_0",
@@ -1404,7 +1409,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373769_0",
@@ -1488,7 +1494,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373770_0",
@@ -1520,7 +1527,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373771_0",
@@ -1560,7 +1568,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373773_0",
@@ -1588,7 +1597,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373774_0",
@@ -1616,7 +1626,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373775_0",
@@ -1648,7 +1659,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373776_0",
@@ -1712,7 +1724,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_370373777_0",
@@ -1788,7 +1801,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651339_0",
@@ -1824,7 +1838,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651340_0",
@@ -1844,7 +1859,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651341_0",
@@ -1896,7 +1912,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651342_0",
@@ -1920,7 +1937,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651343_0",
@@ -1939,8 +1957,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_372651344_0",
@@ -1976,7 +1995,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651345_0",
@@ -2012,7 +2032,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651346_0",
@@ -2035,8 +2056,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_372651347_0",
@@ -2076,7 +2098,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651348_0",
@@ -2107,8 +2130,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_372651349_0",
@@ -2164,7 +2188,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651350_0",
@@ -2196,7 +2221,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651351_0",
@@ -2224,7 +2250,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651352_0",
@@ -2252,7 +2279,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651353_0",
@@ -2299,8 +2327,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_372651354_0",
@@ -2332,7 +2361,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651355_0",
@@ -2372,7 +2402,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_372651356_0",
@@ -2396,7 +2427,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_467810969_0",
@@ -2493,7 +2525,8 @@
       "width_source": "Representative map-measured width from image(20261122-021500).png; approximate, not surveyed",
       "width_measurement_id": "M01",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811274_0",
@@ -2601,7 +2634,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811275_0",
@@ -2633,7 +2667,8 @@
       "bridge": true,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811276_0",
@@ -2665,7 +2700,8 @@
       "bridge": true,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811277_0",
@@ -2697,7 +2733,8 @@
       "bridge": true,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811278_0",
@@ -2726,7 +2763,8 @@
       "width_source": "Representative map-measured width from image(20261122-021601).png; approximate, not surveyed",
       "width_measurement_id": "M02",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_467811279_0",
@@ -2758,7 +2796,8 @@
       "bridge": true,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560163_0",
@@ -2802,7 +2841,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560164_0",
@@ -2838,7 +2878,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560166_0",
@@ -2922,7 +2963,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560168_0",
@@ -2942,7 +2984,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560169_0",
@@ -2965,8 +3008,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560170_0",
@@ -2985,8 +3029,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560171_0",
@@ -3005,8 +3050,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560173_0",
@@ -3026,7 +3072,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560176_0",
@@ -3066,7 +3113,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560178_0",
@@ -3106,7 +3154,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560180_0",
@@ -3126,7 +3175,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560182_0",
@@ -3158,7 +3208,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560184_0",
@@ -3186,7 +3237,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560185_0",
@@ -3206,7 +3258,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560186_0",
@@ -3226,7 +3279,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560187_0",
@@ -3254,7 +3308,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560188_0",
@@ -3274,7 +3329,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560191_0",
@@ -3294,7 +3350,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560193_0",
@@ -3314,7 +3371,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560194_0",
@@ -3334,7 +3392,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560195_0",
@@ -3358,7 +3417,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560197_0",
@@ -3390,7 +3450,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560198_0",
@@ -3410,7 +3471,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560199_0",
@@ -3434,7 +3496,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560200_0",
@@ -3454,7 +3517,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560201_0",
@@ -3494,7 +3558,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560202_0",
@@ -3513,8 +3578,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560203_0",
@@ -3537,8 +3603,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560204_0",
@@ -3557,8 +3624,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560205_0",
@@ -3582,7 +3650,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560206_0",
@@ -3601,8 +3670,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560207_0",
@@ -3666,7 +3736,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560208_0",
@@ -3702,7 +3773,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560208_1",
@@ -3742,7 +3814,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560210_0",
@@ -3766,7 +3839,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560211_0",
@@ -3790,7 +3864,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560212_0",
@@ -3810,7 +3885,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560214_0",
@@ -3830,7 +3906,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560215_0",
@@ -3853,8 +3930,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560216_0",
@@ -3877,8 +3955,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560217_0",
@@ -3906,7 +3985,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560218_0",
@@ -3998,7 +4078,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560219_0",
@@ -4018,7 +4099,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_468560220_0",
@@ -4038,7 +4120,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476604_0",
@@ -4070,7 +4153,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476605_0",
@@ -4090,7 +4174,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476607_0",
@@ -4110,7 +4195,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476609_0",
@@ -4130,7 +4216,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476612_0",
@@ -4150,7 +4237,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476616_0",
@@ -4226,7 +4314,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476618_0",
@@ -4306,7 +4395,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476620_0",
@@ -4327,7 +4417,8 @@
       "width_source": "Estimated continuation of image(20261122-021722).png; approximate, not surveyed",
       "width_measurement_id": "M03",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_481476622_0",
@@ -4355,7 +4446,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476625_0",
@@ -4375,7 +4467,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476628_0",
@@ -4395,7 +4488,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476631_0",
@@ -4419,7 +4513,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476633_0",
@@ -4439,7 +4534,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476637_0",
@@ -4459,7 +4555,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476640_0",
@@ -4483,7 +4580,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476641_0",
@@ -4511,7 +4609,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476642_0",
@@ -4535,7 +4634,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_481476643_0",
@@ -4558,8 +4658,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505121651_0",
@@ -4583,7 +4684,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505121654_0",
@@ -4603,7 +4705,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505121657_0",
@@ -4631,7 +4734,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127435_0",
@@ -4651,7 +4755,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127437_0",
@@ -4671,7 +4776,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127438_0",
@@ -4691,7 +4797,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127441_0",
@@ -4711,7 +4818,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127442_0",
@@ -4747,7 +4855,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127443_0",
@@ -4767,7 +4876,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127444_0",
@@ -4807,7 +4917,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_505127445_0",
@@ -4830,8 +4941,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127446_0",
@@ -4854,8 +4966,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127447_0",
@@ -4915,7 +5028,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_505127448_0",
@@ -4934,8 +5048,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_505127449_0",
@@ -4959,7 +5074,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676801_0",
@@ -4979,7 +5095,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676802_0",
@@ -4999,7 +5116,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676803_0",
@@ -5023,8 +5141,9 @@
       "bridge": false,
       "width_source": "Representative map-measured width from image(20261122-021722).png; approximate, not surveyed",
       "width_measurement_id": "M03",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676804_0",
@@ -5043,8 +5162,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676808_0",
@@ -5064,7 +5184,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676809_0",
@@ -5088,7 +5209,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676812_0",
@@ -5108,7 +5230,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676813_0",
@@ -5132,7 +5255,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676814_0",
@@ -5152,7 +5276,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676815_0",
@@ -5172,7 +5297,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676816_0",
@@ -5192,7 +5318,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676817_0",
@@ -5211,8 +5338,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676818_0",
@@ -5232,7 +5360,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676821_0",
@@ -5252,7 +5381,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676823_0",
@@ -5272,7 +5402,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676824_0",
@@ -5292,7 +5423,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676825_0",
@@ -5312,7 +5444,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676826_0",
@@ -5332,7 +5465,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676827_0",
@@ -5352,7 +5486,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676828_0",
@@ -5372,7 +5507,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676829_0",
@@ -5392,7 +5528,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676830_0",
@@ -5420,7 +5557,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676831_0",
@@ -5444,7 +5582,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676832_0",
@@ -5464,7 +5603,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676833_0",
@@ -5484,7 +5624,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676834_0",
@@ -5504,7 +5645,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676835_0",
@@ -5524,7 +5666,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676836_0",
@@ -5556,7 +5699,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676837_0",
@@ -5576,7 +5720,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676838_0",
@@ -5600,7 +5745,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676839_0",
@@ -5620,7 +5766,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676840_0",
@@ -5656,7 +5803,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676841_0",
@@ -5676,7 +5824,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676842_0",
@@ -5704,7 +5853,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676843_0",
@@ -5724,7 +5874,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676844_0",
@@ -5764,7 +5915,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676845_0",
@@ -5784,7 +5936,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676846_0",
@@ -5808,7 +5961,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676847_0",
@@ -5828,7 +5982,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676848_0",
@@ -5864,7 +6019,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676849_0",
@@ -5884,7 +6040,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676850_0",
@@ -5916,7 +6073,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676851_0",
@@ -5936,7 +6094,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676852_0",
@@ -5972,7 +6131,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676854_0",
@@ -5992,7 +6152,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676855_0",
@@ -6012,7 +6173,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676856_0",
@@ -6032,7 +6194,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676857_0",
@@ -6052,7 +6215,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676858_0",
@@ -6072,7 +6236,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676859_0",
@@ -6100,7 +6265,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_507676860_0",
@@ -6120,7 +6286,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_515362455_0",
@@ -6140,7 +6307,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_515362457_0",
@@ -6160,7 +6328,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_515362459_0",
@@ -6179,8 +6348,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_515362502_0",
@@ -6203,8 +6373,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_515362505_0",
@@ -6240,7 +6411,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_515362508_0",
@@ -6280,7 +6452,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_543965298_0",
@@ -6323,8 +6496,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_543965299_0",
@@ -6343,8 +6517,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_543965300_0",
@@ -6363,8 +6538,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951171_0",
@@ -6400,7 +6576,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951172_0",
@@ -6420,7 +6597,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951173_0",
@@ -6448,7 +6626,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951174_0",
@@ -6492,7 +6671,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951175_0",
@@ -6512,7 +6692,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_545951178_0",
@@ -6532,7 +6713,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951179_0",
@@ -6552,7 +6734,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951180_0",
@@ -6572,7 +6755,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_545951181_0",
@@ -6592,7 +6776,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_566223258_0",
@@ -6620,7 +6805,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_576117231_0",
@@ -6640,7 +6826,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_576117232_0",
@@ -6660,7 +6847,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_595186068_0",
@@ -6696,7 +6884,8 @@
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
       "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Identified named motor carriageway, carriageway connector, or parking access/aisle associated with the parking geometry; separate sidewalks remain allowed.",
+      "surface": "asphalt"
     },
     {
       "id": "path_621007852_0",
@@ -6716,7 +6905,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_621007853_0",
@@ -6736,7 +6926,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_621007854_0",
@@ -6756,7 +6947,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_621007855_0",
@@ -6776,7 +6968,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725469993_0",
@@ -6796,7 +6989,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725469995_0",
@@ -6820,7 +7014,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725469995_1",
@@ -6904,7 +7099,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725469998_0",
@@ -6924,7 +7120,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725469999_0",
@@ -6944,7 +7141,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470002_0",
@@ -6967,8 +7165,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470003_0",
@@ -7004,7 +7203,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470004_0",
@@ -7024,7 +7224,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470005_0",
@@ -7044,7 +7245,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470006_0",
@@ -7068,7 +7270,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470007_0",
@@ -7092,7 +7295,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_725470008_0",
@@ -7112,7 +7316,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1506131392_0",
@@ -7132,7 +7337,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1506131393_0",
@@ -7152,7 +7358,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1506131394_0",
@@ -7172,7 +7379,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1506131395_0",
@@ -7192,7 +7400,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1506131396_0",
@@ -7212,7 +7421,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1528887775_0",
@@ -7232,7 +7442,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1528887776_0",
@@ -7268,7 +7479,8 @@
       "bridge": false,
       "width_source": "Instructor-reported minimum walking width; unmeasured feature uses 3 m, not surveyed",
       "robot_access": "pedestrian",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692595_0",
@@ -7299,8 +7511,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692596_0",
@@ -7323,8 +7536,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692598_0",
@@ -7351,8 +7565,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692598_1",
@@ -7411,8 +7626,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692599_0",
@@ -7431,8 +7647,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692600_0",
@@ -7451,8 +7668,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     },
     {
       "id": "path_1534692601_0",
@@ -7471,8 +7689,9 @@
       ],
       "bridge": false,
       "width_source": "Unmeasured physical-width assumption per paved feature; road carriageway 6 m, service 3.5 m, other crossing 3 m, not surveyed",
-      "robot_access": "motor_road",
-      "access_source": "Pedestrian paths/bridges retained; non-bridge motor/service road centerlines excluded from robot navigation"
+      "robot_access": "pedestrian",
+      "access_source": "Mapped non-asphalt pedestrian/sidewalk or reviewed interior paved corridor; generic kind=road does not imply asphalt. Surface assignment is approximate.",
+      "surface": "non_asphalt_paved"
     }
   ],
   "parking": [
@@ -8061,7 +8280,7 @@
     "FIPR Institute is off-campus in Bartow and intentionally omitted.",
     "Outer bounds are rounded outward to the 0.25 m grid; geographic feature coordinates are unchanged.",
     "Path widths now use instructor map measurements M01-M03 where matched; other walks use the reported 3 m minimum. M04 is an overall corridor including non-pavement and is never applied as a drivable width.",
-    "Robot navigation excludes motor/asphalt road rectangles as well as grass, water and buildings. Only mapped pedestrian features are permitted; this is not a traffic-rule or crossing-permission model."
+    "Surface/access review restores interior non-asphalt paved corridors previously excluded by generic road labels. Separate asphalt-road sidewalks remain drivable. Explicit asphalt carriageways/parking access remain excluded."
   ],
   "navigation_goals": [
     {
@@ -8147,6 +8366,46 @@
     "unmeasured_crossing_width_m": 3.0,
     "quality": "Google Maps distance readouts supplied by instructor; approximate map measurements, not surveyed dimensions",
     "corridor_rule": "Keep carriageways separate. Overall corridor widths that include medians/verges do not define traversable pavement.",
-    "navigation_access": "Pedestrian paths and separate sidewalks only; motor/asphalt carriageways are excluded even where a pedestrian feature crosses them."
+    "navigation_access": "Permit non-asphalt pedestrian paths, separate sidewalks and reviewed interior paved corridors regardless of generic source kind. Exclude identified asphalt carriageways/parking lanes, grass, water and buildings."
+  },
+  "surface_classification": {
+    "basis": "Instructor correction and campus images: most interior non-asphalt paved corridors are drivable; retain mapped sidewalks beside asphalt roads.",
+    "restored_interior_feature_ids": [
+      "path_372651343_0",
+      "path_372651346_0",
+      "path_372651348_0",
+      "path_372651353_0",
+      "path_468560169_0",
+      "path_468560170_0",
+      "path_468560171_0",
+      "path_468560202_0",
+      "path_468560203_0",
+      "path_468560204_0",
+      "path_468560206_0",
+      "path_468560215_0",
+      "path_468560216_0",
+      "path_481476643_0",
+      "path_505127445_0",
+      "path_505127446_0",
+      "path_505127448_0",
+      "path_507676803_0",
+      "path_507676804_0",
+      "path_507676817_0",
+      "path_515362459_0",
+      "path_515362502_0",
+      "path_543965298_0",
+      "path_543965299_0",
+      "path_543965300_0",
+      "path_725470002_0",
+      "path_1534692595_0",
+      "path_1534692596_0",
+      "path_1534692598_0",
+      "path_1534692598_1",
+      "path_1534692599_0",
+      "path_1534692600_0",
+      "path_1534692601_0"
+    ],
+    "limitations": "Surface assignments are explicit simulation classifications, not a surveyed material map. Generic source kind alone is not a surface or access rule.",
+    "asphalt_exclusions": "Named vehicle carriageways, reviewed carriageway connectors and parking access/aisles; do not exclude their separate sidewalk features."
   }
 }
