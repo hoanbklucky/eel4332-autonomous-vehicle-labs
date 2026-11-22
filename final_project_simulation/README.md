@@ -432,7 +432,7 @@ ros2 launch "$PWD/final_project_simulation/goosebot/gps_navigation.launch.py" \
   profile:=rtk reference_map:="$PWD/final_project_simulation/campus/reference.yaml"
 ```
 
-Wait for **GPS_LOCALIZATION_READY**, **pedestrian-only campus reference map + live LiDAR**, and active Nav2 nodes. The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
+Wait for **GPS_LOCALIZATION_READY**, then **CAMPUS_MAP_READY**, and active Nav2 nodes. The GPS filter owns `map → odom`; the wheel/IMU EKF owns `odom → base_footprint`. Home position/heading are known launch settings, not measured ground truth.
 
 **Command breakdown:** `gps_profile:=rtk` selects simulated RTK-like noise; `profile:=rtk` selects matching filter uncertainty. `reference_map:=` validates the matching full-scale map, builds the pedestrian-only grid, and starts the map server. Grass and identified asphalt motor roads are forbidden in both costmaps; separate sidewalks and interior non-asphalt paved corridors remain permitted. GPS estimates pose; the supplied map supports global planning; live LiDAR detects obstacles. There is no AMCL or 2D Pose Estimate. The map is supplied knowledge, not perfect localization or student SLAM evidence.
 
@@ -460,6 +460,22 @@ python3 final_project_simulation/goosebot/gps_goal.py --home
 ```
 
 Each command waits for its goal to finish; `&&` continues only after success. Expect **SUCCEEDED** after each. `--waypoint` reads GPS-aligned meter coordinates from `campus/mission.json`; no coordinates need to be copied. A and B are about 20 m along mapped routes from Home, on opposite sides, keeping the exercise local while testing full-map planning beyond current LiDAR range. Outdoor forward speed is capped at 1.0 m/s; Nav2 may slow for turns or obstacles; keyboard speed is separate. You may also use **Nav2 Goal** on permitted pedestrian paths/sidewalks.
+
+**Example campus navigation run**
+
+These instructor screenshots show the RViz/Gazebo views during a live run. They were captured before the latest pavement-gap and bend-join corrections, so small gaps/notches in these images should not be treated as expected features of the updated map. Timing and exact paths vary.
+
+**1. Campus overview:** the white pedestrian network is permitted; purple regions are forbidden. Gazebo shows the corresponding campus pavement and water.
+
+![Campus pedestrian navigation map in RViz alongside the matching Gazebo world](images/campus_gps_navigation_overview.png)
+
+**2. Following a path:** the planned path stays on the permitted pavement, and the small Goosebot moves along it in Gazebo. RViz shows **Navigation: active** and **Feedback: active**.
+
+![Goosebot following a planned pedestrian path in RViz and Gazebo](images/campus_gps_navigation_following_path.png)
+
+**3. Goal reached:** RViz shows **Feedback: reached**, zero remaining distance and ETA, with Goosebot stopped on the pavement. **Localization: inactive** is expected here because AMCL is absent; GPS localization is provided separately.
+
+![Campus navigation goal reached in RViz with Goosebot on the pavement in Gazebo](images/campus_gps_navigation_goal_reached.png)
 
 **Submit:** a campus video showing GPS readiness, the global path staying on pedestrian paths/sidewalks, and A, B and Home reached. Explain the distinct GPS, prior-map and LiDAR roles. Briefly demonstrate grass and asphalt-road goals are rejected; cancel it before continuing. Do not disable the pedestrian mask or shrink the footprint. Cancel navigation if localization or motion behaves unexpectedly.
 
