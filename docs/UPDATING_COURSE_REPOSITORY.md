@@ -2,6 +2,21 @@
 
 Use Ubuntu/WSL and keep the course repository under `~/courses`, separate from ROS workspaces. **Expected branch: `main`.** Use the instructor-assigned branch; changing a GitHub browser branch does not change your local files.
 
+## How your repositories connect
+
+```mermaid
+flowchart LR
+    Course["Public course repository on GitHub"]
+    Fork["Your fork on GitHub"]
+    Local["Your local clone in Ubuntu or WSL"]
+    Course -->|Fork on GitHub| Fork
+    Fork -->|Clone once| Local
+    Course -->|Fetch updates from upstream| Local
+    Local -->|Push your work to origin| Fork
+```
+
+In your local clone, `upstream` is the remote name for the public course repository. `origin` is the remote name for your GitHub fork. Fetch course updates from `upstream`, merge them into your local branch, then push your work to `origin`.
+
 ## 1. Fork and clone (new students)
 
 1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. The required indoor/outdoor activity is included on `main`.
@@ -22,11 +37,11 @@ git branch --show-current
 code .
 ```
 
-Stop on any error. `origin` is **your fork** (push work); `upstream` is **the instructor's public repository** (receive updates). The branch must print `main`. Open the cloned folder in VS Code with **WSL: Ubuntu**. Do not use Download ZIP as your working copy: it has no Git history/remotes for updates. Reopening VS Code does not fetch course changes.
+Stop on any error. `origin` is **your fork** (push work); `upstream` is **the public course repository** (receive updates). The branch must print `main`. Open the cloned folder in VS Code with **WSL: Ubuntu**. Do not use Download ZIP as your working copy: it has no Git history/remotes for updates. Reopening VS Code does not fetch course changes.
 
-## 2. Already cloned the instructor repository?
+## 2. Already cloned the public course repository?
 
-Keep your files/history; do not delete or reclone over them. Create your fork on GitHub, then run `git remote -v` and `git status`. If `origin` currently points to the instructor and `upstream` does not exist, replace `YOUR_USERNAME` and run:
+Keep your files/history; do not delete or reclone over them. Create your fork on GitHub, then run `git remote -v` and `git status`. Use the commands below if `origin` points to `hoanbklucky/eel4332-autonomous-vehicle-labs` and there is no `upstream` remote yet. Replace `YOUR_USERNAME` with your GitHub username.
 
 ```bash
 cd ~/courses/eel4332-autonomous-vehicle-labs
@@ -59,7 +74,7 @@ git fetch upstream
 git branch --list
 ```
 
-If local `main` exists, run `git switch main`. If absent, create it from the instructor version:
+If local `main` exists, run `git switch main`. If absent, create it from the public course branch:
 
 ```bash
 git switch --no-track -c main upstream/main
@@ -92,7 +107,7 @@ Then back up the combined result to your fork:
 git push -u origin main
 ```
 
-The inclusion check confirms **all commits from the latest successfully fetched instructor branch are in your local history**, even if you also have your own commits. A clean `git status`, `Already up to date` from your fork, or a recent student commit alone does not prove this. Repeat the fetch/update when the instructor announces changes.
+The inclusion check confirms **all commits from the latest successfully fetched course branch are in your local history**, even if you also have your own commits. A clean `git status`, `Already up to date` from your fork, or a recent student commit alone does not prove this. Repeat the fetch/update when the instructor announces changes.
 
 If your fork has newer commits and rejects the push, fetch `origin`, merge `origin/main`, resolve conflicts, and push again. Do not force-push. VS Code **Sync Changes** / ordinary Pull synchronize the tracked fork; they do not replace fetching `upstream`.
 
