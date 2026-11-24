@@ -2,92 +2,11 @@
 
 ## Before you start — use the current course files
 
-**Expected branch: `main`.** Run these commands in **Ubuntu/WSL**. Choose the new-copy or existing-copy instructions, then update below.
+Keep using the course folder you already cloned. In your Ubuntu/WSL terminal, run `git remote -v` from the course folder. Your fetch and push remote `origin` should point to your GitHub fork, and `upstream` should point to the public course repository.
 
-### New copy: fork and clone
+If your existing clone still points directly to the course repository as `origin`, follow [Step 1 of the Git guide](../docs/UPDATING_COURSE_REPOSITORY.md#1-already-cloned-the-public-course-repository) to create your fork and connect it to your existing clone. If you need a fresh clone, use [Step 2](../docs/UPDATING_COURSE_REPOSITORY.md#2-fork-and-clone-new-students).
 
-1. Sign in to GitHub, open [the public course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and choose **Fork → Create fork** under your account. Keep the repository name. One fork serves both labs; do not fork again for Lab 5.
-2. Replace `YOUR_USERNAME` below with your GitHub username. Run only if the destination folder does not already exist:
-
-```bash
-mkdir -p ~/courses
-cd ~/courses
-git clone https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
-cd eel4332-autonomous-vehicle-labs
-git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
-git config --local --replace-all remote.upstream.pushurl DISABLED
-```
-
-### Existing copy: keep your files and check remotes
-
-If you already cloned your fork, skip this block when the URLs are correct. If you cloned the instructor's public repository, **create your fork on GitHub first**, then replace `YOUR_USERNAME` and run:
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git remote set-url origin https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
-git config --local --replace-all remote.origin.pushurl https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
-if git remote get-url upstream >/dev/null 2>&1; then
-  git remote set-url upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
-else
-  git remote add upstream https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs.git
-fi
-git config --local --replace-all remote.upstream.pushurl DISABLED
-```
-
-Changing remote URLs preserves files and commits. `origin` is **your fork**, where you push your work; `upstream` is **the instructor's public repository**, where you fetch updates. Its push URL is `DISABLED`. If your folder came from Download ZIP, keep it as a backup, clone your fork into a new folder, and copy your own work into that clone.
-
-### Select the branch and receive updates
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git remote -v
-git branch --show-current
-git status --short
-```
-
-Save editor files first. If status lists changes, review them and commit the files you want to keep (`git add PATH_TO_FILE`, then `git commit -m "Save my lab work"`); back up ignored maps/results separately. Continue with a clean working tree. Do not discard work to update.
-
-Fetch, then switch to the expected branch; the conditional creates it only if it does not exist locally. Work committed on another branch stays on that branch.
-
-```bash
-git fetch upstream &&
-if git show-ref --verify --quiet refs/heads/main; then
-  git switch main
-else
-  git switch --no-track -c main upstream/main
-fi
-```
-
-After the switch succeeds, receive updates and check that they are included:
-
-```bash
-git merge --no-edit upstream/main &&
-git merge-base --is-ancestor upstream/main HEAD &&
-echo "Current checkout includes the latest fetched main course commits"
-```
-
-Stop on any error. Resolve merge conflicts before continuing; `git merge --abort` cancels an in-progress merge. After a successful update, save the combined branch to your fork:
-
-```bash
-git push -u origin main
-```
-
-**Command breakdown:** `clone` downloads a working copy; `remote` configures repository URLs; `fetch` downloads updates; `switch` selects the local branch; `merge` combines updates with your commits; `merge-base --is-ancestor` verifies inclusion; `push -u origin` uploads the branch and sets its tracking destination.
-
-Reopen **this local README** in VS Code (**WSL: Ubuntu**). Changing the GitHub browser branch or reopening VS Code does not update local files. Git updates files, not installed ROS packages; rebuild only when the lab asks.
-
-**Lab 4 version check:** this lab uses Cartographer in **both TurtleBot3 World (Waffle) and House (Waffle Pi)**. An older one-world or different-SLAM handout is not the current lab. Keep both saved maps for Lab 5.
-
-> [!IMPORTANT]
-> **Stop Gazebo with Ctrl+C in its launch terminal—not just the window's × button.** Closing the GUI can leave the simulation server and ROS nodes running, causing duplicate simulations or a GUI that does not match the robot/world queried from the terminal.
->
-> **Before relaunching, switching worlds, or finishing:**
-> 1. Stop robot motion; save any map/results you need.
-> 2. Press **Ctrl+C** in each teleop, SLAM and Nav2 terminal that is running.
-> 3. Press **Ctrl+C in the simulator launch terminal** (usually Terminal 1).
-> 4. Wait for shutdown messages to finish and the shell prompt to return before launching again.
->
-> If you already closed the window, return to its launch terminal and press Ctrl+C there. If shutdown seems incomplete, check `pgrep -af 'gz sim|gz-sim'` and identify leftover simulation processes before restarting.
+Then follow [Steps 3–5](../docs/UPDATING_COURSE_REPOSITORY.md#3-save-your-work) to save your changes, update local `main` from `upstream`, and push to your fork.
 
 ## Open in VS Code through WSL
 
