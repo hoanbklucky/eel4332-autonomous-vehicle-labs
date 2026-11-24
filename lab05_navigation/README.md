@@ -6,7 +6,9 @@
 
 Use the same course folder and fork you set up in Lab 4. Keep both saved maps from Lab 4. In your Ubuntu/WSL terminal, run `git remote -v` from the course folder. Your fetch and push remote `origin` should point to your GitHub fork, and `upstream` should point to the public course repository.
 
-If your existing clone still points directly to the course repository as `origin`, follow [Step 1 of the Git guide](../docs/UPDATING_COURSE_REPOSITORY.md#1-already-cloned-the-public-course-repository) to create your fork and connect it to your existing clone. If you need a fresh clone, use [Step 2](../docs/UPDATING_COURSE_REPOSITORY.md#2-fork-and-clone-new-students).
+### Connect your existing clone to your GitHub fork
+
+**If `origin` still points to the public course repository, [create your fork and connect your existing clone first](../docs/UPDATING_COURSE_REPOSITORY.md#1-already-cloned-the-public-course-repository).** If you need a fresh clone, use [Step 2](../docs/UPDATING_COURSE_REPOSITORY.md#2-fork-and-clone-new-students).
 
 Then follow [Steps 3–5](../docs/UPDATING_COURSE_REPOSITORY.md#3-save-your-work) to save your changes, update local `main` from `upstream`, and push to your fork.
 
