@@ -14,7 +14,7 @@ flowchart LR
     Local -. Push blocked without write access .-> Course
 ```
 
-Git initially calls the course repository `origin` in this setup. You can edit and commit locally, but pushing to the course repository requires write access. If you already cloned it this way, follow Step 2 to connect your existing clone to your fork.
+Git initially calls the course repository `origin` in this setup. You can edit and commit locally, but pushing to the course repository requires write access. If you already cloned it this way, follow Step 1 to connect your existing clone to your fork.
 
 ### Course workflow with your own fork
 
@@ -30,7 +30,21 @@ flowchart LR
 
 Fork first so you have a GitHub repository you can push to and share for grading. In your local clone, `origin` points to your fork and `upstream` points to the public course repository. When course files change, fetch from `upstream` and merge locally, then push the updated work to `origin`.
 
-## 1. Fork and clone (new students)
+## 1. Already cloned the public course repository?
+
+Keep your files/history; do not delete or reclone over them. Create your fork on GitHub, then run `git remote -v` and `git status`. Use the commands below if `origin` points to `hoanbklucky/eel4332-autonomous-vehicle-labs` and there is no `upstream` remote yet. Replace `YOUR_USERNAME` with your GitHub username.
+
+```bash
+cd ~/courses/eel4332-autonomous-vehicle-labs
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
+git fetch origin
+git remote -v
+```
+
+If either remote already exists, inspect it first; correct a URL with `git remote set-url REMOTE URL` rather than adding duplicates. Check both fetch and push URLs. Changing remotes does not alter files or commits. If working from an old ZIP, preserve it separately, clone your fork in a new folder, then review/copy your own work into that clone.
+
+## 2. Fork and clone (new students)
 
 1. Sign in to GitHub, open [the course repository](https://github.com/hoanbklucky/eel4332-autonomous-vehicle-labs), and click **Fork → Create fork** under your account. Keep its name. The required indoor/outdoor activity is included on `main`.
 2. In Ubuntu/WSL, replace `YOUR_USERNAME` with your actual GitHub username. Run this only for a **new** local copy:
@@ -51,20 +65,6 @@ code .
 ```
 
 Stop on any error. `origin` is **your fork** (push work); `upstream` is **the public course repository** (receive updates). The branch must print `main`. Open the cloned folder in VS Code with **WSL: Ubuntu**. Do not use Download ZIP as your working copy: it has no Git history/remotes for updates. Reopening VS Code does not fetch course changes.
-
-## 2. Already cloned the public course repository?
-
-Keep your files/history; do not delete or reclone over them. Create your fork on GitHub, then run `git remote -v` and `git status`. Use the commands below if `origin` points to `hoanbklucky/eel4332-autonomous-vehicle-labs` and there is no `upstream` remote yet. Replace `YOUR_USERNAME` with your GitHub username.
-
-```bash
-cd ~/courses/eel4332-autonomous-vehicle-labs
-git remote rename origin upstream
-git remote add origin https://github.com/YOUR_USERNAME/eel4332-autonomous-vehicle-labs.git
-git fetch origin
-git remote -v
-```
-
-If either remote already exists, inspect it first; correct a URL with `git remote set-url REMOTE URL` rather than adding duplicates. Check both fetch and push URLs. Changing remotes does not alter files or commits. If working from an old ZIP, preserve it separately, clone your fork in a new folder, then review/copy your own work into that clone.
 
 ## 3. Save your work
 
